@@ -35,7 +35,7 @@ namespace miscale2garmin.ViewModels
                     Address = Address,
                 };
                 ScanningLabel = "Scanning";
-               var bc = await ScaleService.GetBodyCompositonAsync(scale);
+               var bc = await ScaleService.GetBodyCompositonAsync(scale, new User { Sex = sex, Age = Age, Height = Height});
 
                 if (bc.IsValid)
                 {
@@ -72,6 +72,12 @@ namespace miscale2garmin.ViewModels
             await Shell.Current.GoToAsync("..");
         }
 
+        public void SexRadioButtonChanged(object s, CheckedChangedEventArgs e)
+        {
+            var radio = s as RadioButton;
+            this.Sex = radio.Value as string == "1" ? Models.Sex.Male : Models.Sex.Female;
+        }
+
 
         public ICommand OpenWebCommand { get; }
 
@@ -82,6 +88,27 @@ namespace miscale2garmin.ViewModels
         {
             get => address;
             set => SetProperty(ref address, value);
+        }
+
+        private int age;
+        public int Age
+        {
+            get => age;
+            set => SetProperty(ref age, value);
+        }
+
+        private int height;
+        public int Height
+        {
+            get => height;
+            set => SetProperty(ref height, value);
+        }
+
+        private Sex sex;
+        public Sex Sex
+        {
+            get => sex;
+            set => SetProperty(ref sex , value);
         }
 
         private string scanningLabel;
@@ -97,5 +124,7 @@ namespace miscale2garmin.ViewModels
             get => weight;
             set => SetProperty(ref weight, value);
         }
+
+
     }
 }

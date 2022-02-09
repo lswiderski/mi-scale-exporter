@@ -17,6 +17,7 @@ namespace miscale2garmin.Services
         private IMetricsService _metricsService;
         private IDevice _scaleDevice;
         private Scale _scale;
+        private User _user;
         private TaskCompletionSource<BodyComposition> _completionSource;
         private BodyComposition bodyComposition;
 
@@ -28,10 +29,11 @@ namespace miscale2garmin.Services
             _adapter.ScanTimeoutElapsed += TimeOuted;
         }
 
-        public async Task<BodyComposition> GetBodyCompositonAsync(Scale scale)
+        public async Task<BodyComposition> GetBodyCompositonAsync(Scale scale, User user)
         {
             _completionSource = new TaskCompletionSource<BodyComposition>();
             _scale = scale;
+            _user = user;
             _adapter.DeviceDiscovered += DevideDiscovered;
             await _adapter.StartScanningForDevicesAsync();
             return await _completionSource.Task;
@@ -107,7 +109,7 @@ namespace miscale2garmin.Services
 
             if(stabilized > 0)
             {
-                bodyComposition = this._metricsService.GetBodyComposition(new User { Age = 25, Height=175, Sex = Sex.Male }, weight, impedance);
+                bodyComposition = this._metricsService.GetBodyComposition(_user, weight, impedance);
             }
         }
 

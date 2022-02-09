@@ -5,28 +5,35 @@
              xmlns:vm="clr-namespace:miscale2garmin.ViewModels"
              Title="{Binding Title}">
 
-    <ContentPage.Resources>
+    <!--<ContentPage.Resources>
         <ResourceDictionary>
             <Color x:Key="Accent">#96d1ff</Color>
         </ResourceDictionary>
-    </ContentPage.Resources>
+    </ContentPage.Resources>-->
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <StackLayout BackgroundColor="{StaticResource Accent}" VerticalOptions="FillAndExpand" HorizontalOptions="Fill">
+       <!-- <StackLayout BackgroundColor="{StaticResource Accent}" VerticalOptions="FillAndExpand" HorizontalOptions="Fill">
             <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Center">
                 <ContentView Padding="0,40,0,40" VerticalOptions="FillAndExpand">
                     <Image Source="xamarin_logo.png" VerticalOptions="Center" HeightRequest="64" />
                 </ContentView>
             </StackLayout>
-        </StackLayout>
+        </StackLayout>-->
         <ScrollView Grid.Row="1">
             <StackLayout Orientation="Vertical" Padding="30,24,30,24" Spacing="10">
+                <Label Text="Age" FontSize="Medium" TextColor="Black"/>
+                <Entry Text="{Binding Age, Mode=TwoWay}" FontSize="Medium" Keyboard="Numeric" TextColor="Black" BackgroundColor="#c2c2c2"  />
+                <Label Text="Heght" FontSize="Medium" TextColor="Black"/>
+                <Entry Text="{Binding Height, Mode=TwoWay}" FontSize="Medium" Keyboard="Numeric" TextColor="Black" BackgroundColor="#c2c2c2" />
+                <Label Text="Sex"  TextColor="Black"/>
+                <RadioButton Content="Female" Value="0" CheckedChanged="SexRadioButton_CheckedChanged" TextColor="Black"/>
+                <RadioButton Content="Male" Value="1" CheckedChanged="SexRadioButton_CheckedChanged" TextColor="Black"/>
                 <Label Text="Address" FontSize="Medium" TextColor="Black"/>
-                <Entry Text="{Binding Address, Mode=TwoWay}" FontSize="Medium"  TextColor="Black"/>
+                <Entry Text="{Binding Address, Mode=TwoWay}" FontSize="Medium"  TextColor="Black" BackgroundColor="#c2c2c2"/>
                 <Label Text="{Binding ScanningLabel}" FontSize="Small" TextColor="Black"/>
                 <Button Margin="0,10,0,0" Text="Get values from mi scale "
                         Command="{Binding ScanCommand}"

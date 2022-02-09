@@ -8,7 +8,7 @@ namespace miscale2garmin.Services
 {
     public interface IScaleService
     {
-        Task<BodyComposition> GetBodyCompositonAsync(Scale scale);
+        Task<BodyComposition> GetBodyCompositonAsync(Scale scale, User user);
         Task CancelSearchAsync();
     }
 }

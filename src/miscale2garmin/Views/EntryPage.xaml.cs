@@ -13,13 +13,19 @@ namespace miscale2garmin.Views
     public partial class EntryPage : ContentPage
     {
         public Scale Item { get; set; }
+        private IEntryViewModel vm;
         public EntryPage()
         {
             InitializeComponent();
             using (var scope = App.Container.BeginLifetimeScope())
             {
-                this.BindingContext = scope.Resolve<IEntryViewModel>();
+                this.BindingContext =vm = scope.Resolve<IEntryViewModel>();
             }
+        }
+
+        private void SexRadioButton_CheckedChanged(object sender, CheckedChangedEventArgs e)
+        {
+            vm.SexRadioButtonChanged(sender, e);
         }
     }
 }
