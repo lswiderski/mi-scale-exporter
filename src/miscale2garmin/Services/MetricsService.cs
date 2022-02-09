@@ -9,8 +9,8 @@ namespace miscale2garmin.Services
     {
         private double weight;
         private double impedance;
-        private int height;
-        private int age;
+        private double height;
+        private double age;
         private Sex sex;
 
         public MetricsService()
@@ -31,6 +31,7 @@ namespace miscale2garmin.Services
                 IsValid = true,
                 Weight = weight,
                 BMI = this.getBMI(),
+                ProteinPercentage = this.getProteinPercentage(),
                 IdealWeight = this.getIdealWeight(),
                 BMR = this.getBMR(),
                 BoneMass = this.getBoneMass(),

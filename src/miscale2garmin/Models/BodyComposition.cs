@@ -10,6 +10,7 @@ namespace miscale2garmin.Models
         public double Weight { get; set; }
         public double IdealWeight { get; set; }
         public double MetabolicAge { get; set; }
+        public double ProteinPercentage { get; set; }
         public double LBMCoefficient { get; set; }
         public double BMR { get; set; }
         public double Fat { get; set; }
