@@ -4,11 +4,7 @@
              x:Class="miscale2garmin.Views.EntryPage"
              xmlns:vm="clr-namespace:miscale2garmin.ViewModels"
              Title="{Binding Title}">
-    
-    <ContentPage.BindingContext>
-        <vm:EntryViewModel />
-    </ContentPage.BindingContext>
-    
+
     <ContentPage.Resources>
         <ResourceDictionary>
             <Color x:Key="Accent">#96d1ff</Color>
@@ -31,6 +27,7 @@
             <StackLayout Orientation="Vertical" Padding="30,24,30,24" Spacing="10">
                 <Label Text="Address" FontSize="Medium" TextColor="Black"/>
                 <Entry Text="{Binding Address, Mode=TwoWay}" FontSize="Medium"  TextColor="Black"/>
+                <Label Text="{Binding ScanningLabel}" FontSize="Small" TextColor="Black"/>
                 <Button Margin="0,10,0,0" Text="Get values from mi scale "
                         Command="{Binding ScanCommand}"
                         BackgroundColor="{StaticResource Primary}"
@@ -39,7 +36,7 @@
                         Command="{Binding CancelCommand}"
                         BackgroundColor="{StaticResource Primary}"
                         TextColor="White" />
-
+               
                 <Label Text="Weight" FontSize="Medium" TextColor="Black" />
                 <Entry Text="{Binding Weight, Mode=TwoWay}" FontSize="Medium" Keyboard="Numeric" TextColor="Black"/>
 

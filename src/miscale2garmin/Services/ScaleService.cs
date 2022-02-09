@@ -4,6 +4,7 @@ using Plugin.BLE.Abstractions.Contracts;
 using Plugin.BLE.Abstractions.EventArgs;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,11 +14,18 @@ namespace miscale2garmin.Services
     public class ScaleService : IScaleService
     {
         private IAdapter _adapter;
+        private IMetricsService _metricsService;
+        private IDevice _scaleDevice;
         private Scale _scale;
         private TaskCompletionSource<BodyComposition> _completionSource;
-        public ScaleService()
+        private BodyComposition bodyComposition;
+
+        public ScaleService(IMetricsService metricsService)
         {
+            _metricsService = metricsService;
             _adapter = CrossBluetoothLE.Current.Adapter;
+            _adapter.ScanTimeout = 50000;
+            _adapter.ScanTimeoutElapsed += TimeOuted;
         }
 
         public async Task<BodyComposition> GetBodyCompositonAsync(Scale scale)
@@ -33,8 +41,8 @@ namespace miscale2garmin.Services
         {
             try
             {
-                var bc = new BodyComposition { Weight = 0, IsValid = false };
-                _completionSource.SetResult(bc);
+                bodyComposition.IsValid = false;
+                _completionSource.SetResult(bodyComposition);
             }
             catch (Exception ex)
             {
@@ -43,17 +51,63 @@ namespace miscale2garmin.Services
             await StopAsync();
         }
 
+        private void TimeOuted(object s, EventArgs e)
+        {
+            StopAsync().Wait();
+            bodyComposition.IsValid = false;
+            _completionSource.SetResult(bodyComposition);
+        }
+
         private void DevideDiscovered(object s, DeviceEventArgs a) {
 
             var obj = a.Device.NativeDevice;
             PropertyInfo propInfo = obj.GetType().GetProperty("Address");
             string address = (string)propInfo.GetValue(obj, null);
 
-            if(address.ToLowerInvariant() == _scale.Address.ToLowerInvariant())
+            if(address.ToLowerInvariant() == _scale.Address?.ToLowerInvariant())
             {
-                StopAsync().Wait();
-                var bc = new BodyComposition { Weight = 70, IsValid = true };
-                _completionSource.SetResult(bc);
+                try
+                {
+                    _scaleDevice = a.Device;
+                    GetScanData();
+                }
+                catch (Exception ex)
+                {
+                }
+                finally
+                {
+                    StopAsync().Wait();
+                    bodyComposition.IsValid = true;
+                    _completionSource.SetResult(bodyComposition);
+                }
+            }
+        }
+
+        private void GetScanData()
+        {
+            if(_scaleDevice != null)
+            {
+                var data = _scaleDevice.AdvertisementRecords.Where(x => x.Type == Plugin.BLE.Abstractions.AdvertisementRecordType.ServiceData) //0x16
+                     .Select(x => x.Data)
+                     .FirstOrDefault();
+                ComputeData(data);
+            }
+        }
+
+        private void ComputeData(byte[] data)
+        {
+            var le = BitConverter.IsLittleEndian;
+            var buffer = data.Skip(2).ToArray(); // checks why the array is shifted by 2 bytes
+            var ctrlByte1 = buffer[1];
+            var stabilized = ctrlByte1 & (1 << 5);
+        
+            var hasImpedance = ctrlByte1 & (1 << 1);
+            var weight = (((buffer[12] & 0xFF) << 8) | (buffer[11] & 0xFF)) * 0.005;
+            var impedance = (buffer[10] << 8) + buffer[9];
+
+            if(stabilized > 0)
+            {
+                bodyComposition = this._metricsService.GetBodyComposition(new User { Age = 25, Height=175, Sex = Sex.Male }, weight, impedance);
             }
         }
 

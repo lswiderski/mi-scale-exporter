@@ -1,4 +1,5 @@
 ﻿using miscale2garmin.Models;
+using miscale2garmin.Services;
 using Plugin.BLE;
 using Plugin.BLE.Abstractions.Contracts;
 using System;
@@ -12,11 +13,12 @@ using Xamarin.Forms.PlatformConfiguration;
 
 namespace miscale2garmin.ViewModels
 {
-    public class EntryViewModel : BaseViewModel
+    public class EntryViewModel : BaseViewModel, IEntryViewModel
     {
-        
-        public EntryViewModel()
+        private IScaleService ScaleService;
+        public EntryViewModel(IScaleService scaleService)
         {
+            ScaleService = scaleService;
             SaveCommand = new Command(OnSave, ValidateSave);
             CancelCommand = new Command(OnCancel);
             this.PropertyChanged +=
@@ -32,7 +34,17 @@ namespace miscale2garmin.ViewModels
                 {
                     Address = Address,
                 };
+                ScanningLabel = "Scanning";
                var bc = await ScaleService.GetBodyCompositonAsync(scale);
+
+                if (bc.IsValid)
+                {
+                    ScanningLabel = "";
+                }
+                else
+                {
+                    ScanningLabel = "Not found";
+                }
 
                 Weight = bc.Weight;
                 OnPropertyChanged(nameof(Weight));
@@ -70,6 +82,13 @@ namespace miscale2garmin.ViewModels
         {
             get => address;
             set => SetProperty(ref address, value);
+        }
+
+        private string scanningLabel;
+        public string ScanningLabel
+        {
+            get => scanningLabel;
+            set => SetProperty(ref scanningLabel, value);
         }
 
         private double weight;

@@ -10,8 +10,6 @@ namespace miscale2garmin.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-        public IScaleService ScaleService => DependencyService.Get<IScaleService>();
-
         bool isBusy = false;
         public bool IsBusy
         {
