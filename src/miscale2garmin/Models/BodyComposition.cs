@@ -17,6 +17,8 @@ namespace miscale2garmin.Models
         public double MuscleMass { get; set; }
         public double BoneMass { get; set; }
         public double VisceralFat { get; set; }
+        
+        public double WaterPercentage { get; set; }
         public bool IsValid { get; set; }
     }
 }

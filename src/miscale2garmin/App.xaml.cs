@@ -5,6 +5,7 @@ using miscale2garmin.Services;
 using miscale2garmin.ViewModels;
 using miscale2garmin.Views;
 using System;
+using miscale2garmin.Models;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -14,6 +15,7 @@ namespace miscale2garmin
     public partial class App : Application
     {
         public static IContainer Container;
+        public static BodyComposition BodyComposition;
         public App()
         {
             InitializeComponent();
@@ -42,7 +44,8 @@ namespace miscale2garmin
             // Register services
             builder.RegisterType<ScaleService>().As<IScaleService>().InstancePerLifetimeScope();
             builder.RegisterType<MetricsService>().As<IMetricsService>().InstancePerLifetimeScope();
-            builder.RegisterType<EntryViewModel>().As<IEntryViewModel>().InstancePerLifetimeScope();
+            builder.RegisterType<ScaleViewModel>().As<IScaleViewModel>().InstancePerLifetimeScope();
+            builder.RegisterType<FormViewModel>().As<IFormViewModel>().InstancePerLifetimeScope();
             App.Container = builder.Build();
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocator(Container));
         }

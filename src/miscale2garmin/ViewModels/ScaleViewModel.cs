@@ -13,19 +13,15 @@ using Xamarin.Forms.PlatformConfiguration;
 
 namespace miscale2garmin.ViewModels
 {
-    public class EntryViewModel : BaseViewModel, IEntryViewModel
+    public class ScaleViewModel : BaseViewModel, IScaleViewModel
     {
         private IScaleService ScaleService;
-        public EntryViewModel(IScaleService scaleService)
+        public ScaleViewModel(IScaleService scaleService)
         {
             ScaleService = scaleService;
-            SaveCommand = new Command(OnSave, ValidateSave);
             CancelCommand = new Command(OnCancel);
-            this.PropertyChanged +=
-                (_, __) => SaveCommand.ChangeCanExecute();
-
-
-            Title = "Form";
+            
+            Title = "Mi Scale Data";
             OpenWebCommand = new Command(async () => await Browser.OpenAsync("https://github.com/lswiderski/miscale2garmin-mobile"));
             ScanCommand = new Command(async () =>
             {
@@ -35,7 +31,7 @@ namespace miscale2garmin.ViewModels
                     Address = Address,
                 };
                 ScanningLabel = "Scanning";
-               var bc = await ScaleService.GetBodyCompositonAsync(scale, new User { Sex = sex, Age = Age, Height = Height});
+                var bc = await ScaleService.GetBodyCompositonAsync(scale, new User { Sex = sex, Age = Age, Height = Height});
 
                 if (bc.IsValid)
                 {
@@ -46,9 +42,8 @@ namespace miscale2garmin.ViewModels
                     ScanningLabel = "Not found";
                 }
 
-                Weight = bc.Weight;
-                OnPropertyChanged(nameof(Weight));
-
+                App.BodyComposition = bc;
+                await Shell.Current.GoToAsync("///FormPage");
             });
         }
 
@@ -56,8 +51,7 @@ namespace miscale2garmin.ViewModels
         {
             return !String.IsNullOrWhiteSpace(address);
         }
-
-        public Command SaveCommand { get; }
+        
         public Command CancelCommand { get; }
 
         private async void OnCancel()
@@ -65,12 +59,7 @@ namespace miscale2garmin.ViewModels
             await ScaleService.CancelSearchAsync();
         }
 
-        private async void OnSave()
-        {
 
-            // This will pop the current page off the navigation stack
-            await Shell.Current.GoToAsync("..");
-        }
 
         public void SexRadioButtonChanged(object s, CheckedChangedEventArgs e)
         {
@@ -117,14 +106,6 @@ namespace miscale2garmin.ViewModels
             get => scanningLabel;
             set => SetProperty(ref scanningLabel, value);
         }
-
-        private double weight;
-        public double Weight
-        {
-            get => weight;
-            set => SetProperty(ref weight, value);
-        }
-
 
     }
 }

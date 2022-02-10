@@ -10,16 +10,16 @@ using Xamarin.Forms.Xaml;
 
 namespace miscale2garmin.Views
 {
-    public partial class EntryPage : ContentPage
+    public partial class ScalePage : ContentPage
     {
         public Scale Item { get; set; }
-        private IEntryViewModel vm;
-        public EntryPage()
+        private IScaleViewModel vm;
+        public ScalePage()
         {
             InitializeComponent();
             using (var scope = App.Container.BeginLifetimeScope())
             {
-                this.BindingContext =vm = scope.Resolve<IEntryViewModel>();
+                this.BindingContext =vm = scope.Resolve<IScaleViewModel>();
             }
         }
 

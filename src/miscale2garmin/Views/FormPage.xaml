@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="miscale2garmin.Views.FormPage"
+             xmlns:vm="clr-namespace:miscale2garmin.ViewModels"
+             Title="{Binding Title}">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+     
+        <ScrollView Grid.Row="1">
+            <StackLayout Orientation="Vertical" Padding="30,24,30,24" Spacing="10">
+
+                <Label Text="Weight" FontSize="Medium" TextColor="Black" />
+                <Entry Text="{Binding Weight, Mode=TwoWay}" FontSize="Medium" Keyboard="Numeric" TextColor="Black"/>
+
+                <Label Text="BMI" FontSize="Medium" TextColor="Black" />
+                <Entry Text="{Binding BMI, Mode=TwoWay}" FontSize="Medium" Keyboard="Numeric" TextColor="Black"/>
+                
+                <Label Text="Body Fat" FontSize="Medium" TextColor="Black" />
+                <Entry Text="{Binding Fat, Mode=TwoWay}" FontSize="Medium" Keyboard="Numeric" TextColor="Black"/>
+                
+                <Label Text="Muscle Mass" FontSize="Medium" TextColor="Black" />
+                <Entry Text="{Binding MuscleMass, Mode=TwoWay}" FontSize="Medium" Keyboard="Numeric" TextColor="Black"/>
+                
+                <Label Text="Water" FontSize="Medium" TextColor="Black" />
+                <Entry Text="{Binding WaterPercentage, Mode=TwoWay}" FontSize="Medium" Keyboard="Numeric" TextColor="Black"/>
+                
+                <Label Text="Protein *" FontSize="Medium" TextColor="Black" />
+                <Entry Text="{Binding ProteinPercentage, Mode=TwoWay}" FontSize="Medium" Keyboard="Numeric" TextColor="Black"/>
+                
+                <Label Text="Basal Metabolism *" FontSize="Medium" TextColor="Black" />
+                <Entry Text="{Binding BMR, Mode=TwoWay}" FontSize="Medium" Keyboard="Numeric" TextColor="Black"/>
+                
+                <Label Text="Visceral fat" FontSize="Medium" TextColor="Black" />
+                <Entry Text="{Binding VisceralFat, Mode=TwoWay}" FontSize="Medium" Keyboard="Numeric" TextColor="Black"/>
+                
+                <Label Text="Bone mass" FontSize="Medium" TextColor="Black" />
+                <Entry Text="{Binding BoneMass, Mode=TwoWay}" FontSize="Medium" Keyboard="Numeric" TextColor="Black"/>
+                
+                <Label Text="Body age" FontSize="Medium" TextColor="Black" />
+                <Entry Text="{Binding MetabolicAge, Mode=TwoWay}" FontSize="Medium" Keyboard="Numeric" TextColor="Black"/>
+                
+                <Label Text="Ideal weight *" FontSize="Medium" TextColor="Black" />
+                <Entry Text="{Binding IdealWeight, Mode=TwoWay}" FontSize="Medium" Keyboard="Numeric" TextColor="Black"/>
+                
+                <Label Text="Body Type" FontSize="Medium" TextColor="Black" />
+                <Entry Text="{Binding BodyType, Mode=TwoWay}" FontSize="Medium" Keyboard="Numeric" TextColor="Black"/>
+                
+                <Label Text="* fields will not be uploaded" FontSize="Small" TextColor="Black" />
+
+                <Button Margin="0,10,0,0" Text="Upload to Garmin Cloud"
+                        Command="{Binding SaveCommand}"
+                        BackgroundColor="{StaticResource Primary}"
+                        TextColor="White" />
+            </StackLayout>
+        </ScrollView>
+    </Grid>
+
+</ContentPage>

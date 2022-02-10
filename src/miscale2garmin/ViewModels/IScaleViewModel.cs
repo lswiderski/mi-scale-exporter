@@ -5,7 +5,7 @@ using Xamarin.Forms;
 
 namespace miscale2garmin.ViewModels
 {
-    public interface IEntryViewModel
+    public interface IScaleViewModel
     {
         void SexRadioButtonChanged(object s, CheckedChangedEventArgs e);
     }
