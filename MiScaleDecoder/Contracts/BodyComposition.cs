@@ -13,5 +13,14 @@
         public double MuscleMass { get; set; }
         public double BoneMass { get; set; }
         public double VisceralFat { get; set; }
+        public double Water { get; set; }
+        public int BodyType { get; set; }
+        
+        public string BodyTypeName { get; set; }
+        public int Day { get; set; }
+        public int Month { get; set; }
+        public int Hour { get; set; }
+        public int Minute { get; set; }
+        
     }
 }

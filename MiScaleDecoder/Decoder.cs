@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using MiScaleDecoder.Contracts;
 
 namespace MiScaleDecoder
@@ -10,6 +12,81 @@ namespace MiScaleDecoder
         private double _height;
         private double _age;
         private Sex _sex;
+
+        private static MuscleMassScale[] MuscleMassScales => new[]
+        {
+            new MuscleMassScale
+            {
+                Min = new Dictionary<Sex, double>() {{Sex.Male, 170}, {Sex.Female, 160}},
+                Female = new[] {36.5, 42.6},
+                Male = new[] {49.4, 59.5}
+            },
+            new MuscleMassScale
+            {
+                Min = new Dictionary<Sex, double>() {{Sex.Male, 160}, {Sex.Female, 150}},
+                Female = new[] {32.9, 37.6},
+                Male = new[] {44.0, 52.5}
+            },
+            new MuscleMassScale
+            {
+                Min = new Dictionary<Sex, double>() {{Sex.Male, 0}, {Sex.Female, 0}},
+                Female = new[] {29.1, 34.8},
+                Male = new[] {38.5, 46.6}
+            }
+        };
+
+        //The included tables where quite strange, maybe bogus, replaced them with better ones...
+        private static FatPercentageScale[] FatPercentageScales => new[]
+        {
+            new FatPercentageScale
+            {
+                Min = 0, Max = 12,
+                Female = new double[] {12, 21, 30, 34},
+                Male = new double[] {7, 16, 25, 30}
+            },
+            new FatPercentageScale
+            {
+                Min = 12, Max = 14,
+                Female = new double[] {15.0, 24.0, 33.0, 37.0},
+                Male = new double[] {7.0, 16.0, 25.0, 30.0},
+            },
+            new FatPercentageScale
+            {
+                Min = 14, Max = 16,
+                Female = new double[] {18.0, 27.0, 36.0, 40.0},
+                Male = new double[] {7.0, 16.0, 25.0, 30.0},
+            },
+            new FatPercentageScale
+            {
+                Min = 16, Max = 18,
+                Female = new double[] {20.0, 28.0, 37.0, 41.0},
+                Male = new double[] {7.0, 16.0, 25.0, 30.0},
+            },
+            new FatPercentageScale
+            {
+                Min = 18, Max = 40,
+                Female = new double[] {21.0, 28.0, 35.0, 40.0},
+                Male = new double[] {11.0, 17.0, 22.0, 27.0},
+            },
+            new FatPercentageScale
+            {
+                Min = 40, Max = 60,
+                Female = new double[] {22.0, 29.0, 36.0, 41.0},
+                Male = new double[] {12.0, 18.0, 23.0, 28.0},
+            },
+            new FatPercentageScale
+            {
+                Min = 60, Max = 100,
+                Female = new double[] {23.0, 30.0, 37.0, 42.0},
+                Male = new double[] {14.0, 20.0, 25.0, 30.0},
+            }
+        };
+
+        private static string[] BodyTypeScale => new[]
+        {
+            "obese", "overweight", "thick-set", "lack-exerscise", "balanced", "balanced-muscular", "skinny",
+            "balanced-skinny", "skinny-muscular"
+        };
 
         /// <summary>
         /// 
@@ -29,6 +106,10 @@ namespace MiScaleDecoder
             {
                 throw new ArgumentNullException(nameof(data), "data cannot be empty");
             }
+            if (data.Length != 13)
+            {
+                throw new Exception( "data must 13 bytes long");
+            }
 
             var ctrlByte1 = data[1];
             var stabilized = ctrlByte1 & (1 << 5);
@@ -45,7 +126,7 @@ namespace MiScaleDecoder
             this._age = userInfo.Age;
             this._sex = userInfo.Sex;
 
-            return this.GetBodyComposition();
+            return this.GetBodyComposition(data);
         }
 
         private double GetWeight(byte[] data)
@@ -58,21 +139,30 @@ namespace MiScaleDecoder
             return (data[10] << 8) + data[9];
         }
 
-        private BodyComposition GetBodyComposition()
+        private BodyComposition GetBodyComposition(byte[] data)
         {
+            var bodyType = this.GetBodyType();
+            
             return new BodyComposition
             {
                 Weight = _weight,
-                BMI = this.GetBmi(),
-                ProteinPercentage = this.GetProteinPercentage(),
-                IdealWeight = this.GetIdealWeight(),
-                BMR = this.GetBmr(),
-                BoneMass = this.GetBoneMass(),
-                Fat = this.GetFatPercentage(),
+                BMI =  Math.Round(this.GetBmi(),1),
+                ProteinPercentage = Math.Round(this.GetProteinPercentage(),1),
+                IdealWeight = Math.Round(this.GetIdealWeight(),2),
+                BMR = Math.Round(this.GetBmr(),0),
+                BoneMass = Math.Round(this.GetBoneMass(),2),
+                Fat = Math.Round(this.GetFatPercentage(),1),
                 LBMCoefficient = this.GetLbmCoefficient(),
-                MetabolicAge = this.GetMetabolicAge(),
-                MuscleMass = this.GetMuscleMass(),
-                VisceralFat = this.GetVisceralFat()
+                MetabolicAge = Math.Round(this.GetMetabolicAge(),0),
+                MuscleMass = Math.Round(this.GetMuscleMass(),2),
+                VisceralFat = Math.Round(this.GetVisceralFat(),0),
+                Water = Math.Round(this.GetWater(),1),
+                BodyType = bodyType+1,
+                BodyTypeName = BodyTypeScale[bodyType],
+                Day = data[5],
+                Month = data[4],
+                Hour = data[6],
+                Minute = data[8],
             };
         }
 
@@ -88,6 +178,60 @@ namespace MiScaleDecoder
             }
 
             return value;
+        }
+
+        private double GetWater()
+        {
+            double coefficient;
+            double waterPercentage = (100 - this.GetFatPercentage()) * 0.7;
+
+            if (waterPercentage <= 50)
+            {
+                coefficient = 1.02;
+            }
+            else
+            {
+                coefficient = 0.98;
+            }
+
+            // Capping water percentage
+            if (waterPercentage * coefficient >= 65)
+            {
+                waterPercentage = 75;
+            }
+
+            return CheckValueOverflow(waterPercentage * coefficient, 35, 75);
+        }
+
+        public int GetBodyType()
+        {
+            int factor;
+            if (this.GetFatPercentage() > this.GetFatPercentageScale()[2])
+            {
+                factor = 0;
+            }
+            else if (this.GetFatPercentage() < this.GetFatPercentageScale()[1])
+            {
+                factor = 2;
+            }
+            else
+            {
+                factor = 1;
+            }
+
+
+            if (this.GetMuscleMass() > this.GetMuscleMassScale()[1])
+            {
+                return 2 + (factor * 3);
+            }
+            else if (this.GetMuscleMass() < this.GetMuscleMassScale()[0])
+            {
+                return (factor * 3);
+            }
+            else
+            {
+                return 1 + (factor * 3);
+            }
         }
 
         private double GetIdealWeight()
@@ -317,6 +461,39 @@ namespace MiScaleDecoder
             lbm -= this._impedance * 0.0068;
             lbm -= this._age * 0.0542;
             return lbm;
+        }
+
+        private double[] GetMuscleMassScale()
+        {
+            var scale = MuscleMassScales.FirstOrDefault(s => this._height >= s.Min[this._sex]);
+
+            switch (_sex)
+            {
+                case Sex.Female:
+                    return scale.Female;
+                case Sex.Male:
+                    return scale.Male;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        private double[] GetFatPercentageScale()
+        {
+            var scale = FatPercentageScales
+                .FirstOrDefault(s =>
+                    this._age >= s.Min
+                    && this._age < s.Max);
+
+            switch (_sex)
+            {
+                case Sex.Female:
+                    return scale.Female;
+                case Sex.Male:
+                    return scale.Male;
+                default:
+                    throw new NotImplementedException();
+            }
         }
     }
 }
