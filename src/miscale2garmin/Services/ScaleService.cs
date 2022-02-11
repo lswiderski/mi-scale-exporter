@@ -8,25 +8,26 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Decoder = MiScaleDecoder.Decoder;
 
 namespace miscale2garmin.Services
 {
     public class ScaleService : IScaleService
     {
         private IAdapter _adapter;
-        private IMetricsService _metricsService;
         private IDevice _scaleDevice;
         private Scale _scale;
         private User _user;
         private TaskCompletionSource<BodyComposition> _completionSource;
         private BodyComposition bodyComposition;
+        private Decoder _decoder;
 
-        public ScaleService(IMetricsService metricsService)
+        public ScaleService()
         {
-            _metricsService = metricsService;
             _adapter = CrossBluetoothLE.Current.Adapter;
             _adapter.ScanTimeout = 50000;
             _adapter.ScanTimeoutElapsed += TimeOuted;
+            _decoder = new Decoder();
         }
 
         public async Task<BodyComposition> GetBodyCompositonAsync(Scale scale, User user)
@@ -102,15 +103,28 @@ namespace miscale2garmin.Services
             var buffer = data.Skip(2).ToArray(); // checks why the array is shifted by 2 bytes
             var ctrlByte1 = buffer[1];
             var stabilized = ctrlByte1 & (1 << 5);
-        
-            var hasImpedance = ctrlByte1 & (1 << 1);
-            var weight = (((buffer[12] & 0xFF) << 8) | (buffer[11] & 0xFF)) * 0.005;
-            var impedance = (buffer[10] << 8) + buffer[9];
-
-            if(stabilized > 0)
+            if (stabilized <= 0) return;
+            var bc = this._decoder.Calculate(buffer, new MiScaleDecoder.Contracts.User
             {
-                bodyComposition = this._metricsService.GetBodyComposition(_user, weight, impedance);
-            }
+                Age = _user.Age, 
+                Height = _user.Height,
+                Sex = (MiScaleDecoder.Contracts.Sex)(byte)_user.Sex,
+            });
+            
+            bodyComposition = new BodyComposition
+            {
+                Weight = bc.Weight,
+                BMI = bc.BMI,
+                ProteinPercentage = bc.ProteinPercentage,
+                IdealWeight = bc.IdealWeight,
+                BMR = bc.BMR,
+                BoneMass = bc.BoneMass,
+                Fat = bc.Fat,
+                LBMCoefficient = bc.LBMCoefficient,
+                MetabolicAge = bc.MetabolicAge,
+                MuscleMass = bc.MuscleMass,
+                VisceralFat = bc.VisceralFat
+            };
         }
 
         private async Task StopAsync()

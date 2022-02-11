@@ -31,4 +31,8 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\MiScaleDecoder\MiScaleDecoder.csproj" />
+  </ItemGroup>
 </Project>

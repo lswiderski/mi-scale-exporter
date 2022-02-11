@@ -6,7 +6,7 @@ namespace miscale2garmin.Models
 {
     public enum Sex
     {
-        Male,
-        Female,
+        Male = 0,
+        Female = 1,
     }
 }
