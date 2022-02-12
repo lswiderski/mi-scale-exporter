@@ -8,7 +8,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Decoder = MiScaleDecoder.Decoder;
+using MiScaleBodyComposition;
+using Sex = MiScaleBodyComposition.Contracts.Sex;
 
 namespace miscale2garmin.Services
 {
@@ -20,14 +21,14 @@ namespace miscale2garmin.Services
         private User _user;
         private TaskCompletionSource<BodyComposition> _completionSource;
         private BodyComposition bodyComposition;
-        private Decoder _decoder;
+        private MiScale _decoder;
 
         public ScaleService()
         {
             _adapter = CrossBluetoothLE.Current.Adapter;
             _adapter.ScanTimeout = 50000;
             _adapter.ScanTimeoutElapsed += TimeOuted;
-            _decoder = new Decoder();
+            _decoder = new MiScale();
         }
 
         public async Task<BodyComposition> GetBodyCompositonAsync(Scale scale, User user)
@@ -51,6 +52,7 @@ namespace miscale2garmin.Services
             {
                 // TODO Log;
             }
+
             await StopAsync();
         }
 
@@ -61,13 +63,13 @@ namespace miscale2garmin.Services
             _completionSource.SetResult(bodyComposition);
         }
 
-        private void DevideDiscovered(object s, DeviceEventArgs a) {
-
+        private void DevideDiscovered(object s, DeviceEventArgs a)
+        {
             var obj = a.Device.NativeDevice;
             PropertyInfo propInfo = obj.GetType().GetProperty("Address");
-            string address = (string)propInfo.GetValue(obj, null);
+            string address = (string) propInfo.GetValue(obj, null);
 
-            if(address.ToLowerInvariant() == _scale.Address?.ToLowerInvariant())
+            if (address.ToLowerInvariant() == _scale.Address?.ToLowerInvariant())
             {
                 try
                 {
@@ -88,29 +90,25 @@ namespace miscale2garmin.Services
 
         private void GetScanData()
         {
-            if(_scaleDevice != null)
+            if (_scaleDevice != null)
             {
-                var data = _scaleDevice.AdvertisementRecords.Where(x => x.Type == Plugin.BLE.Abstractions.AdvertisementRecordType.ServiceData) //0x16
-                     .Select(x => x.Data)
-                     .FirstOrDefault();
+                var data = _scaleDevice.AdvertisementRecords
+                    .Where(x => x.Type == Plugin.BLE.Abstractions.AdvertisementRecordType.ServiceData) //0x16
+                    .Select(x => x.Data)
+                    .FirstOrDefault();
                 ComputeData(data);
             }
         }
 
         private void ComputeData(byte[] data)
         {
-            var le = BitConverter.IsLittleEndian;
             var buffer = data.Skip(2).ToArray(); // checks why the array is shifted by 2 bytes
             var ctrlByte1 = buffer[1];
             var stabilized = ctrlByte1 & (1 << 5);
             if (stabilized <= 0) return;
-            var bc = this._decoder.Calculate(buffer, new MiScaleDecoder.Contracts.User
-            {
-                Age = _user.Age, 
-                Height = _user.Height,
-                Sex = (MiScaleDecoder.Contracts.Sex)(byte)_user.Sex,
-            });
-            
+            var bc = this._decoder.GetBodyComposition(buffer,
+                new MiScaleBodyComposition.Contracts.User(_user.Age, _user.Height, (Sex) (byte) _user.Sex));
+
             bodyComposition = new BodyComposition
             {
                 Weight = bc.Weight,
@@ -120,7 +118,6 @@ namespace miscale2garmin.Services
                 BMR = bc.BMR,
                 BoneMass = bc.BoneMass,
                 Fat = bc.Fat,
-                LBMCoefficient = bc.LBMCoefficient,
                 MetabolicAge = bc.MetabolicAge,
                 MuscleMass = bc.MuscleMass,
                 VisceralFat = bc.VisceralFat
@@ -133,8 +130,5 @@ namespace miscale2garmin.Services
 
             _adapter.DeviceDiscovered -= DevideDiscovered;
         }
-
-
-
     }
 }

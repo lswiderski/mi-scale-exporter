@@ -37,7 +37,6 @@ namespace miscale2garmin.ViewModels
             MetabolicAge = App.BodyComposition.MetabolicAge;
             ProteinPercentage = App.BodyComposition.ProteinPercentage;
             VisceralFat = App.BodyComposition.VisceralFat;
-            LBMCoefficient = App.BodyComposition.LBMCoefficient;
             Fat = App.BodyComposition.Fat;
             WaterPercentage = App.BodyComposition.WaterPercentage;
         }
@@ -77,13 +76,6 @@ namespace miscale2garmin.ViewModels
         {
             get => proteinPercentage;
             set => SetProperty(ref proteinPercentage, value);
-        }
-        
-        private double lbmCoefficient;
-        public double LBMCoefficient
-        {
-            get => lbmCoefficient;
-            set => SetProperty(ref lbmCoefficient, value);
         }
         
         private double bmr;
