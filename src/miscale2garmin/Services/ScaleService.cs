@@ -34,6 +34,7 @@ namespace miscale2garmin.Services
         public async Task<BodyComposition> GetBodyCompositonAsync(Scale scale, User user)
         {
             _completionSource = new TaskCompletionSource<BodyComposition>();
+            
             _scale = scale;
             _user = user;
             _adapter.DeviceDiscovered += DevideDiscovered;
@@ -120,7 +121,9 @@ namespace miscale2garmin.Services
                 Fat = bc.Fat,
                 MetabolicAge = bc.MetabolicAge,
                 MuscleMass = bc.MuscleMass,
-                VisceralFat = bc.VisceralFat
+                VisceralFat = bc.VisceralFat,
+                WaterPercentage = bc.Water,
+                BodyType = bc.BodyType,
             };
         }
 

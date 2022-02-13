@@ -4,6 +4,7 @@ using Plugin.BLE;
 using Plugin.BLE.Abstractions.Contracts;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Input;
@@ -19,6 +20,7 @@ namespace miscale2garmin.ViewModels
         public ScaleViewModel(IScaleService scaleService)
         {
             ScaleService = scaleService;
+            this.Sex = Sex.Male;
             CancelCommand = new Command(OnCancel);
             
             Title = "Mi Scale Data";
@@ -31,7 +33,7 @@ namespace miscale2garmin.ViewModels
                     Address = Address,
                 };
                 ScanningLabel = "Scanning";
-                var bc = await ScaleService.GetBodyCompositonAsync(scale, new User { Sex = sex, Age = Age, Height = Height});
+                var bc = await ScaleService.GetBodyCompositonAsync(scale, new User { Sex = _sex, Age = _age, Height = _height});
 
                 if (bc.IsValid)
                 {
@@ -49,7 +51,7 @@ namespace miscale2garmin.ViewModels
 
         private bool ValidateSave()
         {
-            return !String.IsNullOrWhiteSpace(address);
+            return !String.IsNullOrWhiteSpace(_address);
         }
         
         public Command CancelCommand { get; }
@@ -72,39 +74,53 @@ namespace miscale2garmin.ViewModels
 
         public ICommand ScanCommand { get; }
 
-        private string address;
+        private string _address;
         public string Address
         {
-            get => address;
-            set => SetProperty(ref address, value);
+            get => _address;
+            set => SetProperty(ref _address, value);
         }
 
-        private int age;
-        public int Age
+        private int _age;
+        public string Age
         {
-            get => age;
-            set => SetProperty(ref age, value);
+            get => _age.ToString();
+            set
+            {
+                if (value is null) return;
+                if (int.TryParse(value, out var result))
+                {
+                    SetProperty(ref _age, result);
+                }
+            }
         }
 
-        private int height;
-        public int Height
+        private int _height;
+        public string Height
         {
-            get => height;
-            set => SetProperty(ref height, value);
+            get => _height.ToString();
+            set
+            {
+                if (value is null) return;
+                if (int.TryParse(value, out var result))
+                {
+                    SetProperty(ref _height, result);
+                }
+            }
         }
 
-        private Sex sex;
+        private Sex _sex;
         public Sex Sex
         {
-            get => sex;
-            set => SetProperty(ref sex , value);
+            get => _sex;
+            set => SetProperty(ref _sex , value);
         }
 
-        private string scanningLabel;
+        private string _scanningLabel;
         public string ScanningLabel
         {
-            get => scanningLabel;
-            set => SetProperty(ref scanningLabel, value);
+            get => _scanningLabel;
+            set => SetProperty(ref _scanningLabel, value);
         }
 
     }
