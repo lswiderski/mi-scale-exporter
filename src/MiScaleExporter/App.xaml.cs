@@ -43,6 +43,7 @@ namespace MiScaleExporter
 
             // Register services
             builder.RegisterType<ScaleService>().As<IScaleService>().InstancePerLifetimeScope();
+            builder.RegisterType<GarminService>().As<IGarminService>().InstancePerLifetimeScope();
             builder.RegisterType<ScaleViewModel>().As<IScaleViewModel>().InstancePerLifetimeScope();
             builder.RegisterType<FormViewModel>().As<IFormViewModel>().InstancePerLifetimeScope();
             App.Container = builder.Build();

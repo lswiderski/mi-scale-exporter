@@ -1,35 +1,63 @@
 ﻿using System;
+using MiScaleExporter.Models;
+using MiScaleExporter.Services;
 using Xamarin.Forms;
 
 namespace MiScaleExporter.ViewModels
 {
-    public class FormViewModel: BaseViewModel, IFormViewModel
+    public class FormViewModel : BaseViewModel, IFormViewModel
     {
+        private readonly IGarminService _garminService;
 
-        public FormViewModel()
+        public FormViewModel(IGarminService garminService)
         {
+            _garminService = garminService;
             Title = "Garmin Body Composition Form";
             Date = DateTime.Now;
             Time = DateTime.Now.TimeOfDay;
-            SaveCommand = new Command(OnSave, ValidateSave);
+            UploadCommand = new Command(OnUpload, ValidateSave);
             this.PropertyChanged +=
-                (_, __) => SaveCommand.ChangeCanExecute();
+                (_, __) => UploadCommand.ChangeCanExecute();
         }
+
         private bool ValidateSave()
         {
-            return true;// return !String.IsNullOrWhiteSpace(weight);
+            return true; // return !String.IsNullOrWhiteSpace(weight);
         }
-        
-        private async void OnSave()
+
+        private async void OnUpload()
         {
+            var response = await this._garminService.UploadAsync(this.PrepareRequest(), Date.Date.Add(Time), Email, Password);
+            var message = response.IsSuccess ? "Uploaded" : response.Message;
+            await Application.Current.MainPage.DisplayAlert ("Response", message, "OK");
+            
             // This will pop the current page off the navigation stack
             await Shell.Current.GoToAsync("..");
         }
-        
+
+        private BodyComposition PrepareRequest()
+        {
+            var bc = new BodyComposition
+            {
+                Fat = _fat ?? 0,
+                BodyType = _bodyType ?? 0,
+                Weight = _weight ?? 0,
+                BoneMass = _boneMass ?? 0,
+                MuscleMass = _muscleMass ?? 0,
+                MetabolicAge = _metabolicAge ?? 0,
+                ProteinPercentage = _proteinPercentage ?? 0,
+                VisceralFat = _visceralFat ?? 0,
+                BMI = _bmi ?? 0,
+                BMR = _bmr ?? 0,
+                WaterPercentage = _waterPercentage ?? 0,
+            };
+            return bc;
+        }
+
         public void LoadBodyComposition()
         {
             if (App.BodyComposition is null) return;
-            
+
             Weight = App.BodyComposition.Weight;
             BMI = App.BodyComposition.BMI;
             BoneMass = App.BodyComposition.BoneMass;
@@ -45,109 +73,122 @@ namespace MiScaleExporter.ViewModels
             IsAutomaticCalculation = true;
         }
 
-        public Command SaveCommand { get; }
-        
-        private double? weight;
+        public Command UploadCommand { get; }
+
+        private double? _weight;
+
         public double? Weight
         {
-            get => weight;
-            set => SetProperty(ref weight, value);
+            get => _weight;
+            set => SetProperty(ref _weight, value);
         }
-        
-        private double? bmi;
+
+        private double? _bmi;
+
         public double? BMI
         {
-            get => bmi;
-            set => SetProperty(ref bmi, value);
+            get => _bmi;
+            set => SetProperty(ref _bmi, value);
         }
-        
-        private double? idealWeight;
+
+        private double? _idealWeight;
+
         public double? IdealWeight
         {
-            get => idealWeight;
-            set => SetProperty(ref idealWeight, value);
+            get => _idealWeight;
+            set => SetProperty(ref _idealWeight, value);
         }
-        
-        private double? metabolicAge;
+
+        private double? _metabolicAge;
+
         public double? MetabolicAge
         {
-            get => metabolicAge;
-            set => SetProperty(ref metabolicAge, value);
+            get => _metabolicAge;
+            set => SetProperty(ref _metabolicAge, value);
         }
-        
-        private double? proteinPercentage;
+
+        private double? _proteinPercentage;
+
         public double? ProteinPercentage
         {
-            get => proteinPercentage;
-            set => SetProperty(ref proteinPercentage, value);
+            get => _proteinPercentage;
+            set => SetProperty(ref _proteinPercentage, value);
         }
-        
-        private double? bmr;
+
+        private double? _bmr;
+
         public double? BMR
         {
-            get => bmr;
-            set => SetProperty(ref bmr, value);
+            get => _bmr;
+            set => SetProperty(ref _bmr, value);
         }
-        
-        private double? fat;
+
+        private double? _fat;
+
         public double? Fat
         {
-            get => fat;
-            set => SetProperty(ref fat, value);
+            get => _fat;
+            set => SetProperty(ref _fat, value);
         }
-        
-        private double? muscleMass;
+
+        private double? _muscleMass;
+
         public double? MuscleMass
         {
-            get => muscleMass;
-            set => SetProperty(ref muscleMass, value);
+            get => _muscleMass;
+            set => SetProperty(ref _muscleMass, value);
         }
-        
-        private double? boneMass;
+
+        private double? _boneMass;
+
         public double? BoneMass
         {
-            get => boneMass;
-            set => SetProperty(ref boneMass, value);
+            get => _boneMass;
+            set => SetProperty(ref _boneMass, value);
         }
-        
-        private double? visceralFat;
+
+        private double? _visceralFat;
+
         public double? VisceralFat
         {
-            get => visceralFat;
-            set => SetProperty(ref visceralFat, value);
+            get => _visceralFat;
+            set => SetProperty(ref _visceralFat, value);
         }
-        
-        private double? bodyType;
-        public double? BodyType
+
+        private int? _bodyType;
+
+        public int? BodyType
         {
-            get => bodyType;
-            set => SetProperty(ref bodyType, value);
+            get => _bodyType;
+            set => SetProperty(ref _bodyType, value);
         }
-        
-        private double? waterPercentage;
+
+        private double? _waterPercentage;
+
         public double? WaterPercentage
         {
-            get => waterPercentage;
-            set => SetProperty(ref waterPercentage, value);
+            get => _waterPercentage;
+            set => SetProperty(ref _waterPercentage, value);
         }
-        
+
         private string _email;
+
         public string Email
         {
             get => _email;
             set => SetProperty(ref _email, value);
         }
-        
+
         private string _password;
+
         public string Password
         {
             get => _password;
             set => SetProperty(ref _password, value);
         }
-        
-      
-        
+
         private DateTime _date;
+
         public DateTime Date
         {
             get => _date;
@@ -155,18 +196,19 @@ namespace MiScaleExporter.ViewModels
         }
 
         private TimeSpan _time;
+
         public TimeSpan Time
         {
             get => _time;
             set => SetProperty(ref _time, value);
         }
-        
+
         private bool _isAutomaticCalculation;
+
         public bool IsAutomaticCalculation
         {
             get => _isAutomaticCalculation;
             set => SetProperty(ref _isAutomaticCalculation, value);
         }
-        
     }
 }

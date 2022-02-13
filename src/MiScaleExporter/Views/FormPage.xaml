@@ -131,7 +131,7 @@
                        Keyboard="Numeric"
                        TextColor="Black">
                     <Entry.Behaviors>
-                        <behaviors:NumericDoubleValidationBehavior />
+                        <behaviors:NumericIntValidationBehavior />
                     </Entry.Behaviors>
                 </Entry>
             </StackLayout>
@@ -174,7 +174,7 @@
             <StackLayout Orientation="Vertical" Padding="10"  Grid.Row="7" Grid.ColumnSpan="2"
                          Grid.Column="0">
                 <Button Margin="0,10,0,0" Text="Upload to Garmin Cloud"
-                        Command="{Binding SaveCommand}"
+                        Command="{Binding UploadCommand}"
                         BackgroundColor="{StaticResource Primary}"
                         TextColor="White" />
                 <StackLayout IsVisible="{Binding IsAutomaticCalculation}">

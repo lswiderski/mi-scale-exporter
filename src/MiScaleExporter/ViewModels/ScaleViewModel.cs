@@ -16,10 +16,11 @@ namespace MiScaleExporter.ViewModels
 {
     public class ScaleViewModel : BaseViewModel, IScaleViewModel
     {
-        private IScaleService ScaleService;
+        private readonly IScaleService _scaleService;
+        
         public ScaleViewModel(IScaleService scaleService)
         {
-            ScaleService = scaleService;
+            _scaleService = scaleService;
             this.Sex = Sex.Male;
             CancelCommand = new Command(OnCancel);
             
@@ -33,7 +34,7 @@ namespace MiScaleExporter.ViewModels
                     Address = Address,
                 };
                 ScanningLabel = "Scanning";
-                var bc = await ScaleService.GetBodyCompositonAsync(scale, new User { Sex = _sex, Age = _age, Height = _height});
+                var bc = await _scaleService.GetBodyCompositonAsync(scale, new User { Sex = _sex, Age = _age, Height = _height});
 
                 if (bc.IsValid)
                 {
@@ -58,7 +59,7 @@ namespace MiScaleExporter.ViewModels
 
         private async void OnCancel()
         {
-            await ScaleService.CancelSearchAsync();
+            await _scaleService.CancelSearchAsync();
         }
 
 
