@@ -4,6 +4,7 @@
 # Rider ignored files
 /contentModel.xml
 /.idea.miscale2garmin.iml
+/.idea.MiScaleExporter.iml
 /projectSettingsUpdater.xml
 /modules.xml
 # Editor-based HTTP Client requests
