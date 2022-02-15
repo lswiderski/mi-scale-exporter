@@ -138,6 +138,7 @@
     <PackageReference Include="Autofac.Extras.CommonServiceLocator">
       <Version>6.0.1</Version>
     </PackageReference>
+    <PackageReference Include="NLog.Config" Version="4.7.13" />
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2337" />
     <PackageReference Include="Xamarin.Essentials" Version="1.7.1" />
   </ItemGroup>

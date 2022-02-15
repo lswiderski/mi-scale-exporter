@@ -12,13 +12,15 @@ namespace MiScaleExporter.Services;
 public class GarminService : IGarminService
 {
     private HttpClient _httpClient;
+    private ILogService _logService;
 
-    public GarminService()
+    public GarminService(ILogService logService)
     {
+        _logService = logService;
         _httpClient = new HttpClient()
         {
             Timeout = TimeSpan.FromMinutes(5),
-            BaseAddress = new Uri("http://192.168.1.17:4321")
+            BaseAddress = new Uri("http://srv09.mikr.us:20366")
         };
     }
 
@@ -64,7 +66,7 @@ public class GarminService : IGarminService
         }
         catch (Exception ex)
         {
-            //TODO log
+            _logService.LogError(ex.Message);
             result.Message = ex.Message;
             return result;
         }

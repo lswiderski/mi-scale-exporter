@@ -66,6 +66,9 @@
     <PackageReference Include="Autofac.Extras.CommonServiceLocator">
       <Version>6.0.1</Version>
     </PackageReference>
+    <PackageReference Include="NLog.Config">
+      <Version>4.7.13</Version>
+    </PackageReference>
     <PackageReference Include="Plugin.BLE">
       <Version>2.1.2</Version>
     </PackageReference>

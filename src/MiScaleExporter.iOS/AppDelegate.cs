@@ -23,7 +23,9 @@ namespace MiScaleExporter.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
-            LoadApplication(new App());
+            var assembly = this.GetType().Assembly;
+            var assemblyName = assembly.GetName().Name;
+            LoadApplication(new App(assembly, assemblyName));
 
             return base.FinishedLaunching(app, options);
         }

@@ -5,6 +5,7 @@ using MiScaleExporter.Services;
 using MiScaleExporter.ViewModels;
 using MiScaleExporter.Views;
 using System;
+using System.Reflection;
 using MiScaleExporter.Models;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -16,8 +17,12 @@ namespace MiScaleExporter
     {
         public static IContainer Container;
         public static BodyComposition BodyComposition;
-        public App()
+        private Assembly _assembly;
+        private string _assemblyName;
+        public App(Assembly assembly, string assemblyName)
         {
+            _assembly = assembly;
+            _assemblyName = assemblyName;
             InitializeComponent();
         }
 
@@ -46,8 +51,10 @@ namespace MiScaleExporter
             builder.RegisterType<GarminService>().As<IGarminService>().InstancePerLifetimeScope();
             builder.RegisterType<ScaleViewModel>().As<IScaleViewModel>().InstancePerLifetimeScope();
             builder.RegisterType<FormViewModel>().As<IFormViewModel>().InstancePerLifetimeScope();
+            builder.RegisterType<LogService>().As<ILogService>().SingleInstance();
             App.Container = builder.Build();
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocator(Container));
         }
+        
     }
 }

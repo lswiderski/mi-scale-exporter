@@ -22,9 +22,11 @@ namespace MiScaleExporter.Services
         private TaskCompletionSource<BodyComposition> _completionSource;
         private BodyComposition bodyComposition;
         private MiScale _decoder;
+        private ILogService _logService;
 
-        public ScaleService()
+        public ScaleService(ILogService logService)
         {
+            _logService = logService;
             _adapter = CrossBluetoothLE.Current.Adapter;
             _adapter.ScanTimeout = 50000;
             _adapter.ScanTimeoutElapsed += TimeOuted;
@@ -34,7 +36,7 @@ namespace MiScaleExporter.Services
         public async Task<BodyComposition> GetBodyCompositonAsync(Scale scale, User user)
         {
             _completionSource = new TaskCompletionSource<BodyComposition>();
-            
+
             _scale = scale;
             _user = user;
             _adapter.DeviceDiscovered += DevideDiscovered;
@@ -51,7 +53,7 @@ namespace MiScaleExporter.Services
             }
             catch (Exception ex)
             {
-                // TODO Log;
+                _logService.LogError(ex.Message);
             }
 
             await StopAsync();
@@ -133,5 +135,6 @@ namespace MiScaleExporter.Services
 
             _adapter.DeviceDiscovered -= DevideDiscovered;
         }
+        
     }
 }
