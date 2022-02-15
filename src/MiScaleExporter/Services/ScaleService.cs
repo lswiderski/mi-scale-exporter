@@ -62,7 +62,6 @@ namespace MiScaleExporter.Services
         private void TimeOuted(object s, EventArgs e)
         {
             StopAsync().Wait();
-            bodyComposition.IsValid = false;
             _completionSource.SetResult(bodyComposition);
         }
 
@@ -81,11 +80,16 @@ namespace MiScaleExporter.Services
                 }
                 catch (Exception ex)
                 {
+                    _logService.LogError(ex.Message);
                 }
                 finally
                 {
                     StopAsync().Wait();
-                    bodyComposition.IsValid = true;
+                    if (bodyComposition != null)
+                    {
+                        bodyComposition.IsValid = true;
+                    }
+                   
                     _completionSource.SetResult(bodyComposition);
                 }
             }
@@ -110,7 +114,7 @@ namespace MiScaleExporter.Services
             var stabilized = ctrlByte1 & (1 << 5);
             if (stabilized <= 0) return;
             var bc = this._decoder.GetBodyComposition(buffer,
-                new MiScaleBodyComposition.Contracts.User(_user.Age, _user.Height, (Sex) (byte) _user.Sex));
+                new MiScaleBodyComposition.Contracts.User(_user.Height, _user.Age, (Sex) (byte) _user.Sex));
 
             bodyComposition = new BodyComposition
             {

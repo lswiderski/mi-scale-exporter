@@ -36,17 +36,17 @@ namespace MiScaleExporter.ViewModels
                 ScanningLabel = "Scanning";
                 var bc = await _scaleService.GetBodyCompositonAsync(scale, new User { Sex = _sex, Age = _age, Height = _height});
 
-                if (bc.IsValid)
+                if (bc is null || !bc.IsValid)
                 {
-                    ScanningLabel = "";
+                    await Application.Current.MainPage.DisplayAlert ("Problem", "Data could not be obtained. try again", "OK");
+                    ScanningLabel = "Not found"; 
                 }
                 else
                 {
-                    ScanningLabel = "Not found";
+                    App.BodyComposition = bc;
+                    await Shell.Current.GoToAsync("///FormPage");
                 }
 
-                App.BodyComposition = bc;
-                await Shell.Current.GoToAsync("///FormPage");
             });
         }
 
