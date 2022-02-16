@@ -168,6 +168,18 @@
                        TextColor="Black">
 
                 </Entry>
+                <Grid VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">  
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <CheckBox Grid.Row="0" Grid.Column="0" VerticalOptions="Center" IsChecked="{Binding SavePassword, Mode=TwoWay }"/>
+                    <Label Grid.Row="0" Grid.Column="1" Text="save password" FontSize="Small" TextColor="Black" VerticalOptions="Center" />
+                </Grid>
             </StackLayout>
 
 

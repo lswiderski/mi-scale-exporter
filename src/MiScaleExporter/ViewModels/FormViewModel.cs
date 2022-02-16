@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Threading.Tasks;
 using MiScaleExporter.Models;
 using MiScaleExporter.Services;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace MiScaleExporter.ViewModels
@@ -12,12 +14,52 @@ namespace MiScaleExporter.ViewModels
         public FormViewModel(IGarminService garminService)
         {
             _garminService = garminService;
+            this.LoadPreferencesAsync().Wait();
             Title = "Garmin Body Composition Form";
             Date = DateTime.Now;
             Time = DateTime.Now.TimeOfDay;
             UploadCommand = new Command(OnUpload, ValidateSave);
             this.PropertyChanged +=
                 (_, __) => UploadCommand.ChangeCanExecute();
+        }
+        
+        private async Task LoadPreferencesAsync()
+        {
+            this._email = Preferences.Get(PreferencesKeys.GarminUserEmail, string.Empty);
+            this._savePassword = Preferences.Get(PreferencesKeys.GarminUserSavePassword, false);
+            if (this._savePassword)
+            {
+                try
+                {
+                    this._password = await SecureStorage.GetAsync(PreferencesKeys.GarminUserPassword);
+                }
+                catch
+                {
+                    this._password = string.Empty;
+                }
+                
+            }
+        }
+
+        private async Task SavePrefencesAsync()
+        {
+            Preferences.Set(PreferencesKeys.GarminUserEmail, _email);
+            Preferences.Set(PreferencesKeys.GarminUserSavePassword, _savePassword);
+            if (_savePassword)
+            {
+                try
+                {
+                    await SecureStorage.SetAsync(PreferencesKeys.GarminUserPassword, _password);
+                }
+                catch
+                {
+                    
+                }
+            }
+            else
+            {
+                SecureStorage.Remove(PreferencesKeys.GarminUserPassword);
+            }
         }
 
         private bool ValidateSave()
@@ -27,6 +69,7 @@ namespace MiScaleExporter.ViewModels
 
         private async void OnUpload()
         {
+            await this.SavePrefencesAsync();
             var response = await this._garminService.UploadAsync(this.PrepareRequest(), Date.Date.Add(Time), Email, Password);
             var message = response.IsSuccess ? "Uploaded" : response.Message;
             await Application.Current.MainPage.DisplayAlert ("Response", message, "OK");
@@ -209,6 +252,14 @@ namespace MiScaleExporter.ViewModels
         {
             get => _isAutomaticCalculation;
             set => SetProperty(ref _isAutomaticCalculation, value);
+        }
+        
+        private bool _savePassword;
+
+        public bool SavePassword
+        {
+            get => _savePassword;
+            set => SetProperty(ref _savePassword, value);
         }
     }
 }

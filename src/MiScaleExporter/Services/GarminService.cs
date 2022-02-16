@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MiScaleExporter.Models;
 using Newtonsoft.Json;
+using Xamarin.Essentials;
 
 namespace MiScaleExporter.Services;
 
@@ -20,7 +21,6 @@ public class GarminService : IGarminService
         _httpClient = new HttpClient()
         {
             Timeout = TimeSpan.FromMinutes(5),
-            BaseAddress = new Uri("http://srv09.mikr.us:20366")
         };
     }
 
@@ -74,8 +74,8 @@ public class GarminService : IGarminService
     
     private async Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content)
     {
-       // var baseAddress = "http://192.168.1.17:4321";
-        var response = await _httpClient.PostAsync($"{requestUri}", content);
+        var baseAddress = Preferences.Get(PreferencesKeys.ApiServerAddressOverride, SettingKeys.ApiServerAddress);
+        var response = await _httpClient.PostAsync($"{baseAddress}{requestUri}", content);
         return response;
     }
 }
