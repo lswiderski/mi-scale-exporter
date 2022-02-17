@@ -3,13 +3,9 @@ using Plugin.BLE;
 using Plugin.BLE.Abstractions.Contracts;
 using Plugin.BLE.Abstractions.EventArgs;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
-using MiScaleBodyComposition;
-using Sex = MiScaleBodyComposition.Contracts.Sex;
 
 namespace MiScaleExporter.Services
 {
@@ -21,7 +17,7 @@ namespace MiScaleExporter.Services
         private User _user;
         private TaskCompletionSource<BodyComposition> _completionSource;
         private BodyComposition bodyComposition;
-        private MiScale _decoder;
+        private MiScaleBodyComposition.MiScale _decoder;
         private ILogService _logService;
 
         public ScaleService(ILogService logService)
@@ -30,10 +26,10 @@ namespace MiScaleExporter.Services
             _adapter = CrossBluetoothLE.Current.Adapter;
             _adapter.ScanTimeout = 50000;
             _adapter.ScanTimeoutElapsed += TimeOuted;
-            _decoder = new MiScale();
+            _decoder = new MiScaleBodyComposition.MiScale();
         }
 
-        public async Task<BodyComposition> GetBodyCompositonAsync(Scale scale, User user)
+        public async Task<Models.BodyComposition> GetBodyCompositonAsync(Scale scale, Models.User user)
         {
             _completionSource = new TaskCompletionSource<BodyComposition>();
 
@@ -114,7 +110,7 @@ namespace MiScaleExporter.Services
             var stabilized = ctrlByte1 & (1 << 5);
             if (stabilized <= 0) return;
             var bc = this._decoder.GetBodyComposition(buffer,
-                new MiScaleBodyComposition.Contracts.User(_user.Height, _user.Age, (Sex) (byte) _user.Sex));
+                new MiScaleBodyComposition.User(_user.Height, _user.Age, (MiScaleBodyComposition.Sex) (byte) _user.Sex));
 
             bodyComposition = new BodyComposition
             {
