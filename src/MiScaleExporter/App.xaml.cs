@@ -52,6 +52,7 @@ namespace MiScaleExporter
             builder.RegisterType<ScaleViewModel>().As<IScaleViewModel>().InstancePerLifetimeScope();
             builder.RegisterType<FormViewModel>().As<IFormViewModel>().InstancePerLifetimeScope();
             builder.RegisterType<LogService>().As<ILogService>().SingleInstance();
+            builder.RegisterType<SettingsViewModel>().AsSelf();
             App.Container = builder.Build();
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocator(Container));
         }
