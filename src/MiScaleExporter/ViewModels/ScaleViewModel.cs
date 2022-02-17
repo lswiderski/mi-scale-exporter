@@ -16,12 +16,11 @@ namespace MiScaleExporter.ViewModels
         {
             _scaleService = scaleService;
             this.LoadPreferences();
-            
+
             Title = "Mi Scale Data";
 
             CancelCommand = new Command(OnCancel);
-            OpenWebCommand = new Command(async () =>
-                await Browser.OpenAsync("https://github.com/lswiderski/MiScaleExporter-mobile"));
+          
             ScanCommand = new Command(async () =>
             {
                 this.SavePrefences();
@@ -81,9 +80,6 @@ namespace MiScaleExporter.ViewModels
             var radio = s as RadioButton;
             this.Sex = radio.Value as string == "1" ? Models.Sex.Male : Models.Sex.Female;
         }
-
-
-        public ICommand OpenWebCommand { get; }
 
         public ICommand ScanCommand { get; }
 

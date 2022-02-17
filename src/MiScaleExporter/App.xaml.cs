@@ -17,12 +17,8 @@ namespace MiScaleExporter
     {
         public static IContainer Container;
         public static BodyComposition BodyComposition;
-        private Assembly _assembly;
-        private string _assemblyName;
-        public App(Assembly assembly, string assemblyName)
+        public App()
         {
-            _assembly = assembly;
-            _assemblyName = assemblyName;
             InitializeComponent();
         }
 
@@ -53,6 +49,7 @@ namespace MiScaleExporter
             builder.RegisterType<FormViewModel>().As<IFormViewModel>().InstancePerLifetimeScope();
             builder.RegisterType<LogService>().As<ILogService>().SingleInstance();
             builder.RegisterType<SettingsViewModel>().AsSelf();
+            builder.RegisterType<AboutViewModel>().AsSelf();
             App.Container = builder.Build();
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocator(Container));
         }

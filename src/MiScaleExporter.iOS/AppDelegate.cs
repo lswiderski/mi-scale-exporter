@@ -25,7 +25,7 @@ namespace MiScaleExporter.iOS
             global::Xamarin.Forms.Forms.Init();
             var assembly = this.GetType().Assembly;
             var assemblyName = assembly.GetName().Name;
-            LoadApplication(new App(assembly, assemblyName));
+            LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);
         }

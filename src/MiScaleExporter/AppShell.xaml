@@ -73,6 +73,10 @@
         </ResourceDictionary>
     </Shell.Resources>
 
+    <FlyoutItem Title="About" Icon="icon_about.png">
+        <ShellContent Route="AboutPage" ContentTemplate="{DataTemplate local:AboutPage}" />
+    </FlyoutItem>
+    
     <FlyoutItem Title="Mi Scale" Icon="icon_feed.png">
         <ShellContent Route="ScalePage" ContentTemplate="{DataTemplate local:ScalePage}" />
     </FlyoutItem>
@@ -80,11 +84,7 @@
     <FlyoutItem Title="Garmin Form" Icon="icon_feed.png">
         <ShellContent Route="FormPage" ContentTemplate="{DataTemplate local:FormPage}" />
     </FlyoutItem>
-
-    <FlyoutItem Title="About" Icon="icon_about.png">
-        <ShellContent Route="AboutPage" ContentTemplate="{DataTemplate local:AboutPage}" />
-    </FlyoutItem>
-
+    
     <FlyoutItem Title="Settings" Icon="icon_feed.png">
         <ShellContent Route="ScalePage" ContentTemplate="{DataTemplate local:SettingPage}" />
     </FlyoutItem>

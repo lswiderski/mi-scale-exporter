@@ -6,7 +6,7 @@
     <ContentPage.Content>
         <StackLayout  Padding="30,24,30,24" Spacing="10">
             <Label Text="Alternate API Address"
-                   FontSize="Medium"
+                   FontSize="Small"
                    TextColor="Black" />
             <Entry Text="{Binding ApiAddress, Mode=TwoWay}"
                    FontSize="Medium"

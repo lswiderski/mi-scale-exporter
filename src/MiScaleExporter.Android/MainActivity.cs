@@ -21,7 +21,7 @@ namespace MiScaleExporter.Droid
             
             var assembly = this.GetType().Assembly;
             var assemblyName = assembly.GetName().Name;
-            LoadApplication(new App(assembly, assemblyName));
+            LoadApplication(new App());
         }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
