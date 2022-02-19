@@ -64,7 +64,8 @@ namespace MiScaleExporter.ViewModels
 
         private bool ValidateSave()
         {
-            return true; // return !String.IsNullOrWhiteSpace(weight);
+            return !String.IsNullOrWhiteSpace(_email) 
+                   &&  !String.IsNullOrWhiteSpace(_password);
         }
 
         private async void OnUpload()
@@ -219,7 +220,11 @@ namespace MiScaleExporter.ViewModels
         public string Email
         {
             get => _email;
-            set => SetProperty(ref _email, value);
+            set
+            {
+                SetProperty(ref _email, value);
+                UploadCommand?.ChangeCanExecute();
+            }
         }
 
         private string _password;
@@ -227,7 +232,11 @@ namespace MiScaleExporter.ViewModels
         public string Password
         {
             get => _password;
-            set => SetProperty(ref _password, value);
+            set
+            {
+                SetProperty(ref _password, value);
+                UploadCommand?.ChangeCanExecute();
+            }
         }
 
         private DateTime _date;

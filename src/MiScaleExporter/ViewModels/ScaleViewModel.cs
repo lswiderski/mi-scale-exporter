@@ -18,32 +18,8 @@ namespace MiScaleExporter.ViewModels
             this.LoadPreferences();
 
             Title = "Mi Scale Data";
-
             CancelCommand = new Command(OnCancel);
-          
-            ScanCommand = new Command(async () =>
-            {
-                this.SavePrefences();
-                Scale scale = new Scale()
-                {
-                    Address = Address,
-                };
-                ScanningLabel = "Scanning";
-                var bc = await _scaleService.GetBodyCompositonAsync(scale,
-                    new User {Sex = _sex, Age = _age, Height = _height});
-
-                if (bc is null || !bc.IsValid)
-                {
-                    await Application.Current.MainPage.DisplayAlert("Problem", "Data could not be obtained. try again",
-                        "OK");
-                    ScanningLabel = "Not found";
-                }
-                else
-                {
-                    App.BodyComposition = bc;
-                    await Shell.Current.GoToAsync("///FormPage");
-                }
-            });
+            ScanCommand = new Command(onScan, ValidateScan);
         }
 
         private void LoadPreferences()
@@ -62,33 +38,62 @@ namespace MiScaleExporter.ViewModels
             Preferences.Set(PreferencesKeys.MiScaleBluetoothAddress, _address);
         }
 
-        private bool ValidateSave()
+        private async void onScan()
         {
-            return !String.IsNullOrWhiteSpace(_address);
+            this.SavePrefences();
+            Scale scale = new Scale()
+            {
+                Address = Address,
+            };
+            ScanningLabel = "Scanning";
+            var bc = await _scaleService.GetBodyCompositonAsync(scale,
+                new User {Sex = _sex, Age = _age, Height = _height});
+
+            if (bc is null || !bc.IsValid)
+            {
+                await Application.Current.MainPage.DisplayAlert("Problem", "Data could not be obtained. try again",
+                    "OK");
+                ScanningLabel = "Not found";
+            }
+            else
+            {
+                App.BodyComposition = bc;
+                await Shell.Current.GoToAsync("///FormPage");
+            }
+        }
+        
+        private bool ValidateScan()
+        {
+            return !String.IsNullOrWhiteSpace(_address)
+                                        && _height > 0 && _height < 220
+                                        && _age > 0 && _age < 99;
         }
 
+        public Command ScanCommand { get; }
         public Command CancelCommand { get; }
 
         private async void OnCancel()
         {
             await _scaleService.CancelSearchAsync();
         }
-
-
         public void SexRadioButtonChanged(object s, CheckedChangedEventArgs e)
         {
             var radio = s as RadioButton;
             this.Sex = radio.Value as string == "1" ? Models.Sex.Male : Models.Sex.Female;
         }
 
-        public ICommand ScanCommand { get; }
+        
 
         private string _address;
 
         public string Address
         {
             get => _address;
-            set => SetProperty(ref _address, value);
+            set
+            {
+                SetProperty(ref _address, value);
+                ScanCommand?.ChangeCanExecute();
+            }
         }
 
         private int _age;
@@ -102,6 +107,7 @@ namespace MiScaleExporter.ViewModels
                 if (int.TryParse(value, out var result))
                 {
                     SetProperty(ref _age, result);
+                    ScanCommand?.ChangeCanExecute();
                 }
             }
         }
@@ -117,6 +123,7 @@ namespace MiScaleExporter.ViewModels
                 if (int.TryParse(value, out var result))
                 {
                     SetProperty(ref _height, result);
+                    ScanCommand?.ChangeCanExecute();
                 }
             }
         }
