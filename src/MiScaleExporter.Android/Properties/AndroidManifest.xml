@@ -9,7 +9,7 @@
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-feature android:name="android.hardware.bluetooth_le" android:required="false"/>
-	<application android:label="MiScaleExporter.Android"
+	<application android:label="MiScale Exporter"
 				 android:usesCleartextTraffic="true"
 				 android:theme="@style/MainTheme"
 				 android:allowBackup="false"></application>
