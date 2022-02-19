@@ -1,6 +1,7 @@
 ﻿using MiScaleExporter.Models;
 using MiScaleExporter.Services;
 using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -19,7 +20,7 @@ namespace MiScaleExporter.ViewModels
 
             Title = "Mi Scale Data";
             CancelCommand = new Command(OnCancel);
-            ScanCommand = new Command(onScan, ValidateScan);
+            ScanCommand = new Command(OnScan, ValidateScan);
         }
 
         private void LoadPreferences()
@@ -38,9 +39,16 @@ namespace MiScaleExporter.ViewModels
             Preferences.Set(PreferencesKeys.MiScaleBluetoothAddress, _address);
         }
 
-        private async void onScan()
+        private async void OnScan()
         {
             this.SavePrefences();
+            if (await GetLocationPermissionStatusAsync() != PermissionStatus.Granted)
+            {
+                await Application.Current.MainPage.DisplayAlert("Problem", "Permission to use Bluetooth is required to scan.",
+                    "OK");
+                return;
+            }
+            
             Scale scale = new Scale()
             {
                 Address = Address,
@@ -60,6 +68,17 @@ namespace MiScaleExporter.ViewModels
                 App.BodyComposition = bc;
                 await Shell.Current.GoToAsync("///FormPage");
             }
+        }
+
+        private async Task<PermissionStatus> GetLocationPermissionStatusAsync()
+        {
+            var locationPermissionStatus = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+            if (locationPermissionStatus != PermissionStatus.Granted)
+            {
+                locationPermissionStatus = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+            }
+
+            return locationPermissionStatus;
         }
         
         private bool ValidateScan()
