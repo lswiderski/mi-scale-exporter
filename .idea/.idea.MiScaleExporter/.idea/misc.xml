@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Projects/mi-scale-exporter/src/MiScaleExporter.Android/Resources/mipmap-anydpi-v26/icon.xml" value="0.5520833333333334" />
+        <entry key="..\:/Projects/mi-scale-exporter/src/MiScaleExporter.Android/Resources/mipmap-anydpi-v26/icon_round.xml" value="0.5520833333333334" />
+      </map>
+    </option>
+  </component>
   <component name="com.jetbrains.rider.android.RiderAndroidMiscFileCreationComponent">
     <option name="ENSURE_MISC_FILE_EXISTS" value="true" />
   </component>

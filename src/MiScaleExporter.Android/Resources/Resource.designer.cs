@@ -14,7 +14,7 @@ namespace MiScaleExporter.Droid
 {
 	
 	
-	[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Android.Build.Tasks", "12.1.0.11")]
+	[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Android.Build.Tasks", "12.2.0.155")]
 	public partial class Resource
 	{
 		
@@ -22242,7 +22242,7 @@ namespace MiScaleExporter.Droid
 			public const int tooltip_frame_light = 2131165329;
 			
 			// aapt resource value: 0x7F070092
-			public const int xamarin_logo = 2131165330;
+			public const int weighing_scale_128 = 2131165330;
 			
 			static Drawable()
 			{
