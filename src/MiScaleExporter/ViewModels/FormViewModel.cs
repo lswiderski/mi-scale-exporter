@@ -70,11 +70,12 @@ namespace MiScaleExporter.ViewModels
 
         private async void OnUpload()
         {
+            this.IsBusy = true;
             await this.SavePrefencesAsync();
             var response = await this._garminService.UploadAsync(this.PrepareRequest(), Date.Date.Add(Time), Email, Password);
             var message = response.IsSuccess ? "Uploaded" : response.Message;
             await Application.Current.MainPage.DisplayAlert ("Response", message, "OK");
-            
+            this.IsBusy = false;
             // This will pop the current page off the navigation stack
             await Shell.Current.GoToAsync("..");
         }
@@ -270,5 +271,14 @@ namespace MiScaleExporter.ViewModels
             get => _savePassword;
             set => SetProperty(ref _savePassword, value);
         }
+        
+        private bool _isBusy;
+
+        public bool IsBusy
+        {
+            get => _isBusy;
+            set => SetProperty(ref _isBusy, value);
+        }
+
     }
 }

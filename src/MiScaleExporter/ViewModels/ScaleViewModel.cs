@@ -53,10 +53,12 @@ namespace MiScaleExporter.ViewModels
             {
                 Address = Address,
             };
-            ScanningLabel = "Scanning";
+            ScanningLabel = string.Empty;
+            this.IsBusy = true;
             var bc = await _scaleService.GetBodyCompositonAsync(scale,
                 new User {Sex = _sex, Age = _age, Height = _height});
 
+            this.IsBusy = false;
             if (bc is null || !bc.IsValid)
             {
                 await Application.Current.MainPage.DisplayAlert("Problem", "Data could not be obtained. try again",
@@ -94,6 +96,7 @@ namespace MiScaleExporter.ViewModels
         private async void OnCancel()
         {
             await _scaleService.CancelSearchAsync();
+            this.IsBusy = false;
         }
         public void SexRadioButtonChanged(object s, CheckedChangedEventArgs e)
         {
@@ -162,5 +165,13 @@ namespace MiScaleExporter.ViewModels
             get => _scanningLabel;
             set => SetProperty(ref _scanningLabel, value);
         }
+        private bool _isBusy;
+
+        public bool IsBusy
+        {
+            get => _isBusy;
+            set => SetProperty(ref _isBusy, value);
+        }
+        
     }
 }
