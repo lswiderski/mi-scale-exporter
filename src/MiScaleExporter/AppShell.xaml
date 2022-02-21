@@ -86,7 +86,7 @@
     </FlyoutItem>
     
     <FlyoutItem Title="Settings" Icon="icon_feed.png">
-        <ShellContent Route="ScalePage" ContentTemplate="{DataTemplate local:SettingPage}" />
+        <ShellContent Route="Settings" ContentTemplate="{DataTemplate local:SettingPage}" />
     </FlyoutItem>
 
 

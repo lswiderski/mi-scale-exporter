@@ -42,6 +42,10 @@
         <ScrollView Grid.Row="2">
             <StackLayout Orientation="Vertical" Padding="30,24,30,24" Spacing="10"  >
                
+                <Button Margin="0,10,0,0" Text="Go to scan"
+                        Command="{Binding GoToScanCommand}"
+                        BackgroundColor="{StaticResource Primary}"
+                        TextColor="White" />
                 <Button Margin="0,10,0,0" Text="Visit project repository"
                         Command="{Binding OpenGithubCommand}"
                         BackgroundColor="{StaticResource Primary}"
