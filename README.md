@@ -52,6 +52,16 @@ https://garmin.bieda.it/
 - Xamarin.Essentials
 - API Backend in GOlang
 
+## Images
+- Xiaomi settings (Bluetooth adress)
+![xiaomi settings](https://github.com/lswiderski/mi-scale-exporter/blob/main/resources/img/screenshots/xiaomi.jpg)
+- required user data
+![required user data](https://github.com/lswiderski/mi-scale-exporter/blob/main/resources/img/screenshots/userdata.jpg)
+- Calculated body composition
+![calculated body composition](https://github.com/lswiderski/mi-scale-exporter/blob/main/resources/img/screenshots/bodycomposition.jpg)
+- results in Gamrin Cloud
+![garmin result](https://github.com/lswiderski/mi-scale-exporter/blob/main/resources/img/screenshots/garmin.png)
+
 ## Inspiration
 
 - https://github.com/RobertWojtowicz/miscale2garmin
