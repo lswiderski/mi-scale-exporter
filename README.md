@@ -5,7 +5,7 @@ Tested on Oneplus 5T (Android 10) and Mi Body Composition Scale (XMTZC02HM)
 
 ## Instruction
 
-- Stand on your scale. Measure yourself. Complete the user form data, Scale Bluetooth address and get data from the scale. Mi Body Composition Scale is active up to 15 min after the measurement.
+- Stand on your scale. Measure yourself. Complete the user form data, Scale Bluetooth address and get data from the scale. Mi Body Composition Scale is active up to 15 min after the measurement. (Bluetooth address can be found in Mi Fit > Profile > My devices > Mi Body Composition Scale > Bluetooth address (hold to copy)).
 
 - Then you can review your data and upload it to Garmin Cloud. If you do not have Mi scale and just want to manually insert the data, you can so.
 
@@ -19,6 +19,31 @@ Tested on Oneplus 5T (Android 10) and Mi Body Composition Scale (XMTZC02HM)
 
 - If you want, you can host your own API server. Just change the server address in Settings.
 
+ ## Diagram
+
+```mermaid
+sequenceDiagram
+    participant Mobile App
+    participant Mi Body Composition Scale
+    participant API Endpoint
+    participant Garmin Cloud
+    Mobile App->>Mi Body Composition Scale: Connect and get data 
+    Mi Body Composition Scale-->>Mobile App: Weight and Impedance data
+    loop 
+        Mobile App->>Mobile App: Calculate Body Composition
+    end
+    Mobile App->>API Endpoint: Body Composition data
+    API Endpoint->>Garmin Cloud: Body Composition data
+    Garmin Cloud-->>API Endpoint: Result
+    API Endpoint-->>Mobile App: Result
+
+```
+
+## API Endpoint used in the app ([source](https://github.com/lswiderski/bodycomposition-webapi))
+
+```http
+https://garmin.bieda.it/
+```
 
 ## Stack
 - Xamarin forms (C#)
