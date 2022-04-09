@@ -28,11 +28,6 @@ namespace MiScaleExporter.Droid
 
             string storageFolder = Android.OS.Environment.ExternalStorageDirectory.Path;
             string appFolder = "MiScaleExporter";
-            var filePathDir = Path.Combine(storageFolder, appFolder);
-            if (!File.Exists(filePathDir))
-            {
-                Directory.CreateDirectory(filePathDir);
-            }
 
             var date = DateTime.UtcNow.Date.ToString("dd.MM.yyyy");
             fileTarget.FileName = Path.Combine(storageFolder, appFolder, string.Format("Log-{0}.txt", date));
@@ -55,6 +50,18 @@ namespace MiScaleExporter.Droid
 
             Logger = LogManager.GetLogger(fileName);
             return Logger;
+        }
+
+        public void CreateFolderIfNecesarry()
+        {
+            string storageFolder = Android.OS.Environment.ExternalStorageDirectory.Path;
+            string appFolder = "MiScaleExporter";
+            var filePathDir = Path.Combine(storageFolder, appFolder);
+
+            if (!File.Exists(filePathDir))
+            {
+                Directory.CreateDirectory(filePathDir);
+            }
         }
     }
 }

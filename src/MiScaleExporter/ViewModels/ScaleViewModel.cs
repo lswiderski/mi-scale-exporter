@@ -12,10 +12,12 @@ namespace MiScaleExporter.ViewModels
     public class ScaleViewModel : BaseViewModel, IScaleViewModel
     {
         private readonly IScaleService _scaleService;
+        private readonly ILogService _logService;
 
-        public ScaleViewModel(IScaleService scaleService)
+        public ScaleViewModel(IScaleService scaleService, ILogService logService)
         {
             _scaleService = scaleService;
+            _logService = logService;
             this.LoadPreferences();
 
             Title = "Mi Scale Data";
@@ -48,7 +50,7 @@ namespace MiScaleExporter.ViewModels
                     "OK");
                 return;
             }
-            
+
             Scale scale = new Scale()
             {
                 Address = Address,
@@ -61,8 +63,10 @@ namespace MiScaleExporter.ViewModels
             this.IsBusy = false;
             if (bc is null || !bc.IsValid)
             {
-                await Application.Current.MainPage.DisplayAlert("Problem", "Data could not be obtained. try again",
+                var msg = "Data could not be obtained. try again";
+                await Application.Current.MainPage.DisplayAlert("Problem", msg,
                     "OK");
+                _logService.LogError(msg);
                 ScanningLabel = "Not found";
             }
             else
@@ -82,7 +86,7 @@ namespace MiScaleExporter.ViewModels
 
             return locationPermissionStatus;
         }
-        
+
         private bool ValidateScan()
         {
             return !String.IsNullOrWhiteSpace(_address)
