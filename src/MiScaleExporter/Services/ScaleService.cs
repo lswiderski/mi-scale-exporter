@@ -19,6 +19,7 @@ namespace MiScaleExporter.Services
         private BodyComposition bodyComposition;
         private MiScaleBodyComposition.MiScale _decoder;
         private ILogService _logService;
+        private byte[] _scannedData;
 
         public ScaleService(ILogService logService)
         {
@@ -77,6 +78,11 @@ namespace MiScaleExporter.Services
                 catch (Exception ex)
                 {
                     _logService.LogError(ex.Message);
+
+                    if (_scannedData != null)
+                    {
+                        _logService.LogInfo(String.Join("; ",_scannedData));
+                    }
                 }
                 finally
                 {
@@ -99,19 +105,18 @@ namespace MiScaleExporter.Services
                     .Where(x => x.Type == Plugin.BLE.Abstractions.AdvertisementRecordType.ServiceData) //0x16
                     .Select(x => x.Data)
                     .FirstOrDefault();
+                _scannedData = data;
                 ComputeData(data);
             }
         }
 
         private void ComputeData(byte[] data)
         {
-            var buffer = data.Skip(2).ToArray(); // checks why the array is shifted by 2 bytes
-            var ctrlByte1 = buffer[1];
-            var stabilized = ctrlByte1 & (1 << 5);
-            if (stabilized <= 0) return;
+
+           
+            var buffer = data.ToArray();
             var bc = this._decoder.GetBodyComposition(buffer,
                 new MiScaleBodyComposition.User(_user.Height, _user.Age, (MiScaleBodyComposition.Sex) (byte) _user.Sex));
-
             bodyComposition = new BodyComposition
             {
                 Weight = bc.Weight,
