@@ -10,4 +10,5 @@ public static class PreferencesKeys
     public static string GarminUserSavePassword = "GarminUserSavePassword";
     public static string GarminUserPassword = "GarminUserPassword";
     public static string ApiServerAddressOverride = "ApiServerAddressOverride";
+    public static string SaveToStorage = "SaveToStorage";
 }

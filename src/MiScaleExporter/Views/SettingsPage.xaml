@@ -11,6 +11,18 @@
             <Entry Text="{Binding ApiAddress, Mode=TwoWay}"
                    FontSize="Medium"
                    TextColor="Black" />
+            <Grid VerticalOptions="StartAndExpand" HorizontalOptions="CenterAndExpand">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <CheckBox Grid.Row="0" Grid.Column="0" VerticalOptions="Center" IsChecked="{Binding SaveToStorage, Mode=TwoWay }"/>
+                <Label Grid.Row="0" Grid.Column="1" Text="save log to storage" FontSize="Small" TextColor="Black" VerticalOptions="Center" />
+            </Grid>
             <Button Margin="0,10,0,0" Text="Reset to Default"
                     Command="{Binding ResetCommand}"
                     BackgroundColor="{StaticResource Primary}"

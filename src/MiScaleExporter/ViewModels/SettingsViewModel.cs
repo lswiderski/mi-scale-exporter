@@ -12,10 +12,12 @@ namespace MiScaleExporter.ViewModels
         {
             this.Title = "Settings";
             this._apiAddress = Preferences.Get(PreferencesKeys.ApiServerAddressOverride, string.Empty);
+            this._saveToStorage = Preferences.Get(PreferencesKeys.SaveToStorage,false);
             ResetCommand = new Command(() =>
                 {
                     Preferences.Remove(PreferencesKeys.ApiServerAddressOverride);
                     this.ApiAddress = string.Empty;
+                    Preferences.Remove(PreferencesKeys.SaveToStorage);
                 }
             );
         }
@@ -41,6 +43,17 @@ namespace MiScaleExporter.ViewModels
                 }
                 SetProperty(ref _apiAddress, value);
             }
+        }
+
+        private bool _saveToStorage;
+
+        public bool SaveToStorage
+        {
+            get => _saveToStorage;
+            set {
+                Preferences.Set(PreferencesKeys.SaveToStorage, value);
+                SetProperty(ref _saveToStorage, value);
+            } 
         }
     }
 }
