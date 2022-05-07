@@ -14,6 +14,7 @@
             <Grid VerticalOptions="StartAndExpand" HorizontalOptions="CenterAndExpand">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
@@ -21,7 +22,9 @@
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <CheckBox Grid.Row="0" Grid.Column="0" VerticalOptions="Center" IsChecked="{Binding SaveToStorage, Mode=TwoWay }"/>
-                <Label Grid.Row="0" Grid.Column="1" Text="save log to storage" FontSize="Small" TextColor="Black" VerticalOptions="Center" />
+                <Label Grid.Row="0" Grid.Column="1" Text="Save log to storage" FontSize="Small" TextColor="Black" VerticalOptions="Center" />
+                <CheckBox Grid.Row="1" Grid.Column="0" VerticalOptions="Center" IsChecked="{Binding ShowReceivedByteArray, Mode=TwoWay }"/>
+                <Label Grid.Row="1" Grid.Column="1" Text="Show received raw data after measurement" FontSize="Small" TextColor="Black" VerticalOptions="Center" />
             </Grid>
             <Button Margin="0,10,0,0" Text="Reset to Default"
                     Command="{Binding ResetCommand}"

@@ -55,5 +55,17 @@ namespace MiScaleExporter.ViewModels
                 SetProperty(ref _saveToStorage, value);
             } 
         }
+
+        private bool _showReceivedByteArray;
+
+        public bool ShowReceivedByteArray
+        {
+            get => _showReceivedByteArray;
+            set
+            {
+                Preferences.Set(PreferencesKeys.ShowReceivedByteArray, value);
+                SetProperty(ref _showReceivedByteArray, value);
+            }
+        }
     }
 }

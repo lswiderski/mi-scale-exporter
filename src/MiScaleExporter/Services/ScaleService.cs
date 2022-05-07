@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 
 namespace MiScaleExporter.Services
 {
@@ -106,14 +107,17 @@ namespace MiScaleExporter.Services
                     .Select(x => x.Data)
                     .FirstOrDefault();
                 _scannedData = data;
+                if(Preferences.Get(PreferencesKeys.ShowReceivedByteArray, false))
+                {
+                    _logService.LogInfo(String.Join("; ", _scannedData));
+                }
+                
                 ComputeData(data);
             }
         }
 
         private void ComputeData(byte[] data)
         {
-
-           
             var buffer = data.ToArray();
             var bc = this._decoder.GetBodyComposition(buffer,
                 new MiScaleBodyComposition.User(_user.Height, _user.Age, (MiScaleBodyComposition.Sex) (byte) _user.Sex));
