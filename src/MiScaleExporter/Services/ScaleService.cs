@@ -18,7 +18,6 @@ namespace MiScaleExporter.Services
         private User _user;
         private TaskCompletionSource<BodyComposition> _completionSource;
         private BodyComposition bodyComposition;
-        private MiScaleBodyComposition.MiScale _decoder;
         private ILogService _logService;
         private byte[] _scannedData;
 
@@ -28,7 +27,6 @@ namespace MiScaleExporter.Services
             _adapter = CrossBluetoothLE.Current.Adapter;
             _adapter.ScanTimeout = 50000;
             _adapter.ScanTimeoutElapsed += TimeOuted;
-            _decoder = new MiScaleBodyComposition.MiScale();
         }
 
         public async Task<Models.BodyComposition> GetBodyCompositonAsync(Scale scale, Models.User user)
@@ -119,23 +117,45 @@ namespace MiScaleExporter.Services
         private void ComputeData(byte[] data)
         {
             var buffer = data.ToArray();
-            var bc = this._decoder.GetBodyComposition(buffer,
-                new MiScaleBodyComposition.User(_user.Height, _user.Age, (MiScaleBodyComposition.Sex) (byte) _user.Sex));
-            bodyComposition = new BodyComposition
+
+            switch (_user.ScaleType)
             {
-                Weight = bc.Weight,
-                BMI = bc.BMI,
-                ProteinPercentage = bc.ProteinPercentage,
-                IdealWeight = bc.IdealWeight,
-                BMR = bc.BMR,
-                BoneMass = bc.BoneMass,
-                Fat = bc.Fat,
-                MetabolicAge = bc.MetabolicAge,
-                MuscleMass = bc.MuscleMass,
-                VisceralFat = bc.VisceralFat,
-                WaterPercentage = bc.Water,
-                BodyType = bc.BodyType,
-            };
+                case ScaleType.MiBodyCompositionScale:
+                    var miScale = new MiScaleBodyComposition.MiScale();
+                    var bc = miScale.GetBodyComposition(buffer,
+                        new MiScaleBodyComposition.User(_user.Height, _user.Age, (MiScaleBodyComposition.Sex)(byte)_user.Sex));
+                    bodyComposition = new BodyComposition
+                    {
+                        Weight = bc.Weight,
+                        BMI = bc.BMI,
+                        ProteinPercentage = bc.ProteinPercentage,
+                        IdealWeight = bc.IdealWeight,
+                        BMR = bc.BMR,
+                        BoneMass = bc.BoneMass,
+                        Fat = bc.Fat,
+                        MetabolicAge = bc.MetabolicAge,
+                        MuscleMass = bc.MuscleMass,
+                        VisceralFat = bc.VisceralFat,
+                        WaterPercentage = bc.Water,
+                        BodyType = bc.BodyType,
+                    };
+                    break;
+                case ScaleType.MiSmartScale:
+                    var legacyMiscale = new MiScaleBodyComposition.LegacyMiScale();
+                    var legacyResult = legacyMiscale.GetWeight(buffer, _user.Height);
+
+                    bodyComposition = new BodyComposition
+                    {
+                        Weight = legacyResult.Weight,
+                        BMI = legacyResult.BMI,
+                    };
+
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
+
+         
         }
 
         private async Task StopAsync()

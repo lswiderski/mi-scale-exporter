@@ -27,5 +27,10 @@ namespace MiScaleExporter.Views
         {
             vm.SexRadioButtonChanged(sender, e);
         }
+        private void ScaleTypeRadioButton_CheckedChanged(object sender, CheckedChangedEventArgs e)
+        {
+            vm.ScaleTypeRadioButton_Changed(sender, e);
+        }
+        
     }
 }

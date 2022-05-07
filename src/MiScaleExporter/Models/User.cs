@@ -9,5 +9,6 @@ namespace MiScaleExporter.Models
         public int Height { get; set; }
         public int Age { get; set; }
         public Sex Sex { get; set; }
+        public ScaleType ScaleType { get; set; }
     }
 }

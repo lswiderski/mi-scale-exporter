@@ -31,6 +31,7 @@ namespace MiScaleExporter.ViewModels
             this._height = Preferences.Get(PreferencesKeys.UserHeight, 170);
             this._sex = (Sex) Preferences.Get(PreferencesKeys.UserSex, (byte) Sex.Male);
             this._address = Preferences.Get(PreferencesKeys.MiScaleBluetoothAddress, string.Empty);
+            this._scaleType = (ScaleType)Preferences.Get(PreferencesKeys.ScaleType, (byte)ScaleType.MiBodyCompositionScale);
         }
 
         private void SavePrefences()
@@ -39,6 +40,7 @@ namespace MiScaleExporter.ViewModels
             Preferences.Set(PreferencesKeys.UserHeight, _height);
             Preferences.Set(PreferencesKeys.UserSex, (byte) _sex);
             Preferences.Set(PreferencesKeys.MiScaleBluetoothAddress, _address);
+            Preferences.Set(PreferencesKeys.ScaleType, (byte)_scaleType);
         }
 
         private async void OnScan()
@@ -58,7 +60,7 @@ namespace MiScaleExporter.ViewModels
             ScanningLabel = string.Empty;
             this.IsBusy = true;
             var bc = await _scaleService.GetBodyCompositonAsync(scale,
-                new User {Sex = _sex, Age = _age, Height = _height});
+                new User {Sex = _sex, Age = _age, Height = _height, ScaleType =_scaleType});
 
             this.IsBusy = false;
             if (bc is null || !bc.IsValid)
@@ -108,7 +110,11 @@ namespace MiScaleExporter.ViewModels
             this.Sex = radio.Value as string == "1" ? Models.Sex.Male : Models.Sex.Female;
         }
 
-        
+        public void ScaleTypeRadioButton_Changed(object s, CheckedChangedEventArgs e)
+        {
+            var radio = s as RadioButton;
+            this.ScaleType = radio.Value as string == "1" ? Models.ScaleType.MiSmartScale : Models.ScaleType.MiBodyCompositionScale;
+        }
 
         private string _address;
 
@@ -176,6 +182,14 @@ namespace MiScaleExporter.ViewModels
             get => _isBusy;
             set => SetProperty(ref _isBusy, value);
         }
-        
+
+
+        private ScaleType _scaleType;
+
+        public ScaleType ScaleType
+        {
+            get => _scaleType;
+            set => SetProperty(ref _scaleType, value);
+        }
     }
 }

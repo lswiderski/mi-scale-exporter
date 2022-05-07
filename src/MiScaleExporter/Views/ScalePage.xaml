@@ -41,10 +41,10 @@
                 </Entry>
                 <Label Text="Sex"
                        TextColor="Black" />
-                <RadioButton Content="Female" Value="0"
-                             CheckedChanged="SexRadioButton_CheckedChanged"
+                    <RadioButton Content="Female" Value="0" GroupName="Sex"
+                             CheckedChanged="SexRadioButton_CheckedChanged" 
                              TextColor="Black" />
-                <RadioButton Content="Male" Value="1" IsChecked="True"
+                    <RadioButton Content="Male" Value="1" IsChecked="True" GroupName="Sex"
                              CheckedChanged="SexRadioButton_CheckedChanged" 
                              TextColor="Black" />
 
@@ -54,8 +54,17 @@
                 <Entry Text="{Binding Address, Mode=TwoWay}"
                        FontSize="Medium"
                        TextColor="Black" />
-               
-                <Label Text="{Binding ScanningLabel}" FontSize="Small" TextColor="Black" />
+
+                    <Label Text="Scale"
+                       TextColor="Black" />
+                    <RadioButton Content="Mi Body Composition Scale 1 / 2" Value="0" IsChecked="True" GroupName="ScaleType"
+                             CheckedChanged="ScaleTypeRadioButton_CheckedChanged"
+                             TextColor="Black" />
+                    <RadioButton Content="Mi Smarty Scale" Value="1"  GroupName="ScaleType"
+                             CheckedChanged="ScaleTypeRadioButton_CheckedChanged" 
+                             TextColor="Black" />
+
+                    <Label Text="{Binding ScanningLabel}" FontSize="Small" TextColor="Black" />
                 <Button Margin="0,10,0,0" Text="Get values from mi scale "
                         Command="{Binding ScanCommand}"
                         BackgroundColor="{StaticResource Primary}"
