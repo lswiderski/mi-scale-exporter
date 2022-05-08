@@ -31,11 +31,12 @@ namespace MiScaleExporter.Services
 
         public async Task<Models.BodyComposition> GetBodyCompositonAsync(Scale scale, Models.User user)
         {
+            bodyComposition = null;
             _completionSource = new TaskCompletionSource<BodyComposition>();
 
             _scale = scale;
             _user = user;
-            _adapter.DeviceDiscovered += DevideDiscovered;
+            _adapter.DeviceAdvertised += DeviceAdvertided;
             await _adapter.StartScanningForDevicesAsync();
             return await _completionSource.Task;
         }
@@ -61,18 +62,22 @@ namespace MiScaleExporter.Services
             _completionSource.SetResult(bodyComposition);
         }
 
-        private void DevideDiscovered(object s, DeviceEventArgs a)
+        private void DeviceAdvertided(object s, DeviceEventArgs a)
         {
             var obj = a.Device.NativeDevice;
             PropertyInfo propInfo = obj.GetType().GetProperty("Address");
-            string address = (string) propInfo.GetValue(obj, null);
+            string address = (string)propInfo.GetValue(obj, null);
 
             if (address.ToLowerInvariant() == _scale.Address?.ToLowerInvariant())
             {
+
                 try
                 {
                     _scaleDevice = a.Device;
-                    GetScanData();
+                    if(!GetScanData())
+                    {
+                        return;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -80,23 +85,24 @@ namespace MiScaleExporter.Services
 
                     if (_scannedData != null)
                     {
-                        _logService.LogInfo(String.Join("; ",_scannedData));
+                        _logService.LogInfo(String.Join("; ", _scannedData));
                     }
                 }
                 finally
                 {
-                    StopAsync().Wait();
+                 
                     if (bodyComposition != null)
                     {
+                        StopAsync().Wait();
                         bodyComposition.IsValid = true;
+                        _completionSource.SetResult(bodyComposition);
                     }
-                   
-                    _completionSource.SetResult(bodyComposition);
                 }
             }
+
         }
 
-        private void GetScanData()
+        private bool GetScanData()
         {
             if (_scaleDevice != null)
             {
@@ -105,65 +111,86 @@ namespace MiScaleExporter.Services
                     .Select(x => x.Data)
                     .FirstOrDefault();
                 _scannedData = data;
-                if(Preferences.Get(PreferencesKeys.ShowReceivedByteArray, false))
-                {
-                    _logService.LogInfo(String.Join("; ", _scannedData));
-                }
-                
-                ComputeData(data);
+              
+
+                var bc = ComputeData(data);
+
+                return bc != null;
             }
+
+            return false;
         }
 
-        private void ComputeData(byte[] data)
+        private BodyComposition ComputeData(byte[] data)
         {
-            var buffer = data.ToArray();
-
             switch (_user.ScaleType)
             {
                 case ScaleType.MiBodyCompositionScale:
-                    var miScale = new MiScaleBodyComposition.MiScale();
-                    var bc = miScale.GetBodyComposition(buffer,
-                        new MiScaleBodyComposition.User(_user.Height, _user.Age, (MiScaleBodyComposition.Sex)(byte)_user.Sex));
-                    bodyComposition = new BodyComposition
+
+                    var miBodyCompositionScale = new MiScaleBodyComposition.MiScale();
+                    var user = new MiScaleBodyComposition.User(_user.Height, _user.Age, (MiScaleBodyComposition.Sex)(byte)_user.Sex);
+
+                    if (miBodyCompositionScale.Istabilized(data, user)
+                        && miBodyCompositionScale.HasImpedance(data, user))
                     {
-                        Weight = bc.Weight,
-                        BMI = bc.BMI,
-                        ProteinPercentage = bc.ProteinPercentage,
-                        IdealWeight = bc.IdealWeight,
-                        BMR = bc.BMR,
-                        BoneMass = bc.BoneMass,
-                        Fat = bc.Fat,
-                        MetabolicAge = bc.MetabolicAge,
-                        MuscleMass = bc.MuscleMass,
-                        VisceralFat = bc.VisceralFat,
-                        WaterPercentage = bc.Water,
-                        BodyType = bc.BodyType,
-                    };
-                    break;
+                        if (Preferences.Get(PreferencesKeys.ShowReceivedByteArray, false))
+                        {
+                            _logService.LogInfo(String.Join("; ", data));
+                        }
+                        var bc = miBodyCompositionScale.GetBodyComposition(data, user);
+                        bodyComposition = new BodyComposition
+                        {
+                            Weight = bc.Weight,
+                            BMI = bc.BMI,
+                            ProteinPercentage = bc.ProteinPercentage,
+                            IdealWeight = bc.IdealWeight,
+                            BMR = bc.BMR,
+                            BoneMass = bc.BoneMass,
+                            Fat = bc.Fat,
+                            MetabolicAge = bc.MetabolicAge,
+                            MuscleMass = bc.MuscleMass,
+                            VisceralFat = bc.VisceralFat,
+                            WaterPercentage = bc.Water,
+                            BodyType = bc.BodyType,
+                        };
+                        return bodyComposition;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 case ScaleType.MiSmartScale:
                     var legacyMiscale = new MiScaleBodyComposition.LegacyMiScale();
-                    var legacyResult = legacyMiscale.GetWeight(buffer, _user.Height);
 
-                    bodyComposition = new BodyComposition
+                    if (legacyMiscale.Istabilized(data))
                     {
-                        Weight = legacyResult.Weight,
-                        BMI = legacyResult.BMI,
-                    };
+                        var legacyResult = legacyMiscale.GetWeight(data, _user.Height);
 
-                    break;
+                        bodyComposition = new BodyComposition
+                        {
+                            Weight = legacyResult.Weight,
+                            BMI = legacyResult.BMI,
+                        };
+
+                        return bodyComposition;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 default:
                     throw new NotImplementedException();
             }
 
-         
+
         }
 
         private async Task StopAsync()
         {
             await _adapter.StopScanningForDevicesAsync();
 
-            _adapter.DeviceDiscovered -= DevideDiscovered;
+            _adapter.DeviceAdvertised -= DeviceAdvertided;
         }
-        
+
     }
 }
