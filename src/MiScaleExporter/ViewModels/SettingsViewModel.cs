@@ -12,12 +12,18 @@ namespace MiScaleExporter.ViewModels
         {
             this.Title = "Settings";
             this._apiAddress = Preferences.Get(PreferencesKeys.ApiServerAddressOverride, string.Empty);
+            this._showReceivedByteArray = Preferences.Get(PreferencesKeys.ShowReceivedByteArray, false);
             this._saveToStorage = Preferences.Get(PreferencesKeys.SaveToStorage,false);
+            this._autoScan = Preferences.Get(PreferencesKeys.AutoScan, false);
+            this._oneClickScanAndUpload = Preferences.Get(PreferencesKeys.OneClickScanAndUpload, false);
             ResetCommand = new Command(() =>
                 {
                     Preferences.Remove(PreferencesKeys.ApiServerAddressOverride);
                     this.ApiAddress = string.Empty;
+                    Preferences.Remove(PreferencesKeys.ShowReceivedByteArray);
                     Preferences.Remove(PreferencesKeys.SaveToStorage);
+                    Preferences.Remove(PreferencesKeys.AutoScan);
+                    Preferences.Remove(PreferencesKeys.OneClickScanAndUpload);
                 }
             );
         }
@@ -67,5 +73,30 @@ namespace MiScaleExporter.ViewModels
                 SetProperty(ref _showReceivedByteArray, value);
             }
         }
+
+        private bool _autoScan;
+
+        public bool AutoScan
+        {
+            get => _autoScan;
+            set
+            {
+                Preferences.Set(PreferencesKeys.AutoScan, value);
+                SetProperty(ref _autoScan, value);
+            }
+        }
+
+        private bool _oneClickScanAndUpload;
+
+        public bool OneClickScanAndUpload
+        {
+            get => _oneClickScanAndUpload;
+            set
+            {
+                Preferences.Set(PreferencesKeys.OneClickScanAndUpload, value);
+                SetProperty(ref _oneClickScanAndUpload, value);
+            }
+        }
+        
     }
 }

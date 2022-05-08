@@ -9,5 +9,6 @@ namespace MiScaleExporter.ViewModels
     {
         void SexRadioButtonChanged(object s, CheckedChangedEventArgs e);
         void ScaleTypeRadioButton_Changed(object s, CheckedChangedEventArgs e);
+        void CheckPreferences();
     }
 }

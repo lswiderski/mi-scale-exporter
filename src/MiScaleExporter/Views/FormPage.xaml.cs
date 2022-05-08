@@ -29,6 +29,7 @@ namespace MiScaleExporter.Views
             base.OnAppearing();
 
             vm.LoadBodyComposition();
+            vm.CheckPreferences();
         }
       
     }

@@ -26,11 +26,21 @@ namespace MiScaleExporter.ViewModels
             ScanCommand = new Command(OnScan, ValidateScan);
         }
 
+        public void CheckPreferences()
+        {
+            if ((Preferences.Get(PreferencesKeys.AutoScan, false)
+                 || Preferences.Get(PreferencesKeys.OneClickScanAndUpload, false))
+                 && !string.IsNullOrWhiteSpace(_address))
+            {
+                OnScan();
+            }
+        }
+
         private void LoadPreferences()
         {
             this._age = Preferences.Get(PreferencesKeys.UserAge, 25);
             this._height = Preferences.Get(PreferencesKeys.UserHeight, 170);
-            this._sex = (Sex) Preferences.Get(PreferencesKeys.UserSex, (byte) Sex.Male);
+            this._sex = (Sex)Preferences.Get(PreferencesKeys.UserSex, (byte)Sex.Male);
             this._address = Preferences.Get(PreferencesKeys.MiScaleBluetoothAddress, string.Empty);
             this._scaleType = (ScaleType)Preferences.Get(PreferencesKeys.ScaleType, (byte)ScaleType.MiBodyCompositionScale);
         }
@@ -39,7 +49,7 @@ namespace MiScaleExporter.ViewModels
         {
             Preferences.Set(PreferencesKeys.UserAge, _age);
             Preferences.Set(PreferencesKeys.UserHeight, _height);
-            Preferences.Set(PreferencesKeys.UserSex, (byte) _sex);
+            Preferences.Set(PreferencesKeys.UserSex, (byte)_sex);
             Preferences.Set(PreferencesKeys.MiScaleBluetoothAddress, _address);
             Preferences.Set(PreferencesKeys.ScaleType, (byte)_scaleType);
         }
@@ -48,10 +58,10 @@ namespace MiScaleExporter.ViewModels
         {
             this.SavePrefences();
 
-            if(DeviceInfo.Platform == DevicePlatform.Android)
+            if (DeviceInfo.Platform == DevicePlatform.Android)
             {
                 var version = double.Parse(DeviceInfo.VersionString);
-                if(version >= 12)
+                if (version >= 12)
                 {
                     if (await GetBluetoothPermissionStatusAsync() != PermissionStatus.Granted)
                     {
@@ -80,7 +90,7 @@ namespace MiScaleExporter.ViewModels
             ScanningLabel = string.Empty;
             this.IsBusy = true;
             var bc = await _scaleService.GetBodyCompositonAsync(scale,
-                new User {Sex = _sex, Age = _age, Height = _height, ScaleType =_scaleType});
+                new User { Sex = _sex, Age = _age, Height = _height, ScaleType = _scaleType });
 
             this.IsBusy = false;
             if (bc is null || !bc.IsValid)

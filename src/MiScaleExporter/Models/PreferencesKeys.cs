@@ -13,4 +13,6 @@ public static class PreferencesKeys
     public static string SaveToStorage = "SaveToStorage";
     public static string ShowReceivedByteArray = "ShowReceivedByteArray";
     public static string ScaleType = "ScaleType";
+    public static string AutoScan = "AutoScan";
+    public static string OneClickScanAndUpload = "OneClickScanAndUpload";
 }

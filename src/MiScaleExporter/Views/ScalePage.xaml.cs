@@ -5,6 +5,7 @@ using MiScaleExporter.Services;
 using MiScaleExporter.ViewModels;
 using System;
 using System.ComponentModel;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -19,7 +20,7 @@ namespace MiScaleExporter.Views
             InitializeComponent();
             using (var scope = App.Container.BeginLifetimeScope())
             {
-                this.BindingContext =vm = scope.Resolve<IScaleViewModel>();
+                this.BindingContext = vm = scope.Resolve<IScaleViewModel>();
             }
         }
 
@@ -31,6 +32,12 @@ namespace MiScaleExporter.Views
         {
             vm.ScaleTypeRadioButton_Changed(sender, e);
         }
-        
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            vm.CheckPreferences();
+        }
+
     }
 }

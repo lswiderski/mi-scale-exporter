@@ -68,6 +68,16 @@ namespace MiScaleExporter.ViewModels
                    &&  !String.IsNullOrWhiteSpace(_password);
         }
 
+        public void CheckPreferences()
+        {
+            if ( Preferences.Get(PreferencesKeys.OneClickScanAndUpload, false)
+                 && !string.IsNullOrWhiteSpace(Email)
+                 && !string.IsNullOrWhiteSpace(Password))
+            {
+                OnUpload();
+            }
+        }
+
         private async void OnUpload()
         {
             this.IsBusy = true;
