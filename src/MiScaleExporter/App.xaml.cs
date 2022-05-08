@@ -11,6 +11,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using NLog;
 using MiScaleExporter.Log;
+using MiScaleExporter.Permission;
 
 namespace MiScaleExporter
 {
@@ -53,6 +54,7 @@ namespace MiScaleExporter
             builder.RegisterType<AboutViewModel>().AsSelf();
             builder.RegisterInstance<ILogManager>(DependencyService.Get<ILogManager>());
             builder.RegisterInstance<ILogger>(DependencyService.Get<ILogManager>().GetLog());
+       
             App.Container = builder.Build();
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocator(Container));
         }

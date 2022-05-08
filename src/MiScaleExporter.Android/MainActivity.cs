@@ -10,6 +10,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using MiScaleExporter.Log;
+using MiScaleExporter.Permission;
 
 namespace MiScaleExporter.Droid
 {
@@ -26,8 +27,7 @@ namespace MiScaleExporter.Droid
             DisplayCrashReport();
             var app = new App();
             logger = DependencyService.Get<ILogManager>().GetLog();
-            var assembly = this.GetType().Assembly;
-            var assemblyName = assembly.GetName().Name;
+            DependencyService.Register<IBluetoothConnectPermission, BluetoothConnectPermission>();
             LoadApplication(app);
         }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)

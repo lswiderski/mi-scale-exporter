@@ -6,6 +6,7 @@ using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Essentials;
+using MiScaleExporter.Permission;
 
 namespace MiScaleExporter.ViewModels
 {
@@ -46,12 +47,31 @@ namespace MiScaleExporter.ViewModels
         private async void OnScan()
         {
             this.SavePrefences();
-            if (await GetLocationPermissionStatusAsync() != PermissionStatus.Granted)
+
+            if(DeviceInfo.Platform == DevicePlatform.Android)
             {
-                await Application.Current.MainPage.DisplayAlert("Problem", "Permission to use Bluetooth is required to scan.",
-                    "OK");
-                return;
+                var version = double.Parse(DeviceInfo.VersionString);
+                if(version >= 12)
+                {
+                    if (await GetBluetoothPermissionStatusAsync() != PermissionStatus.Granted)
+                    {
+                        await Application.Current.MainPage.DisplayAlert("Problem", "Permission to use Bluetooth is required to scan.",
+                           "OK");
+                        return;
+                    }
+                }
+                else
+                {
+                    if (await GetLocationPermissionStatusAsync() != PermissionStatus.Granted)
+                    {
+                        await Application.Current.MainPage.DisplayAlert("Problem", "Permission to use Bluetooth is required to scan.",
+                            "OK");
+                        return;
+                    }
+                }
+
             }
+
 
             Scale scale = new Scale()
             {
@@ -87,6 +107,17 @@ namespace MiScaleExporter.ViewModels
             }
 
             return locationPermissionStatus;
+        }
+
+        private async Task<PermissionStatus> GetBluetoothPermissionStatusAsync()
+        {
+            var bluetoothPermission = DependencyService.Get<IBluetoothConnectPermission>();
+            var status = await bluetoothPermission.CheckStatusAsync();
+            if (status != PermissionStatus.Granted)
+            {
+                status = await bluetoothPermission.RequestAsync();
+            }
+            return status;
         }
 
         private bool ValidateScan()
