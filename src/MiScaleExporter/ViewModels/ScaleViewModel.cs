@@ -104,7 +104,7 @@ namespace MiScaleExporter.ViewModels
             else
             {
                 App.BodyComposition = bc;
-                await Shell.Current.GoToAsync("///FormPage");
+                await Shell.Current.GoToAsync($"///FormPage?autoUpload={Preferences.Get(PreferencesKeys.OneClickScanAndUpload, false)}");
             }
         }
 

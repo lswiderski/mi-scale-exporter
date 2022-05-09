@@ -11,6 +11,7 @@ using Xamarin.Forms.Xaml;
 
 namespace MiScaleExporter.Views
 {
+    [QueryProperty(nameof(AutoUpload), "autoUpload")]
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class FormPage : ContentPage
     {
@@ -27,9 +28,18 @@ namespace MiScaleExporter.Views
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-
             vm.LoadBodyComposition();
-            vm.CheckPreferences();
+        }
+
+        public bool AutoUpload
+        {
+            set
+            {
+                if (value)
+                {
+                    vm.AutoUpload();
+                }
+            }
         }
       
     }

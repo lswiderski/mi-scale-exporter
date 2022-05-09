@@ -4,6 +4,6 @@
     {
         void LoadBodyComposition();
 
-        void CheckPreferences();
+        void AutoUpload();
     }
 }

@@ -68,10 +68,9 @@ namespace MiScaleExporter.ViewModels
                    &&  !String.IsNullOrWhiteSpace(_password);
         }
 
-        public void CheckPreferences()
+        public void AutoUpload()
         {
-            if ( Preferences.Get(PreferencesKeys.OneClickScanAndUpload, false)
-                 && !string.IsNullOrWhiteSpace(Email)
+            if (!string.IsNullOrWhiteSpace(Email)
                  && !string.IsNullOrWhiteSpace(Password))
             {
                 OnUpload();
@@ -87,7 +86,7 @@ namespace MiScaleExporter.ViewModels
             await Application.Current.MainPage.DisplayAlert ("Response", message, "OK");
             this.IsBusy = false;
             // This will pop the current page off the navigation stack
-            await Shell.Current.GoToAsync("..");
+            await Shell.Current.GoToAsync("..?autoUpload=false");
         }
 
         private BodyComposition PrepareRequest()
