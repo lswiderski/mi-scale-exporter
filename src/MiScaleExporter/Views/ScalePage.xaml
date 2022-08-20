@@ -28,7 +28,7 @@
                         <behaviors:NumericIntValidationBehavior />
                     </Entry.Behaviors>
                 </Entry>
-                <Label Text="Heght"
+                <Label Text="Height"
                        FontSize="Medium"
                        TextColor="Black" />
                 <Entry Text="{Binding Height, Mode=TwoWay}"
@@ -60,7 +60,7 @@
                     <RadioButton Content="Mi Body Composition Scale 1 / 2" Value="0" IsChecked="True" GroupName="ScaleType"
                              CheckedChanged="ScaleTypeRadioButton_CheckedChanged"
                              TextColor="Black" />
-                    <RadioButton Content="Mi Smarty Scale" Value="1"  GroupName="ScaleType"
+                    <RadioButton Content="Mi Smart Scale" Value="1"  GroupName="ScaleType"
                              CheckedChanged="ScaleTypeRadioButton_CheckedChanged" 
                              TextColor="Black" />
 
