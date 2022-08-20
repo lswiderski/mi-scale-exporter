@@ -60,7 +60,9 @@ namespace MiScaleExporter.ViewModels
 
             if (DeviceInfo.Platform == DevicePlatform.Android)
             {
-                var version = double.Parse(DeviceInfo.VersionString);
+                double version = 0;
+                double.TryParse(DeviceInfo.VersionString, out version);
+
                 if (version >= 12)
                 {
                     if (await GetBluetoothPermissionStatusAsync() != PermissionStatus.Granted)
