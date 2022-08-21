@@ -203,6 +203,16 @@ namespace MiScaleExporter.ViewModels
             }
         }
 
+        public bool IsMaleSelected
+        {
+            get => _sex == Sex.Male;
+        }
+
+        public bool IsFemaleSelected
+        {
+            get => _sex == Sex.Female;
+        }
+
         private Sex _sex;
 
         public Sex Sex
@@ -224,6 +234,16 @@ namespace MiScaleExporter.ViewModels
         {
             get => _isBusy;
             set => SetProperty(ref _isBusy, value);
+        }
+
+        public bool IsMiBodyCompositionScaleSelected
+        {
+            get => _scaleType == ScaleType.MiBodyCompositionScale;
+        }
+
+        public bool IsMiSmartScaleSelected
+        {
+            get => _scaleType == ScaleType.MiSmartScale;
         }
 
 
