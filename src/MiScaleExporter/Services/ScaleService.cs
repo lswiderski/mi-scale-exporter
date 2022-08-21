@@ -20,7 +20,7 @@ namespace MiScaleExporter.Services
         private BodyComposition bodyComposition;
         private ILogService _logService;
         private byte[] _scannedData;
-        private byte[] _previousErrorData; 
+        private byte[] _previousErrorData;
 
         public ScaleService(ILogService logService)
         {
@@ -75,7 +75,7 @@ namespace MiScaleExporter.Services
                 try
                 {
                     _scaleDevice = a.Device;
-                    if(!GetScanData())
+                    if (!GetScanData())
                     {
                         return;
                     }
@@ -91,7 +91,7 @@ namespace MiScaleExporter.Services
                 }
                 finally
                 {
-                 
+
                     if (bodyComposition != null)
                     {
                         StopAsync().Wait();
@@ -112,7 +112,7 @@ namespace MiScaleExporter.Services
                     .Select(x => x.Data)
                     .FirstOrDefault();
                 _scannedData = data;
-              
+
 
                 var bc = ComputeData(data);
 
@@ -130,9 +130,11 @@ namespace MiScaleExporter.Services
 
                     var miBodyCompositionScale = new MiScaleBodyComposition.MiScale();
                     var user = new MiScaleBodyComposition.User(_user.Height, _user.Age, (MiScaleBodyComposition.Sex)(byte)_user.Sex);
+                    var isStabilized = miBodyCompositionScale.Istabilized(data, user);
+                    var hasImpedance = miBodyCompositionScale.HasImpedance(data, user);
+                    var doNotWaitForImpedance = Preferences.Get(PreferencesKeys.DoNotWaitForImpedance, false);
 
-                    if (miBodyCompositionScale.Istabilized(data, user)
-                        && miBodyCompositionScale.HasImpedance(data, user))
+                    if (isStabilized && (doNotWaitForImpedance || hasImpedance))
                     {
                         if (Preferences.Get(PreferencesKeys.ShowReceivedByteArray, false))
                         {
@@ -202,7 +204,7 @@ namespace MiScaleExporter.Services
                                 _previousErrorData = data;
                             }
                         }
-                       
+
                         return null;
                     }
                 default:
