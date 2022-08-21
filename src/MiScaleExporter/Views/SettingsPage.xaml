@@ -17,6 +17,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
@@ -31,6 +32,8 @@
                 <Label Grid.Row="2" Grid.Column="1" Text="Start scan on Go to Scan button" FontSize="Small" TextColor="Black" VerticalOptions="Center" />
                 <CheckBox Grid.Row="3" Grid.Column="0" VerticalOptions="Center" IsChecked="{Binding OneClickScanAndUpload, Mode=TwoWay }"/>
                 <Label Grid.Row="3" Grid.Column="1" Text="One click - Scan &amp; Upload" FontSize="Small" TextColor="Black" VerticalOptions="Center" />
+                <CheckBox Grid.Row="4" Grid.Column="0" VerticalOptions="Center" IsChecked="{Binding ShowUnstabilizedData, Mode=TwoWay }"/>
+                <Label Grid.Row="4" Grid.Column="1" Text="Show unstabilized data" FontSize="Small" TextColor="Black" VerticalOptions="Center" />
             </Grid>
             <Button Margin="0,10,0,0" Text="Reset to Default"
                     Command="{Binding ResetCommand}"

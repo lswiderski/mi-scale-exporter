@@ -20,6 +20,7 @@ namespace MiScaleExporter.Services
         private BodyComposition bodyComposition;
         private ILogService _logService;
         private byte[] _scannedData;
+        private byte[] _previousErrorData; 
 
         public ScaleService(ILogService logService)
         {
@@ -157,6 +158,16 @@ namespace MiScaleExporter.Services
                     }
                     else
                     {
+                        if (Preferences.Get(PreferencesKeys.ShowUnstabilizedData, false))
+                        {
+                            var dataString = String.Join("; ", data);
+                            var previousDataString = String.Join("; ", _previousErrorData ?? new byte[0]);
+                            if (previousDataString != dataString)
+                            {
+                                _logService.LogInfo("received data but it is unstable, or wrong scale type is selected\n" + dataString);
+                                _previousErrorData = data;
+                            }
+                        }
                         return null;
                     }
                 case ScaleType.MiSmartScale:
@@ -164,6 +175,11 @@ namespace MiScaleExporter.Services
 
                     if (legacyMiscale.Istabilized(data))
                     {
+                        if (Preferences.Get(PreferencesKeys.ShowReceivedByteArray, false))
+                        {
+                            _logService.LogInfo(String.Join("; ", data));
+                        }
+
                         var legacyResult = legacyMiscale.GetWeight(data, _user.Height);
 
                         bodyComposition = new BodyComposition
@@ -176,6 +192,17 @@ namespace MiScaleExporter.Services
                     }
                     else
                     {
+                        if (Preferences.Get(PreferencesKeys.ShowUnstabilizedData, false))
+                        {
+                            var dataString = String.Join("; ", data);
+                            var previousDataString = String.Join("; ", _previousErrorData ?? new byte[0]);
+                            if (previousDataString != dataString)
+                            {
+                                _logService.LogInfo("received data but it is unstable, or wrong scale type is selected\n" + dataString);
+                                _previousErrorData = data;
+                            }
+                        }
+                       
                         return null;
                     }
                 default:

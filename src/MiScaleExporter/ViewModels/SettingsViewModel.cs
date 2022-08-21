@@ -16,6 +16,7 @@ namespace MiScaleExporter.ViewModels
             this._saveToStorage = Preferences.Get(PreferencesKeys.SaveToStorage,false);
             this._autoScan = Preferences.Get(PreferencesKeys.AutoScan, false);
             this._oneClickScanAndUpload = Preferences.Get(PreferencesKeys.OneClickScanAndUpload, false);
+            this._showUnstabilizedData = Preferences.Get(PreferencesKeys.ShowUnstabilizedData, false);
             ResetCommand = new Command(() =>
                 {
                     Preferences.Remove(PreferencesKeys.ApiServerAddressOverride);
@@ -24,6 +25,7 @@ namespace MiScaleExporter.ViewModels
                     Preferences.Remove(PreferencesKeys.SaveToStorage);
                     Preferences.Remove(PreferencesKeys.AutoScan);
                     Preferences.Remove(PreferencesKeys.OneClickScanAndUpload);
+                    Preferences.Remove(PreferencesKeys.ShowUnstabilizedData);
                 }
             );
         }
@@ -97,6 +99,18 @@ namespace MiScaleExporter.ViewModels
                 SetProperty(ref _oneClickScanAndUpload, value);
             }
         }
-        
+
+        private bool _showUnstabilizedData;
+
+        public bool ShowUnstabilizedData
+        {
+            get => _showUnstabilizedData;
+            set
+            {
+                Preferences.Set(PreferencesKeys.ShowUnstabilizedData, value);
+                SetProperty(ref _showUnstabilizedData, value);
+            }
+        }
+
     }
 }

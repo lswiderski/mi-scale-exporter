@@ -15,4 +15,5 @@ public static class PreferencesKeys
     public static string ScaleType = "ScaleType";
     public static string AutoScan = "AutoScan";
     public static string OneClickScanAndUpload = "OneClickScanAndUpload";
+    public static string ShowUnstabilizedData = "ShowUnstabilizedData";
 }
