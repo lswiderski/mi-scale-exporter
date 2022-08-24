@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MiScaleExporter.MAUI.Views.ScalePage"
+             xmlns:vm="clr-namespace:MiScaleExporter.MAUI.ViewModels"
+             xmlns:behaviors="clr-namespace:MiScaleExporter.MAUI.Behaviors;assembly=MiScaleExporter.MAUI"
+             Title="{Binding Title}">
+    <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+        <Grid AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1" HorizontalOptions="FillAndExpand">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition  Width="*"/>
+            </Grid.ColumnDefinitions>
+            <ScrollView Grid.Row="1" HorizontalOptions="Fill">
+                <StackLayout Orientation="Vertical" Padding="30,24,30,24" Spacing="10">
+                    <Label Text="Age"
+                       FontSize="Medium"
+                       TextColor="Black" />
+                    <Entry Text="{Binding Age, Mode=TwoWay}"
+                       FontSize="Medium"
+                       Keyboard="Numeric"
+                       TextColor="Black">
+                        <Entry.Behaviors>
+                            <behaviors:NumericIntValidationBehavior />
+                        </Entry.Behaviors>
+                    </Entry>
+                    <Label Text="Height"
+                       FontSize="Medium"
+                       TextColor="Black" />
+                    <Entry Text="{Binding Height, Mode=TwoWay}"
+                       FontSize="Medium"
+                       Keyboard="Numeric"
+                       TextColor="Black">
+                        <Entry.Behaviors>
+                            <behaviors:NumericIntValidationBehavior />
+                        </Entry.Behaviors>
+                    </Entry>
+                    <Label Text="Sex"
+                       TextColor="Black" />
+                    <RadioButton Content="Female"
+                                 Value="0"
+                                 IsChecked="{Binding IsFemaleSelected}"
+                                 GroupName="Sex" 
+                                 CheckedChanged="SexRadioButton_CheckedChanged" 
+                                 TextColor="Black" />
+                    <RadioButton Content="Male"
+                                 Value="1"
+                                 IsChecked="{Binding IsMaleSelected}"
+                                 GroupName="Sex"
+                                 CheckedChanged="SexRadioButton_CheckedChanged" 
+                                 TextColor="Black" />
+
+                    <Label Text="Address"
+                       FontSize="Medium"
+                       TextColor="Black" />
+                    <Entry Text="{Binding Address, Mode=TwoWay}"
+                       FontSize="Medium"
+                       TextColor="Black" />
+
+                    <Label Text="Scale"
+                       TextColor="Black" />
+                    <RadioButton Content="Mi Body Composition Scale 1 / 2"
+                                 Value="0"
+                                 IsChecked="{Binding IsMiBodyCompositionScaleSelected}"
+                                 GroupName="ScaleType"
+                                 CheckedChanged="ScaleTypeRadioButton_CheckedChanged"
+                                 TextColor="Black" />
+                    <RadioButton Content="Mi Smart Scale"
+                                 Value="1"
+                                 IsChecked="{Binding IsMiSmartScaleSelected}"
+                                 GroupName="ScaleType"
+                                 CheckedChanged="ScaleTypeRadioButton_CheckedChanged" 
+                                 TextColor="Black" />
+
+                    <Label Text="{Binding ScanningLabel}" FontSize="Small" TextColor="Black" />
+                    <Button Margin="0,10,0,0" Text="Get values from mi scale "
+                        Command="{Binding ScanCommand}"
+                        BackgroundColor="{StaticResource Primary}"
+                        TextColor="White" />
+                    <Button Margin="0,10,0,0" Text="Cancel Search"
+                        Command="{Binding CancelCommand}"
+                        BackgroundColor="{StaticResource Primary}"
+                        TextColor="White" />
+                </StackLayout>
+            </ScrollView>
+        </Grid>
+        <StackLayout IsVisible="{Binding IsBusy}" Padding="12"
+                 AbsoluteLayout.LayoutFlags="PositionProportional"
+                 AbsoluteLayout.LayoutBounds="0.5,0.4,-1,-1">
+            <Frame>
+                <StackLayout>
+                    <ActivityIndicator IsRunning="{Binding IsBusy}" Color ="#80000000" BackgroundColor="White"/>
+
+                    <Label Text="Scanning..." HorizontalOptions="Center" TextColor="Black"/>
+                </StackLayout>
+
+            </Frame>
+
+
+        </StackLayout>
+    </AbsoluteLayout>
+</ContentPage>
