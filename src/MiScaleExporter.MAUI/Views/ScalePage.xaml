@@ -15,31 +15,42 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition  Width="*"/>
             </Grid.ColumnDefinitions>
-            <ScrollView Grid.Row="1" HorizontalOptions="Fill">
-                <StackLayout Orientation="Vertical" Padding="30,24,30,24" Spacing="10">
+            <ScrollView Grid.Row="1" HorizontalOptions="FillAndExpand">
+                <StackLayout Orientation="Vertical" Padding="15,24,15,24" Spacing="10">
                     <Label Text="Age"
                        FontSize="Medium"
                        TextColor="Black" />
-                    <Entry Text="{Binding Age, Mode=TwoWay}"
+                    <Border Stroke="{StaticResource Primary}"
+        StrokeThickness="1"
+        Padding="4,1"
+        HorizontalOptions="FillAndExpand">
+                        <Entry Text="{Binding Age, Mode=TwoWay}"
                        FontSize="Medium"
                        Keyboard="Numeric"
                        TextColor="Black">
-                        <Entry.Behaviors>
-                            <behaviors:NumericIntValidationBehavior />
-                        </Entry.Behaviors>
-                    </Entry>
+                            <Entry.Behaviors>
+                                <behaviors:NumericIntValidationBehavior />
+                            </Entry.Behaviors>
+                        </Entry>
+                    </Border>
                     <Label Text="Height"
                        FontSize="Medium"
                        TextColor="Black" />
-                    <Entry Text="{Binding Height, Mode=TwoWay}"
+                    <Border Stroke="{StaticResource Primary}"
+        StrokeThickness="1"
+        Padding="4,1"
+        HorizontalOptions="FillAndExpand">
+                        <Entry Text="{Binding Height, Mode=TwoWay}"
                        FontSize="Medium"
                        Keyboard="Numeric"
                        TextColor="Black">
-                        <Entry.Behaviors>
-                            <behaviors:NumericIntValidationBehavior />
-                        </Entry.Behaviors>
-                    </Entry>
+                            <Entry.Behaviors>
+                                <behaviors:NumericIntValidationBehavior />
+                            </Entry.Behaviors>
+                        </Entry>
+                    </Border>
                     <Label Text="Sex"
+                           FontSize="Medium"
                        TextColor="Black" />
                     <RadioButton Content="Female"
                                  Value="0"
@@ -57,11 +68,17 @@
                     <Label Text="Address"
                        FontSize="Medium"
                        TextColor="Black" />
-                    <Entry Text="{Binding Address, Mode=TwoWay}"
+                    <Border Stroke="{StaticResource Primary}"
+        StrokeThickness="1"
+        Padding="4,1"
+        HorizontalOptions="FillAndExpand">
+                        <Entry Text="{Binding Address, Mode=TwoWay}"
                        FontSize="Medium"
                        TextColor="Black" />
+                    </Border>
 
                     <Label Text="Scale"
+                           FontSize="Medium"
                        TextColor="Black" />
                     <RadioButton Content="Mi Body Composition Scale 1 / 2"
                                  Value="0"

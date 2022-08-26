@@ -3,8 +3,9 @@
     x:Class="MiScaleExporter.MAUI.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:MiScaleExporter.MAUI"
-    Shell.FlyoutBehavior="Disabled">
+    xmlns:local="clr-namespace:MiScaleExporter.MAUI.Views"
+     FlyoutBackgroundImageAspect="AspectFill"
+       FlyoutHeaderBehavior="CollapseOnScroll">
 
 
     <Shell.Resources>
@@ -69,20 +70,21 @@
         </ResourceDictionary>
     </Shell.Resources>
 
+    
     <FlyoutItem Title="About" Icon="icon_about.png">
-        <ShellContent Route="AboutPage" ContentTemplate="{DataTemplate local:Views.AboutPage}" />
+        <ShellContent Route="AboutPage" ContentTemplate="{DataTemplate local:AboutPage}" />
     </FlyoutItem>
 
     <FlyoutItem Title="Mi Scale" Icon="icon_feed.png">
-        <ShellContent Route="ScalePage" ContentTemplate="{DataTemplate local:Views.ScalePage}" />
+        <ShellContent Route="ScalePage" ContentTemplate="{DataTemplate local:ScalePage}" />
     </FlyoutItem>
 
     <FlyoutItem Title="Garmin Form" Icon="icon_feed.png">
-        <ShellContent Route="FormPage" ContentTemplate="{DataTemplate local:Views.FormPage}" />
+        <ShellContent Route="FormPage" ContentTemplate="{DataTemplate local:FormPage}" />
     </FlyoutItem>
 
     <FlyoutItem Title="Settings" Icon="icon_feed.png">
-        <ShellContent Route="Settings" ContentTemplate="{DataTemplate local:Views.SettingPage}" />
+        <ShellContent Route="Settings" ContentTemplate="{DataTemplate local:SettingPage}" />
     </FlyoutItem>
 
 

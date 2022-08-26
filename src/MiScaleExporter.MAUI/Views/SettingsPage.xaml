@@ -7,11 +7,19 @@
         <StackLayout  Padding="30,24,30,24" Spacing="10">
             <Label Text="Alternate API Address"
                    FontSize="Small"
-                   TextColor="Black" />
-            <Entry Text="{Binding ApiAddress, Mode=TwoWay}"
+                   TextColor="Black"
+                   Margin="15,0"/>
+            <Border Stroke="{StaticResource Primary}"
+        StrokeThickness="1"
+        Padding="4,1"
+        HorizontalOptions="FillAndExpand"
+        Margin="15,0,15,20">
+                <Entry Text="{Binding ApiAddress, Mode=TwoWay}"
                    FontSize="Medium"
                    TextColor="Black" />
-            <Grid VerticalOptions="StartAndExpand" HorizontalOptions="CenterAndExpand">
+            </Border>
+
+            <Grid VerticalOptions="StartAndExpand" HorizontalOptions="FillAndExpand" Margin="10,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -38,7 +46,7 @@
                 <CheckBox Grid.Row="5" Grid.Column="0" VerticalOptions="Center" IsChecked="{Binding DoNotWaitForImpedance, Mode=TwoWay }"/>
                 <Label Grid.Row="5" Grid.Column="1" Text="Do not wait for impedance" FontSize="Small" TextColor="Black" VerticalOptions="Center" />
             </Grid>
-            <Button Margin="0,10,0,0" Text="Reset to Default"
+            <Button Margin="15,10,15,10" Text="Reset to Default"
                     Command="{Binding ResetCommand}"
                     BackgroundColor="{StaticResource Primary}"
                     TextColor="White" />
