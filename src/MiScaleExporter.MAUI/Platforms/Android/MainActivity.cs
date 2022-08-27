@@ -18,9 +18,7 @@ namespace MiScaleExporter.MAUI
             base.OnCreate(savedInstanceState);
 
             Platform.Init(this, savedInstanceState);
-            //global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             DisplayCrashReport();
-          //  var app = new App();
             logger = DependencyService.Get<ILogManager>().GetLog();
             DependencyService.Register<IBluetoothConnectPermission, BluetoothConnectPermission>();
             // LoadApplication(app);
