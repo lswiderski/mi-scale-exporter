@@ -80,12 +80,12 @@ namespace MiScaleExporter.MAUI.ViewModels
 
         private async void OnUpload()
         {
-            this.IsBusy = true;
+            this.IsBusyForm = true;
             await this.SavePrefencesAsync();
             var response = await this._garminService.UploadAsync(this.PrepareRequest(), Date.Date.Add(Time), Email, Password);
             var message = response.IsSuccess ? "Uploaded" : response.Message;
             await Application.Current.MainPage.DisplayAlert ("Response", message, "OK");
-            this.IsBusy = false;
+            this.IsBusyForm = false;
             // This will pop the current page off the navigation stack
             await Shell.Current.GoToAsync("..?autoUpload=false");
         }
@@ -282,12 +282,12 @@ namespace MiScaleExporter.MAUI.ViewModels
             set => SetProperty(ref _savePassword, value);
         }
         
-        private bool _isBusy;
+        private bool _isBusyForm;
 
-        public bool IsBusy
+        public bool IsBusyForm
         {
-            get => _isBusy;
-            set => SetProperty(ref _isBusy, value);
+            get => _isBusyForm;
+            set => SetProperty(ref _isBusyForm, value);
         }
 
     }

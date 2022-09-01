@@ -91,11 +91,11 @@ namespace MiScaleExporter.MAUI.ViewModels
                 Address = Address,
             };
             ScanningLabel = string.Empty;
-            this.IsBusy = true;
+            this.IsBusyForm = true;
             var bc = await _scaleService.GetBodyCompositonAsync(scale,
                 new User { Sex = _sex, Age = _age, Height = _height, ScaleType = _scaleType });
 
-            this.IsBusy = false;
+            this.IsBusyForm = false;
             if (bc is null || !bc.IsValid)
             {
                 var msg = "Data could not be obtained. try again";
@@ -107,7 +107,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             else
             {
                 App.BodyComposition = bc;
-                await Shell.Current.GoToAsync($"///FormPage?autoUpload={Preferences.Get(PreferencesKeys.OneClickScanAndUpload, false)}");
+                await Shell.Current.GoToAsync($"//FormPage?autoUpload={Preferences.Get(PreferencesKeys.OneClickScanAndUpload, false)}");
             }
         }
 
@@ -146,7 +146,7 @@ namespace MiScaleExporter.MAUI.ViewModels
         private async void OnCancel()
         {
             await _scaleService.CancelSearchAsync();
-            this.IsBusy = false;
+            this.IsBusyForm = false;
         }
         public void SexRadioButtonChanged(object s, CheckedChangedEventArgs e)
         {
@@ -229,12 +229,12 @@ namespace MiScaleExporter.MAUI.ViewModels
             get => _scanningLabel;
             set => SetProperty(ref _scanningLabel, value);
         }
-        private bool _isBusy;
+        private bool _isBusyForm;
 
-        public bool IsBusy
+        public bool IsBusyForm
         {
-            get => _isBusy;
-            set => SetProperty(ref _isBusy, value);
+            get => _isBusyForm;
+            set => SetProperty(ref _isBusyForm, value);
         }
 
         public bool IsMiBodyCompositionScaleSelected
