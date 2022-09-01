@@ -16,17 +16,17 @@
         <ScrollView Grid.Row="0">
             <StackLayout Orientation="Vertical" Padding="30,24,30,24" Spacing="10">
                 <Label Text="Stand on your scale. Measure yourself. Complete the user form data, Scale Bluetooth address and get data from the scale. Mi Body Composition Scale is active up to 15 min after the measurement." 
-                       FontSize="Small" TextColor="Black"/>
+                       FontSize="Small"/>
                 <Label Text="Then you can review your data and upload it to Garmin Cloud. If you do not have Mi scale and just want to manually insert the data, you can so." 
-                       FontSize="Small" TextColor="Black"/>
+                       FontSize="Small"/>
                 <Label Text="You can save the Garmin password in this App but you don't have to. Passwords Managers like KeePass2 works well too." 
-                       FontSize="Small" TextColor="Black"/>
+                       FontSize="Small"/>
                 <Label Text="This App pass your data, email and password to API server and then it sends to Garmin Cloud." 
-                       FontSize="Small" TextColor="Black"/>
+                       FontSize="Small"/>
                 <Label Text="The API does not store or log anything, it's just a middleware between this App and Garmin services." 
-                       FontSize="Small" TextColor="Black"/>
+                       FontSize="Small" />
                 <Label Text="Both has open sources and you can audit it any time. And if you want, you can host your own API server. Just change the server address in Settings." 
-                       FontSize="Small" TextColor="Black"/>
+                       FontSize="Small" />
 
             </StackLayout>
         </ScrollView>

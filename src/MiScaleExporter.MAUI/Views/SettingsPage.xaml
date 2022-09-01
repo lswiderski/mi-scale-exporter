@@ -7,7 +7,6 @@
         <StackLayout  Padding="30,24,30,24" Spacing="10">
             <Label Text="Alternate External API Address"
                    FontSize="Small"
-                   TextColor="Black"
                    Margin="15,0"/>
             <Border Stroke="{StaticResource Primary}"
         StrokeThickness="1"
@@ -16,7 +15,7 @@
         Margin="15,0,15,20">
                 <Entry Text="{Binding ApiAddress, Mode=TwoWay}"
                    FontSize="Medium"
-                   TextColor="Black" />
+                  />
             </Border>
 
             <Grid VerticalOptions="StartAndExpand" HorizontalOptions="FillAndExpand" Margin="10,0">
@@ -35,19 +34,19 @@
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <CheckBox Grid.Row="0" Grid.Column="0" VerticalOptions="Center" IsChecked="{Binding SaveToStorage, Mode=TwoWay }"/>
-                <Label Grid.Row="0" Grid.Column="1" Text="Save log to storage" FontSize="Small" TextColor="Black" VerticalOptions="Center" />
+                <Label Grid.Row="0" Grid.Column="1" Text="Save log to storage" FontSize="Small" VerticalOptions="Center" />
                 <CheckBox Grid.Row="1" Grid.Column="0" VerticalOptions="Center" IsChecked="{Binding ShowReceivedByteArray, Mode=TwoWay }"/>
-                <Label Grid.Row="1" Grid.Column="1" Text="Show received raw data after measurement" FontSize="Small" TextColor="Black" VerticalOptions="Center" />
+                <Label Grid.Row="1" Grid.Column="1" Text="Show received raw data after measurement" FontSize="Small"  VerticalOptions="Center" />
                 <CheckBox Grid.Row="2" Grid.Column="0" VerticalOptions="Center" IsChecked="{Binding AutoScan, Mode=TwoWay }"/>
-                <Label Grid.Row="2" Grid.Column="1" Text="Start scan on Go to Scan button" FontSize="Small" TextColor="Black" VerticalOptions="Center" />
+                <Label Grid.Row="2" Grid.Column="1" Text="Start scan on Go to Scan button" FontSize="Small" VerticalOptions="Center" />
                 <CheckBox Grid.Row="3" Grid.Column="0" VerticalOptions="Center" IsChecked="{Binding OneClickScanAndUpload, Mode=TwoWay }"/>
-                <Label Grid.Row="3" Grid.Column="1" Text="One click - Scan &amp; Upload" FontSize="Small" TextColor="Black" VerticalOptions="Center" />
+                <Label Grid.Row="3" Grid.Column="1" Text="One click - Scan &amp; Upload" FontSize="Small"  VerticalOptions="Center" />
                 <CheckBox Grid.Row="4" Grid.Column="0" VerticalOptions="Center" IsChecked="{Binding ShowUnstabilizedData, Mode=TwoWay }"/>
-                <Label Grid.Row="4" Grid.Column="1" Text="Show unstabilized data" FontSize="Small" TextColor="Black" VerticalOptions="Center" />
+                <Label Grid.Row="4" Grid.Column="1" Text="Show unstabilized data" FontSize="Small"  VerticalOptions="Center" />
                 <CheckBox Grid.Row="5" Grid.Column="0" VerticalOptions="Center" IsChecked="{Binding DoNotWaitForImpedance, Mode=TwoWay }"/>
-                <Label Grid.Row="5" Grid.Column="1" Text="Do not wait for impedance" FontSize="Small" TextColor="Black" VerticalOptions="Center" />
+                <Label Grid.Row="5" Grid.Column="1" Text="Do not wait for impedance" FontSize="Small"  VerticalOptions="Center" />
                 <CheckBox Grid.Row="6" Grid.Column="0" VerticalOptions="Center" IsChecked="{Binding UseExternalAPI, Mode=TwoWay }"/>
-                <Label Grid.Row="6" Grid.Column="1" Text="Use External API" FontSize="Small" TextColor="Black" VerticalOptions="Center" />
+                <Label Grid.Row="6" Grid.Column="1" Text="Use External API" FontSize="Small"  VerticalOptions="Center" />
             </Grid>
             <Button Margin="15,10,15,10" Text="Reset to Default"
                     Command="{Binding ResetCommand}"

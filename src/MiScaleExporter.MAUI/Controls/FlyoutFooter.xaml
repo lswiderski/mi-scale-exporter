@@ -5,7 +5,6 @@
     <VerticalStackLayout>
         <Label Text="Created by Lukasz Swiderski 2022"
                FontSize="Small"
-               TextColor="Black"
                HorizontalOptions="Center"
                Margin="10"/>
     </VerticalStackLayout>

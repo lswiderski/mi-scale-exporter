@@ -36,7 +36,7 @@
             </Grid.ColumnDefinitions>
 
             <StackLayout Grid.Row="0" Grid.Column="0">
-                <Label Text="Weight (Kg)" FontSize="Small" TextColor="Black" />
+                <Label Text="Weight (Kg)" FontSize="Small"  />
                     <Border Stroke="{StaticResource Primary}"
         StrokeThickness="1"
         Padding="4,1"
@@ -44,8 +44,7 @@
         Margin="0,0,15,5">
                         <Entry Text="{Binding Weight, Mode=TwoWay}"
                        FontSize="Medium"
-                       Keyboard="Numeric"
-                       TextColor="Black">
+                       Keyboard="Numeric">
                             <Entry.Behaviors>
                                 <behaviors:NumericDoubleValidationBehavior />
                             </Entry.Behaviors>
@@ -54,7 +53,7 @@
                 </StackLayout>
 
             <StackLayout Grid.Row="0" Grid.Column="1">
-                <Label Text="BMI" FontSize="Small" TextColor="Black" />
+                <Label Text="BMI" FontSize="Small"  />
                     <Border Stroke="{StaticResource Primary}"
         StrokeThickness="1"
         Padding="4,1"
@@ -62,8 +61,7 @@
         Margin="0,0,5,5">
                         <Entry Text="{Binding BMI, Mode=TwoWay}"
                        FontSize="Medium"
-                       Keyboard="Numeric"
-                       TextColor="Black">
+                       Keyboard="Numeric">
                             <Entry.Behaviors>
                                 <behaviors:NumericDoubleValidationBehavior />
                             </Entry.Behaviors>
@@ -72,7 +70,7 @@
                 </StackLayout>
 
             <StackLayout Grid.Row="1" Grid.Column="0">
-                <Label Text="Body Fat (%)" FontSize="Small" TextColor="Black" />
+                <Label Text="Body Fat (%)" FontSize="Small"  />
                     <Border Stroke="{StaticResource Primary}"
         StrokeThickness="1"
         Padding="4,1"
@@ -80,8 +78,7 @@
         Margin="0,0,15,5">
                         <Entry Text="{Binding Fat, Mode=TwoWay}"
                        FontSize="Medium"
-                       Keyboard="Numeric"
-                       TextColor="Black">
+                       Keyboard="Numeric">
                             <Entry.Behaviors>
                                 <behaviors:NumericDoubleValidationBehavior />
                             </Entry.Behaviors>
@@ -89,7 +86,7 @@
                     </Border>
                 </StackLayout>
             <StackLayout Grid.Row="1" Grid.Column="1">
-                <Label Text="Muscle Mass (Kg)" FontSize="Small" TextColor="Black" />
+                <Label Text="Muscle Mass (Kg)" FontSize="Small"  />
                     <Border Stroke="{StaticResource Primary}"
         StrokeThickness="1"
         Padding="4,1"
@@ -97,8 +94,7 @@
         Margin="0,0,5,5">
                         <Entry Text="{Binding MuscleMass, Mode=TwoWay}"
                        FontSize="Medium"
-                       Keyboard="Numeric"
-                       TextColor="Black">
+                       Keyboard="Numeric">
                             <Entry.Behaviors>
                                 <behaviors:NumericDoubleValidationBehavior />
                             </Entry.Behaviors>
@@ -107,7 +103,7 @@
                 </StackLayout>
 
             <StackLayout Grid.Row="2" Grid.Column="0">
-                <Label Text="Water (%)" FontSize="Small" TextColor="Black" />
+                <Label Text="Water (%)" FontSize="Small" />
                     <Border Stroke="{StaticResource Primary}"
         StrokeThickness="1"
         Padding="4,1"
@@ -115,8 +111,7 @@
         Margin="0,0,15,5">
                         <Entry Text="{Binding WaterPercentage, Mode=TwoWay}"
                        FontSize="Medium"
-                       Keyboard="Numeric"
-                       TextColor="Black">
+                       Keyboard="Numeric">
                             <Entry.Behaviors>
                                 <behaviors:NumericDoubleValidationBehavior />
                             </Entry.Behaviors>
@@ -124,7 +119,7 @@
                     </Border>
                 </StackLayout>
             <StackLayout Grid.Row="2" Grid.Column="1">
-                <Label Text="Bone mass (Kg)" FontSize="Small" TextColor="Black" />
+                <Label Text="Bone mass (Kg)" FontSize="Small"  />
                     <Border Stroke="{StaticResource Primary}"
         StrokeThickness="1"
         Padding="4,1"
@@ -132,8 +127,7 @@
         Margin="0,0,5,5">
                         <Entry Text="{Binding BoneMass, Mode=TwoWay}"
                        FontSize="Medium"
-                       Keyboard="Numeric"
-                       TextColor="Black">
+                       Keyboard="Numeric">
                             <Entry.Behaviors>
                                 <behaviors:NumericDoubleValidationBehavior />
                             </Entry.Behaviors>
@@ -142,7 +136,7 @@
                 </StackLayout>
 
             <StackLayout Grid.Row="3" Grid.Column="0">
-                <Label Text="Visceral fat" FontSize="Small" TextColor="Black" />
+                <Label Text="Visceral fat" FontSize="Small"/>
                     <Border Stroke="{StaticResource Primary}"
         StrokeThickness="1"
         Padding="4,1"
@@ -150,8 +144,7 @@
         Margin="0,0,15,5">
                         <Entry Text="{Binding VisceralFat, Mode=TwoWay}"
                        FontSize="Medium"
-                       Keyboard="Numeric"
-                       TextColor="Black">
+                       Keyboard="Numeric">
                             <Entry.Behaviors>
                                 <behaviors:NumericDoubleValidationBehavior />
                             </Entry.Behaviors>
@@ -167,8 +160,7 @@
         Margin="0,0,5,5">
                         <Entry Text="{Binding MetabolicAge, Mode=TwoWay}"
                        FontSize="Medium"
-                       Keyboard="Numeric"
-                       TextColor="Black">
+                       Keyboard="Numeric">
                             <Entry.Behaviors>
                                 <behaviors:NumericDoubleValidationBehavior />
                             </Entry.Behaviors>
@@ -177,7 +169,7 @@
                 </StackLayout>
 
             <StackLayout Grid.Row="4" Grid.Column="0">
-                <Label Text="Body Type" FontSize="Small" TextColor="Black" />
+                <Label Text="Body Type" FontSize="Small"  />
                     <Border Stroke="{StaticResource Primary}"
         StrokeThickness="1"
         Padding="4,1"
@@ -185,8 +177,7 @@
         Margin="0,0,15,5">
                         <Entry Text="{Binding BodyType, Mode=TwoWay}"
                        FontSize="Medium"
-                       Keyboard="Numeric"
-                       TextColor="Black">
+                       Keyboard="Numeric">
                     <Entry.Behaviors>
                         <behaviors:NumericIntValidationBehavior />
                     </Entry.Behaviors>
@@ -195,7 +186,7 @@
             </StackLayout>
 
             <StackLayout Grid.Row="4" Grid.Column="1">
-                <Label Text="Time of measurement" FontSize="Small" TextColor="Black" />
+                <Label Text="Time of measurement" FontSize="Small"  />
                     <Border Stroke="{StaticResource Primary}"
         StrokeThickness="1"
         Padding="4,4"
@@ -210,7 +201,7 @@
                 </StackLayout>
 
             <StackLayout Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">
-                <Label Text="Email" FontSize="Small" TextColor="Black" />
+                <Label Text="Email" FontSize="Small" />
                     <Border Stroke="{StaticResource Primary}"
         StrokeThickness="1"
         Padding="4,1"
@@ -219,8 +210,7 @@
                         <Entry Text="{Binding Email, Mode=TwoWay}"
 
                        FontSize="Medium"
-                       Keyboard="Email"
-                       TextColor="Black">
+                       Keyboard="Email">
                             <Entry.Behaviors>
                                 <toolkit:EmailValidationBehavior
                             DecorationFlags="Trim"
@@ -231,7 +221,7 @@
                 </StackLayout>
 
             <StackLayout Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2">
-                <Label Text="Password" FontSize="Small" TextColor="Black" />
+                <Label Text="Password" FontSize="Small"  />
                     <Border Stroke="{StaticResource Primary}"
         StrokeThickness="1"
         Padding="4,1"
@@ -239,8 +229,7 @@
         Margin="0,0,5,5">
                         <Entry Text="{Binding Password, Mode=TwoWay}"
                        IsPassword="True"
-                       FontSize="Medium"
-                       TextColor="Black">
+                       FontSize="Medium">
 
                         </Entry>
                     </Border>
@@ -254,7 +243,7 @@
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <CheckBox Grid.Row="0" Grid.Column="0" VerticalOptions="Center" IsChecked="{Binding SavePassword, Mode=TwoWay }"/>
-                    <Label Grid.Row="0" Grid.Column="1" Text="save password" FontSize="Small" TextColor="Black" VerticalOptions="Center" />
+                    <Label Grid.Row="0" Grid.Column="1" Text="save password" FontSize="Small"  VerticalOptions="Center" />
                 </Grid>
             </StackLayout>
 
@@ -266,31 +255,31 @@
                         BackgroundColor="{StaticResource Primary}"
                         TextColor="White" />
                 <StackLayout IsVisible="{Binding IsAutomaticCalculation}">
-                    <Label Text="Values that will not be sent to the cloud:" FontSize="Small" TextColor="Black" />
+                    <Label Text="Values that will not be sent to the cloud:" FontSize="Small"  />
                     <StackLayout Orientation="Horizontal">
-                        <Label Text="Protein (%):" FontSize="Small" TextColor="Black" />
-                        <Label Text="{Binding ProteinPercentage, Mode=TwoWay}" FontSize="Small" TextColor="Black" />
+                        <Label Text="Protein (%):" FontSize="Small"  />
+                        <Label Text="{Binding ProteinPercentage, Mode=TwoWay}" FontSize="Small"  />
 
                     </StackLayout>
                     <StackLayout Orientation="Horizontal">
-                        <Label Text="Basal Metabolism (kCal):" FontSize="Small" TextColor="Black" />
-                        <Label Text="{Binding BMR,Mode=TwoWay}" FontSize="Small" TextColor="Black" />
+                        <Label Text="Basal Metabolism (kCal):" FontSize="Small"  />
+                        <Label Text="{Binding BMR,Mode=TwoWay}" FontSize="Small"  />
                     </StackLayout>
                     <StackLayout Orientation="Horizontal">
-                        <Label Text="Ideal Weight (Kg):" FontSize="Small" TextColor="Black" />
-                        <Label Text="{Binding IdealWeight,Mode=TwoWay}" FontSize="Small" TextColor="Black" />
+                        <Label Text="Ideal Weight (Kg):" FontSize="Small"  />
+                        <Label Text="{Binding IdealWeight,Mode=TwoWay}" FontSize="Small" />
                     </StackLayout>
                 </StackLayout>
                 
             </StackLayout>
 
         </Grid>
-        <StackLayout IsVisible="{Binding IsBusy}" Padding="12"
+            <StackLayout IsVisible="{Binding IsBusyForm}" Padding="12"
                      AbsoluteLayout.LayoutFlags="PositionProportional"
                      AbsoluteLayout.LayoutBounds="0.5,0.4,-1,-1">
             <Frame>
                 <StackLayout>
-                    <ActivityIndicator IsRunning="{Binding IsBusy}" Color ="#80000000" BackgroundColor="White"/>
+                        <ActivityIndicator IsRunning="{Binding IsBusyForm}" Color ="#80000000" BackgroundColor="White"/>
 
                     <Label Text="Uploading..." HorizontalOptions="Center" TextColor="Black"/>
                 </StackLayout>
