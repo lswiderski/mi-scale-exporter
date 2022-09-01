@@ -20,7 +20,7 @@ public class NumericDoubleValidationBehavior : Behavior<Entry>
     void OnEntryTextChanged(object sender, TextChangedEventArgs args)
     {
         bool isValid = double.TryParse(args.NewTextValue, out _);
-        var defaultColor = Color.FromRgb(0, 0, 0);
+        var defaultColor = Application.Current.RequestedTheme == AppTheme.Dark ? Color.FromRgb(255, 255, 255) : Color.FromRgb(0, 0, 0);
         ((Entry)sender).TextColor = isValid ? defaultColor : Color.FromRgb(255, 0, 0);
     }
 }
