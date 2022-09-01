@@ -6,6 +6,7 @@
         <Label 
             Text="Mi Scale Exporter"
             VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+            HorizontalOptions="Center"
+            Margin="40"/>
     </VerticalStackLayout>
 </ContentView>
