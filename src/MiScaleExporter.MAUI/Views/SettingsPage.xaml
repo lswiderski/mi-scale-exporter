@@ -5,7 +5,7 @@
              Title="{Binding Title}">
     <ContentPage.Content>
         <StackLayout  Padding="30,24,30,24" Spacing="10">
-            <Label Text="Alternate API Address"
+            <Label Text="Alternate External API Address"
                    FontSize="Small"
                    TextColor="Black"
                    Margin="15,0"/>
@@ -21,6 +21,7 @@
 
             <Grid VerticalOptions="StartAndExpand" HorizontalOptions="FillAndExpand" Margin="10,0">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -45,6 +46,8 @@
                 <Label Grid.Row="4" Grid.Column="1" Text="Show unstabilized data" FontSize="Small" TextColor="Black" VerticalOptions="Center" />
                 <CheckBox Grid.Row="5" Grid.Column="0" VerticalOptions="Center" IsChecked="{Binding DoNotWaitForImpedance, Mode=TwoWay }"/>
                 <Label Grid.Row="5" Grid.Column="1" Text="Do not wait for impedance" FontSize="Small" TextColor="Black" VerticalOptions="Center" />
+                <CheckBox Grid.Row="6" Grid.Column="0" VerticalOptions="Center" IsChecked="{Binding UseExternalAPI, Mode=TwoWay }"/>
+                <Label Grid.Row="6" Grid.Column="1" Text="Use External API" FontSize="Small" TextColor="Black" VerticalOptions="Center" />
             </Grid>
             <Button Margin="15,10,15,10" Text="Reset to Default"
                     Command="{Binding ResetCommand}"

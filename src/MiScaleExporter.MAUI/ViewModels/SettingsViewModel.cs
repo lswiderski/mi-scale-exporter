@@ -18,6 +18,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             this._oneClickScanAndUpload = Preferences.Get(PreferencesKeys.OneClickScanAndUpload, false);
             this._showUnstabilizedData = Preferences.Get(PreferencesKeys.ShowUnstabilizedData, false);
             this._doNotWaitForImpedance = Preferences.Get(PreferencesKeys.DoNotWaitForImpedance, false);
+            this._useExternalAPI = Preferences.Get(PreferencesKeys.UseExternalAPI, false);
             ResetCommand = new Command(() =>
                 {
                     Preferences.Remove(PreferencesKeys.ApiServerAddressOverride);
@@ -28,6 +29,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                     Preferences.Remove(PreferencesKeys.OneClickScanAndUpload);
                     Preferences.Remove(PreferencesKeys.ShowUnstabilizedData);
                     Preferences.Remove(PreferencesKeys.DoNotWaitForImpedance);
+                    Preferences.Remove(PreferencesKeys.UseExternalAPI);
                 }
             );
         }
@@ -123,6 +125,18 @@ namespace MiScaleExporter.MAUI.ViewModels
             {
                 Preferences.Set(PreferencesKeys.DoNotWaitForImpedance, value);
                 SetProperty(ref _doNotWaitForImpedance, value);
+            }
+        }
+
+        private bool _useExternalAPI;
+
+        public bool UseExternalAPI
+        {
+            get => _useExternalAPI;
+            set
+            {
+                Preferences.Set(PreferencesKeys.UseExternalAPI, value);
+                SetProperty(ref _useExternalAPI, value);
             }
         }
 

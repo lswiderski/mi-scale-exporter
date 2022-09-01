@@ -26,6 +26,19 @@ public class GarminService : IGarminService
 
     public async Task<GarminApiResponse> UploadAsync(BodyComposition bodyComposition, DateTime time, string email, string password)
     {
+        if(Preferences.Get(PreferencesKeys.UseExternalAPI, false))
+        {
+            // TODO switch to internal update
+            return await UploadViaExternalAPIAsync(bodyComposition, time, email, password);
+        }
+        else
+        {
+            return await UploadViaExternalAPIAsync(bodyComposition, time, email, password);
+        }
+    }
+
+    public async Task<GarminApiResponse> UploadViaExternalAPIAsync(BodyComposition bodyComposition, DateTime time, string email, string password)
+    {
         var unixTime = ((DateTimeOffset) time).ToUnixTimeSeconds();
         var request = new GarminBodyCompositionRequest
         {
