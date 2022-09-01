@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:MiScaleExporter.MAUI.Views"
+       xmlns:controls="clr-namespace:MiScaleExporter.Controls"
      FlyoutBackgroundImageAspect="AspectFill"
        FlyoutHeaderBehavior="CollapseOnScroll">
 
@@ -70,10 +71,14 @@
         </ResourceDictionary>
     </Shell.Resources>
 
-    
-    <FlyoutItem Title="About" Icon="icon_about.png">
-        <ShellContent Route="AboutPage" ContentTemplate="{DataTemplate local:AboutPage}" />
-    </FlyoutItem>
+    <Shell.FlyoutHeader>
+        <controls:FlyoutHeader />
+    </Shell.FlyoutHeader>
+
+    <Shell.FlyoutFooter>
+        <controls:FlyoutFooter />
+    </Shell.FlyoutFooter>
+
 
     <FlyoutItem Title="Mi Scale" Icon="icon_feed.png">
         <ShellContent Route="ScalePage" ContentTemplate="{DataTemplate local:ScalePage}" />
@@ -87,5 +92,8 @@
         <ShellContent Route="Settings" ContentTemplate="{DataTemplate local:SettingPage}" />
     </FlyoutItem>
 
+    <FlyoutItem Title="About" Icon="icon_about.png">
+        <ShellContent Route="AboutPage" ContentTemplate="{DataTemplate local:AboutPage}" />
+    </FlyoutItem>
 
 </Shell>
