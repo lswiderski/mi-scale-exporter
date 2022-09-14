@@ -45,11 +45,10 @@ public class GarminService : IGarminService
         var result = new GarminApiResponse();
         try
         {
-           
             var userProfileSettings = new UserProfileSettings
             {
-                Age = 40,
-                Height = 180,
+                Age = Preferences.Get(PreferencesKeys.UserAge, 25),
+                Height = Preferences.Get(PreferencesKeys.UserHeight, 170),
             };
             var scaleDTO = new GarminWeightScaleDTO
             {
