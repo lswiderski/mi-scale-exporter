@@ -1,57 +1,277 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MiScaleExporter.MAUI.Views.SettingPage"
-             Title="{Binding Title}">
-    <ContentPage.Content>
-        <StackLayout  Padding="30,24,30,24" Spacing="10">
-            <Label Text="Alternate External API Address"
-                   FontSize="Small"
-                   Margin="15,0"/>
-            <Border Stroke="{StaticResource Primary}"
-        StrokeThickness="1"
-        Padding="4,1"
-        HorizontalOptions="FillAndExpand"
-        Margin="15,0,15,20">
-                <Entry Text="{Binding ApiAddress, Mode=TwoWay}"
-                   FontSize="Medium"
-                  />
-            </Border>
+<ContentPage
+    x:Class="MiScaleExporter.MAUI.Views.SettingPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:behaviors="clr-namespace:MiScaleExporter.MAUI.Behaviors;assembly=MiScaleExporter.MAUI"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vm="clr-namespace:MiScaleExporter.MAUI.ViewModels"
+    Title="{Binding Title}">
+    <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+        <Grid
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All"
+            HorizontalOptions="FillAndExpand">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <ScrollView Grid.Row="1" HorizontalOptions="FillAndExpand">
+                <StackLayout
+                    Padding="15,24,15,24"
+                    Orientation="Vertical"
+                    Spacing="20">
+                    <Border>
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20" />
+                        </Border.StrokeShape>
+                        <StackLayout
+                            Padding="15,24,15,24"
+                            Orientation="Vertical"
+                            Spacing="10">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="Small"
+                                Text="Scale Settings" />
+                            <BoxView
+                                HeightRequest="2"
+                                HorizontalOptions="Fill"
+                                Color="Gray" />
+                            <Label FontSize="Small" Text="Age" />
+                            <Border
+                                Padding="4,1"
+                                HorizontalOptions="FillAndExpand"
+                                StrokeThickness="1">
+                                <Entry
+                                    FontSize="Medium"
+                                    Keyboard="Numeric"
+                                    Text="{Binding Age, Mode=TwoWay}">
+                                    <Entry.Behaviors>
+                                        <behaviors:NumericIntValidationBehavior />
+                                    </Entry.Behaviors>
+                                </Entry>
+                            </Border>
+                            <Label FontSize="Small" Text="Height" />
+                            <Border
+                                Padding="4,1"
+                                HorizontalOptions="FillAndExpand"
+                                StrokeThickness="1">
+                                <Entry
+                                    FontSize="Medium"
+                                    Keyboard="Numeric"
+                                    Text="{Binding Height, Mode=TwoWay}">
+                                    <Entry.Behaviors>
+                                        <behaviors:NumericIntValidationBehavior />
+                                    </Entry.Behaviors>
+                                </Entry>
+                            </Border>
+                            <Label FontSize="Small" Text="Sex" />
+                            <HorizontalStackLayout>
+                                <RadioButton
+                                    CheckedChanged="SexRadioButton_CheckedChanged"
+                                    Content="Female"
+                                    GroupName="Sex"
+                                    IsChecked="{Binding IsFemaleSelected}"
+                                    Value="0" />
+                                <RadioButton
+                                    CheckedChanged="SexRadioButton_CheckedChanged"
+                                    Content="Male"
+                                    GroupName="Sex"
+                                    IsChecked="{Binding IsMaleSelected}"
+                                    Value="1" />
+                            </HorizontalStackLayout>
 
-            <Grid VerticalOptions="StartAndExpand" HorizontalOptions="FillAndExpand" Margin="10,0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
+                            <Label FontSize="Small" Text="Scale Model" />
+                            <RadioButton
+                                BackgroundColor="Aqua"
+                                CheckedChanged="ScaleTypeRadioButton_CheckedChanged"
+                                Content="Mi Body Composition Scale 1 / 2"
+                                GroupName="ScaleType"
+                                IsChecked="{Binding IsMiBodyCompositionScaleSelected}"
+                                Value="0" />
+                            <RadioButton
+                                CheckedChanged="ScaleTypeRadioButton_CheckedChanged"
+                                Content="Mi Smart Scale"
+                                GroupName="ScaleType"
+                                IsChecked="{Binding IsMiSmartScaleSelected}"
+                                Value="1" />
+                            <Label FontSize="Small" Text="Bluetooth Address" />
+                            <Border
+                                Padding="4,1"
+                                HorizontalOptions="FillAndExpand"
+                                StrokeThickness="1">
+                                <Entry FontSize="Medium" Text="{Binding Address, Mode=TwoWay}" />
+                            </Border>
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <CheckBox Grid.Row="0" Grid.Column="0" VerticalOptions="Center" IsChecked="{Binding SaveToStorage, Mode=TwoWay }"/>
-                <Label Grid.Row="0" Grid.Column="1" Text="Save log to storage" FontSize="Small" VerticalOptions="Center" />
-                <CheckBox Grid.Row="1" Grid.Column="0" VerticalOptions="Center" IsChecked="{Binding ShowReceivedByteArray, Mode=TwoWay }"/>
-                <Label Grid.Row="1" Grid.Column="1" Text="Show received raw data after measurement" FontSize="Small"  VerticalOptions="Center" />
-                <CheckBox Grid.Row="2" Grid.Column="0" VerticalOptions="Center" IsChecked="{Binding AutoScan, Mode=TwoWay }"/>
-                <Label Grid.Row="2" Grid.Column="1" Text="Start scan on Go to Scan button" FontSize="Small" VerticalOptions="Center" />
-                <CheckBox Grid.Row="3" Grid.Column="0" VerticalOptions="Center" IsChecked="{Binding OneClickScanAndUpload, Mode=TwoWay }"/>
-                <Label Grid.Row="3" Grid.Column="1" Text="One click - Scan &amp; Upload" FontSize="Small"  VerticalOptions="Center" />
-                <CheckBox Grid.Row="4" Grid.Column="0" VerticalOptions="Center" IsChecked="{Binding ShowUnstabilizedData, Mode=TwoWay }"/>
-                <Label Grid.Row="4" Grid.Column="1" Text="Show unstabilized data" FontSize="Small"  VerticalOptions="Center" />
-                <CheckBox Grid.Row="5" Grid.Column="0" VerticalOptions="Center" IsChecked="{Binding DoNotWaitForImpedance, Mode=TwoWay }"/>
-                <Label Grid.Row="5" Grid.Column="1" Text="Do not wait for impedance" FontSize="Small"  VerticalOptions="Center" />
-                <CheckBox Grid.Row="6" Grid.Column="0" VerticalOptions="Center" IsChecked="{Binding UseExternalAPI, Mode=TwoWay }"/>
-                <Label Grid.Row="6" Grid.Column="1" Text="Use External API" FontSize="Small"  VerticalOptions="Center" />
-            </Grid>
-            <Button Margin="15,10,15,10" Text="Reset to Default"
-                    Command="{Binding ResetCommand}"
-                    BackgroundColor="{StaticResource Primary}"
-                    TextColor="White" />
-        </StackLayout>
-    </ContentPage.Content>
+                        </StackLayout>
+
+                    </Border>
+                    <Border>
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20" />
+                        </Border.StrokeShape>
+                        <StackLayout
+                            Padding="15,24,15,24"
+                            Orientation="Vertical"
+                            Spacing="10">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="Small"
+                                Text="Garmin Settings" />
+                            <BoxView
+                                HeightRequest="2"
+                                HorizontalOptions="Fill"
+                                Color="Gray" />
+                            <Label FontSize="Small" Text="Email" />
+                            <Border
+                                Padding="4,1"
+                                HorizontalOptions="FillAndExpand"
+                                StrokeThickness="1">
+                                <Entry
+                                    FontSize="Medium"
+                                    Keyboard="Email"
+                                    Text="{Binding Email, Mode=TwoWay}">
+                                    <Entry.Behaviors>
+                                        <toolkit:EmailValidationBehavior DecorationFlags="Trim" InvalidStyle="{StaticResource InvalidEntryStyle}" />
+                                    </Entry.Behaviors>
+                                </Entry>
+                            </Border>
+                            <Label FontSize="Small" Text="Password" />
+                            <Border
+                                Padding="4,1"
+                                HorizontalOptions="FillAndExpand"
+                                StrokeThickness="1">
+                                <Entry
+                                    FontSize="Medium"
+                                    IsPassword="True"
+                                    Text="{Binding Password, Mode=TwoWay}" />
+                            </Border>
+                        </StackLayout>
+                    </Border>
+                    <Border>
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20" />
+                        </Border.StrokeShape>
+                        <StackLayout
+                            Padding="15,24,15,24"
+                            Orientation="Vertical"
+                            Spacing="10">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="Small"
+                                Text="App Settings" />
+                            <BoxView
+                                HeightRequest="2"
+                                HorizontalOptions="Fill"
+                                Color="Gray" />
+
+                            <Label FontSize="Small" Text="Alternate External API Address" />
+                            <Border
+                                Margin="0,0,0,10"
+                                Padding="4,1"
+                                HorizontalOptions="FillAndExpand"
+                                StrokeThickness="1">
+                                <Entry FontSize="Medium" Text="{Binding ApiAddress, Mode=TwoWay}" />
+                            </Border>
+
+                            <Grid HorizontalOptions="FillAndExpand" VerticalOptions="Start">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <CheckBox
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    IsChecked="{Binding UseExternalAPI, Mode=TwoWay}"
+                                    VerticalOptions="Center" />
+                                <Label
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    FontSize="Small"
+                                    Text="Use External API"
+                                    VerticalOptions="Center" />
+                                <CheckBox
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    IsChecked="{Binding ShowReceivedByteArray, Mode=TwoWay}"
+                                    VerticalOptions="Center" />
+                                <Label
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    FontSize="Small"
+                                    Text="Show received raw data after measurement"
+                                    VerticalOptions="Center" />
+                                <CheckBox
+                                    Grid.Row="2"
+                                    Grid.Column="0"
+                                    IsChecked="{Binding SaveToStorage, Mode=TwoWay}"
+                                    VerticalOptions="Center" />
+                                <Label
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    FontSize="Small"
+                                    Text="Save log to storage"
+                                    VerticalOptions="Center" />
+                                <CheckBox
+                                    Grid.Row="3"
+                                    Grid.Column="0"
+                                    IsChecked="{Binding OneClickScanAndUpload, Mode=TwoWay}"
+                                    VerticalOptions="Center" />
+                                <Label
+                                    Grid.Row="3"
+                                    Grid.Column="1"
+                                    FontSize="Small"
+                                    Text="One click - Scan &amp; Upload"
+                                    VerticalOptions="Center" />
+                                <CheckBox
+                                    Grid.Row="4"
+                                    Grid.Column="0"
+                                    IsChecked="{Binding ShowUnstabilizedData, Mode=TwoWay}"
+                                    VerticalOptions="Center" />
+                                <Label
+                                    Grid.Row="4"
+                                    Grid.Column="1"
+                                    FontSize="Small"
+                                    Text="Show unstabilized data"
+                                    VerticalOptions="Center" />
+                                <CheckBox
+                                    Grid.Row="5"
+                                    Grid.Column="0"
+                                    IsChecked="{Binding DoNotWaitForImpedance, Mode=TwoWay}"
+                                    VerticalOptions="Center" />
+                                <Label
+                                    Grid.Row="5"
+                                    Grid.Column="1"
+                                    FontSize="Small"
+                                    Text="Do not wait for impedance"
+                                    VerticalOptions="Center" />
+
+                            </Grid>
+                            <Button
+                                Margin="0,10,0,10"
+                                BackgroundColor="{StaticResource Primary}"
+                                Command="{Binding ResetCommand}"
+                                Text="Reset to Default"
+                                TextColor="White" />
+
+
+                        </StackLayout>
+                    </Border>
+                </StackLayout>
+            </ScrollView>
+        </Grid>
+    </AbsoluteLayout>
 </ContentPage>

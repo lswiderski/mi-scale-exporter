@@ -15,7 +15,6 @@ namespace MiScaleExporter.MAUI.ViewModels
         public FormViewModel(IGarminService garminService)
         {
             _garminService = garminService;
-            this.LoadPreferencesAsync().Wait();
             Title = "Garmin Body Composition Form";
             Date = DateTime.Now;
             Time = DateTime.Now.TimeOfDay;
@@ -24,45 +23,14 @@ namespace MiScaleExporter.MAUI.ViewModels
                 (_, __) => UploadCommand.ChangeCanExecute();
         }
         
-        private async Task LoadPreferencesAsync()
+        public async Task LoadPreferencesAsync()
         {
             this._email = Preferences.Get(PreferencesKeys.GarminUserEmail, string.Empty);
-            this._savePassword = Preferences.Get(PreferencesKeys.GarminUserSavePassword, false);
-            if (this._savePassword)
-            {
-                try
-                {
-                    this._password = await SecureStorage.GetAsync(PreferencesKeys.GarminUserPassword);
-                }
-                catch
-                {
-                    this._password = string.Empty;
-                }
-                
-            }
-        }
+            this._password = await SecureStorage.GetAsync(PreferencesKeys.GarminUserPassword);
 
-        private async Task SavePrefencesAsync()
-        {
-            Preferences.Set(PreferencesKeys.GarminUserEmail, _email);
-            Preferences.Set(PreferencesKeys.GarminUserSavePassword, _savePassword);
-            if (_savePassword)
-            {
-                try
-                {
-                    await SecureStorage.SetAsync(PreferencesKeys.GarminUserPassword, _password);
-                }
-                catch
-                {
-                    
-                }
-            }
-            else
-            {
-                SecureStorage.Remove(PreferencesKeys.GarminUserPassword);
-            }
+            this.ShowEmail = string.IsNullOrWhiteSpace(_email);
+            this.ShowPassword = string.IsNullOrWhiteSpace(_password);
         }
-
         private bool ValidateSave()
         {
             return !String.IsNullOrWhiteSpace(_email) 
@@ -71,8 +39,8 @@ namespace MiScaleExporter.MAUI.ViewModels
 
         public void AutoUpload()
         {
-            if (!string.IsNullOrWhiteSpace(Email)
-                 && !string.IsNullOrWhiteSpace(Password))
+            if (!string.IsNullOrWhiteSpace(_email)
+                 && !string.IsNullOrWhiteSpace(_password))
             {
                 OnUpload();
             }
@@ -81,8 +49,7 @@ namespace MiScaleExporter.MAUI.ViewModels
         private async void OnUpload()
         {
             this.IsBusyForm = true;
-            await this.SavePrefencesAsync();
-            var response = await this._garminService.UploadAsync(this.PrepareRequest(), Date.Date.Add(Time), Email, Password);
+            var response = await this._garminService.UploadAsync(this.PrepareRequest(), Date.Date.Add(Time), _email, _password);
             var message = response.IsSuccess ? "Uploaded" : response.Message;
             await Application.Current.MainPage.DisplayAlert ("Response", message, "OK");
             this.IsBusyForm = false;
@@ -228,27 +195,7 @@ namespace MiScaleExporter.MAUI.ViewModels
 
         private string _email;
 
-        public string Email
-        {
-            get => _email;
-            set
-            {
-                SetProperty(ref _email, value);
-                UploadCommand?.ChangeCanExecute();
-            }
-        }
-
         private string _password;
-
-        public string Password
-        {
-            get => _password;
-            set
-            {
-                SetProperty(ref _password, value);
-                UploadCommand?.ChangeCanExecute();
-            }
-        }
 
         private DateTime _date;
 
@@ -274,20 +221,47 @@ namespace MiScaleExporter.MAUI.ViewModels
             set => SetProperty(ref _isAutomaticCalculation, value);
         }
         
-        private bool _savePassword;
-
-        public bool SavePassword
-        {
-            get => _savePassword;
-            set => SetProperty(ref _savePassword, value);
-        }
-        
         private bool _isBusyForm;
 
         public bool IsBusyForm
         {
             get => _isBusyForm;
             set => SetProperty(ref _isBusyForm, value);
+        }
+
+        public string Email
+        {
+            get => _email;
+            set
+            {
+                SetProperty(ref _email, value);
+                UploadCommand?.ChangeCanExecute();
+            }
+        }
+
+        public string Password
+        {
+            get => _password;
+            set
+            {
+                SetProperty(ref _password, value);
+                UploadCommand?.ChangeCanExecute();
+            }
+        }
+
+        private bool _showEmail;
+        private bool _showPassword;
+
+        public bool ShowEmail
+        {
+            get => _showEmail;
+            set => SetProperty(ref _showEmail, value);
+        }
+
+        public bool ShowPassword
+        {
+            get => _showPassword;
+            set => SetProperty(ref _showPassword, value);
         }
 
     }

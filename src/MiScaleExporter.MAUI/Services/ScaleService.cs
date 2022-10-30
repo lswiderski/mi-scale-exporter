@@ -45,8 +45,15 @@ namespace MiScaleExporter.Services
         {
             try
             {
-                bodyComposition.IsValid = false;
-                _completionSource.SetResult(bodyComposition);
+                if(bodyComposition != null)
+                {
+                    bodyComposition.IsValid = false;
+                }
+                if (!_completionSource.Task.IsCompleted)
+                {
+                    _completionSource.SetResult(bodyComposition);
+                }
+               
             }
             catch (Exception ex)
             {

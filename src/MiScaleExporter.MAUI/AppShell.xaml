@@ -83,7 +83,7 @@
     <FlyoutItem Title="About" Icon="icon_about.png">
         <ShellContent Route="AboutPage" ContentTemplate="{DataTemplate local:AboutPage}" />
     </FlyoutItem>
-    
+
     <FlyoutItem Title="Mi Scale" Icon="icon_feed.png">
         <ShellContent Route="ScalePage" ContentTemplate="{DataTemplate local:ScalePage}" />
     </FlyoutItem>

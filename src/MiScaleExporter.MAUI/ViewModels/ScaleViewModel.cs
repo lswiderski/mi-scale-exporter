@@ -16,28 +16,36 @@ namespace MiScaleExporter.MAUI.ViewModels
         private readonly IScaleService _scaleService;
         private readonly ILogService _logService;
 
+        private string _address;
+        private int _age;
+        private int _height;
+        private Sex _sex;
+        private ScaleType _scaleType;
+
         public ScaleViewModel(IScaleService scaleService, ILogService logService)
         {
             _scaleService = scaleService;
             _logService = logService;
-            this.LoadPreferences();
 
             Title = "Mi Scale Data";
             CancelCommand = new Command(OnCancel);
             ScanCommand = new Command(OnScan, ValidateScan);
         }
 
-        public void CheckPreferences()
+        public async Task CheckPreferencesAsync()
         {
-            if ((Preferences.Get(PreferencesKeys.AutoScan, false)
-                 || Preferences.Get(PreferencesKeys.OneClickScanAndUpload, false))
-                 && !string.IsNullOrWhiteSpace(_address))
+            await this.LoadPreferencesAsync();
+            if (!string.IsNullOrWhiteSpace(_address))
             {
                 OnScan();
             }
+            else
+            {
+                await Shell.Current.GoToAsync($"//Settings");
+            }
         }
 
-        private void LoadPreferences()
+        public async Task LoadPreferencesAsync()
         {
             this._age = Preferences.Get(PreferencesKeys.UserAge, 25);
             this._height = Preferences.Get(PreferencesKeys.UserHeight, 170);
@@ -46,18 +54,8 @@ namespace MiScaleExporter.MAUI.ViewModels
             this._scaleType = (ScaleType)Preferences.Get(PreferencesKeys.ScaleType, (byte)ScaleType.MiBodyCompositionScale);
         }
 
-        private void SavePrefences()
-        {
-            Preferences.Set(PreferencesKeys.UserAge, _age);
-            Preferences.Set(PreferencesKeys.UserHeight, _height);
-            Preferences.Set(PreferencesKeys.UserSex, (byte)_sex);
-            Preferences.Set(PreferencesKeys.MiScaleBluetoothAddress, _address);
-            Preferences.Set(PreferencesKeys.ScaleType, (byte)_scaleType);
-        }
-
         private async void OnScan()
         {
-            this.SavePrefences();
 
             if (DeviceInfo.Platform == DevicePlatform.Android)
             {
@@ -88,7 +86,7 @@ namespace MiScaleExporter.MAUI.ViewModels
 
             Scale scale = new Scale()
             {
-                Address = Address,
+                Address = _address,
             };
             ScanningLabel = string.Empty;
             this.IsBusyForm = true;
@@ -148,79 +146,6 @@ namespace MiScaleExporter.MAUI.ViewModels
             await _scaleService.CancelSearchAsync();
             this.IsBusyForm = false;
         }
-        public void SexRadioButtonChanged(object s, CheckedChangedEventArgs e)
-        {
-            var radio = s as RadioButton;
-            this.Sex = radio.Value as string == "1" ? Models.Sex.Male : Models.Sex.Female;
-        }
-
-        public void ScaleTypeRadioButton_Changed(object s, CheckedChangedEventArgs e)
-        {
-            var radio = s as RadioButton;
-            this.ScaleType = radio.Value as string == "1" ? Models.ScaleType.MiSmartScale : Models.ScaleType.MiBodyCompositionScale;
-        }
-
-        private string _address;
-
-        public string Address
-        {
-            get => _address;
-            set
-            {
-                SetProperty(ref _address, value);
-                ScanCommand?.ChangeCanExecute();
-            }
-        }
-
-        private int _age;
-
-        public string Age
-        {
-            get => _age.ToString();
-            set
-            {
-                if (value is null) return;
-                if (int.TryParse(value, out var result))
-                {
-                    SetProperty(ref _age, result);
-                    ScanCommand?.ChangeCanExecute();
-                }
-            }
-        }
-
-        private int _height;
-
-        public string Height
-        {
-            get => _height.ToString();
-            set
-            {
-                if (value is null) return;
-                if (int.TryParse(value, out var result))
-                {
-                    SetProperty(ref _height, result);
-                    ScanCommand?.ChangeCanExecute();
-                }
-            }
-        }
-
-        public bool IsMaleSelected
-        {
-            get => _sex == Sex.Male;
-        }
-
-        public bool IsFemaleSelected
-        {
-            get => _sex == Sex.Female;
-        }
-
-        private Sex _sex;
-
-        public Sex Sex
-        {
-            get => _sex;
-            set => SetProperty(ref _sex, value);
-        }
 
         private string _scanningLabel;
 
@@ -237,23 +162,5 @@ namespace MiScaleExporter.MAUI.ViewModels
             set => SetProperty(ref _isBusyForm, value);
         }
 
-        public bool IsMiBodyCompositionScaleSelected
-        {
-            get => _scaleType == ScaleType.MiBodyCompositionScale;
-        }
-
-        public bool IsMiSmartScaleSelected
-        {
-            get => _scaleType == ScaleType.MiSmartScale;
-        }
-
-
-        private ScaleType _scaleType;
-
-        public ScaleType ScaleType
-        {
-            get => _scaleType;
-            set => SetProperty(ref _scaleType, value);
-        }
     }
 }

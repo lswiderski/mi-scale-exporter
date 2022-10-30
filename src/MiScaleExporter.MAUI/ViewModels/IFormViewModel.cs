@@ -3,6 +3,7 @@
     public interface IFormViewModel
     {
         void LoadBodyComposition();
+        Task LoadPreferencesAsync();
 
         void AutoUpload();
     }

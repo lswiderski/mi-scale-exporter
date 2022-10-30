@@ -51,7 +51,7 @@ namespace MiScaleExporter.MAUI
             builder.RegisterType<ScaleViewModel>().As<IScaleViewModel>().InstancePerLifetimeScope();
             builder.RegisterType<FormViewModel>().As<IFormViewModel>().InstancePerLifetimeScope();
             builder.RegisterType<LogService>().As<ILogService>().SingleInstance();
-            builder.RegisterType<SettingsViewModel>().AsSelf();
+            builder.RegisterType<SettingsViewModel>().As<ISettingsViewModel>().InstancePerLifetimeScope();
             builder.RegisterType<AboutViewModel>().AsSelf();
             DependencyService.Register<ILogManager, NLogManager>();
             builder.RegisterInstance<ILogManager>(DependencyService.Get<ILogManager>());

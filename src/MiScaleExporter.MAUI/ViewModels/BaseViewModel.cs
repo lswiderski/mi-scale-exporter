@@ -48,5 +48,10 @@ namespace MiScaleExporter.MAUI.ViewModels
             changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
+
+        protected void NotifyAllPropertiesChanged()
+        {
+            PropertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(null));
+        }
     }
 }

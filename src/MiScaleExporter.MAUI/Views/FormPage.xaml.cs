@@ -23,6 +23,7 @@ namespace MiScaleExporter.MAUI.Views
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+            await vm.LoadPreferencesAsync();
             vm.LoadBodyComposition();
         }
 

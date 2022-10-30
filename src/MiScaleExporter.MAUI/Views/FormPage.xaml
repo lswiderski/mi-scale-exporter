@@ -185,8 +185,8 @@
                         </Border>
             </StackLayout>
 
-            <StackLayout Grid.Row="4" Grid.Column="1">
-                <Label Text="Time of measurement" FontSize="Small"  />
+                <StackLayout Grid.Row="4" Grid.Column="1">
+                    <Label Text="Time of measurement" FontSize="Small"  />
                     <Border Stroke="{StaticResource Primary}"
         StrokeThickness="1"
         Padding="4,4"
@@ -200,8 +200,9 @@
                     </Border>
                 </StackLayout>
 
-            <StackLayout Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">
-                <Label Text="Email" FontSize="Small" />
+
+                <StackLayout Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" IsVisible="{Binding ShowEmail}">
+                    <Label Text="Email" FontSize="Small" />
                     <Border Stroke="{StaticResource Primary}"
         StrokeThickness="1"
         Padding="4,1"
@@ -220,8 +221,8 @@
                     </Border>
                 </StackLayout>
 
-            <StackLayout Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2">
-                <Label Text="Password" FontSize="Small"  />
+                <StackLayout Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" IsVisible="{Binding ShowPassword}">
+                    <Label Text="Password" FontSize="Small"  />
                     <Border Stroke="{StaticResource Primary}"
         StrokeThickness="1"
         Padding="4,1"
@@ -233,22 +234,11 @@
 
                         </Entry>
                     </Border>
-                    <Grid VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand">  
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
+                </StackLayout>
+                
+                
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <CheckBox Grid.Row="0" Grid.Column="0" VerticalOptions="Center" IsChecked="{Binding SavePassword, Mode=TwoWay }"/>
-                    <Label Grid.Row="0" Grid.Column="1" Text="save password" FontSize="Small"  VerticalOptions="Center" />
-                </Grid>
-            </StackLayout>
-
-
-            <StackLayout Orientation="Vertical" Padding="10"  Grid.Row="7" Grid.ColumnSpan="2"
+                <StackLayout Orientation="Vertical" Padding="10"  Grid.Row="7" Grid.ColumnSpan="2"
                          Grid.Column="0">
                 <Button Margin="0,10,0,0" Text="Upload to Garmin Cloud"
                         Command="{Binding UploadCommand}"

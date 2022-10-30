@@ -1,11 +1,7 @@
 ﻿
 using Autofac;
-using MiScaleExporter.MAUI;
 using MiScaleExporter.Models;
-using MiScaleExporter.Services;
 using MiScaleExporter.MAUI.ViewModels;
-using System;
-using System.ComponentModel;
 
 
 namespace MiScaleExporter.MAUI.Views
@@ -23,19 +19,10 @@ namespace MiScaleExporter.MAUI.Views
             }
         }
 
-        private void SexRadioButton_CheckedChanged(object sender, CheckedChangedEventArgs e)
-        {
-            vm.SexRadioButtonChanged(sender, e);
-        }
-        private void ScaleTypeRadioButton_CheckedChanged(object sender, CheckedChangedEventArgs e)
-        {
-            vm.ScaleTypeRadioButton_Changed(sender, e);
-        }
-
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
-            vm.CheckPreferences();
+            await vm.CheckPreferencesAsync();
         }
 
     }
