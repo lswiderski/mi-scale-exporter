@@ -3,10 +3,10 @@
     x:Class="MiScaleExporter.MAUI.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:MiScaleExporter.Controls"
     xmlns:local="clr-namespace:MiScaleExporter.MAUI.Views"
-       xmlns:controls="clr-namespace:MiScaleExporter.Controls"
-     FlyoutBackgroundImageAspect="AspectFill"
-       FlyoutHeaderBehavior="CollapseOnScroll">
+    FlyoutBackgroundImageAspect="AspectFill"
+    FlyoutHeaderBehavior="CollapseOnScroll">
 
 
     <Shell.Resources>
@@ -18,33 +18,37 @@
                 <Setter Property="Shell.DisabledColor" Value="#B4FFFFFF" />
                 <Setter Property="Shell.UnselectedColor" Value="#95FFFFFF" />
                 <Setter Property="Shell.TabBarBackgroundColor" Value="{StaticResource Primary}" />
-                <Setter Property="Shell.TabBarForegroundColor" Value="White"/>
-                <Setter Property="Shell.TabBarUnselectedColor" Value="#95FFFFFF"/>
-                <Setter Property="Shell.TabBarTitleColor" Value="White"/>
+                <Setter Property="Shell.TabBarForegroundColor" Value="White" />
+                <Setter Property="Shell.TabBarUnselectedColor" Value="#95FFFFFF" />
+                <Setter Property="Shell.TabBarTitleColor" Value="White" />
             </Style>
-            <Style TargetType="TabBar" BasedOn="{StaticResource BaseStyle}" />
-            <Style TargetType="FlyoutItem" BasedOn="{StaticResource BaseStyle}" />
+            <Style BasedOn="{StaticResource BaseStyle}" TargetType="TabBar" />
+            <Style BasedOn="{StaticResource BaseStyle}" TargetType="FlyoutItem" />
 
             <!--
-            Default Styles for all Flyout Items
-            https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/shell/flyout#flyoutitem-and-menuitem-style-classes
+                Default Styles for all Flyout Items
+                https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/shell/flyout#flyoutitem-and-menuitem-style-classes
             -->
             <Style Class="FlyoutItemLabelStyle" TargetType="Label">
-                <Setter Property="TextColor" Value="White"></Setter>
+                <Setter Property="TextColor" Value="White" />
             </Style>
-            <Style Class="FlyoutItemLayoutStyle" TargetType="Layout" ApplyToDerivedTypes="True">
+            <Style
+                ApplyToDerivedTypes="True"
+                Class="FlyoutItemLayoutStyle"
+                TargetType="Layout">
                 <Setter Property="VisualStateManager.VisualStateGroups">
                     <VisualStateGroupList>
                         <VisualStateGroup x:Name="CommonStates">
                             <VisualState x:Name="Normal">
                                 <VisualState.Setters>
                                     <Setter Property="BackgroundColor" Value="{x:OnPlatform UWP=Transparent, iOS=White}" />
-                                    <Setter TargetName="FlyoutItemLabel" Property="Label.TextColor" Value="{StaticResource Primary}" />
+                                    <Setter TargetName="FlyoutItemLabel" Property="Label.TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
                                 </VisualState.Setters>
                             </VisualState>
                             <VisualState x:Name="Selected">
                                 <VisualState.Setters>
                                     <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
+                                    <Setter TargetName="FlyoutItemLabel" Property="Label.TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
                                 </VisualState.Setters>
                             </VisualState>
                         </VisualStateGroup>
@@ -53,15 +57,18 @@
             </Style>
 
             <!--
-            Custom Style you can apply to any Flyout Item
+                Custom Style you can apply to any Flyout Item
             -->
-            <Style Class="MenuItemLayoutStyle" TargetType="Layout" ApplyToDerivedTypes="True">
+            <Style
+                ApplyToDerivedTypes="True"
+                Class="MenuItemLayoutStyle"
+                TargetType="Layout">
                 <Setter Property="VisualStateManager.VisualStateGroups">
                     <VisualStateGroupList>
                         <VisualStateGroup x:Name="CommonStates">
                             <VisualState x:Name="Normal">
                                 <VisualState.Setters>
-                                    <Setter TargetName="FlyoutItemLabel" Property="Label.TextColor" Value="{StaticResource Primary}" />
+                                    <Setter TargetName="FlyoutItemLabel" Property="Label.TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
                                 </VisualState.Setters>
                             </VisualState>
                         </VisualStateGroup>
@@ -80,20 +87,52 @@
     </Shell.FlyoutFooter>
 
 
-    <FlyoutItem Title="About" Icon="icon_about.png">
-        <ShellContent Route="AboutPage" ContentTemplate="{DataTemplate local:AboutPage}" />
+    <FlyoutItem Title="About">
+        <FlyoutItem.Icon>
+            <FontImageSource
+                FontFamily="FontAwesome6Solid"
+                Glyph=""
+                Size="16"
+                Color="{AppThemeBinding Light={StaticResource Black},
+                                        Dark={StaticResource White}}" />
+        </FlyoutItem.Icon>
+        <ShellContent ContentTemplate="{DataTemplate local:AboutPage}" Route="AboutPage" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Mi Scale" Icon="icon_feed.png">
-        <ShellContent Route="ScalePage" ContentTemplate="{DataTemplate local:ScalePage}" />
+    <FlyoutItem Title="Mi Scale">
+        <FlyoutItem.Icon>
+            <FontImageSource
+                FontFamily="FontAwesome6Solid"
+                Glyph=""
+                Size="16"
+                Color="{AppThemeBinding Light={StaticResource Black},
+                                        Dark={StaticResource White}}" />
+        </FlyoutItem.Icon>
+        <ShellContent ContentTemplate="{DataTemplate local:ScalePage}" Route="ScalePage" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Garmin Form" Icon="icon_feed.png">
-        <ShellContent Route="FormPage" ContentTemplate="{DataTemplate local:FormPage}" />
+    <FlyoutItem Title="Garmin Form">
+        <FlyoutItem.Icon>
+            <FontImageSource
+                FontFamily="FontAwesome6Solid"
+                Glyph=""
+                Size="16"
+                Color="{AppThemeBinding Light={StaticResource Black},
+                                        Dark={StaticResource White}}" />
+        </FlyoutItem.Icon>
+        <ShellContent ContentTemplate="{DataTemplate local:FormPage}" Route="FormPage" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Settings" Icon="icon_feed.png">
-        <ShellContent Route="Settings" ContentTemplate="{DataTemplate local:SettingPage}" />
+    <FlyoutItem Title="Settings">
+        <FlyoutItem.Icon>
+            <FontImageSource
+                FontFamily="FontAwesome6Solid"
+                Glyph=""
+                Size="16"
+                Color="{AppThemeBinding Light={StaticResource Black},
+                                        Dark={StaticResource White}}" />
+        </FlyoutItem.Icon>
+        <ShellContent ContentTemplate="{DataTemplate local:SettingPage}" Route="Settings" />
     </FlyoutItem>
 
 </Shell>

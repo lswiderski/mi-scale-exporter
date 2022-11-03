@@ -11,6 +11,8 @@ namespace MiScaleExporter.MAUI
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                fonts.AddFont("FontAwesome6Regular.otf", "FontAwesome6Regular");
+                fonts.AddFont("FontAwesome6Solid.otf", "FontAwesome6Solid");
             }).UseMauiCommunityToolkit();
             return builder.Build();
         }
