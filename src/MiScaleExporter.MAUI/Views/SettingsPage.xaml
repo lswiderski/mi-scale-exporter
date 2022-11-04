@@ -86,7 +86,6 @@
 
                             <Label FontSize="Small" Text="Scale Model" />
                             <RadioButton
-                                BackgroundColor="Aqua"
                                 CheckedChanged="ScaleTypeRadioButton_CheckedChanged"
                                 Content="Mi Body Composition Scale 1 / 2"
                                 GroupName="ScaleType"
