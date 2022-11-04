@@ -23,7 +23,8 @@
                 <StackLayout
                     Padding="15,24,15,24"
                     Orientation="Vertical"
-                    Spacing="10">
+                    Spacing="10"
+                    VerticalOptions="EndAndExpand">
 
                     <Label FontSize="Small" Text="{Binding ScanningLabel}" />
                     <!-- <Button Margin="0,10,0,0" Text="Get values from mi scale "
