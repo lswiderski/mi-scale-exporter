@@ -150,18 +150,24 @@ namespace MiScaleExporter.MAUI.ViewModels
             }
         }
 
-
-
-        public void SexRadioButtonChanged(object s, CheckedChangedEventArgs e)
+        public void SexRadioSetToMale()
         {
-            var radio = s as RadioButton;
-            this.Sex = radio.Value as string == "1" ? Models.Sex.Male : Models.Sex.Female;
+            this.Sex = Sex.Male;
         }
 
-        public void ScaleTypeRadioButton_Changed(object s, CheckedChangedEventArgs e)
+        public void SexRadioSetToFemale()
         {
-            var radio = s as RadioButton;
-            this.ScaleType = radio.Value as string == "1" ? Models.ScaleType.MiSmartScale : Models.ScaleType.MiBodyCompositionScale;
+            this.Sex = Sex.Female;
+        }
+
+        public void ScaleTypeSetToBodyCompositionScale()
+        {
+            this.ScaleType = ScaleType.MiBodyCompositionScale;
+        }
+
+         public void ScaleTypeSetToMiscale()
+        {
+            this.ScaleType = ScaleType.MiSmartScale;
         }
 
         public void CheckPreferences()

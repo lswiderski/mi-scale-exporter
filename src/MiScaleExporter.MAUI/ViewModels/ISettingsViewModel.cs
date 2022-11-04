@@ -8,8 +8,10 @@ namespace MiScaleExporter.MAUI.ViewModels
 {
     public interface ISettingsViewModel
     {
-        void SexRadioButtonChanged(object s, CheckedChangedEventArgs e);
-        void ScaleTypeRadioButton_Changed(object s, CheckedChangedEventArgs e);
+        void SexRadioSetToMale();
+        void SexRadioSetToFemale();
+        void ScaleTypeSetToBodyCompositionScale();
+        void ScaleTypeSetToMiscale();
         Task LoadPreferencesAsync();
     }
 }

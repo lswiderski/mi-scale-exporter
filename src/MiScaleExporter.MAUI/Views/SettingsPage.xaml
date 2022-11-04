@@ -71,13 +71,13 @@
                             <Label FontSize="Small" Text="Sex" />
                             <HorizontalStackLayout>
                                 <RadioButton
-                                    CheckedChanged="SexRadioButton_CheckedChanged"
+                                    CheckedChanged="SexRadioSetToFemale"
                                     Content="Female"
                                     GroupName="Sex"
                                     IsChecked="{Binding IsFemaleSelected}"
                                     Value="0" />
                                 <RadioButton
-                                    CheckedChanged="SexRadioButton_CheckedChanged"
+                                    CheckedChanged="SexRadioSetToMale"
                                     Content="Male"
                                     GroupName="Sex"
                                     IsChecked="{Binding IsMaleSelected}"
@@ -86,13 +86,13 @@
 
                             <Label FontSize="Small" Text="Scale Model" />
                             <RadioButton
-                                CheckedChanged="ScaleTypeRadioButton_CheckedChanged"
+                                CheckedChanged="ScaleTypeSetToBodyCompositionScale"
                                 Content="Mi Body Composition Scale 1 / 2"
                                 GroupName="ScaleType"
                                 IsChecked="{Binding IsMiBodyCompositionScaleSelected}"
                                 Value="0" />
                             <RadioButton
-                                CheckedChanged="ScaleTypeRadioButton_CheckedChanged"
+                                CheckedChanged="ScaleTypeSetToMiscale"
                                 Content="Mi Smart Scale"
                                 GroupName="ScaleType"
                                 IsChecked="{Binding IsMiSmartScaleSelected}"

@@ -22,13 +22,35 @@ namespace MiScaleExporter.MAUI.Views
             }
         }
 
-        private void SexRadioButton_CheckedChanged(object sender, CheckedChangedEventArgs e)
+        private void SexRadioSetToMale(object sender, CheckedChangedEventArgs e)
         {
-            vm.SexRadioButtonChanged(sender, e);
+            if (e.Value)
+            {
+                vm.SexRadioSetToMale();
+            }
         }
-        private void ScaleTypeRadioButton_CheckedChanged(object sender, CheckedChangedEventArgs e)
+        private void SexRadioSetToFemale(object sender, CheckedChangedEventArgs e)
         {
-            vm.ScaleTypeRadioButton_Changed(sender, e);
+            if (e.Value)
+            {
+                vm.SexRadioSetToFemale();
+            }
+        }
+        private void ScaleTypeSetToBodyCompositionScale(object sender, CheckedChangedEventArgs e)
+        {
+            if (e.Value)
+            {
+                vm.ScaleTypeSetToBodyCompositionScale();
+            }
+
+        }
+        private void ScaleTypeSetToMiscale(object sender, CheckedChangedEventArgs e)
+        {
+            if (e.Value)
+            {
+                vm.ScaleTypeSetToMiscale();
+            }
+
         }
 
         protected override async void OnAppearing()
