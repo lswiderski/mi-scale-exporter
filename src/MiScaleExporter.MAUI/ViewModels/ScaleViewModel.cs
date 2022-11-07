@@ -34,6 +34,7 @@ namespace MiScaleExporter.MAUI.ViewModels
 
         public async Task CheckPreferencesAsync()
         {
+            App.BodyComposition = null;
             await this.LoadPreferencesAsync();
             if (!string.IsNullOrWhiteSpace(_address))
             {
