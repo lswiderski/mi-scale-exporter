@@ -132,11 +132,7 @@
                                 <Entry
                                     FontSize="Medium"
                                     Keyboard="Email"
-                                    Text="{Binding Email, Mode=TwoWay}">
-                                    <Entry.Behaviors>
-                                        <toolkit:EmailValidationBehavior DecorationFlags="Trim" InvalidStyle="{StaticResource InvalidEntryStyle}" />
-                                    </Entry.Behaviors>
-                                </Entry>
+                                    Text="{Binding Email, Mode=TwoWay}" />
                             </Border>
                             <Label FontSize="Small" Text="Password" />
                             <Border
