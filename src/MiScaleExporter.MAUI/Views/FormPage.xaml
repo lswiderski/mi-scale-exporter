@@ -46,7 +46,8 @@
                         <Entry
                             FontSize="Medium"
                             Keyboard="Numeric"
-                            Text="{Binding Weight, Mode=TwoWay}">
+                            
+                            Text="{Binding Weight, Mode=TwoWay, StringFormat='{0:0.##}'}">
                             <Entry.Behaviors>
                                 <behaviors:NumericDoubleValidationBehavior />
                             </Entry.Behaviors>

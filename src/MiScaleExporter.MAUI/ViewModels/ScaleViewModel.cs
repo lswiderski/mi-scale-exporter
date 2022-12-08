@@ -139,7 +139,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                 {
                     _scaleDevice = a.Device;
                     bodyComposition = GetScanData();
-                    WeightLabel = bodyComposition.Weight.ToString();
+                    WeightLabel = bodyComposition.Weight.ToString("0.##");
                     StabilizedLabel = bodyComposition.IsStabilized ? "Stable: Yes" : "Stable: No";
                     ImpedanceLabel = bodyComposition.HasImpedance ? "Impedance: Yes" : "Impedance: No";
                     DataLabel = string.Join("|", bodyComposition.ReceivedRawData);
@@ -253,7 +253,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                 Address = _address,
             };
             ScanningLabel = string.Empty;
-            WeightLabel = "76";
+            WeightLabel = "0";
             this.IsBusyForm = true;
             var bc = await this.GetBodyCompositonAsync(scale,
                 new User { Sex = _sex, Age = _age, Height = _height, ScaleType = _scaleType });
