@@ -41,19 +41,14 @@ namespace MiScaleExporter.Services
                     var user = new MiScaleBodyComposition.User(_user.Height, _user.Age, (MiScaleBodyComposition.Sex)(byte)_user.Sex);
                     var isStabilized = miBodyCompositionScale.Istabilized(data, user);
                     var hasImpedance = miBodyCompositionScale.HasImpedance(data, user);
-                    var doNotWaitForImpedance = Preferences.Get(PreferencesKeys.DoNotWaitForImpedance, false);
 
                     if (data.Length > 13)
                     {
                         data = data.Skip(data.Length - 13).ToArray();
                     }
 
-                    if (isStabilized)//isStabilized && (doNotWaitForImpedance || hasImpedance))
+                    if (isStabilized)
                     {
-                        if (Preferences.Get(PreferencesKeys.ShowReceivedByteArray, false))
-                        {
-                            _logService.LogInfo(String.Join("; ", data));
-                        }
                         var bc = miBodyCompositionScale.GetBodyComposition(data, user, true);
                         var bodyComposition = new BodyComposition
                         {
@@ -71,7 +66,8 @@ namespace MiScaleExporter.Services
                             BodyType = bc.BodyType,
                             HasImpedance = hasImpedance,
                             IsStabilized = isStabilized,
-                            Date = bc.Date,
+                            Date = bc.Date, 
+
                         };
                         return bodyComposition;
                     }
@@ -85,31 +81,11 @@ namespace MiScaleExporter.Services
                         };
                         return bodyComposition;
                     }
-                    /*
-                    else
-                    {
-                        if (Preferences.Get(PreferencesKeys.ShowUnstabilizedData, false))
-                        {
-                            var dataString = String.Join("; ", data);
-                            var previousDataString = String.Join("; ", _previousErrorData ?? new byte[0]);
-                            if (previousDataString != dataString)
-                            {
-                                _logService.LogInfo("received data but it is unstable, or wrong scale type is selected\n" + dataString);
-                                _previousErrorData = data;
-                            }
-                        }
-                        return null;
-                    }*/
                 case ScaleType.MiSmartScale:
                     var legacyMiscale = new MiScaleBodyComposition.LegacyMiScale();
 
                     if (legacyMiscale.Istabilized(data))
                     {
-                        if (Preferences.Get(PreferencesKeys.ShowReceivedByteArray, false))
-                        {
-                            _logService.LogInfo(String.Join("; ", data));
-                        }
-
                         var legacyResult = legacyMiscale.GetWeight(data, _user.Height, true);
 
                         var bodyComposition = new BodyComposition
@@ -124,17 +100,6 @@ namespace MiScaleExporter.Services
                     }
                     else
                     {
-                        if (Preferences.Get(PreferencesKeys.ShowUnstabilizedData, false))
-                        {
-                            var dataString = String.Join("; ", data);
-                            var previousDataString = String.Join("; ", _previousErrorData ?? new byte[0]);
-                            if (previousDataString != dataString)
-                            {
-                                _logService.LogInfo("received data but it is unstable, or wrong scale type is selected\n" + dataString);
-                                _previousErrorData = data;
-                            }
-                        }
-
                         return null;
                     }
                 default:

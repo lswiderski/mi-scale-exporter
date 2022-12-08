@@ -15,11 +15,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                 {
                     Preferences.Remove(PreferencesKeys.ApiServerAddressOverride);
                     this.ApiAddress = string.Empty;
-                    Preferences.Remove(PreferencesKeys.ShowReceivedByteArray);
-                    Preferences.Remove(PreferencesKeys.SaveToStorage);
                     Preferences.Remove(PreferencesKeys.OneClickScanAndUpload);
-                    Preferences.Remove(PreferencesKeys.ShowUnstabilizedData);
-                    Preferences.Remove(PreferencesKeys.DoNotWaitForImpedance);
                     Preferences.Remove(PreferencesKeys.UseExternalAPI);
                 }
             );
@@ -31,11 +27,7 @@ namespace MiScaleExporter.MAUI.ViewModels
         public async Task LoadPreferencesAsync()
         {
             this._apiAddress = Preferences.Get(PreferencesKeys.ApiServerAddressOverride, string.Empty);
-            this._showReceivedByteArray = Preferences.Get(PreferencesKeys.ShowReceivedByteArray, false);
-            this._saveToStorage = Preferences.Get(PreferencesKeys.SaveToStorage, false);
             this._oneClickScanAndUpload = Preferences.Get(PreferencesKeys.OneClickScanAndUpload, false);
-            this._showUnstabilizedData = Preferences.Get(PreferencesKeys.ShowUnstabilizedData, false);
-            this._doNotWaitForImpedance = Preferences.Get(PreferencesKeys.DoNotWaitForImpedance, false);
             this._useExternalAPI = Preferences.Get(PreferencesKeys.UseExternalAPI, false);
 
             this._age = Preferences.Get(PreferencesKeys.UserAge, 25);
@@ -77,29 +69,6 @@ namespace MiScaleExporter.MAUI.ViewModels
             }
         }
 
-        private bool _saveToStorage;
-
-        public bool SaveToStorage
-        {
-            get => _saveToStorage;
-            set
-            {
-                Preferences.Set(PreferencesKeys.SaveToStorage, value);
-                SetProperty(ref _saveToStorage, value);
-            }
-        }
-
-        private bool _showReceivedByteArray;
-
-        public bool ShowReceivedByteArray
-        {
-            get => _showReceivedByteArray;
-            set
-            {
-                Preferences.Set(PreferencesKeys.ShowReceivedByteArray, value);
-                SetProperty(ref _showReceivedByteArray, value);
-            }
-        }
 
 
         private bool _oneClickScanAndUpload;
@@ -111,30 +80,6 @@ namespace MiScaleExporter.MAUI.ViewModels
             {
                 Preferences.Set(PreferencesKeys.OneClickScanAndUpload, value);
                 SetProperty(ref _oneClickScanAndUpload, value);
-            }
-        }
-
-        private bool _showUnstabilizedData;
-
-        public bool ShowUnstabilizedData
-        {
-            get => _showUnstabilizedData;
-            set
-            {
-                Preferences.Set(PreferencesKeys.ShowUnstabilizedData, value);
-                SetProperty(ref _showUnstabilizedData, value);
-            }
-        }
-
-        private bool _doNotWaitForImpedance;
-
-        public bool DoNotWaitForImpedance
-        {
-            get => _doNotWaitForImpedance;
-            set
-            {
-                Preferences.Set(PreferencesKeys.DoNotWaitForImpedance, value);
-                SetProperty(ref _doNotWaitForImpedance, value);
             }
         }
 

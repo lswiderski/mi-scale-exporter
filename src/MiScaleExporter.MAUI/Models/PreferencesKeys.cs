@@ -10,11 +10,7 @@ public static class PreferencesKeys
     public static string GarminUserSavePassword = "GarminUserSavePassword";
     public static string GarminUserPassword = "GarminUserPassword";
     public static string ApiServerAddressOverride = "ApiServerAddressOverride";
-    public static string SaveToStorage = "SaveToStorage";
-    public static string ShowReceivedByteArray = "ShowReceivedByteArray";
     public static string ScaleType = "ScaleType";
     public static string OneClickScanAndUpload = "OneClickScanAndUpload";
-    public static string ShowUnstabilizedData = "ShowUnstabilizedData";
-    public static string DoNotWaitForImpedance = "DoNotWaitForImpedance";
     public static string UseExternalAPI = "UseExternalAPI";
 }

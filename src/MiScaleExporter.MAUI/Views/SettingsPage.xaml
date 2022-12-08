@@ -176,11 +176,6 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
 
                                 <Grid.ColumnDefinitions>
@@ -201,57 +196,13 @@
                                 <CheckBox
                                     Grid.Row="1"
                                     Grid.Column="0"
-                                    IsChecked="{Binding ShowReceivedByteArray, Mode=TwoWay}"
+                                    IsChecked="{Binding OneClickScanAndUpload, Mode=TwoWay}"
                                     VerticalOptions="Center" />
                                 <Label
                                     Grid.Row="1"
                                     Grid.Column="1"
                                     FontSize="Small"
-                                    Text="Show received raw data after measurement"
-                                    VerticalOptions="Center" />
-                                <CheckBox
-                                    Grid.Row="2"
-                                    Grid.Column="0"
-                                    IsChecked="{Binding SaveToStorage, Mode=TwoWay}"
-                                    VerticalOptions="Center" />
-                                <Label
-                                    Grid.Row="2"
-                                    Grid.Column="1"
-                                    FontSize="Small"
-                                    Text="Save log to storage"
-                                    VerticalOptions="Center" />
-                                <CheckBox
-                                    Grid.Row="3"
-                                    Grid.Column="0"
-                                    IsChecked="{Binding OneClickScanAndUpload, Mode=TwoWay}"
-                                    VerticalOptions="Center" />
-                                <Label
-                                    Grid.Row="3"
-                                    Grid.Column="1"
-                                    FontSize="Small"
                                     Text="One click - Scan &amp; Upload"
-                                    VerticalOptions="Center" />
-                                <CheckBox
-                                    Grid.Row="4"
-                                    Grid.Column="0"
-                                    IsChecked="{Binding ShowUnstabilizedData, Mode=TwoWay}"
-                                    VerticalOptions="Center" />
-                                <Label
-                                    Grid.Row="4"
-                                    Grid.Column="1"
-                                    FontSize="Small"
-                                    Text="Show unstabilized data"
-                                    VerticalOptions="Center" />
-                                <CheckBox
-                                    Grid.Row="5"
-                                    Grid.Column="0"
-                                    IsChecked="{Binding DoNotWaitForImpedance, Mode=TwoWay}"
-                                    VerticalOptions="Center" />
-                                <Label
-                                    Grid.Row="5"
-                                    Grid.Column="1"
-                                    FontSize="Small"
-                                    Text="Do not wait for impedance"
                                     VerticalOptions="Center" />
 
                             </Grid>
