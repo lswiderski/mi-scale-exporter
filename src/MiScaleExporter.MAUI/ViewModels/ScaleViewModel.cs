@@ -250,12 +250,19 @@ namespace MiScaleExporter.MAUI.ViewModels
                            "OK");
                         return;
                     }
+
+                    if (await GetLocationPermissionStatusAsync() != PermissionStatus.Granted)
+                    {
+                        await Application.Current.MainPage.DisplayAlert("Problem", "Permission to use Location (Bluetooth) is required to scan.",
+                            "OK");
+                        return;
+                    }
                 }
                 else
                 {
                     if (await GetLocationPermissionStatusAsync() != PermissionStatus.Granted)
                     {
-                        await Application.Current.MainPage.DisplayAlert("Problem", "Permission to use Bluetooth is required to scan.",
+                        await Application.Current.MainPage.DisplayAlert("Problem", "Permission to use  Location (Bluetooth) is required to scan.",
                             "OK");
                         return;
                     }
