@@ -139,8 +139,9 @@ namespace MiScaleExporter.MAUI.ViewModels
                 {
                     _scaleDevice = a.Device;
                     bodyComposition = GetScanData();
+                    FoundScaleLabel = bodyComposition != null ? "Connected to scale: Yes" : "Connected to scale: No";
                     WeightLabel = bodyComposition.Weight.ToString("0.##");
-                    StabilizedLabel = bodyComposition.IsStabilized ? "Stable: Yes" : "Stable: No";
+                    StabilizedLabel = bodyComposition.IsStabilized ? "Stabilized: Yes" : "Stabilized: No";
                     ImpedanceLabel = bodyComposition.HasImpedance ? "Impedance: Yes" : "Impedance: No";
                     DataLabel = string.Join("|", bodyComposition.ReceivedRawData);
                     if (!bodyComposition.IsStabilized)
@@ -340,7 +341,7 @@ namespace MiScaleExporter.MAUI.ViewModels
 
         public string DataLabel
         {
-            get => _dataLabel;
+            get => Preferences.Get(PreferencesKeys.ShowDebugInfo, false) ?  _dataLabel : string.Empty;
             set => SetProperty(ref _dataLabel, value);
         }
 
@@ -348,7 +349,7 @@ namespace MiScaleExporter.MAUI.ViewModels
 
         public string StabilizedLabel
         {
-            get => _stabilizedLabel;
+            get => Preferences.Get(PreferencesKeys.ShowDebugInfo, false) ? _stabilizedLabel : string.Empty;
             set => SetProperty(ref _stabilizedLabel, value);
         }
 
@@ -356,9 +357,18 @@ namespace MiScaleExporter.MAUI.ViewModels
 
         public string ImpedanceLabel
         {
-            get => _impedanceLabel;
+            get => Preferences.Get(PreferencesKeys.ShowDebugInfo, false) ? _impedanceLabel : string.Empty;
             set => SetProperty(ref _impedanceLabel, value);
         }
+
+        private string _foundScaleLabel;
+
+        public string FoundScaleLabel
+        {
+            get => Preferences.Get(PreferencesKeys.ShowDebugInfo, false) ? _foundScaleLabel : string.Empty;
+            set => SetProperty(ref _foundScaleLabel, value);
+        }
+
 
     }
 }

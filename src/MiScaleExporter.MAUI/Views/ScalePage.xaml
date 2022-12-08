@@ -44,6 +44,7 @@
                     Spacing="10"
                     VerticalOptions="EndAndExpand">
 
+                    <Label FontSize="Small" Text="{Binding FoundScaleLabel}" />
                     <Label FontSize="Small" Text="{Binding ImpedanceLabel}" />
                     <Label FontSize="Small" Text="{Binding StabilizedLabel}" />
                     <Label FontSize="Small" Text="{Binding DataLabel}" />

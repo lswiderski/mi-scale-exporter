@@ -13,4 +13,5 @@ public static class PreferencesKeys
     public static string ScaleType = "ScaleType";
     public static string OneClickScanAndUpload = "OneClickScanAndUpload";
     public static string UseExternalAPI = "UseExternalAPI";
+    public static string ShowDebugInfo = "ShowDebugInfo";
 }

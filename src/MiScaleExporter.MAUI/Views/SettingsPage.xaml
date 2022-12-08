@@ -176,6 +176,7 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
 
                                 <Grid.ColumnDefinitions>
@@ -203,6 +204,17 @@
                                     Grid.Column="1"
                                     FontSize="Small"
                                     Text="One click - Scan &amp; Upload"
+                                    VerticalOptions="Center" />
+                                <CheckBox
+                                    Grid.Row="2"
+                                    Grid.Column="0"
+                                    IsChecked="{Binding ShowDebugInfo, Mode=TwoWay}"
+                                    VerticalOptions="Center" />
+                                <Label
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    FontSize="Small"
+                                    Text="Show Debug Info during scan"
                                     VerticalOptions="Center" />
 
                             </Grid>

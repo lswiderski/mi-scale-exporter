@@ -17,6 +17,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                     this.ApiAddress = string.Empty;
                     Preferences.Remove(PreferencesKeys.OneClickScanAndUpload);
                     Preferences.Remove(PreferencesKeys.UseExternalAPI);
+                    Preferences.Remove(PreferencesKeys.ShowDebugInfo);
                 }
             );
         }
@@ -29,6 +30,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             this._apiAddress = Preferences.Get(PreferencesKeys.ApiServerAddressOverride, string.Empty);
             this._oneClickScanAndUpload = Preferences.Get(PreferencesKeys.OneClickScanAndUpload, false);
             this._useExternalAPI = Preferences.Get(PreferencesKeys.UseExternalAPI, false);
+            this._useExternalAPI = Preferences.Get(PreferencesKeys.ShowDebugInfo, false);
 
             this._age = Preferences.Get(PreferencesKeys.UserAge, 25);
             this._height = Preferences.Get(PreferencesKeys.UserHeight, 170);
@@ -92,6 +94,18 @@ namespace MiScaleExporter.MAUI.ViewModels
             {
                 Preferences.Set(PreferencesKeys.UseExternalAPI, value);
                 SetProperty(ref _useExternalAPI, value);
+            }
+        }
+
+        private bool _showDebugInfo;
+
+        public bool ShowDebugInfo
+        {
+            get => _showDebugInfo;
+            set
+            {
+                Preferences.Set(PreferencesKeys.ShowDebugInfo, value);
+                SetProperty(ref _showDebugInfo, value);
             }
         }
 
