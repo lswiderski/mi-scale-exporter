@@ -41,33 +41,24 @@
                                 HorizontalOptions="Fill"
                                 Color="Gray" />
                             <Label FontSize="Small" Text="Age" />
-                            <Border
-                                Padding="4,1"
-                                HorizontalOptions="FillAndExpand"
-                                StrokeThickness="1">
-                                <Entry
+                            <Entry
                                     FontSize="Medium"
                                     Keyboard="Numeric"
                                     Text="{Binding Age, Mode=TwoWay}">
-                                    <Entry.Behaviors>
-                                        <behaviors:NumericIntValidationBehavior />
-                                    </Entry.Behaviors>
-                                </Entry>
-                            </Border>
+                                <Entry.Behaviors>
+                                    <behaviors:NumericIntValidationBehavior />
+                                </Entry.Behaviors>
+                            </Entry>
+
                             <Label FontSize="Small" Text="Height" />
-                            <Border
-                                Padding="4,1"
-                                HorizontalOptions="FillAndExpand"
-                                StrokeThickness="1">
-                                <Entry
+                            <Entry
                                     FontSize="Medium"
                                     Keyboard="Numeric"
                                     Text="{Binding Height, Mode=TwoWay}">
-                                    <Entry.Behaviors>
-                                        <behaviors:NumericIntValidationBehavior />
-                                    </Entry.Behaviors>
-                                </Entry>
-                            </Border>
+                                <Entry.Behaviors>
+                                    <behaviors:NumericIntValidationBehavior />
+                                </Entry.Behaviors>
+                            </Entry>
                             <Label FontSize="Small" Text="Sex" />
                             <HorizontalStackLayout>
                                 <RadioButton
@@ -98,12 +89,7 @@
                                 IsChecked="{Binding IsMiSmartScaleSelected}"
                                 Value="1" />
                             <Label FontSize="Small" Text="Bluetooth Address" />
-                            <Border
-                                Padding="4,1"
-                                HorizontalOptions="FillAndExpand"
-                                StrokeThickness="1">
-                                <Entry FontSize="Medium" Text="{Binding Address, Mode=TwoWay}" />
-                            </Border>
+                            <Entry FontSize="Medium" Text="{Binding Address, Mode=TwoWay}" />
 
                         </StackLayout>
 
@@ -125,25 +111,16 @@
                                 HorizontalOptions="Fill"
                                 Color="Gray" />
                             <Label FontSize="Small" Text="Email" />
-                            <Border
-                                Padding="4,1"
-                                HorizontalOptions="FillAndExpand"
-                                StrokeThickness="1">
-                                <Entry
+                            <Entry
                                     FontSize="Medium"
                                     Keyboard="Email"
                                     Text="{Binding Email, Mode=TwoWay}" />
-                            </Border>
                             <Label FontSize="Small" Text="Password" />
-                            <Border
-                                Padding="4,1"
-                                HorizontalOptions="FillAndExpand"
-                                StrokeThickness="1">
-                                <Entry
+                            <Entry
                                     FontSize="Medium"
                                     IsPassword="True"
                                     Text="{Binding Password, Mode=TwoWay}" />
-                            </Border>
+
                         </StackLayout>
                     </Border>
                     <Border>
@@ -164,14 +141,7 @@
                                 Color="Gray" />
 
                             <Label FontSize="Small" Text="Alternate External API Address" />
-                            <Border
-                                Margin="0,0,0,10"
-                                Padding="4,1"
-                                HorizontalOptions="FillAndExpand"
-                                StrokeThickness="1">
-                                <Entry FontSize="Medium" Text="{Binding ApiAddress, Mode=TwoWay}" />
-                            </Border>
-
+                            <Entry FontSize="Medium" Text="{Binding ApiAddress, Mode=TwoWay}" />
                             <Grid HorizontalOptions="FillAndExpand" VerticalOptions="Start">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />

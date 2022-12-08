@@ -38,83 +38,57 @@
 
                 <StackLayout Grid.Row="0" Grid.Column="0">
                     <Label FontSize="Small" Text="Weight (Kg)" />
-                    <Border
-                        Margin="0,0,15,5"
-                        Padding="4,1"
-                        HorizontalOptions="FillAndExpand"
-                        StrokeThickness="1">
-                        <Entry
+                    <Entry
                             FontSize="Medium"
                             Keyboard="Numeric"
                             
                             Text="{Binding Weight, Mode=TwoWay, StringFormat='{0:0.##}'}">
-                            <Entry.Behaviors>
-                                <behaviors:NumericDoubleValidationBehavior />
-                            </Entry.Behaviors>
-                        </Entry>
-                    </Border>
+                        <Entry.Behaviors>
+                            <behaviors:NumericDoubleValidationBehavior />
+                        </Entry.Behaviors>
+                    </Entry>
                 </StackLayout>
 
                 <StackLayout Grid.Row="0" Grid.Column="1">
                     <Label FontSize="Small" Text="BMI" />
-                    <Border
-                        Margin="0,0,5,5"
-                        Padding="4,1"
-                        HorizontalOptions="FillAndExpand"
-                        StrokeThickness="1">
-                        <Entry
+                    <Entry
                             FontSize="Medium"
                             Keyboard="Numeric"
                             Text="{Binding BMI, Mode=TwoWay}">
-                            <Entry.Behaviors>
-                                <behaviors:NumericDoubleValidationBehavior />
-                            </Entry.Behaviors>
-                        </Entry>
-                    </Border>
+                        <Entry.Behaviors>
+                            <behaviors:NumericDoubleValidationBehavior />
+                        </Entry.Behaviors>
+                    </Entry>
                 </StackLayout>
 
                 <StackLayout Grid.Row="1" Grid.Column="0">
                     <Label FontSize="Small" Text="Body Fat (%)" />
-                    <Border
-                        Margin="0,0,15,5"
-                        Padding="4,1"
-                        HorizontalOptions="FillAndExpand"
-                        StrokeThickness="1">
-                        <Entry
+
+                    <Entry
                             FontSize="Medium"
                             Keyboard="Numeric"
                             Text="{Binding Fat, Mode=TwoWay}">
-                            <Entry.Behaviors>
-                                <behaviors:NumericDoubleValidationBehavior />
-                            </Entry.Behaviors>
-                        </Entry>
-                    </Border>
+                        <Entry.Behaviors>
+                            <behaviors:NumericDoubleValidationBehavior />
+                        </Entry.Behaviors>
+                    </Entry>
                 </StackLayout>
                 <StackLayout Grid.Row="1" Grid.Column="1">
                     <Label FontSize="Small" Text="Muscle Mass (Kg)" />
-                    <Border
-                        Margin="0,0,5,5"
-                        Padding="4,1"
-                        HorizontalOptions="FillAndExpand"
-                        StrokeThickness="1">
-                        <Entry
+
+                    <Entry
                             FontSize="Medium"
                             Keyboard="Numeric"
                             Text="{Binding MuscleMass, Mode=TwoWay}">
-                            <Entry.Behaviors>
-                                <behaviors:NumericDoubleValidationBehavior />
-                            </Entry.Behaviors>
-                        </Entry>
-                    </Border>
+                        <Entry.Behaviors>
+                            <behaviors:NumericDoubleValidationBehavior />
+                        </Entry.Behaviors>
+                    </Entry>
                 </StackLayout>
 
                 <StackLayout Grid.Row="2" Grid.Column="0">
                     <Label FontSize="Small" Text="Water (%)" />
-                    <Border
-                        Margin="0,0,15,5"
-                        Padding="4,1"
-                        HorizontalOptions="FillAndExpand"
-                        StrokeThickness="1">
+                   
                         <Entry
                             FontSize="Medium"
                             Keyboard="Numeric"
@@ -123,15 +97,11 @@
                                 <behaviors:NumericDoubleValidationBehavior />
                             </Entry.Behaviors>
                         </Entry>
-                    </Border>
+                    
                 </StackLayout>
                 <StackLayout Grid.Row="2" Grid.Column="1">
                     <Label FontSize="Small" Text="Bone mass (Kg)" />
-                    <Border
-                        Margin="0,0,5,5"
-                        Padding="4,1"
-                        HorizontalOptions="FillAndExpand"
-                        StrokeThickness="1">
+                   
                         <Entry
                             FontSize="Medium"
                             Keyboard="Numeric"
@@ -140,16 +110,12 @@
                                 <behaviors:NumericDoubleValidationBehavior />
                             </Entry.Behaviors>
                         </Entry>
-                    </Border>
+                   
                 </StackLayout>
 
                 <StackLayout Grid.Row="3" Grid.Column="0">
                     <Label FontSize="Small" Text="Visceral fat" />
-                    <Border
-                        Margin="0,0,15,5"
-                        Padding="4,1"
-                        HorizontalOptions="FillAndExpand"
-                        StrokeThickness="1">
+                   
                         <Entry
                             FontSize="Medium"
                             Keyboard="Numeric"
@@ -158,15 +124,11 @@
                                 <behaviors:NumericDoubleValidationBehavior />
                             </Entry.Behaviors>
                         </Entry>
-                    </Border>
+                    
                 </StackLayout>
                 <StackLayout Grid.Row="3" Grid.Column="1">
                     <Label FontSize="Small" Text="Body age (years)"  />
-                    <Border
-                        Margin="0,0,5,5"
-                        Padding="4,1"
-                        HorizontalOptions="FillAndExpand"
-                        StrokeThickness="1">
+                    
                         <Entry
                             FontSize="Medium"
                             Keyboard="Numeric"
@@ -175,16 +137,12 @@
                                 <behaviors:NumericDoubleValidationBehavior />
                             </Entry.Behaviors>
                         </Entry>
-                    </Border>
+                    
                 </StackLayout>
 
                 <StackLayout Grid.Row="4" Grid.Column="0">
                     <Label FontSize="Small" Text="Body Type" />
-                    <Border
-                        Margin="0,0,15,5"
-                        Padding="4,1"
-                        HorizontalOptions="FillAndExpand"
-                        StrokeThickness="1">
+                   
                         <Entry
                             FontSize="Medium"
                             Keyboard="Numeric"
@@ -193,22 +151,18 @@
                                 <behaviors:NumericIntValidationBehavior />
                             </Entry.Behaviors>
                         </Entry>
-                    </Border>
+                   
                 </StackLayout>
 
                 <StackLayout Grid.Row="4" Grid.Column="1">
                     <Label FontSize="Small" Text="Time of measurement" />
-                    <Border
-                        Margin="0,0,5,5"
-                        Padding="4,4"
-                        HorizontalOptions="FillAndExpand"
-                        StrokeThickness="1">
+                   
                         <StackLayout Orientation="Horizontal">
 
                             <DatePicker Date="{Binding Date}" Format="d" />
                             <TimePicker Format="HH:mm" Time="{Binding Time}" />
                         </StackLayout>
-                    </Border>
+                   
                 </StackLayout>
 
 
@@ -218,11 +172,7 @@
                     Grid.ColumnSpan="2"
                     IsVisible="{Binding ShowEmail}">
                     <Label FontSize="Small" Text="Email" />
-                    <Border
-                        Margin="0,0,5,5"
-                        Padding="4,1"
-                        HorizontalOptions="FillAndExpand"
-                        StrokeThickness="1">
+                   
                         <Entry
                             FontSize="Medium"
                             Keyboard="Email"
@@ -231,7 +181,7 @@
                                 <toolkit:EmailValidationBehavior DecorationFlags="Trim" InvalidStyle="{StaticResource InvalidEntryStyle}" />
                             </Entry.Behaviors>
                         </Entry>
-                    </Border>
+                    
                 </StackLayout>
 
                 <StackLayout
@@ -240,16 +190,12 @@
                     Grid.ColumnSpan="2"
                     IsVisible="{Binding ShowPassword}">
                     <Label FontSize="Small" Text="Password" />
-                    <Border
-                        Margin="0,0,5,5"
-                        Padding="4,1"
-                        HorizontalOptions="FillAndExpand"
-                        StrokeThickness="1">
+                  
                         <Entry
                             FontSize="Medium"
                             IsPassword="True"
                             Text="{Binding Password, Mode=TwoWay}" />
-                    </Border>
+                  
                 </StackLayout>
 
 
