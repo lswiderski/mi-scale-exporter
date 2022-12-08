@@ -160,10 +160,7 @@
                     </Border>
                 </StackLayout>
                 <StackLayout Grid.Row="3" Grid.Column="1">
-                    <Label
-                        FontSize="Small"
-                        Text="Body age (years)"
-                        TextColor="Black" />
+                    <Label FontSize="Small" Text="Body age (years)"  />
                     <Border
                         Margin="0,0,5,5"
                         Padding="4,1"
