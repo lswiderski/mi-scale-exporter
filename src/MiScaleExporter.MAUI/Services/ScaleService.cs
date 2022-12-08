@@ -11,124 +11,27 @@ namespace MiScaleExporter.Services
 {
     public class ScaleService : IScaleService
     {
-        private IAdapter _adapter;
-        private IDevice _scaleDevice;
-        private Scale _scale;
+        
+       
         private User _user;
-        private TaskCompletionSource<BodyComposition> _completionSource;
-        private BodyComposition bodyComposition;
+       
+        
         private ILogService _logService;
-        private byte[] _scannedData;
+        
         private byte[] _previousErrorData;
+        private string weightLabel;
 
         public ScaleService(ILogService logService)
         {
             _logService = logService;
-            _adapter = CrossBluetoothLE.Current.Adapter;
-            _adapter.ScanTimeout = 50000;
-            _adapter.ScanTimeoutElapsed += TimeOuted;
+           
         }
 
-        public async Task<Models.BodyComposition> GetBodyCompositonAsync(Scale scale, Models.User user)
+        private double GetWeight(byte[] data)
         {
-            bodyComposition = null;
-            _completionSource = new TaskCompletionSource<BodyComposition>();
-
-            _scale = scale;
-            _user = user;
-            _adapter.DeviceAdvertised += DeviceAdvertided;
-            await _adapter.StartScanningForDevicesAsync();
-            return await _completionSource.Task;
+            return (double)(((data[12] & 0xFF) << 8) | (data[11] & 0xFF)) * 0.005;
         }
-
-        public async Task CancelSearchAsync()
-        {
-            try
-            {
-                if(bodyComposition != null)
-                {
-                    bodyComposition.IsValid = false;
-                }
-                if (!_completionSource.Task.IsCompleted)
-                {
-                    _completionSource.SetResult(bodyComposition);
-                }
-               
-            }
-            catch (Exception ex)
-            {
-                _logService.LogError(ex.Message);
-            }
-
-            await StopAsync();
-        }
-
-        private void TimeOuted(object s, EventArgs e)
-        {
-            StopAsync().Wait();
-            _completionSource.SetResult(bodyComposition);
-        }
-
-        private void DeviceAdvertided(object s, DeviceEventArgs a)
-        {
-            var obj = a.Device.NativeDevice;
-            PropertyInfo propInfo = obj.GetType().GetProperty("Address");
-            string address = (string)propInfo.GetValue(obj, null);
-
-            if (address.ToLowerInvariant() == _scale.Address?.ToLowerInvariant())
-            {
-
-                try
-                {
-                    _scaleDevice = a.Device;
-                    if (!GetScanData())
-                    {
-                        return;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    _logService.LogError(ex.Message);
-
-                    if (_scannedData != null)
-                    {
-                        _logService.LogInfo(String.Join("; ", _scannedData));
-                    }
-                }
-                finally
-                {
-
-                    if (bodyComposition != null)
-                    {
-                        StopAsync().Wait();
-                        bodyComposition.IsValid = true;
-                        _completionSource.SetResult(bodyComposition);
-                    }
-                }
-            }
-
-        }
-
-        private bool GetScanData()
-        {
-            if (_scaleDevice != null)
-            {
-                var data = _scaleDevice.AdvertisementRecords
-                    .Where(x => x.Type == Plugin.BLE.Abstractions.AdvertisementRecordType.ServiceData) //0x16
-                    .Select(x => x.Data)
-                    .FirstOrDefault();
-                _scannedData = data;
-
-
-                var bc = ComputeData(data);
-
-                return bc != null;
-            }
-
-            return false;
-        }
-
-        private BodyComposition ComputeData(byte[] data)
+        public BodyComposition ComputeData(byte[] data, User _user)
         {
             switch (_user.ScaleType)
             {
@@ -140,14 +43,19 @@ namespace MiScaleExporter.Services
                     var hasImpedance = miBodyCompositionScale.HasImpedance(data, user);
                     var doNotWaitForImpedance = Preferences.Get(PreferencesKeys.DoNotWaitForImpedance, false);
 
-                    if (isStabilized && (doNotWaitForImpedance || hasImpedance))
+                    if (data.Length > 13)
+                    {
+                        data = data.Skip(data.Length - 13).ToArray();
+                    }
+
+                    if (isStabilized)//isStabilized && (doNotWaitForImpedance || hasImpedance))
                     {
                         if (Preferences.Get(PreferencesKeys.ShowReceivedByteArray, false))
                         {
                             _logService.LogInfo(String.Join("; ", data));
                         }
-                        var bc = miBodyCompositionScale.GetBodyComposition(data, user);
-                        bodyComposition = new BodyComposition
+                        var bc = miBodyCompositionScale.GetBodyComposition(data, user, true);
+                        var bodyComposition = new BodyComposition
                         {
                             Weight = bc.Weight,
                             BMI = bc.BMI,
@@ -161,9 +69,23 @@ namespace MiScaleExporter.Services
                             VisceralFat = bc.VisceralFat,
                             WaterPercentage = bc.Water,
                             BodyType = bc.BodyType,
+                            HasImpedance = hasImpedance,
+                            IsStabilized = isStabilized,
+                            Date = bc.Date,
                         };
                         return bodyComposition;
                     }
+                    else
+                    {
+                        var bodyComposition = new BodyComposition
+                        {
+                            Weight = GetWeight(data),
+                            HasImpedance = hasImpedance,
+                            IsStabilized = isStabilized,
+                        };
+                        return bodyComposition;
+                    }
+                    /*
                     else
                     {
                         if (Preferences.Get(PreferencesKeys.ShowUnstabilizedData, false))
@@ -177,7 +99,7 @@ namespace MiScaleExporter.Services
                             }
                         }
                         return null;
-                    }
+                    }*/
                 case ScaleType.MiSmartScale:
                     var legacyMiscale = new MiScaleBodyComposition.LegacyMiScale();
 
@@ -188,12 +110,14 @@ namespace MiScaleExporter.Services
                             _logService.LogInfo(String.Join("; ", data));
                         }
 
-                        var legacyResult = legacyMiscale.GetWeight(data, _user.Height);
+                        var legacyResult = legacyMiscale.GetWeight(data, _user.Height, true);
 
-                        bodyComposition = new BodyComposition
+                        var bodyComposition = new BodyComposition
                         {
                             Weight = legacyResult.Weight,
                             BMI = legacyResult.BMI,
+                            Date = legacyResult.Date,
+                            IsStabilized = true
                         };
 
                         return bodyComposition;
@@ -220,12 +144,7 @@ namespace MiScaleExporter.Services
 
         }
 
-        private async Task StopAsync()
-        {
-            await _adapter.StopScanningForDevicesAsync();
-
-            _adapter.DeviceAdvertised -= DeviceAdvertided;
-        }
+       
 
     }
 }

@@ -19,5 +19,9 @@ namespace MiScaleExporter.Models
         public int BodyType { get; set; }
         public double WaterPercentage { get; set; }
         public bool IsValid { get; set; }
+        public bool HasImpedance { get; set; }
+        public bool IsStabilized { get; set; }
+        public DateTime Date { get; set; }
+        public byte[] ReceivedRawData { get; set; } 
     }
 }

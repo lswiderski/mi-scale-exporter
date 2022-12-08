@@ -8,7 +8,6 @@ namespace MiScaleExporter.Services
 {
     public interface IScaleService
     {
-        Task<BodyComposition> GetBodyCompositonAsync(Scale scale, User user);
-        Task CancelSearchAsync();
+        BodyComposition ComputeData(byte[] data, User _user);
     }
 }

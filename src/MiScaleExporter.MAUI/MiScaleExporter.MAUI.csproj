@@ -71,7 +71,7 @@
 	  <PackageReference Include="Autofac.Extras.CommonServiceLocator" Version="6.0.1" />
 	  <PackageReference Include="CommunityToolkit.Maui" Version="1.3.0" />
 	  <PackageReference Include="GarminWeightScaleUploader.Library" Version="0.2.1" />
-	  <PackageReference Include="MiScaleBodyComposition" Version="1.0.4" />
+	  <PackageReference Include="MiScaleBodyComposition" Version="1.0.5" />
 	  <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 	  <PackageReference Include="NLog.Config" Version="4.7.15" />
 	  <PackageReference Include="Plugin.BLE" Version="2.1.2" />
