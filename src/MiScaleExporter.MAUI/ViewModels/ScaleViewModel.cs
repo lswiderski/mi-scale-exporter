@@ -1,20 +1,10 @@
 ﻿using MiScaleExporter.Models;
 using MiScaleExporter.Services;
-using System;
-using System.Threading.Tasks;
-using System.Windows.Input;
-
-
-using System.Threading.Tasks;
 using MiScaleExporter.Permission;
-using MiScaleExporter.MAUI;
 using Plugin.BLE;
 using Plugin.BLE.Abstractions.Contracts;
 using Plugin.BLE.Abstractions.EventArgs;
-using System;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 
 namespace MiScaleExporter.MAUI.ViewModels
@@ -36,6 +26,7 @@ namespace MiScaleExporter.MAUI.ViewModels
         private ScaleType _scaleType;
 
         private BodyComposition bodyComposition;
+        private BodyComposition lastSuccessfulBodyComposition;
         private byte[] _scannedData;
         private Scale _scale;
         private DateTime? lastSuccessfulMeasure;
@@ -49,7 +40,7 @@ namespace MiScaleExporter.MAUI.ViewModels
 
             Title = "Mi Scale Data";
             CancelCommand = new Command(OnCancel);
-            ScanCommand = new Command(OnScan, ValidateScan);
+            StopCommand = new Command(OnStop);
 
             _adapter = CrossBluetoothLE.Current.Adapter;
             _adapter.ScanTimeout = 50000;
@@ -82,6 +73,7 @@ namespace MiScaleExporter.MAUI.ViewModels
         private async Task<Models.BodyComposition> GetBodyCompositonAsync(Scale scale, Models.User user)
         {
             bodyComposition = null;
+            lastSuccessfulBodyComposition = null;
             _impedanceWaitFinished = false;
             _impedanceWaitStarted = false;
             _scale = scale;
@@ -144,6 +136,12 @@ namespace MiScaleExporter.MAUI.ViewModels
                     StabilizedLabel = bodyComposition.IsStabilized ? "Stabilized: Yes" : "Stabilized: No";
                     ImpedanceLabel = bodyComposition.HasImpedance ? "Impedance: Yes" : "Impedance: No";
                     DataLabel = string.Join("|", bodyComposition.ReceivedRawData);
+
+                    if (bodyComposition != null)
+                    {
+                        lastSuccessfulBodyComposition = bodyComposition;
+                    }
+
                     if (!bodyComposition.IsStabilized)
                     {
                         bodyComposition = null;
@@ -151,6 +149,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                     }
                     else
                     {
+
                         if (lastSuccessfulMeasure != null && lastSuccessfulMeasure >= bodyComposition.Date)
                         {
                             bodyComposition = null;
@@ -218,6 +217,22 @@ namespace MiScaleExporter.MAUI.ViewModels
             return null;
         }
 
+        private async void OnStop()
+        {
+            StopAsync().Wait();
+
+            if(bodyComposition is not null)
+            {
+                bodyComposition.IsValid = true;
+            }
+            else if(lastSuccessfulBodyComposition is not null)
+            {
+                bodyComposition = lastSuccessfulBodyComposition;
+                bodyComposition.IsValid = true;
+            }
+            FinishMeasure();
+
+        }
 
         private async void OnScan()
         {
@@ -256,11 +271,15 @@ namespace MiScaleExporter.MAUI.ViewModels
             ScanningLabel = string.Empty;
             WeightLabel = "0";
             this.IsBusyForm = true;
-            var bc = await this.GetBodyCompositonAsync(scale,
+            await this.GetBodyCompositonAsync(scale,
                 new User { Sex = _sex, Age = _age, Height = _height, ScaleType = _scaleType });
+            OnStop();
+        }
 
+        private async void FinishMeasure()
+        {
             this.IsBusyForm = false;
-            if (bc is null || !bc.IsValid)
+            if (bodyComposition is null || !bodyComposition.IsValid)
             {
                 var msg = "Data could not be obtained. try again";
                 await Application.Current.MainPage.DisplayAlert("Problem", msg,
@@ -270,9 +289,15 @@ namespace MiScaleExporter.MAUI.ViewModels
             }
             else
             {
-                App.BodyComposition = bc;
+                App.BodyComposition = bodyComposition;
                 await Shell.Current.GoToAsync($"//FormPage?autoUpload={Preferences.Get(PreferencesKeys.OneClickScanAndUpload, false)}");
             }
+        }
+
+        private async void OnCancel()
+        {
+            await this.CancelSearchAsync();
+            this.IsBusyForm = false;
         }
 
         private async Task<PermissionStatus> GetLocationPermissionStatusAsync()
@@ -297,21 +322,8 @@ namespace MiScaleExporter.MAUI.ViewModels
             return status;
         }
 
-        private bool ValidateScan()
-        {
-            return !String.IsNullOrWhiteSpace(_address)
-                                        && _height > 0 && _height < 220
-                                        && _age > 0 && _age < 99;
-        }
-
-        public Command ScanCommand { get; }
         public Command CancelCommand { get; }
-
-        private async void OnCancel()
-        {
-            await this.CancelSearchAsync();
-            this.IsBusyForm = false;
-        }
+        public Command StopCommand { get; }
 
         private string _weight;
 
@@ -341,7 +353,7 @@ namespace MiScaleExporter.MAUI.ViewModels
 
         public string DataLabel
         {
-            get => Preferences.Get(PreferencesKeys.ShowDebugInfo, false) ?  _dataLabel : string.Empty;
+            get => Preferences.Get(PreferencesKeys.ShowDebugInfo, false) ? _dataLabel : string.Empty;
             set => SetProperty(ref _dataLabel, value);
         }
 
