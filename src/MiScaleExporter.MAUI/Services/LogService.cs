@@ -1,23 +1,9 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
-using System.Xml;
-using MiScaleExporter.Log;
-using MiScaleExporter.Models;
-using NLog;
-using NLog.Config;
-using NLog.Targets;
-
-namespace MiScaleExporter.Services;
+﻿namespace MiScaleExporter.Services;
 
 public class LogService : ILogService
 {
-    private readonly ILogger logger;
-    private readonly ILogManager logManager;
-    public LogService(ILogger logger, ILogManager logManager)
+    public LogService()
     {
-        this.logger = logger;
-        this.logManager = logManager;
     }
 
     public void LogDebug(string message)

@@ -1,11 +1,9 @@
 ﻿using Autofac;
 using Autofac.Extras.CommonServiceLocator;
 using CommonServiceLocator;
-using MiScaleExporter.Log;
 using MiScaleExporter.Models;
 using MiScaleExporter.Services;
 using MiScaleExporter.MAUI.ViewModels;
-using NLog;
 using IContainer = Autofac.IContainer;
 using MiScaleExporter.Droid;
 
@@ -53,9 +51,6 @@ namespace MiScaleExporter.MAUI
             builder.RegisterType<LogService>().As<ILogService>().SingleInstance();
             builder.RegisterType<SettingsViewModel>().As<ISettingsViewModel>().InstancePerLifetimeScope();
             builder.RegisterType<AboutViewModel>().AsSelf();
-            DependencyService.Register<ILogManager, NLogManager>();
-            builder.RegisterInstance<ILogManager>(DependencyService.Get<ILogManager>());
-            builder.RegisterInstance<ILogger>(DependencyService.Get<ILogManager>().GetLog());
 
             App.Container = builder.Build();
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocator(Container));
