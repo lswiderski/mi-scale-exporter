@@ -159,8 +159,8 @@
                    
                         <StackLayout Orientation="Horizontal">
 
-                            <DatePicker Date="{Binding Date}" Format="d" />
-                            <TimePicker Format="HH:mm" Time="{Binding Time}" />
+                            <DatePicker Date="{Binding Date}" Format="d" FontSize="Medium" />
+                        <TimePicker Format="HH:mm" Time="{Binding Time}" FontSize="Medium" />
                         </StackLayout>
                    
                 </StackLayout>
