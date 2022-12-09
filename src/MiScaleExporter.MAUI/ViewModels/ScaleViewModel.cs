@@ -139,7 +139,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                     _scaleDevice = a.Device;
                     bodyComposition = GetScanData();
                     FoundScaleLabel = bodyComposition != null ? "Connected to scale: Yes" : "Connected to scale: No";
-                    WeightLabel = bodyComposition.Weight.ToString("0.##");
+                    WeightLabel = bodyComposition.Weight.ToString("0.##") + "kg";
                     StabilizedLabel = bodyComposition.IsStabilized ? "Stabilized: Yes" : "Stabilized: No";
                     ImpedanceLabel = bodyComposition.HasImpedance ? "Impedance: Yes" : "Impedance: No";
                     DataLabel = string.Join("|", bodyComposition.ReceivedRawData);

@@ -25,16 +25,10 @@
                 Orientation="Horizontal">
                 <Label
                     Margin="0,100,0,0"
-                    FontSize="100"
+                    FontSize="90"
                     Text="{Binding WeightLabel}"
                     VerticalOptions="CenterAndExpand"
                     VerticalTextAlignment="End" />
-                <Label
-                    Margin="10,0,0,15"
-                    FontSize="43"
-                    VerticalTextAlignment="End">
-                    kg
-                </Label>
             </StackLayout>
 
             <ScrollView Grid.Row="1" HorizontalOptions="FillAndExpand">
