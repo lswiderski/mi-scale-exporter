@@ -5,7 +5,7 @@ using Plugin.BLE;
 using Plugin.BLE.Abstractions.Contracts;
 using Plugin.BLE.Abstractions.EventArgs;
 using System.Reflection;
-
+using Microsoft.Maui.Layouts;
 
 namespace MiScaleExporter.MAUI.ViewModels
 {
@@ -50,15 +50,22 @@ namespace MiScaleExporter.MAUI.ViewModels
         public async Task CheckPreferencesAsync()
         {
             App.BodyComposition = null;
-            await this.LoadPreferencesAsync();
-            if (!string.IsNullOrWhiteSpace(_address))
+            var hasPermissions = await CheckPermissions();
+
+            if(hasPermissions)
             {
-                OnScan();
+                await this.LoadPreferencesAsync();
+                if (!string.IsNullOrWhiteSpace(_address))
+                {
+                    OnScan();
+                }
+                else
+                {
+                   // await App.Current.MainPage.Navigation.PopAsync();
+                    await Shell.Current.GoToAsync($"//Settings");
+                }
             }
-            else
-            {
-                await Shell.Current.GoToAsync($"//Settings");
-            }
+           
         }
 
         public async Task LoadPreferencesAsync()
@@ -217,7 +224,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             return null;
         }
 
-        private async void OnStop()
+        private void OnStop()
         {
             StopAsync().Wait();
 
@@ -233,10 +240,15 @@ namespace MiScaleExporter.MAUI.ViewModels
             FinishMeasure();
 
         }
+       
 
         private async void OnScan()
         {
+            await StartScan();
+        }
 
+        private async Task<bool> CheckPermissions()
+        {
             if (DeviceInfo.Platform == DevicePlatform.Android)
             {
                 double version = 0;
@@ -248,14 +260,14 @@ namespace MiScaleExporter.MAUI.ViewModels
                     {
                         await Application.Current.MainPage.DisplayAlert("Problem", "Permission to use Bluetooth is required to scan.",
                            "OK");
-                        return;
+                        return false;
                     }
 
                     if (await GetLocationPermissionStatusAsync() != PermissionStatus.Granted)
                     {
                         await Application.Current.MainPage.DisplayAlert("Problem", "Permission to use Location (Bluetooth) is required to scan.",
                             "OK");
-                        return;
+                        return false;
                     }
                 }
                 else
@@ -264,12 +276,18 @@ namespace MiScaleExporter.MAUI.ViewModels
                     {
                         await Application.Current.MainPage.DisplayAlert("Problem", "Permission to use  Location (Bluetooth) is required to scan.",
                             "OK");
-                        return;
+                        return false;
                     }
                 }
 
             }
 
+            return true;
+
+        }
+
+        private async Task StartScan()
+        {
 
             Scale scale = new Scale()
             {
