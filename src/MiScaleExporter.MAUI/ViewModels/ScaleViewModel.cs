@@ -237,8 +237,18 @@ namespace MiScaleExporter.MAUI.ViewModels
                 bodyComposition = lastSuccessfulBodyComposition;
                 bodyComposition.IsValid = true;
             }
+            CalculateBMIIfEmpty();
             FinishMeasure();
 
+        }
+
+        private void CalculateBMIIfEmpty()
+        {
+           if (bodyComposition is not null && bodyComposition.BMI == 0 && _height != 0)
+            {
+                var heightInMeters = (double)_height / 100;
+                bodyComposition.BMI = Math.Round(bodyComposition.Weight / (heightInMeters * heightInMeters), 2);
+            }
         }
        
 
