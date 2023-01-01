@@ -30,7 +30,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             this._apiAddress = Preferences.Get(PreferencesKeys.ApiServerAddressOverride, string.Empty);
             this._oneClickScanAndUpload = Preferences.Get(PreferencesKeys.OneClickScanAndUpload, false);
             this._useExternalAPI = Preferences.Get(PreferencesKeys.UseExternalAPI, false);
-            this._useExternalAPI = Preferences.Get(PreferencesKeys.ShowDebugInfo, false);
+            this._showDebugInfo = Preferences.Get(PreferencesKeys.ShowDebugInfo, false);
 
             this._age = Preferences.Get(PreferencesKeys.UserAge, 25);
             this._height = Preferences.Get(PreferencesKeys.UserHeight, 170);
