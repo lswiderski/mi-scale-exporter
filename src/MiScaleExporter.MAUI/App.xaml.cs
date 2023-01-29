@@ -44,7 +44,8 @@ namespace MiScaleExporter.MAUI
             var builder = new ContainerBuilder();
 
             // Register services
-            builder.RegisterType<ScaleService>().As<IScaleService>().InstancePerLifetimeScope();
+            builder.RegisterType<Scale>().As<IScale>().InstancePerLifetimeScope();
+            builder.RegisterType<DataInterpreter>().As<IDataInterpreter>().InstancePerLifetimeScope();
             builder.RegisterType<GarminService>().As<IGarminService>().InstancePerLifetimeScope();
             builder.RegisterType<ScaleViewModel>().As<IScaleViewModel>().InstancePerLifetimeScope();
             builder.RegisterType<FormViewModel>().As<IFormViewModel>().InstancePerLifetimeScope();

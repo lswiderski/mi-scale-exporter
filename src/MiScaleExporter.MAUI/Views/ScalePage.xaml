@@ -6,6 +6,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:behaviors="clr-namespace:MiScaleExporter.MAUI.Behaviors;assembly=MiScaleExporter.MAUI"
     xmlns:vm="clr-namespace:MiScaleExporter.MAUI.ViewModels"
+    xmlns:models="clr-namespace:MiScaleExporter.Models"
     Title="{Binding Title}">
     <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
         <Grid
@@ -26,7 +27,7 @@
                 <Label
                     Margin="0,100,0,0"
                     FontSize="90"
-                    Text="{Binding WeightLabel}"
+                    Text="{Binding Source={x:Static models:ScaleMeasurement.Instance}, Path=Weight}"
                     VerticalOptions="CenterAndExpand"
                     VerticalTextAlignment="End" />
             </StackLayout>
@@ -37,11 +38,9 @@
                     Orientation="Vertical"
                     Spacing="10"
                     VerticalOptions="EndAndExpand">
-
-                    <Label FontSize="Small" Text="{Binding FoundScaleLabel}" />
-                    <Label FontSize="Small" Text="{Binding ImpedanceLabel}" />
-                    <Label FontSize="Small" Text="{Binding StabilizedLabel}" />
-                    <Label FontSize="Small" Text="{Binding DataLabel}" />
+                    <Label FontSize="Small" Text="{Binding Source={x:Static models:ScaleMeasurement.Instance}, Path=FoundScale}" />
+                    <Label FontSize="Small" Text="{Binding Source={x:Static models:ScaleMeasurement.Instance}, Path=DebugData}" />
+                    <Label FontSize="Small" Text="{Binding Source={x:Static models:ScaleMeasurement.Instance}, Path=RawData}" />
 
                     <Label FontSize="Small" Text="{Binding ScanningLabel}" />
 

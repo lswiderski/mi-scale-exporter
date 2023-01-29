@@ -8,7 +8,6 @@ namespace MiScaleExporter.MAUI.Views
 {
     public partial class ScalePage : ContentPage
     {
-        public Scale Item { get; set; }
         private IScaleViewModel vm;
         public ScalePage()
         {
