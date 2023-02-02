@@ -1,6 +1,8 @@
 ﻿
 
 
+using MiScaleExporter.MAUI.Utils;
+
 namespace MiScaleExporter.MAUI.Behaviors;
 
 public class NumericDoubleValidationBehavior : Behavior<Entry>
@@ -19,8 +21,9 @@ public class NumericDoubleValidationBehavior : Behavior<Entry>
 
     void OnEntryTextChanged(object sender, TextChangedEventArgs args)
     {
-        bool isValid = double.TryParse(args.NewTextValue, out _);
+        bool isValid = DoubleValueParser.IsValid(args.NewTextValue);
         var defaultColor = Application.Current.RequestedTheme == AppTheme.Dark ? Color.FromRgb(255, 255, 255) : Color.FromRgb(0, 0, 0);
         ((Entry)sender).TextColor = isValid ? defaultColor : Color.FromRgb(255, 0, 0);
     }
+
 }

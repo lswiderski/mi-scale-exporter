@@ -6,6 +6,7 @@ using MiScaleExporter.Services;
 using MiScaleExporter.MAUI.ViewModels;
 using IContainer = Autofac.IContainer;
 using MiScaleExporter.Droid;
+using System.Globalization;
 
 namespace MiScaleExporter.MAUI
 {
@@ -15,6 +16,7 @@ namespace MiScaleExporter.MAUI
         public static BodyComposition BodyComposition;
         public App()
         {
+            CultureInfo.DefaultThreadCurrentCulture = Thread.CurrentThread.CurrentCulture;
             InitializeComponent();
 
         }

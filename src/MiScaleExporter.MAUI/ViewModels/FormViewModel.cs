@@ -1,10 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using MiScaleExporter.MAUI;
+﻿using MiScaleExporter.MAUI;
+using MiScaleExporter.MAUI.Utils;
 using MiScaleExporter.Models;
 using MiScaleExporter.Services;
- 
- 
+using System.Globalization;
 
 namespace MiScaleExporter.MAUI.ViewModels
 {
@@ -22,7 +20,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             this.PropertyChanged +=
                 (_, __) => UploadCommand.ChangeCanExecute();
         }
-        
+
         public async Task LoadPreferencesAsync()
         {
             this._email = Preferences.Get(PreferencesKeys.GarminUserEmail, string.Empty);
@@ -33,8 +31,8 @@ namespace MiScaleExporter.MAUI.ViewModels
         }
         private bool ValidateSave()
         {
-            return !String.IsNullOrWhiteSpace(_email) 
-                   &&  !String.IsNullOrWhiteSpace(_password);
+            return !String.IsNullOrWhiteSpace(_email)
+                   && !String.IsNullOrWhiteSpace(_password);
         }
 
         public void AutoUpload()
@@ -51,7 +49,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             this.IsBusyForm = true;
             var response = await this._garminService.UploadAsync(this.PrepareRequest(), Date.Date.Add(Time), _email, _password);
             var message = response.IsSuccess ? "Uploaded" : response.Message;
-            await Application.Current.MainPage.DisplayAlert ("Response", message, "OK");
+            await Application.Current.MainPage.DisplayAlert("Response", message, "OK");
             this.IsBusyForm = false;
             // This will pop the current page off the navigation stack
             await Shell.Current.GoToAsync("..?autoUpload=false");
@@ -61,17 +59,17 @@ namespace MiScaleExporter.MAUI.ViewModels
         {
             var bc = new BodyComposition
             {
-                Fat = _fat ?? 0,
+                Fat = DoubleValueParser.ParseValueFromUsersCulture(_fat) ?? 0,
                 BodyType = _bodyType ?? 0,
-                Weight = _weight ?? 0,
-                BoneMass = _boneMass ?? 0,
-                MuscleMass = _muscleMass ?? 0,
-                MetabolicAge = _metabolicAge ?? 0,
-                ProteinPercentage = _proteinPercentage ?? 0,
-                VisceralFat = _visceralFat ?? 0,
-                BMI = _bmi ?? 0,
-                BMR = _bmr ?? 0,
-                WaterPercentage = _waterPercentage ?? 0,
+                Weight = DoubleValueParser.ParseValueFromUsersCulture(_weight) ?? 0,
+                BoneMass = DoubleValueParser.ParseValueFromUsersCulture(_boneMass) ?? 0,
+                MuscleMass = DoubleValueParser.ParseValueFromUsersCulture(_muscleMass) ?? 0,
+                MetabolicAge = DoubleValueParser.ParseValueFromUsersCulture(_metabolicAge) ?? 0,
+                ProteinPercentage = DoubleValueParser.ParseValueFromUsersCulture(_proteinPercentage) ?? 0,
+                VisceralFat = DoubleValueParser.ParseValueFromUsersCulture(_visceralFat) ?? 0,
+                BMI = DoubleValueParser.ParseValueFromUsersCulture(_bmi) ?? 0,
+                BMR = DoubleValueParser.ParseValueFromUsersCulture(_bmr) ?? 0,
+                WaterPercentage = DoubleValueParser.ParseValueFromUsersCulture(_waterPercentage) ?? 0,
             };
             return bc;
         }
@@ -80,101 +78,101 @@ namespace MiScaleExporter.MAUI.ViewModels
         {
             if (App.BodyComposition is null) return;
 
-            Weight = App.BodyComposition.Weight;
-            BMI = App.BodyComposition.BMI;
-            BoneMass = App.BodyComposition.BoneMass;
-            MuscleMass = App.BodyComposition.MuscleMass;
-            IdealWeight = App.BodyComposition.IdealWeight;
-            BMR = App.BodyComposition.BMR;
-            MetabolicAge = App.BodyComposition.MetabolicAge;
-            ProteinPercentage = App.BodyComposition.ProteinPercentage;
-            VisceralFat = App.BodyComposition.VisceralFat;
-            Fat = App.BodyComposition.Fat;
-            WaterPercentage = App.BodyComposition.WaterPercentage;
+            Weight = App.BodyComposition.Weight.ToString();
+            BMI = App.BodyComposition.BMI.ToString();
+            BoneMass = App.BodyComposition.BoneMass.ToString();
+            MuscleMass = App.BodyComposition.MuscleMass.ToString();
+            IdealWeight = App.BodyComposition.IdealWeight.ToString();
+            BMR = App.BodyComposition.BMR.ToString(); ;
+            MetabolicAge = App.BodyComposition.MetabolicAge.ToString(); 
+            ProteinPercentage = App.BodyComposition.ProteinPercentage.ToString();
+            VisceralFat = App.BodyComposition.VisceralFat.ToString();
+            Fat = App.BodyComposition.Fat.ToString();
+            WaterPercentage = App.BodyComposition.WaterPercentage.ToString();
             BodyType = App.BodyComposition.BodyType;
             IsAutomaticCalculation = true;
         }
 
         public Command UploadCommand { get; }
 
-        private double? _weight;
+        private string _weight;
 
-        public double? Weight
+        public string Weight
         {
             get => _weight;
-            set => SetProperty(ref _weight, value);
+            set => SetProperty(ref _weight, DoubleValueParser.CheckValue(value));
         }
 
-        private double? _bmi;
+        private string _bmi;
 
-        public double? BMI
+        public string BMI
         {
             get => _bmi;
-            set => SetProperty(ref _bmi, value);
+            set => SetProperty(ref _bmi, DoubleValueParser.CheckValue(value));
         }
 
-        private double? _idealWeight;
+        private string _idealWeight;
 
-        public double? IdealWeight
+        public string IdealWeight
         {
             get => _idealWeight;
-            set => SetProperty(ref _idealWeight, value);
+            set => SetProperty(ref _idealWeight, DoubleValueParser.CheckValue(value));
         }
 
-        private double? _metabolicAge;
+        private string _metabolicAge;
 
-        public double? MetabolicAge
+        public string MetabolicAge
         {
             get => _metabolicAge;
-            set => SetProperty(ref _metabolicAge, value);
+            set => SetProperty(ref _metabolicAge, DoubleValueParser.CheckValue(value));
         }
 
-        private double? _proteinPercentage;
+        private string _proteinPercentage;
 
-        public double? ProteinPercentage
+        public string ProteinPercentage
         {
             get => _proteinPercentage;
-            set => SetProperty(ref _proteinPercentage, value);
+            set => SetProperty(ref _proteinPercentage, DoubleValueParser.CheckValue(value));
         }
 
-        private double? _bmr;
+        private string _bmr;
 
-        public double? BMR
+        public string BMR
         {
             get => _bmr;
-            set => SetProperty(ref _bmr, value);
+            set => SetProperty(ref _bmr, DoubleValueParser.CheckValue(value));
         }
 
-        private double? _fat;
+        private string _fat;
 
-        public double? Fat
+        public string Fat
         {
             get => _fat;
-            set => SetProperty(ref _fat, value);
+            set => SetProperty(ref _fat, DoubleValueParser.CheckValue(value));
         }
 
-        private double? _muscleMass;
+        private string _muscleMass;
 
-        public double? MuscleMass
+        public string MuscleMass
         {
             get => _muscleMass;
-            set => SetProperty(ref _muscleMass, value);
+            set => SetProperty(ref _muscleMass, DoubleValueParser.CheckValue(value));
         }
 
-        private double? _boneMass;
+        private string _boneMass;
 
-        public double? BoneMass
+        public string BoneMass
         {
             get => _boneMass;
-            set => SetProperty(ref _boneMass, value);
+            set => SetProperty(ref _boneMass, DoubleValueParser.CheckValue(value));
         }
 
-        private double? _visceralFat;
+        private string _visceralFat;
 
-        public double? VisceralFat
+        public string VisceralFat
         {
             get => _visceralFat;
-            set => SetProperty(ref _visceralFat, value);
+            set => SetProperty(ref _visceralFat, DoubleValueParser.CheckValue(value));
         }
 
         private int? _bodyType;
@@ -185,12 +183,12 @@ namespace MiScaleExporter.MAUI.ViewModels
             set => SetProperty(ref _bodyType, value);
         }
 
-        private double? _waterPercentage;
+        private string _waterPercentage;
 
-        public double? WaterPercentage
+        public string WaterPercentage
         {
             get => _waterPercentage;
-            set => SetProperty(ref _waterPercentage, value);
+            set => SetProperty(ref _waterPercentage, DoubleValueParser.CheckValue(value));
         }
 
         private string _email;
@@ -220,7 +218,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             get => _isAutomaticCalculation;
             set => SetProperty(ref _isAutomaticCalculation, value);
         }
-        
+
         private bool _isBusyForm;
 
         public bool IsBusyForm
