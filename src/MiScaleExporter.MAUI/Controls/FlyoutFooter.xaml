@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MiScaleExporter.Controls.FlyoutFooter">
     <VerticalStackLayout>
-        <Label Text="Created by Lukasz Swiderski 2022"
+        <Label Text="Created by Lukasz Swiderski 2023, v2.0.2"
                FontSize="Small"
                HorizontalOptions="Center"
                Margin="10"/>
