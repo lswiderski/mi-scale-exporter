@@ -20,6 +20,7 @@ namespace MiScaleExporter.Services
         private DateTime? _lastSuccessfulMeasure;
         private static bool _impedanceWaitFinished = false;
         private bool _impedanceWaitStarted = false;
+        private int _minWeight = 10; // in kilograms
 
         private User _user;
 
@@ -70,7 +71,12 @@ namespace MiScaleExporter.Services
                 try
                 {
                     var device = a.Device;
-                    this.BodyComposition = GetScanData(device);
+                    var bodyCompositionCandidate = GetScanData(device);
+                    if(bodyCompositionCandidate is not null && bodyCompositionCandidate.Weight > _minWeight)
+                    {
+                        this.BodyComposition = bodyCompositionCandidate;
+                    }
+                   
                     this.ProcessReceivedData();
                 }
                 catch (Exception ex)
@@ -98,12 +104,14 @@ namespace MiScaleExporter.Services
 
         private void ProcessReceivedData()
         {
+            if (this.BodyComposition == null)
+            {
+                return;
+            }
+
             this.SetPreviews();
 
-            if (this.BodyComposition != null)
-            {
-                _lastSuccessfulBodyComposition = this.BodyComposition;
-            }
+            _lastSuccessfulBodyComposition = this.BodyComposition;
 
             if (!this.BodyComposition.IsStabilized)
             {
