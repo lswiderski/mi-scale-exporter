@@ -6,8 +6,8 @@ Tested on Oneplus 5T (Android 10) and Mi Body Composition Scale (XMTZC02HM)
 
 ## Download
 
-Google play: https://play.google.com/store/apps/details?id=com.lukaszswiderski.MiScaleExporter
-APK/ABB installers: https://github.com/lswiderski/mi-scale-exporter/releases
+- Google play: https://play.google.com/store/apps/details?id=com.lukaszswiderski.MiScaleExporter
+- APK/ABB installers: https://github.com/lswiderski/mi-scale-exporter/releases
 
 ## Instruction
 
