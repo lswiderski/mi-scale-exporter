@@ -4,13 +4,22 @@ Mobile App to export data from Mi Body Composition Scale (works with Mi Scale to
 
 Tested on Oneplus 5T (Android 10) and Mi Body Composition Scale (XMTZC02HM)
 
+## Download
+
+Google play: https://play.google.com/store/apps/details?id=com.lukaszswiderski.MiScaleExporter
+APK/ABB installers: https://github.com/lswiderski/mi-scale-exporter/releases
+
 ## Instruction
 
 - Stand on your scale. Measure yourself. Complete the user form data, Scale Bluetooth address and get data from the scale. Mi Body Composition Scale is active up to 15 min after the measurement. (Bluetooth address can be found in Zepp Life > Profile > My devices > Mi Body Composition Scale > Bluetooth address (hold to copy)).
 
+- If your scale supports "Weigh small object" - turn it off
+
 - Then you can review your data and upload it to Garmin Cloud. If you do not have Mi scale and just want to manually insert the data, you can so.
 
 - You can save the Garmin password in this App but you don't have to. Passwords Managers like KeePass2 works well too. If you do not provide a password in the settings, you will be asked for it each time before sending. No password will be saved in app.
+
+- The unofficial Garmin API does not support 2FA. To use this application, you must disable it.
 
 - This App pass your data, email and password directly to Garmin Connect Cloud or you can change it to proxy API server and then it sends to Garmin Cloud.
 
