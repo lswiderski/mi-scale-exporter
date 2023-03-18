@@ -52,7 +52,7 @@ sequenceDiagram
 ## API Endpoint used in the app ([source](https://github.com/lswiderski/bodycomposition-webapi))
 
 ```http
-https://garmin.bieda.it/
+https://frog01-20364.wykr.es/
 ```
 
 ## Diagram of the flow with direct send to Garmin Cloud
