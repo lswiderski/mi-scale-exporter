@@ -27,7 +27,7 @@ Tested on Oneplus 5T (Android 10) and Mi Body Composition Scale (XMTZC02HM)
 
 - Proxy API repository: https://github.com/lswiderski/bodycomposition-webapi
 
-- If you afraid of your data, you can host your own API server. Just change the server address in Settings. For now you can use default one: https://garmin.bieda.it/ tut it will be removed soon.
+- If you afraid of your data, you can host your own API server. Just change the server address in Settings. For now you can use default one: https://frog01-20364.wykr.es/ but it will be removed soon.
 
 ## Diagram of the flow with Web Proxy
 

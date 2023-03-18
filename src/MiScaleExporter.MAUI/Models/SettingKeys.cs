@@ -2,5 +2,5 @@
 
 public static class SettingKeys
 {
-    public static string ApiServerAddress = "https://garmin.bieda.it/";
+    public static string ApiServerAddress = "https://frog01-20364.wykr.es";
 }
