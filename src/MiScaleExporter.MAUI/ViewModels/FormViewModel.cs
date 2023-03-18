@@ -78,7 +78,7 @@ namespace MiScaleExporter.MAUI.ViewModels
         {
             if (App.BodyComposition is null) return;
 
-            Weight = App.BodyComposition.Weight.ToString();
+            Weight = Math.Round(App.BodyComposition.Weight, 2).ToString();
             BMI = App.BodyComposition.BMI.ToString();
             BoneMass = App.BodyComposition.BoneMass.ToString();
             MuscleMass = App.BodyComposition.MuscleMass.ToString();
