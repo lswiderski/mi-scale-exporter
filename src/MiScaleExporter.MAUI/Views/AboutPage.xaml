@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MiScaleExporter.MAUI.Views.AboutPage"
-             xmlns:vm="clr-namespace:MiScaleExporter.MAUI.ViewModels"
-             Title="{Binding Title}">
+<ContentPage
+    x:Class="MiScaleExporter.MAUI.Views.AboutPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:MiScaleExporter.MAUI.ViewModels"
+    Title="{Binding Title}">
 
-    <ContentPage.Resources>
-    </ContentPage.Resources>
+    <ContentPage.Resources />
 
     <Grid>
         <Grid.RowDefinitions>
@@ -14,38 +14,43 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <ScrollView Grid.Row="0">
-            <StackLayout Orientation="Vertical" Padding="30,24,30,24" Spacing="10">
-                <Label Text="Stand on your scale. Measure yourself. Complete the user form data, Scale Bluetooth address and get data from the scale. Mi Body Composition Scale is active up to 15 min after the measurement." 
-                       FontSize="Small"/>
-                <Label Text="Then you can review your data and upload it to Garmin Cloud. If you do not have Mi scale and just want to manually insert the data, you can so." 
-                       FontSize="Small"/>
-                <Label Text="You can save the Garmin password in this App but you don't have to. Passwords Managers like KeePass2 works well too." 
-                       FontSize="Small"/>
-                <Label Text="This App pass your data, email and password to API server and then it sends to Garmin Cloud." 
-                       FontSize="Small"/>
-                <Label Text="The API does not store or log anything, it's just a middleware between this App and Garmin services." 
-                       FontSize="Small" />
-                <Label Text="Both has open sources and you can audit it any time. And if you want, you can host your own API server. Just change the server address in Settings." 
-                       FontSize="Small" />
+            <StackLayout
+                Padding="30,24,30,24"
+                Orientation="Vertical"
+                Spacing="10">
+                <Label FontSize="Small" Text="This application is an open source community project and I have no affiliation with Garmin™." />
+                <Label FontSize="Small" Text="Set the bluetooth address of the scale, and your data in the settings. Stand on your scale. Measure yourself. Mi Body Composition Scale is active up to 15 min after the measurement." />
+                <Label FontSize="Small" Text="Then you can review your data and upload it to Garmin Cloud. If you do not have Mi scale and just want to manually insert the data, you can so." />
+                <Label FontSize="Small" Text="This App pass your data, email and password directly to Garmin Cloud or via external API server. The API does not store or log anything, it's just a middleware between this App and Garmin services." />
+                <Label FontSize="Small" Text="Both has open sources and you can audit it any time. And if you want, you can host your own API server. Just change the server address in Settings." />
 
             </StackLayout>
         </ScrollView>
         <ScrollView Grid.Row="1">
-            <StackLayout Orientation="Vertical" Padding="30,24,30,24" Spacing="10"  >
-               
-                <Button Margin="0,10,0,0" Text="Go to scan"
-                        Command="{Binding GoToScanCommand}"
-                        BackgroundColor="{StaticResource Primary}"
-                        TextColor="White" />
-                <Button Margin="0,10,0,0" Text="Visit project repository"
-                        Command="{Binding OpenGithubCommand}"
-                        BackgroundColor="{StaticResource Primary}"
-                        TextColor="White" />
-                <Button Margin="0,10,0,0" Text="Buy me a coffee"
-                        Command="{Binding OpenCoffeeCommand}"
-                        BackgroundColor="{StaticResource Primary}"
-                        TextColor="White" />
-              
+            <StackLayout
+                Padding="30,24,30,24"
+                Orientation="Vertical"
+                Spacing="10">
+
+                <Button
+                    Margin="0,10,0,0"
+                    BackgroundColor="{StaticResource Primary}"
+                    Command="{Binding GoToScanCommand}"
+                    Text="Go to scan"
+                    TextColor="White" />
+                <Button
+                    Margin="0,10,0,0"
+                    BackgroundColor="{StaticResource Primary}"
+                    Command="{Binding OpenGithubCommand}"
+                    Text="Visit project repository"
+                    TextColor="White" />
+                <Button
+                    Margin="0,10,0,0"
+                    BackgroundColor="{StaticResource Primary}"
+                    Command="{Binding OpenCoffeeCommand}"
+                    Text="Buy me a coffee"
+                    TextColor="White" />
+
             </StackLayout>
         </ScrollView>
     </Grid>
