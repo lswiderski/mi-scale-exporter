@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 using GarminWeightScaleUploader.Lib.Models;
 using MiScaleExporter.Models;
 using Newtonsoft.Json;
- 
+using Xamarin.Android.Net;
 
 namespace MiScaleExporter.Services;
 
@@ -21,16 +22,37 @@ public class GarminService : IGarminService
     public GarminService(ILogService logService)
     {
         _logService = logService;
-        _httpClient = new HttpClient()
+        if (DeviceInfo.Platform == DevicePlatform.Android)
         {
-            Timeout = TimeSpan.FromMinutes(5),
-        };
+            _httpClient = new HttpClient(new AndroidMessageHandler())
+            {
+                Timeout = TimeSpan.FromMinutes(5),
+                DefaultVersionPolicy = HttpVersionPolicy.RequestVersionOrHigher,
+                DefaultRequestVersion = HttpVersion.Version11
+            };
+        }
+        else
+        {
+            _httpClient = new HttpClient()
+            {
+                Timeout = TimeSpan.FromMinutes(5),
+            };
+        }
+
         _tmpDir = Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tmp")).FullName;
     }
 
     public async Task<GarminApiResponse> UploadAsync(BodyComposition bodyComposition, DateTime time, string email, string password)
     {
-        if(Preferences.Get(PreferencesKeys.UseExternalAPI, false))
+
+        if (DeviceInfo.Platform == DevicePlatform.Android) //Older android versions do not support TLS 1.3, so force to use external api for them
+        {
+            if (DeviceInfo.Version.Major < 10)
+            {
+                Preferences.Set(PreferencesKeys.UseExternalAPI, true);
+            }
+        }
+        if (Preferences.Get(PreferencesKeys.UseExternalAPI, false))
         {
             return await UploadViaExternalAPIAsync(bodyComposition, time, email, password);
         }
@@ -72,18 +94,18 @@ public class GarminService : IGarminService
             result.IsSuccess = garminApiReponse;
             return result;
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             _logService.LogError(ex.Message);
             result.Message = ex.Message;
             return result;
         }
-       
+
     }
 
     private async Task<GarminApiResponse> UploadViaExternalAPIAsync(BodyComposition bodyComposition, DateTime time, string email, string password)
     {
-        var unixTime = ((DateTimeOffset) time).ToUnixTimeSeconds();
+        var unixTime = ((DateTimeOffset)time).ToUnixTimeSeconds();
         var request = new GarminBodyCompositionRequest
         {
             Email = email,
@@ -99,7 +121,7 @@ public class GarminService : IGarminService
             PhysiqueRating = bodyComposition.BodyType,
             TimeStamp = unixTime
         };
-       return await UploadToGarminCloud(request);
+        return await UploadToGarminCloud(request);
     }
 
     private async Task<GarminApiResponse> UploadToGarminCloud(GarminBodyCompositionRequest request)
@@ -108,18 +130,18 @@ public class GarminService : IGarminService
         try
         {
 
-        var dataAsString = JsonConvert.SerializeObject(request);
-        var content = new StringContent(dataAsString, Encoding.UTF8, "application/json");
+            var dataAsString = JsonConvert.SerializeObject(request);
+            var content = new StringContent(dataAsString, Encoding.UTF8, "application/json");
 
-        var response = await PostAsync("/upload", content);
-        result.IsSuccess = response.IsSuccessStatusCode;
-        
-        using (var stream = await response.Content.ReadAsStreamAsync())
-        using (var reader = new StreamReader(stream))
-        {
-            result.Message = await reader.ReadToEndAsync();
-            return result;
-        }
+            var response = await PostAsync("/upload", content);
+            result.IsSuccess = response.IsSuccessStatusCode;
+
+            using (var stream = await response.Content.ReadAsStreamAsync())
+            using (var reader = new StreamReader(stream))
+            {
+                result.Message = await reader.ReadToEndAsync();
+                return result;
+            }
         }
         catch (Exception ex)
         {
@@ -128,7 +150,7 @@ public class GarminService : IGarminService
             return result;
         }
     }
-    
+
     private async Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content)
     {
         var baseAddress = Preferences.Get(PreferencesKeys.ApiServerAddressOverride, SettingKeys.ApiServerAddress);
