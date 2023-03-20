@@ -18,7 +18,7 @@
                 Padding="30,24,30,24"
                 Orientation="Vertical"
                 Spacing="10">
-                <Label FontSize="Small" Text="This application is an open source community project and I have no affiliation with Garmin™." />
+                <Label FontSize="Small" Text="This application is an open source community project and I have no affiliation with Garmin." />
                 <Label FontSize="Small" Text="Set the bluetooth address of the scale, and your data in the settings. Stand on your scale. Measure yourself. Mi Body Composition Scale is active up to 15 min after the measurement." />
                 <Label FontSize="Small" Text="Then you can review your data and upload it to Garmin Cloud. If you do not have Mi scale and just want to manually insert the data, you can so." />
                 <Label FontSize="Small" Text="This App pass your data, email and password directly to Garmin Cloud or via external API server. The API does not store or log anything, it's just a middleware between this App and Garmin services." />
