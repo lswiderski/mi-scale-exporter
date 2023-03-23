@@ -67,10 +67,7 @@ namespace MiScaleExporter.MAUI.ViewModels
         {
             if (DeviceInfo.Platform == DevicePlatform.Android)
             {
-                double version = 0;
-                double.TryParse(DeviceInfo.VersionString, out version);
-
-                if (version >= 12)
+                if (DeviceInfo.Version.Major >= 12)
                 {
                     if (await GetBluetoothPermissionStatusAsync() != PermissionStatus.Granted)
                     {
@@ -79,7 +76,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                         return false;
                     }
 
-                    if (await GetLocationPermissionStatusAsync() != PermissionStatus.Granted)
+                    if (await GetLocationWhenInUsePermissionStatusAsync() != PermissionStatus.Granted)
                     {
                         await Application.Current.MainPage.DisplayAlert("Problem", "Permission to use Location (Bluetooth) is required to scan.",
                             "OK");
@@ -88,11 +85,14 @@ namespace MiScaleExporter.MAUI.ViewModels
                 }
                 else
                 {
-                    if (await GetLocationPermissionStatusAsync() != PermissionStatus.Granted)
+                    if (await GetLocationWhenInUsePermissionStatusAsync() != PermissionStatus.Granted)
                     {
-                        await Application.Current.MainPage.DisplayAlert("Problem", "Permission to use  Location (Bluetooth) is required to scan.",
-                            "OK");
-                        return false;
+                        if(await GetLocationAlwaysPermissionStatusAsync() != PermissionStatus.Granted)
+                        {
+                            await Application.Current.MainPage.DisplayAlert("Problem", "Permission to use  Location (Bluetooth) is required to scan.",
+                           "OK");
+                            return false;
+                        }
                     }
                 }
 
@@ -137,12 +137,23 @@ namespace MiScaleExporter.MAUI.ViewModels
             this.IsBusyForm = false;
         }
 
-        private async Task<PermissionStatus> GetLocationPermissionStatusAsync()
+        private async Task<PermissionStatus> GetLocationWhenInUsePermissionStatusAsync()
         {
             var locationPermissionStatus = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
             if (locationPermissionStatus != PermissionStatus.Granted)
             {
                 locationPermissionStatus = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+            }
+
+            return locationPermissionStatus;
+        }
+
+        private async Task<PermissionStatus> GetLocationAlwaysPermissionStatusAsync()
+        {
+            var locationPermissionStatus = await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
+            if (locationPermissionStatus != PermissionStatus.Granted)
+            {
+                locationPermissionStatus = await Permissions.RequestAsync<Permissions.LocationAlways>();
             }
 
             return locationPermissionStatus;
