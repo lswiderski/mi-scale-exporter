@@ -45,17 +45,17 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-android|AnyCPU'">
-	  <ApplicationDisplayVersion>2.0.2</ApplicationDisplayVersion>
-	  <ApplicationVersion>17</ApplicationVersion>
+	  <ApplicationDisplayVersion>2.0.4</ApplicationDisplayVersion>
+	  <ApplicationVersion>19</ApplicationVersion>
 	  <AndroidUseAapt2>True</AndroidUseAapt2>
 	  <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
-	  <AndroidPackageFormat>aab</AndroidPackageFormat>
+	  <AndroidPackageFormat>apk</AndroidPackageFormat>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-android|AnyCPU'">
-	  <ApplicationDisplayVersion>2.0.2</ApplicationDisplayVersion>
-	  <ApplicationVersion>17</ApplicationVersion>
-	  <AndroidPackageFormat>aab</AndroidPackageFormat>
+	  <ApplicationDisplayVersion>2.0.4</ApplicationDisplayVersion>
+	  <ApplicationVersion>19</ApplicationVersion>
+	  <AndroidPackageFormat>apk</AndroidPackageFormat>
 	  <AndroidUseAapt2>True</AndroidUseAapt2>
 	  <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
 	</PropertyGroup>
