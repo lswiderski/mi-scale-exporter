@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:MiScaleExporter.Controls"
     xmlns:local="clr-namespace:MiScaleExporter.MAUI.Views"
+    xmlns:localization="clr-namespace:MiScaleExporter.MAUI.Resources.Localization"
     FlyoutBackgroundImageAspect="AspectFill"
     FlyoutHeaderBehavior="CollapseOnScroll">
 
@@ -87,7 +88,7 @@
     </Shell.FlyoutFooter>
 
 
-    <FlyoutItem Title="About">
+    <FlyoutItem Title="{x:Static localization:AppSnippets.Start}">
         <FlyoutItem.Icon>
             <FontImageSource
                 FontFamily="FontAwesome6Solid"
@@ -99,7 +100,7 @@
         <ShellContent ContentTemplate="{DataTemplate local:AboutPage}" Route="AboutPage" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Mi Scale">
+    <FlyoutItem Title="{x:Static localization:AppSnippets.MiScale}">
         <FlyoutItem.Icon>
             <FontImageSource
                 FontFamily="FontAwesome6Solid"
@@ -111,7 +112,7 @@
         <ShellContent ContentTemplate="{DataTemplate local:ScalePage}" Route="ScalePage" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Garmin Form">
+    <FlyoutItem Title="{x:Static localization:AppSnippets.GarminForm}">
         <FlyoutItem.Icon>
             <FontImageSource
                 FontFamily="FontAwesome6Solid"
@@ -123,7 +124,7 @@
         <ShellContent ContentTemplate="{DataTemplate local:FormPage}" Route="FormPage" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Settings">
+    <FlyoutItem Title="{x:Static localization:AppSnippets.Settings}">
         <FlyoutItem.Icon>
             <FontImageSource
                 FontFamily="FontAwesome6Solid"
@@ -134,7 +135,7 @@
         </FlyoutItem.Icon>
         <ShellContent ContentTemplate="{DataTemplate local:SettingPage}" Route="Settings" />
     </FlyoutItem>
-    <FlyoutItem Title="Help">
+    <FlyoutItem Title="{x:Static localization:AppSnippets.Help}">
         <FlyoutItem.Icon>
             <FontImageSource
                 FontFamily="FontAwesome6Solid"

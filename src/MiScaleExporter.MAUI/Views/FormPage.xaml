@@ -5,6 +5,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:behaviors="clr-namespace:MiScaleExporter.MAUI.Behaviors;assembly=MiScaleExporter.MAUI"
+    xmlns:localization="clr-namespace:MiScaleExporter.MAUI.Resources.Localization"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     Title="{Binding Title}">
 
@@ -37,12 +38,11 @@
                 </Grid.ColumnDefinitions>
 
                 <StackLayout Grid.Row="0" Grid.Column="0">
-                    <Label FontSize="Small" Text="Weight (Kg)" />
+                    <Label FontSize="Small" Text="{x:Static localization:AppSnippets.WeightKg}" />
                     <Entry
-                            FontSize="Medium"
-                            Keyboard="Numeric"
-                            
-                            Text="{Binding Weight, Mode=TwoWay, StringFormat='{0:0.##}'}">
+                        FontSize="Medium"
+                        Keyboard="Numeric"
+                        Text="{Binding Weight, Mode=TwoWay, StringFormat='{0:0.##}'}">
                         <Entry.Behaviors>
                             <behaviors:NumericDoubleValidationBehavior />
                         </Entry.Behaviors>
@@ -50,11 +50,11 @@
                 </StackLayout>
 
                 <StackLayout Grid.Row="0" Grid.Column="1">
-                    <Label FontSize="Small" Text="BMI" />
+                    <Label FontSize="Small" Text="{x:Static localization:AppSnippets.BMI}" />
                     <Entry
-                            FontSize="Medium"
-                            Keyboard="Numeric"
-                            Text="{Binding BMI, Mode=TwoWay}">
+                        FontSize="Medium"
+                        Keyboard="Numeric"
+                        Text="{Binding BMI, Mode=TwoWay}">
                         <Entry.Behaviors>
                             <behaviors:NumericDoubleValidationBehavior />
                         </Entry.Behaviors>
@@ -62,24 +62,24 @@
                 </StackLayout>
 
                 <StackLayout Grid.Row="1" Grid.Column="0">
-                    <Label FontSize="Small" Text="Body Fat (%)" />
+                    <Label FontSize="Small" Text="{x:Static localization:AppSnippets.BodyFatPercent}" />
 
                     <Entry
-                            FontSize="Medium"
-                            Keyboard="Numeric"
-                            Text="{Binding Fat, Mode=TwoWay}">
+                        FontSize="Medium"
+                        Keyboard="Numeric"
+                        Text="{Binding Fat, Mode=TwoWay}">
                         <Entry.Behaviors>
                             <behaviors:NumericDoubleValidationBehavior />
                         </Entry.Behaviors>
                     </Entry>
                 </StackLayout>
                 <StackLayout Grid.Row="1" Grid.Column="1">
-                    <Label FontSize="Small" Text="Muscle Mass (Kg)" />
+                    <Label FontSize="Small" Text="{x:Static localization:AppSnippets.MuscleMassKg}" />
 
                     <Entry
-                            FontSize="Medium"
-                            Keyboard="Numeric"
-                            Text="{Binding MuscleMass, Mode=TwoWay}">
+                        FontSize="Medium"
+                        Keyboard="Numeric"
+                        Text="{Binding MuscleMass, Mode=TwoWay}">
                         <Entry.Behaviors>
                             <behaviors:NumericDoubleValidationBehavior />
                         </Entry.Behaviors>
@@ -87,82 +87,88 @@
                 </StackLayout>
 
                 <StackLayout Grid.Row="2" Grid.Column="0">
-                    <Label FontSize="Small" Text="Water (%)" />
-                   
-                        <Entry
-                            FontSize="Medium"
-                            Keyboard="Numeric"
-                            Text="{Binding WaterPercentage, Mode=TwoWay}">
-                            <Entry.Behaviors>
-                                <behaviors:NumericDoubleValidationBehavior />
-                            </Entry.Behaviors>
-                        </Entry>
-                    
+                    <Label FontSize="Small" Text="{x:Static localization:AppSnippets.WaterPercent}" />
+
+                    <Entry
+                        FontSize="Medium"
+                        Keyboard="Numeric"
+                        Text="{Binding WaterPercentage, Mode=TwoWay}">
+                        <Entry.Behaviors>
+                            <behaviors:NumericDoubleValidationBehavior />
+                        </Entry.Behaviors>
+                    </Entry>
+
                 </StackLayout>
                 <StackLayout Grid.Row="2" Grid.Column="1">
-                    <Label FontSize="Small" Text="Bone mass (Kg)" />
-                   
-                        <Entry
-                            FontSize="Medium"
-                            Keyboard="Numeric"
-                            Text="{Binding BoneMass, Mode=TwoWay}">
-                            <Entry.Behaviors>
-                                <behaviors:NumericDoubleValidationBehavior />
-                            </Entry.Behaviors>
-                        </Entry>
-                   
+                    <Label FontSize="Small" Text="{x:Static localization:AppSnippets.BoneMassPercent}" />
+
+                    <Entry
+                        FontSize="Medium"
+                        Keyboard="Numeric"
+                        Text="{Binding BoneMass, Mode=TwoWay}">
+                        <Entry.Behaviors>
+                            <behaviors:NumericDoubleValidationBehavior />
+                        </Entry.Behaviors>
+                    </Entry>
+
                 </StackLayout>
 
                 <StackLayout Grid.Row="3" Grid.Column="0">
-                    <Label FontSize="Small" Text="Visceral fat" />
-                   
-                        <Entry
-                            FontSize="Medium"
-                            Keyboard="Numeric"
-                            Text="{Binding VisceralFat, Mode=TwoWay}">
-                            <Entry.Behaviors>
-                                <behaviors:NumericDoubleValidationBehavior />
-                            </Entry.Behaviors>
-                        </Entry>
-                    
+                    <Label FontSize="Small" Text="{x:Static localization:AppSnippets.VisceralFat}" />
+
+                    <Entry
+                        FontSize="Medium"
+                        Keyboard="Numeric"
+                        Text="{Binding VisceralFat, Mode=TwoWay}">
+                        <Entry.Behaviors>
+                            <behaviors:NumericDoubleValidationBehavior />
+                        </Entry.Behaviors>
+                    </Entry>
+
                 </StackLayout>
                 <StackLayout Grid.Row="3" Grid.Column="1">
-                    <Label FontSize="Small" Text="Body age (years)"  />
-                    
-                        <Entry
-                            FontSize="Medium"
-                            Keyboard="Numeric"
-                            Text="{Binding MetabolicAge, Mode=TwoWay}">
-                            <Entry.Behaviors>
-                                <behaviors:NumericDoubleValidationBehavior />
-                            </Entry.Behaviors>
-                        </Entry>
-                    
+                    <Label FontSize="Small" Text="{x:Static localization:AppSnippets.BodyAgeYears}" />
+
+                    <Entry
+                        FontSize="Medium"
+                        Keyboard="Numeric"
+                        Text="{Binding MetabolicAge, Mode=TwoWay}">
+                        <Entry.Behaviors>
+                            <behaviors:NumericDoubleValidationBehavior />
+                        </Entry.Behaviors>
+                    </Entry>
+
                 </StackLayout>
 
                 <StackLayout Grid.Row="4" Grid.Column="0">
-                    <Label FontSize="Small" Text="Body Type" />
-                   
-                        <Entry
-                            FontSize="Medium"
-                            Keyboard="Numeric"
-                            Text="{Binding BodyType, Mode=TwoWay}">
-                            <Entry.Behaviors>
-                                <behaviors:NumericIntValidationBehavior />
-                            </Entry.Behaviors>
-                        </Entry>
-                   
+                    <Label FontSize="Small" Text="{x:Static localization:AppSnippets.BodyType}" />
+
+                    <Entry
+                        FontSize="Medium"
+                        Keyboard="Numeric"
+                        Text="{Binding BodyType, Mode=TwoWay}">
+                        <Entry.Behaviors>
+                            <behaviors:NumericIntValidationBehavior />
+                        </Entry.Behaviors>
+                    </Entry>
+
                 </StackLayout>
 
                 <StackLayout Grid.Row="4" Grid.Column="1">
-                    <Label FontSize="Small" Text="Time of measurement" />
-                   
-                        <StackLayout Orientation="Horizontal">
+                    <Label FontSize="Small" Text="{x:Static localization:AppSnippets.TimeOfMeasurement}" />
 
-                            <DatePicker Date="{Binding Date}" Format="d" FontSize="Medium" />
-                        <TimePicker Format="HH:mm" Time="{Binding Time}" FontSize="Medium" />
-                        </StackLayout>
-                   
+                    <StackLayout Orientation="Horizontal">
+
+                        <DatePicker
+                            Date="{Binding Date}"
+                            FontSize="Medium"
+                            Format="d" />
+                        <TimePicker
+                            FontSize="Medium"
+                            Format="HH:mm"
+                            Time="{Binding Time}" />
+                    </StackLayout>
+
                 </StackLayout>
 
 
@@ -171,17 +177,17 @@
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
                     IsVisible="{Binding ShowEmail}">
-                    <Label FontSize="Small" Text="Email" />
-                   
-                        <Entry
-                            FontSize="Medium"
-                            Keyboard="Email"
-                            Text="{Binding Email, Mode=TwoWay}">
-                            <Entry.Behaviors>
-                                <toolkit:EmailValidationBehavior DecorationFlags="Trim" InvalidStyle="{StaticResource InvalidEntryStyle}" />
-                            </Entry.Behaviors>
-                        </Entry>
-                    
+                    <Label FontSize="Small" Text="{x:Static localization:AppSnippets.Email}" />
+
+                    <Entry
+                        FontSize="Medium"
+                        Keyboard="Email"
+                        Text="{Binding Email, Mode=TwoWay}">
+                        <Entry.Behaviors>
+                            <toolkit:EmailValidationBehavior DecorationFlags="Trim" InvalidStyle="{StaticResource InvalidEntryStyle}" />
+                        </Entry.Behaviors>
+                    </Entry>
+
                 </StackLayout>
 
                 <StackLayout
@@ -189,13 +195,13 @@
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
                     IsVisible="{Binding ShowPassword}">
-                    <Label FontSize="Small" Text="Password" />
-                  
-                        <Entry
-                            FontSize="Medium"
-                            IsPassword="True"
-                            Text="{Binding Password, Mode=TwoWay}" />
-                  
+                    <Label FontSize="Small" Text="{x:Static localization:AppSnippets.Password}" />
+
+                    <Entry
+                        FontSize="Medium"
+                        IsPassword="True"
+                        Text="{Binding Password, Mode=TwoWay}" />
+
                 </StackLayout>
 
 
@@ -210,21 +216,21 @@
                         Margin="0,10,0,0"
                         BackgroundColor="{StaticResource Primary}"
                         Command="{Binding UploadCommand}"
-                        Text="Upload to Garmin Cloud"
+                        Text="{x:Static localization:AppSnippets.UploadToGarminCloud}"
                         TextColor="White" />
                     <StackLayout IsVisible="{Binding IsAutomaticCalculation}">
-                        <Label FontSize="Small" Text="Values that will not be sent to the cloud:" />
+                        <Label FontSize="Small" Text="{x:Static localization:AppSnippets.ValuesThatWillNotBeSentToTheCloud}" />
                         <StackLayout Orientation="Horizontal">
-                            <Label FontSize="Small" Text="Protein (%):" />
+                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.ProteinPercent}" />
                             <Label FontSize="Small" Text="{Binding ProteinPercentage, Mode=TwoWay}" />
 
                         </StackLayout>
                         <StackLayout Orientation="Horizontal">
-                            <Label FontSize="Small" Text="Basal Metabolism (kCal):" />
+                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.BasalMetabolosimKCal}" />
                             <Label FontSize="Small" Text="{Binding BMR, Mode=TwoWay}" />
                         </StackLayout>
                         <StackLayout Orientation="Horizontal">
-                            <Label FontSize="Small" Text="Ideal Weight (Kg):" />
+                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.IdealWeightKg}" />
                             <Label FontSize="Small" Text="{Binding IdealWeight, Mode=TwoWay}" />
                         </StackLayout>
                     </StackLayout>
@@ -246,7 +252,7 @@
 
                         <Label
                             HorizontalOptions="Center"
-                            Text="Uploading..."
+                            Text="{x:Static localization:AppSnippets.Uploading}"
                             TextColor="Black" />
                     </StackLayout>
 

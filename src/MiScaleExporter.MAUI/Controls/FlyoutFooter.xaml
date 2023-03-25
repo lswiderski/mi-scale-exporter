@@ -2,12 +2,13 @@
 <ContentView
     x:Class="MiScaleExporter.Controls.FlyoutFooter"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:localization="clr-namespace:MiScaleExporter.MAUI.Resources.Localization">
     <VerticalStackLayout>
         <Label
             Margin="10"
             FontSize="Small"
             HorizontalOptions="Center"
-            Text="Created by Lukasz Swiderski 2023" />
+            Text="{x:Static localization:AppSnippets.CreatedBy}" />
     </VerticalStackLayout>
 </ContentView>

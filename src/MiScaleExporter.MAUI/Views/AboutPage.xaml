@@ -3,6 +3,7 @@
     x:Class="MiScaleExporter.MAUI.Views.AboutPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:localization="clr-namespace:MiScaleExporter.MAUI.Resources.Localization"
     xmlns:vm="clr-namespace:MiScaleExporter.MAUI.ViewModels"
     Title="{Binding Title}">
 
@@ -34,26 +35,26 @@
                     Margin="0,10,0,0"
                     BackgroundColor="{StaticResource Primary}"
                     Command="{Binding GoToScanCommand}"
-                    Text="Go to scan"
+                    Text="{x:Static localization:AppSnippets.GoToScan}"
                     TextColor="White" />
                 <Button
                     Margin="0,10,0,0"
                     BackgroundColor="{StaticResource Primary}"
                     Command="{Binding OpenHelpCommand}"
-                    Text="Open Help"
+                    Text="{x:Static localization:AppSnippets.OpenHelp}"
                     TextColor="White" />
-                <Label FontSize="Small" Text="Do you like this app and would you like to support it?" />
+                <Label FontSize="Small" Text="{x:Static localization:AppSnippets.DoYouLikeAndWouldYouLikeToSupport}" />
                 <Button
                     Margin="0,10,0,0"
                     BackgroundColor="{StaticResource Primary}"
                     Command="{Binding OpenCoffeeCommand}"
-                    Text="Buy me a coffee"
+                    Text="{x:Static localization:AppSnippets.BuyMeACoffee}"
                     TextColor="White" />
                 <Button
                     Margin="0,10,0,0"
                     BackgroundColor="{StaticResource Primary}"
                     Command="{Binding OpenGithubCommand}"
-                    Text="Visit project repository"
+                    Text="{x:Static localization:AppSnippets.VisitProjectRepository}"
                     TextColor="White" />
 
             </StackLayout>

@@ -3,7 +3,8 @@
     x:Class="MiScaleExporter.MAUI.Views.HelpPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Title="Help">
+    xmlns:localization="clr-namespace:MiScaleExporter.MAUI.Resources.Localization"
+    Title="{x:Static localization:AppSnippets.Help}">
     <ScrollView VerticalScrollBarVisibility="Always">
         <StackLayout
             Padding="15,24,15,24"
@@ -12,100 +13,100 @@
             <Label
                 FontAttributes="Bold"
                 FontSize="Small"
-                Text="1. How to connect to the scale" />
+                Text="{x:Static localization:AppSnippets.HelpConnect}" />
             <Label
                 Padding="15,0,0,0"
                 FontSize="Small"
-                Text="Set the Bluetooth address of the scale in settings. Set the correct age/height/gender values. Measure yourself. The scale is active for up to 15 minutes after measurement." />
+                Text="{x:Static localization:AppSnippets.HelpConnectDescription}" />
             <Label
                 Padding="15,0,0,0"
                 FontSize="Small"
-                Text="Bluetooth address can be found in Zepp Life &gt; Profile &gt; My devices &gt; Mi Body Composition Scale &gt; Bluetooth address (hold to copy)" />
+                Text="{x:Static localization:AppSnippets.HelpConnectDescription2}" />
             <Image Source="Images/xiaomi.jpg" />
             <Label
                 FontAttributes="Bold"
                 FontSize="Small"
-                Text="2. How It works" />
+                Text="{x:Static localization:AppSnippets.HelpHowItWorks}" />
             <Label
                 Padding="15,0,0,0"
                 FontSize="Small"
-                Text="This App pass your data, email and password directly to Garmin Cloud or via external API server. The API does not store or log anything, it's just a middleware between this App and Garmin services." />
+                Text="{x:Static localization:AppSnippets.HelpHowItWorksDescription}" />
             <Label
                 FontAttributes="Bold"
                 FontSize="Small"
-                Text="3. Strange results? (Like 10kg only)" />
+                Text="{x:Static localization:AppSnippets.HelpStrangeResults}" />
             <Label
                 Padding="15,0,0,0"
                 FontSize="Small"
-                Text="If you have the Mi Body Composition Scale 2. Disable the 'Weight small object' option in Zepp Life" />
+                Text="{x:Static localization:AppSnippets.HelpStrangeResultsDescription}" />
             <Label
                 FontAttributes="Bold"
                 FontSize="Small"
-                Text="4. Results different from Zepp Life" />
+                Text="{x:Static localization:AppSnippets.HelpZeppLifeDriference}" />
             <Label
                 Padding="15,0,0,0"
                 FontSize="Small"
-                Text="Please check the age/height/gender parameters - should be identical in both apps. But even then, the values may be slightly different because we do not use the exact algorithm used by Xiaomi, but an alternative open source algorithm." />
+                Text="{x:Static localization:AppSnippets.HelpZeppLifeDriferenceDescription}" />
             <Label
                 FontAttributes="Bold"
                 FontSize="Small"
-                Text="5. Cannot Sync. Missing Cookies" />
+                Text="{x:Static localization:AppSnippets.HelpCannotSync2FA}" />
             <Label
                 Padding="15,0,0,0"
                 FontSize="Small"
-                Text="You probably have 2FA enabled. It's not supported. Please turn it off if you want to use this application." />
+                Text="{x:Static localization:AppSnippets.HelpCannotSync2FADescription}" />
             <Label
                 FontAttributes="Bold"
                 FontSize="Small"
-                Text="6. External Api" />
+                Text="{x:Static localization:AppSnippets.HelpExternalApi}" />
             <Label
                 Padding="15,0,0,0"
                 FontSize="Small"
-                Text="External API is used as a proxy for older Android phones (9 or lower). The default address is https://frog01-20364.wykr.es/. You can host your own version of the API and this app will send the data to your system instead of Garmin. Check out the project repository for more information." />
+                Text="{x:Static localization:AppSnippets.HelpExternalApiDescription}" />
 
             <Label
                 FontAttributes="Bold"
                 FontSize="Small"
-                Text="7. Garmin and Xiaomi" />
+                Text="{x:Static localization:AppSnippets.HelpGarminAndXiaomi}" />
             <Label
                 Padding="15,0,0,0"
                 FontSize="Small"
-                Text="This application is an open source community project and I have no affiliation with Garmin or Xiaomi. You use it at your own risk. You can always check out the source code on Github." />
+                Text="{x:Static localization:AppSnippets.HelpGarminAndXiaomiDescription}" />
             <Label
                 FontAttributes="Bold"
                 FontSize="Small"
-                Text="8. Feedback &amp; Contact" />
+                Text="{x:Static localization:AppSnippets.HelpFeedback}" />
             <Label
                 Padding="15,0,0,0"
                 FontSize="Small"
-                Text="If you found a bug, need a feature or have an idea, share it with me at the project repository." />
+                Text="{x:Static localization:AppSnippets.HelpFeedbackDescription}" />
             <Button
                 Margin="0,10,0,0"
                 BackgroundColor="{StaticResource Primary}"
                 Command="{Binding OpenGithubCommand}"
-                Text="Visit project repository"
+                Text="{x:Static localization:AppSnippets.VisitProjectRepository}"
                 TextColor="White" />
             <Label
                 FontAttributes="Bold"
                 FontSize="Small"
-                Text="9. Coffee" />
+                Text="{x:Static localization:AppSnippets.HelpCoffee}" />
             <Label
                 Padding="15,0,0,0"
                 FontSize="Small"
-                Text="Keep in mind that this is my hobby project. It was created for my inner needs and I believe it may be useful to others as well. I do not receive any compensation for creating and maintaining this project. If you want to support the development or thank me, you can buy me a coffee." />
+                Text="{x:Static localization:AppSnippets.HelpCoffeeDescription}" />
 
             <Button
                 Margin="0,10,0,0"
                 BackgroundColor="{StaticResource Primary}"
                 Command="{Binding OpenCoffeeCommand}"
-                Text="Buy me a coffee"
+                Text="{x:Static localization:AppSnippets.BuyMeACoffee}"
                 TextColor="White" />
 
             <Label
                 Margin="10"
                 FontSize="Small"
                 HorizontalOptions="Center"
-                Text="Created by Lukasz Swiderski 2023" />
+                Text="{x:Static localization:AppSnippets.CreatedBy}" />
         </StackLayout>
     </ScrollView>
 </ContentPage>

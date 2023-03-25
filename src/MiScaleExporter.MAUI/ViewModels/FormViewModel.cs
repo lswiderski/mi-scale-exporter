@@ -1,4 +1,5 @@
 ﻿using MiScaleExporter.MAUI;
+using MiScaleExporter.MAUI.Resources.Localization;
 using MiScaleExporter.MAUI.Utils;
 using MiScaleExporter.Models;
 using MiScaleExporter.Services;
@@ -13,7 +14,7 @@ namespace MiScaleExporter.MAUI.ViewModels
         public FormViewModel(IGarminService garminService)
         {
             _garminService = garminService;
-            Title = "Garmin Body Composition Form";
+            Title = AppSnippets.GarminBodyCompositionForm;
             Date = DateTime.Now;
             Time = DateTime.Now.TimeOfDay;
             UploadCommand = new Command(OnUpload, ValidateSave);
@@ -48,8 +49,8 @@ namespace MiScaleExporter.MAUI.ViewModels
         {
             this.IsBusyForm = true;
             var response = await this._garminService.UploadAsync(this.PrepareRequest(), Date.Date.Add(Time), _email, _password);
-            var message = response.IsSuccess ? "Uploaded" : response.Message;
-            await Application.Current.MainPage.DisplayAlert("Response", message, "OK");
+            var message = response.IsSuccess ? AppSnippets.Uploaded : response.Message;
+            await Application.Current.MainPage.DisplayAlert(AppSnippets.Response, message, AppSnippets.OK);
             this.IsBusyForm = false;
             // This will pop the current page off the navigation stack
             await Shell.Current.GoToAsync("..?autoUpload=false");

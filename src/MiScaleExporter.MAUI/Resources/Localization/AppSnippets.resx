@@ -1,0 +1,357 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Age" xml:space="preserve">
+    <value>Age</value>
+  </data>
+  <data name="AlternateExternalAPIAddress" xml:space="preserve">
+    <value>Alternate External API Address</value>
+  </data>
+  <data name="AppSettings" xml:space="preserve">
+    <value>App Settings</value>
+  </data>
+  <data name="BasalMetabolosimKCal" xml:space="preserve">
+    <value>Basal Metabolism (kCal):</value>
+  </data>
+  <data name="BluetoothAddress" xml:space="preserve">
+    <value>Bluetooth Address</value>
+  </data>
+  <data name="BMI" xml:space="preserve">
+    <value>BMI</value>
+  </data>
+  <data name="BodyAgeYears" xml:space="preserve">
+    <value>Body age (years)</value>
+  </data>
+  <data name="BodyFatPercent" xml:space="preserve">
+    <value>Body Fat (%)</value>
+  </data>
+  <data name="BodyType" xml:space="preserve">
+    <value>Body Type</value>
+  </data>
+  <data name="BoneMassPercent" xml:space="preserve">
+    <value>Bone mass (Kg)</value>
+  </data>
+  <data name="BuyMeACoffee" xml:space="preserve">
+    <value>Buy me a coffee</value>
+  </data>
+  <data name="CancelSearch" xml:space="preserve">
+    <value>Cancel Search</value>
+  </data>
+  <data name="CreatedBy" xml:space="preserve">
+    <value>Created by Lukasz Swiderski 2023</value>
+  </data>
+  <data name="DataCouldNotBeObtained" xml:space="preserve">
+    <value>Data could not be obtained. try again</value>
+  </data>
+  <data name="DoYouLikeAndWouldYouLikeToSupport" xml:space="preserve">
+    <value>Do you like this app and would you like to support it?</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Female" xml:space="preserve">
+    <value>Female</value>
+  </data>
+  <data name="GarminBodyCompositionForm" xml:space="preserve">
+    <value>Garmin Body Composition Form</value>
+  </data>
+  <data name="GarminForm" xml:space="preserve">
+    <value>Garmin Form</value>
+  </data>
+  <data name="GarminSettings" xml:space="preserve">
+    <value>Garmin Settings</value>
+  </data>
+  <data name="GoToScan" xml:space="preserve">
+    <value>Go to scan</value>
+  </data>
+  <data name="Height" xml:space="preserve">
+    <value>Height</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="HelpCannotSync2FA" xml:space="preserve">
+    <value>5. Cannot Sync. Missing Cookies</value>
+  </data>
+  <data name="HelpCannotSync2FADescription" xml:space="preserve">
+    <value>You probably have 2FA enabled. It's not supported. Please turn it off if you want to use this application.</value>
+  </data>
+  <data name="HelpCoffee" xml:space="preserve">
+    <value>9. Coffee</value>
+  </data>
+  <data name="HelpCoffeeDescription" xml:space="preserve">
+    <value>Keep in mind that this is my hobby project. It was created for my inner needs and I believe it may be useful to others as well. I do not receive any compensation for creating and maintaining this project. If you want to support the development or thank me, you can buy me a coffee.</value>
+  </data>
+  <data name="HelpConnect" xml:space="preserve">
+    <value>1. How to connect to the scale</value>
+  </data>
+  <data name="HelpConnectDescription" xml:space="preserve">
+    <value>Set the Bluetooth address of the scale in settings. Set the correct age/height/gender values. Measure yourself. The scale is active for up to 15 minutes after measurement.</value>
+  </data>
+  <data name="HelpConnectDescription2" xml:space="preserve">
+    <value>Bluetooth address can be found in Zepp Life &gt; Profile &gt; My devices &gt; Mi Body Composition Scale &gt; Bluetooth address (hold to copy)</value>
+  </data>
+  <data name="HelpExternalApi" xml:space="preserve">
+    <value>6. External Api</value>
+  </data>
+  <data name="HelpExternalApiDescription" xml:space="preserve">
+    <value>External API is used as a proxy for older Android phones (9 or lower). The default address is https://frog01-20364.wykr.es/. You can host your own version of the API and this app will send the data to your system instead of Garmin. Check out the project repository for more information.</value>
+  </data>
+  <data name="HelpFeedback" xml:space="preserve">
+    <value>8. Feedback &amp; Contact</value>
+  </data>
+  <data name="HelpFeedbackDescription" xml:space="preserve">
+    <value>If you found a bug, need a feature or have an idea, share it with me at the project repository.</value>
+  </data>
+  <data name="HelpGarminAndXiaomi" xml:space="preserve">
+    <value>7. Garmin and Xiaomi</value>
+  </data>
+  <data name="HelpGarminAndXiaomiDescription" xml:space="preserve">
+    <value>This application is an open source community project and I have no affiliation with Garmin or Xiaomi. You use it at your own risk. You can always check out the source code on Github.</value>
+  </data>
+  <data name="HelpHowItWorks" xml:space="preserve">
+    <value>2. How It works</value>
+  </data>
+  <data name="HelpHowItWorksDescription" xml:space="preserve">
+    <value>This App pass your data, email and password directly to Garmin Cloud or via external API server. The API does not store or log anything, it's just a middleware between this App and Garmin services.</value>
+  </data>
+  <data name="HelpStrangeResults" xml:space="preserve">
+    <value>3. Strange results? (Like 10kg only)</value>
+  </data>
+  <data name="HelpStrangeResultsDescription" xml:space="preserve">
+    <value>If you have the Mi Body Composition Scale 2. Disable the 'Weight small object' option in Zepp Life</value>
+  </data>
+  <data name="HelpZeppLifeDriference" xml:space="preserve">
+    <value>4. Results different from Zepp Life</value>
+  </data>
+  <data name="HelpZeppLifeDriferenceDescription" xml:space="preserve">
+    <value>Please check the age/height/gender parameters - should be identical in both apps. But even then, the values may be slightly different because we do not use the exact algorithm used by Xiaomi, but an alternative open source algorithm.</value>
+  </data>
+  <data name="IdealWeightKg" xml:space="preserve">
+    <value>Ideal Weight (Kg):</value>
+  </data>
+  <data name="Male" xml:space="preserve">
+    <value>Male</value>
+  </data>
+  <data name="MiBodyCompositionScale" xml:space="preserve">
+    <value>Mi Body Composition Scale 1 / 2</value>
+  </data>
+  <data name="MiScale" xml:space="preserve">
+    <value>Mi Scale</value>
+  </data>
+  <data name="MiScaleData" xml:space="preserve">
+    <value>Mi Scale Data</value>
+  </data>
+  <data name="MiScaleExporter" xml:space="preserve">
+    <value>Mi Scale Exporter</value>
+  </data>
+  <data name="MiSmartScale" xml:space="preserve">
+    <value>Mi Smart Scale</value>
+  </data>
+  <data name="MuscleMassKg" xml:space="preserve">
+    <value>Muscle Mass (Kg)</value>
+  </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>Not found</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="OneClickScanUpload" xml:space="preserve">
+    <value>One click - Scan &amp; Upload</value>
+  </data>
+  <data name="OpenHelp" xml:space="preserve">
+    <value>Open Help</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="PermissionBluetoothRequired" xml:space="preserve">
+    <value>Permission to use Bluetooth is required to scan.</value>
+  </data>
+  <data name="PermissionLocationRequired" xml:space="preserve">
+    <value>Permission to use Location (Bluetooth) is required to scan.</value>
+  </data>
+  <data name="Problem" xml:space="preserve">
+    <value>Problem</value>
+  </data>
+  <data name="ProteinPercent" xml:space="preserve">
+    <value>Protein (%):</value>
+  </data>
+  <data name="ResetToDefault" xml:space="preserve">
+    <value>Reset to Default</value>
+  </data>
+  <data name="Response" xml:space="preserve">
+    <value>Response</value>
+  </data>
+  <data name="ScaleModel" xml:space="preserve">
+    <value>Scale Model</value>
+  </data>
+  <data name="ScaleSettings" xml:space="preserve">
+    <value>Scale Settings</value>
+  </data>
+  <data name="Scanning" xml:space="preserve">
+    <value>Scanning...</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Sex" xml:space="preserve">
+    <value>Sex</value>
+  </data>
+  <data name="ShowDebug" xml:space="preserve">
+    <value>Show Debug Info during scan</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="StopMeasure" xml:space="preserve">
+    <value>Stop Measure</value>
+  </data>
+  <data name="TimeOfMeasurement" xml:space="preserve">
+    <value>Time of measurement</value>
+  </data>
+  <data name="Uploaded" xml:space="preserve">
+    <value>Uploaded</value>
+  </data>
+  <data name="Uploading" xml:space="preserve">
+    <value>Uploading...</value>
+  </data>
+  <data name="UploadToGarminCloud" xml:space="preserve">
+    <value>Upload to Garmin Cloud</value>
+  </data>
+  <data name="UseExternalAPI" xml:space="preserve">
+    <value>Use External API</value>
+  </data>
+  <data name="ValuesThatWillNotBeSentToTheCloud" xml:space="preserve">
+    <value>Values that will not be sent to the cloud:</value>
+  </data>
+  <data name="VisceralFat" xml:space="preserve">
+    <value>Visceral fat</value>
+  </data>
+  <data name="VisitProjectRepository" xml:space="preserve">
+    <value>Visit the project repository</value>
+  </data>
+  <data name="WaterPercent" xml:space="preserve">
+    <value>Water (%)</value>
+  </data>
+  <data name="WeightKg" xml:space="preserve">
+    <value>Weight (Kg)</value>
+  </data>
+</root>

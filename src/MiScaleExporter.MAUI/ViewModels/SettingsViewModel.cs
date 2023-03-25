@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
+using MiScaleExporter.MAUI.Resources.Localization;
 using MiScaleExporter.Models;
 
 
@@ -10,7 +11,7 @@ namespace MiScaleExporter.MAUI.ViewModels
     {
         public SettingsViewModel()
         {
-            this.Title = "Settings";
+            this.Title = AppSnippets.Settings;
             ResetCommand = new Command(() =>
                 {
                     Preferences.Remove(PreferencesKeys.ApiServerAddressOverride);

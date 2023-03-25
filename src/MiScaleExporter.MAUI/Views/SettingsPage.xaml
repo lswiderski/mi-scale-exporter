@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:behaviors="clr-namespace:MiScaleExporter.MAUI.Behaviors;assembly=MiScaleExporter.MAUI"
+    xmlns:localization="clr-namespace:MiScaleExporter.MAUI.Resources.Localization"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:vm="clr-namespace:MiScaleExporter.MAUI.ViewModels"
     Title="{Binding Title}">
@@ -35,60 +36,60 @@
                             <Label
                                 FontAttributes="Bold"
                                 FontSize="Small"
-                                Text="Scale Settings" />
+                                Text="{x:Static localization:AppSnippets.ScaleSettings}" />
                             <BoxView
                                 HeightRequest="2"
                                 HorizontalOptions="Fill"
                                 Color="Gray" />
-                            <Label FontSize="Small" Text="Age" />
+                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.Age}" />
                             <Entry
-                                    FontSize="Medium"
-                                    Keyboard="Numeric"
-                                    Text="{Binding Age, Mode=TwoWay}">
+                                FontSize="Medium"
+                                Keyboard="Numeric"
+                                Text="{Binding Age, Mode=TwoWay}">
                                 <Entry.Behaviors>
                                     <behaviors:NumericIntValidationBehavior />
                                 </Entry.Behaviors>
                             </Entry>
 
-                            <Label FontSize="Small" Text="Height" />
+                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.Height}" />
                             <Entry
-                                    FontSize="Medium"
-                                    Keyboard="Numeric"
-                                    Text="{Binding Height, Mode=TwoWay}">
+                                FontSize="Medium"
+                                Keyboard="Numeric"
+                                Text="{Binding Height, Mode=TwoWay}">
                                 <Entry.Behaviors>
                                     <behaviors:NumericIntValidationBehavior />
                                 </Entry.Behaviors>
                             </Entry>
-                            <Label FontSize="Small" Text="Sex" />
+                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.Sex}" />
                             <HorizontalStackLayout>
                                 <RadioButton
                                     CheckedChanged="SexRadioSetToFemale"
-                                    Content="Female"
+                                    Content="{x:Static localization:AppSnippets.Female}"
                                     GroupName="Sex"
                                     IsChecked="{Binding IsFemaleSelected}"
                                     Value="0" />
                                 <RadioButton
                                     CheckedChanged="SexRadioSetToMale"
-                                    Content="Male"
+                                    Content="{x:Static localization:AppSnippets.Male}"
                                     GroupName="Sex"
                                     IsChecked="{Binding IsMaleSelected}"
                                     Value="1" />
                             </HorizontalStackLayout>
 
-                            <Label FontSize="Small" Text="Scale Model" />
+                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.ScaleModel}" />
                             <RadioButton
                                 CheckedChanged="ScaleTypeSetToBodyCompositionScale"
-                                Content="Mi Body Composition Scale 1 / 2"
+                                Content="{x:Static localization:AppSnippets.MiBodyCompositionScale}"
                                 GroupName="ScaleType"
                                 IsChecked="{Binding IsMiBodyCompositionScaleSelected}"
                                 Value="0" />
                             <RadioButton
                                 CheckedChanged="ScaleTypeSetToMiscale"
-                                Content="Mi Smart Scale"
+                                Content="{x:Static localization:AppSnippets.MiScale}"
                                 GroupName="ScaleType"
                                 IsChecked="{Binding IsMiSmartScaleSelected}"
                                 Value="1" />
-                            <Label FontSize="Small" Text="Bluetooth Address" />
+                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.BluetoothAddress}" />
                             <Entry FontSize="Medium" Text="{Binding Address, Mode=TwoWay}" />
 
                         </StackLayout>
@@ -105,21 +106,21 @@
                             <Label
                                 FontAttributes="Bold"
                                 FontSize="Small"
-                                Text="Garmin Settings" />
+                                Text="{x:Static localization:AppSnippets.GarminSettings}" />
                             <BoxView
                                 HeightRequest="2"
                                 HorizontalOptions="Fill"
                                 Color="Gray" />
-                            <Label FontSize="Small" Text="Email" />
+                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.Email}" />
                             <Entry
-                                    FontSize="Medium"
-                                    Keyboard="Email"
-                                    Text="{Binding Email, Mode=TwoWay}" />
-                            <Label FontSize="Small" Text="Password" />
+                                FontSize="Medium"
+                                Keyboard="Email"
+                                Text="{Binding Email, Mode=TwoWay}" />
+                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.Password}" />
                             <Entry
-                                    FontSize="Medium"
-                                    IsPassword="True"
-                                    Text="{Binding Password, Mode=TwoWay}" />
+                                FontSize="Medium"
+                                IsPassword="True"
+                                Text="{Binding Password, Mode=TwoWay}" />
 
                         </StackLayout>
                     </Border>
@@ -134,13 +135,13 @@
                             <Label
                                 FontAttributes="Bold"
                                 FontSize="Small"
-                                Text="App Settings" />
+                                Text="{x:Static localization:AppSnippets.AppSettings}" />
                             <BoxView
                                 HeightRequest="2"
                                 HorizontalOptions="Fill"
                                 Color="Gray" />
 
-                            <Label FontSize="Small" Text="Alternate External API Address" />
+                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.AlternateExternalAPIAddress}" />
                             <Entry FontSize="Medium" Text="{Binding ApiAddress, Mode=TwoWay}" />
                             <Grid HorizontalOptions="FillAndExpand" VerticalOptions="Start">
                                 <Grid.RowDefinitions>
@@ -162,7 +163,7 @@
                                     Grid.Row="0"
                                     Grid.Column="1"
                                     FontSize="Small"
-                                    Text="Use External API"
+                                    Text="{x:Static localization:AppSnippets.UseExternalAPI}"
                                     VerticalOptions="Center" />
                                 <CheckBox
                                     Grid.Row="1"
@@ -173,7 +174,7 @@
                                     Grid.Row="1"
                                     Grid.Column="1"
                                     FontSize="Small"
-                                    Text="One click - Scan &amp; Upload"
+                                    Text="{x:Static localization:AppSnippets.OneClickScanUpload}"
                                     VerticalOptions="Center" />
                                 <CheckBox
                                     Grid.Row="2"
@@ -184,7 +185,7 @@
                                     Grid.Row="2"
                                     Grid.Column="1"
                                     FontSize="Small"
-                                    Text="Show Debug Info during scan"
+                                    Text="{x:Static localization:AppSnippets.ShowDebug}"
                                     VerticalOptions="Center" />
 
                             </Grid>
@@ -192,7 +193,7 @@
                                 Margin="0,10,0,10"
                                 BackgroundColor="{StaticResource Primary}"
                                 Command="{Binding ResetCommand}"
-                                Text="Reset to Default"
+                                Text="{x:Static localization:AppSnippets.ResetToDefault}"
                                 TextColor="White" />
 
 

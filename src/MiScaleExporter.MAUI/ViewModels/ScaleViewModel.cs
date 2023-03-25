@@ -1,6 +1,7 @@
 ﻿using MiScaleExporter.Models;
 using MiScaleExporter.Services;
 using MiScaleExporter.Permission;
+using MiScaleExporter.MAUI.Resources.Localization;
 
 namespace MiScaleExporter.MAUI.ViewModels
 {
@@ -22,7 +23,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             _scale = scale;
             _logService = logService;
 
-            Title = "Mi Scale Data";
+            Title = AppSnippets.MiScaleData;
             CancelCommand = new Command(OnCancel);
             StopCommand = new Command(OnStop);
         }
@@ -71,15 +72,15 @@ namespace MiScaleExporter.MAUI.ViewModels
                 {
                     if (await GetBluetoothPermissionStatusAsync() != PermissionStatus.Granted)
                     {
-                        await Application.Current.MainPage.DisplayAlert("Problem", "Permission to use Bluetooth is required to scan.",
-                           "OK");
+                        await Application.Current.MainPage.DisplayAlert(AppSnippets.Problem, AppSnippets.PermissionBluetoothRequired,
+                           AppSnippets.OK);
                         return false;
                     }
 
                     if (await GetLocationWhenInUsePermissionStatusAsync() != PermissionStatus.Granted)
                     {
-                        await Application.Current.MainPage.DisplayAlert("Problem", "Permission to use Location (Bluetooth) is required to scan.",
-                            "OK");
+                        await Application.Current.MainPage.DisplayAlert(AppSnippets.Problem, AppSnippets.PermissionLocationRequired,
+                             AppSnippets.OK);
                         return false;
                     }
                 }
@@ -89,8 +90,8 @@ namespace MiScaleExporter.MAUI.ViewModels
                     {
                         if(await GetLocationAlwaysPermissionStatusAsync() != PermissionStatus.Granted)
                         {
-                            await Application.Current.MainPage.DisplayAlert("Problem", "Permission to use  Location (Bluetooth) is required to scan.",
-                           "OK");
+                            await Application.Current.MainPage.DisplayAlert(AppSnippets.Problem, AppSnippets.PermissionLocationRequired,
+                            AppSnippets.OK);
                             return false;
                         }
                     }
@@ -118,11 +119,11 @@ namespace MiScaleExporter.MAUI.ViewModels
             this.IsBusyForm = false;
             if (this._scale.BodyComposition is null || !this._scale.BodyComposition.IsValid)
             {
-                var msg = "Data could not be obtained. try again";
-                await Application.Current.MainPage.DisplayAlert("Problem", msg,
-                    "OK");
+                var msg = AppSnippets.DataCouldNotBeObtained;
+                await Application.Current.MainPage.DisplayAlert(AppSnippets.Problem, msg,
+                    AppSnippets.OK);
                 _logService.LogError(msg);
-                ScanningLabel = "Not found";
+                ScanningLabel = AppSnippets.NotFound;
             }
             else
             {

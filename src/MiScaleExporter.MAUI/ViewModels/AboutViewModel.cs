@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using MiScaleExporter.MAUI.Resources.Localization;
+using System.Windows.Input;
  
  
 
@@ -8,7 +9,7 @@ public class AboutViewModel : BaseViewModel
 {
     public AboutViewModel()
     {
-        this.Title = "Mi Scale Exporter";
+        this.Title = AppSnippets.MiScaleExporter;
         GoToScanCommand = new Command(async () =>
             await Shell.Current.GoToAsync("///ScalePage"));
         OpenGithubCommand = new Command(async () =>

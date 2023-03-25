@@ -5,8 +5,9 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:behaviors="clr-namespace:MiScaleExporter.MAUI.Behaviors;assembly=MiScaleExporter.MAUI"
-    xmlns:vm="clr-namespace:MiScaleExporter.MAUI.ViewModels"
+    xmlns:localization="clr-namespace:MiScaleExporter.MAUI.Resources.Localization"
     xmlns:models="clr-namespace:MiScaleExporter.Models"
+    xmlns:vm="clr-namespace:MiScaleExporter.MAUI.ViewModels"
     Title="{Binding Title}">
     <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
         <Grid
@@ -48,13 +49,13 @@
                         Margin="0,10,0,0"
                         BackgroundColor="{StaticResource Primary}"
                         Command="{Binding StopCommand}"
-                        Text="Stop Measure"
+                        Text="{x:Static localization:AppSnippets.StopMeasure}"
                         TextColor="White" />
                     <Button
                         Margin="0,10,0,0"
                         BackgroundColor="{StaticResource Primary}"
                         Command="{Binding CancelCommand}"
-                        Text="Cancel Search"
+                        Text="{x:Static localization:AppSnippets.CancelSearch}"
                         TextColor="White" />
                 </StackLayout>
             </ScrollView>
@@ -73,7 +74,7 @@
 
                     <Label
                         HorizontalOptions="Center"
-                        Text="Scanning..."
+                        Text="{x:Static localization:AppSnippets.Scanning}"
                         TextColor="Black" />
                 </StackLayout>
 
