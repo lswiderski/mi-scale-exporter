@@ -120,6 +120,9 @@
 	  <MauiXaml Update="Views\FormPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\HelpPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\ScalePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

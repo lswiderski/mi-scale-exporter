@@ -8,6 +8,6 @@
             Margin="10"
             FontSize="Small"
             HorizontalOptions="Center"
-            Text="Created by Lukasz Swiderski 2023, v2.0.3" />
+            Text="Created by Lukasz Swiderski 2023" />
     </VerticalStackLayout>
 </ContentView>

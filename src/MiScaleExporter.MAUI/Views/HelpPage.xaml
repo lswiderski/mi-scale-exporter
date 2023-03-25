@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="MiScaleExporter.MAUI.Views.HelpPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Help">
+    <ScrollView VerticalScrollBarVisibility="Always">
+        <StackLayout
+            Padding="15,24,15,24"
+            Orientation="Vertical"
+            Spacing="10">
+            <Label
+                FontAttributes="Bold"
+                FontSize="Small"
+                Text="1. How to connect to the scale" />
+            <Label
+                Padding="15,0,0,0"
+                FontSize="Small"
+                Text="Set the Bluetooth address of the scale in settings. Set the correct age/height/gender values. Measure yourself. The scale is active for up to 15 minutes after measurement." />
+            <Label
+                Padding="15,0,0,0"
+                FontSize="Small"
+                Text="Bluetooth address can be found in Zepp Life &gt; Profile &gt; My devices &gt; Mi Body Composition Scale &gt; Bluetooth address (hold to copy)" />
+            <Image Source="Images/xiaomi.jpg" />
+            <Label
+                FontAttributes="Bold"
+                FontSize="Small"
+                Text="2. How It works" />
+            <Label
+                Padding="15,0,0,0"
+                FontSize="Small"
+                Text="This App pass your data, email and password directly to Garmin Cloud or via external API server. The API does not store or log anything, it's just a middleware between this App and Garmin services." />
+            <Label
+                FontAttributes="Bold"
+                FontSize="Small"
+                Text="3. Strange results? (Like 10kg only)" />
+            <Label
+                Padding="15,0,0,0"
+                FontSize="Small"
+                Text="If you have the Mi Body Composition Scale 2. Disable the 'Weight small object' option in Zepp Life" />
+            <Label
+                FontAttributes="Bold"
+                FontSize="Small"
+                Text="4. Results different from Zepp Life" />
+            <Label
+                Padding="15,0,0,0"
+                FontSize="Small"
+                Text="Please check the age/height/gender parameters - should be identical in both apps. But even then, the values may be slightly different because we do not use the exact algorithm used by Xiaomi, but an alternative open source algorithm." />
+            <Label
+                FontAttributes="Bold"
+                FontSize="Small"
+                Text="5. Cannot Sync. Missing Cookies" />
+            <Label
+                Padding="15,0,0,0"
+                FontSize="Small"
+                Text="You probably have 2FA enabled. It's not supported. Please turn it off if you want to use this application." />
+            <Label
+                FontAttributes="Bold"
+                FontSize="Small"
+                Text="6. External Api" />
+            <Label
+                Padding="15,0,0,0"
+                FontSize="Small"
+                Text="External API is used as a proxy for older Android phones (9 or lower). The default address is https://frog01-20364.wykr.es/. You can host your own version of the API and this app will send the data to your system instead of Garmin. Check out the project repository for more information." />
+
+            <Label
+                FontAttributes="Bold"
+                FontSize="Small"
+                Text="7. Garmin and Xiaomi" />
+            <Label
+                Padding="15,0,0,0"
+                FontSize="Small"
+                Text="This application is an open source community project and I have no affiliation with Garmin or Xiaomi. You use it at your own risk. You can always check out the source code on Github." />
+            <Label
+                FontAttributes="Bold"
+                FontSize="Small"
+                Text="8. Feedback &amp; Contact" />
+            <Label
+                Padding="15,0,0,0"
+                FontSize="Small"
+                Text="If you found a bug, need a feature or have an idea, share it with me at the project repository." />
+            <Button
+                Margin="0,10,0,0"
+                BackgroundColor="{StaticResource Primary}"
+                Command="{Binding OpenGithubCommand}"
+                Text="Visit project repository"
+                TextColor="White" />
+            <Label
+                FontAttributes="Bold"
+                FontSize="Small"
+                Text="9. Coffee" />
+            <Label
+                Padding="15,0,0,0"
+                FontSize="Small"
+                Text="Keep in mind that this is my hobby project. It was created for my inner needs and I believe it may be useful to others as well. I do not receive any compensation for creating and maintaining this project. If you want to support the development or thank me, you can buy me a coffee." />
+
+            <Button
+                Margin="0,10,0,0"
+                BackgroundColor="{StaticResource Primary}"
+                Command="{Binding OpenCoffeeCommand}"
+                Text="Buy me a coffee"
+                TextColor="White" />
+
+            <Label
+                Margin="10"
+                FontSize="Small"
+                HorizontalOptions="Center"
+                Text="Created by Lukasz Swiderski 2023" />
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

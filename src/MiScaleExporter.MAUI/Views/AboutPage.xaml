@@ -15,20 +15,18 @@
         </Grid.RowDefinitions>
         <ScrollView Grid.Row="0">
             <StackLayout
-                Padding="30,24,30,24"
+                Padding="15,24,15,24"
                 Orientation="Vertical"
                 Spacing="10">
                 <Label FontSize="Small" Text="This application is an open source community project and I have no affiliation with Garmin." />
                 <Label FontSize="Small" Text="Set the bluetooth address of the scale, and your data in the settings. Stand on your scale. Measure yourself. Mi Body Composition Scale is active up to 15 min after the measurement." />
                 <Label FontSize="Small" Text="Then you can review your data and upload it to Garmin Cloud. If you do not have Mi scale and just want to manually insert the data, you can so." />
-                <Label FontSize="Small" Text="This App pass your data, email and password directly to Garmin Cloud or via external API server. The API does not store or log anything, it's just a middleware between this App and Garmin services." />
-                <Label FontSize="Small" Text="Both has open sources and you can audit it any time. And if you want, you can host your own API server. Just change the server address in Settings." />
 
             </StackLayout>
         </ScrollView>
         <ScrollView Grid.Row="1">
             <StackLayout
-                Padding="30,24,30,24"
+                Padding="15,24,15,24"
                 Orientation="Vertical"
                 Spacing="10">
 
@@ -41,14 +39,21 @@
                 <Button
                     Margin="0,10,0,0"
                     BackgroundColor="{StaticResource Primary}"
-                    Command="{Binding OpenGithubCommand}"
-                    Text="Visit project repository"
+                    Command="{Binding OpenHelpCommand}"
+                    Text="Open Help"
                     TextColor="White" />
+                <Label FontSize="Small" Text="Do you like this app and would you like to support it?" />
                 <Button
                     Margin="0,10,0,0"
                     BackgroundColor="{StaticResource Primary}"
                     Command="{Binding OpenCoffeeCommand}"
                     Text="Buy me a coffee"
+                    TextColor="White" />
+                <Button
+                    Margin="0,10,0,0"
+                    BackgroundColor="{StaticResource Primary}"
+                    Command="{Binding OpenGithubCommand}"
+                    Text="Visit project repository"
                     TextColor="White" />
 
             </StackLayout>

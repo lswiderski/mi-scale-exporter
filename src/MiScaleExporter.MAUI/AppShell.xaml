@@ -134,5 +134,16 @@
         </FlyoutItem.Icon>
         <ShellContent ContentTemplate="{DataTemplate local:SettingPage}" Route="Settings" />
     </FlyoutItem>
+    <FlyoutItem Title="Help">
+        <FlyoutItem.Icon>
+            <FontImageSource
+                FontFamily="FontAwesome6Solid"
+                Glyph=""
+                Size="16"
+                Color="{AppThemeBinding Light={StaticResource Black},
+                                        Dark={StaticResource White}}" />
+        </FlyoutItem.Icon>
+        <ShellContent ContentTemplate="{DataTemplate local:HelpPage}" Route="HelpPage" />
+    </FlyoutItem>
 
 </Shell>
