@@ -61,6 +61,33 @@ namespace MiScaleExporter.MAUI.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This application is an open source community project and I have no affiliation with Garmin..
+        /// </summary>
+        internal static string AboutGarmin {
+            get {
+                return ResourceManager.GetString("AboutGarmin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set the bluetooth address of the scale, and your data in the settings. Stand on your scale. Measure yourself. Mi Body Composition Scale is active up to 15 min after the measurement..
+        /// </summary>
+        internal static string AboutMeasureInstruction {
+            get {
+                return ResourceManager.GetString("AboutMeasureInstruction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Then you can review your data and upload it to Garmin Cloud. If you do not have Mi scale and just want to manually insert the data, you can so..
+        /// </summary>
+        internal static string AboutUpload {
+            get {
+                return ResourceManager.GetString("AboutUpload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Age.
         /// </summary>
         internal static string Age {

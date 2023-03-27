@@ -117,7 +117,250 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AboutGarmin" xml:space="preserve">
+    <value>Ta aplikacja jest projektem społeczności open source i nie ma żadnych powiązań z firmą Garmin.</value>
+  </data>
+  <data name="AboutMeasureInstruction" xml:space="preserve">
+    <value>Ustaw w ustawieniach adres bluetooth wagi, oraz swoje dane. Stań na swojej wadze. Zmierz się. Mi Body Composition Scale jest aktywna do 15 min po dokonaniu pomiaru.</value>
+  </data>
+  <data name="AboutUpload" xml:space="preserve">
+    <value>Następnie możesz przejrzeć swoje dane i przesłać je do Garmin Cloud. Jeśli nie masz wagi Mi Scale i możesz po prostu ręcznie wprowadzić dane i przesłac je do Garmin Connect.</value>
+  </data>
+  <data name="Age" xml:space="preserve">
+    <value>Wiek</value>
+  </data>
+  <data name="AlternateExternalAPIAddress" xml:space="preserve">
+    <value>Alternatywny zewnętrzny adres API</value>
+  </data>
+  <data name="AppSettings" xml:space="preserve">
+    <value>Ustawienia aplikacji</value>
+  </data>
+  <data name="BasalMetabolosimKCal" xml:space="preserve">
+    <value>Metabolizm podstawowy (kCal):</value>
+  </data>
+  <data name="BluetoothAddress" xml:space="preserve">
+    <value>Adres Bluetooth</value>
+  </data>
+  <data name="BMI" xml:space="preserve">
+    <value>BMI</value>
+  </data>
+  <data name="BodyAgeYears" xml:space="preserve">
+    <value>Wiek ciała (w latach)</value>
+  </data>
+  <data name="BodyFatPercent" xml:space="preserve">
+    <value>Tłuszcz w organizmie (%)</value>
+  </data>
+  <data name="BodyType" xml:space="preserve">
+    <value>Typ Ciała</value>
+  </data>
+  <data name="BoneMassPercent" xml:space="preserve">
+    <value>Masa kostna (Kg)</value>
+  </data>
+  <data name="BuyMeACoffee" xml:space="preserve">
+    <value>Postaw mi kawę</value>
+  </data>
+  <data name="CancelSearch" xml:space="preserve">
+    <value>Anuluj wyszukiwanie</value>
+  </data>
+  <data name="CreatedBy" xml:space="preserve">
+    <value>Stworzone przez Łukasza Świderskiego 2023</value>
+  </data>
+  <data name="DataCouldNotBeObtained" xml:space="preserve">
+    <value>Nie udało się uzyskać danych. Spróbuj ponownie</value>
+  </data>
+  <data name="DoYouLikeAndWouldYouLikeToSupport" xml:space="preserve">
+    <value>Czy podoba Ci się ta aplikacja i chciałbyś ją wesprzeć?</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Female" xml:space="preserve">
+    <value>Kobieta</value>
+  </data>
+  <data name="GarminBodyCompositionForm" xml:space="preserve">
+    <value>Formularz składu ciała Garmin</value>
+  </data>
+  <data name="GarminForm" xml:space="preserve">
+    <value>Formularz Garmin</value>
+  </data>
+  <data name="GarminSettings" xml:space="preserve">
+    <value>Ustawienia Garmin</value>
+  </data>
   <data name="GoToScan" xml:space="preserve">
-    <value>GoToScan</value>
+    <value>Przejdź do skanowania</value>
+  </data>
+  <data name="Height" xml:space="preserve">
+    <value>Wzrost</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Pomoc</value>
+  </data>
+  <data name="HelpCannotSync2FA" xml:space="preserve">
+    <value>5. Nie można zsynchronizować. Brakujące ciasteczka</value>
+  </data>
+  <data name="HelpCannotSync2FADescription" xml:space="preserve">
+    <value>Prawdopodobnie masz włączone 2FA. To nie jest obsługiwane. Jeśli chcesz korzystać z tej aplikacji, musisz je wyłączyć.</value>
+  </data>
+  <data name="HelpCoffee" xml:space="preserve">
+    <value>9. Kawa</value>
+  </data>
+  <data name="HelpCoffeeDescription" xml:space="preserve">
+    <value>Należy pamiętać, że jest to mój projekt hobbystyczny. Został on stworzony dla moich wewnętrznych potrzeb i wierzę, że może być przydatny również dla innych. Nie otrzymuję żadnego wynagrodzenia za stworzenie i utrzymanie tego projektu. Jeśli chcesz wesprzeć rozwój lub podziękować mi, możesz postawić mi kawę.</value>
+  </data>
+  <data name="HelpConnect" xml:space="preserve">
+    <value>1. Jak podłączyć się do wagi</value>
+  </data>
+  <data name="HelpConnectDescription" xml:space="preserve">
+    <value>Ustawić adres Bluetooth wagi w ustawieniach. Ustaw prawidłowe wartości wieku/wzrostu/płci. Zmierz się. Waga jest aktywna i wysyła wyniki do 15 minut po pomiarze.</value>
+  </data>
+  <data name="HelpConnectDescription2" xml:space="preserve">
+    <value>Adres Bluetooth można znaleźć w Zepp Life &gt; Profil &gt; Moje urządzenia &gt; Mi Body Composition Scale &gt; Adres Bluetooth (przytrzymaj, aby skopiować)</value>
+  </data>
+  <data name="HelpExternalApi" xml:space="preserve">
+    <value>6. Zewnętrzne Api</value>
+  </data>
+  <data name="HelpExternalApiDescription" xml:space="preserve">
+    <value>Zewnętrzny interfejs API jest używany jako proxy dla starszych telefonów z systemem Android (9 lub niższy). Domyślny adres to https://frog01-20364.wykr.es/. Możesz hostować własną wersję API, a ta aplikacja wyśle dane do twojego systemu zamiast do Garmina. Sprawdź repozytorium projektu, aby uzyskać więcej informacji.</value>
+  </data>
+  <data name="HelpFeedback" xml:space="preserve">
+    <value>8. Informacje zwrotne i kontakt</value>
+  </data>
+  <data name="HelpFeedbackDescription" xml:space="preserve">
+    <value>Jeśli znalazłeś błąd, potrzebujesz jakiejś funkcji lub masz pomysł, podziel się nim ze mną w repozytorium projektu.</value>
+  </data>
+  <data name="HelpGarminAndXiaomi" xml:space="preserve">
+    <value>7. Garmin i Xiaomi</value>
+  </data>
+  <data name="HelpGarminAndXiaomiDescription" xml:space="preserve">
+    <value>Ta aplikacja jest otwarto-źródłowym projektem społeczności i nie ma żadnych powiązań z Garminem lub Xiaomi. Używasz jej na własne ryzyko. Zawsze możesz sprawdzić kod źródłowy na Githubie.</value>
+  </data>
+  <data name="HelpHowItWorks" xml:space="preserve">
+    <value>2. Jak to działa</value>
+  </data>
+  <data name="HelpHowItWorksDescription" xml:space="preserve">
+    <value>Ta aplikacja przekazuje Twoje dane, email i hasło bezpośrednio do Garmin Cloud lub poprzez zewnętrzny serwer API. API nie przechowuje ani nie rejestruje niczego, jest to tylko pośrednikiem pomiędzy aplikacją a usługami firmy Garmin.</value>
+  </data>
+  <data name="HelpStrangeResults" xml:space="preserve">
+    <value>3. Dziwne wyniki? (Np zwraca małe wartości jak 10kg)</value>
+  </data>
+  <data name="HelpStrangeResultsDescription" xml:space="preserve">
+    <value>Jeśli posiadasz Mi Body Composition Scale 2. Wyłącz opcję "Waż mały obiekt" w Zepp Life</value>
+  </data>
+  <data name="HelpZeppLifeDriference" xml:space="preserve">
+    <value>4. Wyniki różne od Zepp Life</value>
+  </data>
+  <data name="HelpZeppLifeDriferenceDescription" xml:space="preserve">
+    <value>Sprawdź parametry wieku/wzrostui/płci - powinny być identyczne w obu aplikacjach. Ale nawet wtedy wartości mogą być nieco inne, ponieważ nie używamy dokładnie takiego samego algorytmu jak  Xiaomi, ale alternatywnego algorytmu open source.</value>
+  </data>
+  <data name="IdealWeightKg" xml:space="preserve">
+    <value>Idealna masa ciała (Kg):</value>
+  </data>
+  <data name="Male" xml:space="preserve">
+    <value>Mężczyzna</value>
+  </data>
+  <data name="MiBodyCompositionScale" xml:space="preserve">
+    <value>Mi Body Composition Scale 1 / 2</value>
+  </data>
+  <data name="MiScale" xml:space="preserve">
+    <value>Mi Scale</value>
+  </data>
+  <data name="MiScaleData" xml:space="preserve">
+    <value>Dane Mi Scale</value>
+  </data>
+  <data name="MiScaleExporter" xml:space="preserve">
+    <value>Mi Scale Exporter</value>
+  </data>
+  <data name="MiSmartScale" xml:space="preserve">
+    <value>Mi Smart Scale</value>
+  </data>
+  <data name="MuscleMassKg" xml:space="preserve">
+    <value>Masa mięśniowa (Kg)</value>
+  </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>Nie znaleziono</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="OneClickScanUpload" xml:space="preserve">
+    <value>Jedno kliknięcie - skanowanie i przesyłanie</value>
+  </data>
+  <data name="OpenHelp" xml:space="preserve">
+    <value>Otwórz pomoc</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Hasło</value>
+  </data>
+  <data name="PermissionBluetoothRequired" xml:space="preserve">
+    <value>Do skanowania wymagana jest zgoda na korzystanie z Bluetooth.</value>
+  </data>
+  <data name="PermissionLocationRequired" xml:space="preserve">
+    <value>Do skanowania wymagane jest pozwolenie na korzystanie z funkcji Lokalizacji (Bluetooth).</value>
+  </data>
+  <data name="Problem" xml:space="preserve">
+    <value>Problem</value>
+  </data>
+  <data name="ProteinPercent" xml:space="preserve">
+    <value>Białko (%):</value>
+  </data>
+  <data name="ResetToDefault" xml:space="preserve">
+    <value>Przywrócenie ustawień domyślnych</value>
+  </data>
+  <data name="Response" xml:space="preserve">
+    <value>Odpowiedź</value>
+  </data>
+  <data name="ScaleModel" xml:space="preserve">
+    <value>Model Wagi</value>
+  </data>
+  <data name="ScaleSettings" xml:space="preserve">
+    <value>Ustawienia wagi</value>
+  </data>
+  <data name="Scanning" xml:space="preserve">
+    <value>Skanowanie...</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Ustawienia</value>
+  </data>
+  <data name="Sex" xml:space="preserve">
+    <value>Płeć</value>
+  </data>
+  <data name="ShowDebug" xml:space="preserve">
+    <value>Pokaż informacje debug podczas skanowania</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="StopMeasure" xml:space="preserve">
+    <value>Zatrzymaj pomiar</value>
+  </data>
+  <data name="TimeOfMeasurement" xml:space="preserve">
+    <value>Czas pomiaru</value>
+  </data>
+  <data name="Uploaded" xml:space="preserve">
+    <value>Przesłano</value>
+  </data>
+  <data name="Uploading" xml:space="preserve">
+    <value>Wysyłanie...</value>
+  </data>
+  <data name="UploadToGarminCloud" xml:space="preserve">
+    <value>Prześlij do usługi Garmin Cloud</value>
+  </data>
+  <data name="UseExternalAPI" xml:space="preserve">
+    <value>Użyj zewnętrznego API</value>
+  </data>
+  <data name="ValuesThatWillNotBeSentToTheCloud" xml:space="preserve">
+    <value>Wartości, które nie będą wysyłane do chmury:</value>
+  </data>
+  <data name="VisceralFat" xml:space="preserve">
+    <value>Tłuszcz trzewny</value>
+  </data>
+  <data name="VisitProjectRepository" xml:space="preserve">
+    <value>Odwiedź repozytorium projektu</value>
+  </data>
+  <data name="WaterPercent" xml:space="preserve">
+    <value>Woda (%)</value>
+  </data>
+  <data name="WeightKg" xml:space="preserve">
+    <value>Waga (Kg)</value>
   </data>
 </root>
