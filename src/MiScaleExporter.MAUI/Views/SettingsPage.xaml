@@ -148,6 +148,7 @@
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
 
                                 <Grid.ColumnDefinitions>
@@ -186,6 +187,17 @@
                                     Grid.Column="1"
                                     FontSize="Small"
                                     Text="{x:Static localization:AppSnippets.ShowDebug}"
+                                    VerticalOptions="Center" />
+                                <CheckBox
+                                    Grid.Row="3"
+                                    Grid.Column="0"
+                                    IsChecked="{Binding HideAds, Mode=TwoWay}"
+                                    VerticalOptions="Center" />
+                                <Label
+                                    Grid.Row="3"
+                                    Grid.Column="1"
+                                    FontSize="Small"
+                                    Text="{x:Static localization:AppSnippets.SettingsHideAds}"
                                     VerticalOptions="Center" />
 
                             </Grid>

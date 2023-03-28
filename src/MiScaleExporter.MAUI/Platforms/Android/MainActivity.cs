@@ -4,6 +4,8 @@ using Android.OS;
 using Android.Runtime;
 using MiScaleExporter.Droid;
 using MiScaleExporter.Permission;
+using Plugin.MauiMTAdmob;
+
 namespace MiScaleExporter.MAUI
 {
     [Activity(Label = "MiScale Exporter", Theme = "@style/Maui.SplashTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize | ConfigChanges.Density)]
@@ -14,6 +16,7 @@ namespace MiScaleExporter.MAUI
             base.OnCreate(savedInstanceState);
 
             Platform.Init(this, savedInstanceState);
+            CrossMauiMTAdmob.Current.UserPersonalizedAds = false;
             DependencyService.Register<IBluetoothConnectPermission, BluetoothConnectPermission>();
             // LoadApplication(app);
         }

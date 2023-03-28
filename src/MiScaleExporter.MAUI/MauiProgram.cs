@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui;
+using Plugin.MauiMTAdmob;
 
 namespace MiScaleExporter.MAUI
 {
@@ -13,7 +14,8 @@ namespace MiScaleExporter.MAUI
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 fonts.AddFont("FontAwesome6Regular.otf", "FontAwesome6Regular");
                 fonts.AddFont("FontAwesome6Solid.otf", "FontAwesome6Solid");
-            }).UseMauiCommunityToolkit();
+            }).UseMauiCommunityToolkit()
+             .UseMauiMTAdmob();
             return builder.Build();
         }
     }

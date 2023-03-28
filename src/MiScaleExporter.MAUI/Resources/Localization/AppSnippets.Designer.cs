@@ -673,6 +673,15 @@ namespace MiScaleExporter.MAUI.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hide Ads Banner.
+        /// </summary>
+        internal static string SettingsHideAds {
+            get {
+                return ResourceManager.GetString("SettingsHideAds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sex.
         /// </summary>
         internal static string Sex {

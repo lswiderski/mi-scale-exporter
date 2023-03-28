@@ -321,6 +321,9 @@
   <data name="Settings" xml:space="preserve">
     <value>Ustawienia</value>
   </data>
+  <data name="SettingsHideAds" xml:space="preserve">
+    <value>Schowaj reklamy</value>
+  </data>
   <data name="Sex" xml:space="preserve">
     <value>Płeć</value>
   </data>

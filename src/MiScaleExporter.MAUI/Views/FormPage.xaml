@@ -5,6 +5,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:behaviors="clr-namespace:MiScaleExporter.MAUI.Behaviors;assembly=MiScaleExporter.MAUI"
+    xmlns:controls="clr-namespace:Plugin.MauiMTAdmob.Controls;assembly=Plugin.MauiMTAdmob"
     xmlns:localization="clr-namespace:MiScaleExporter.MAUI.Resources.Localization"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     Title="{Binding Title}">
@@ -37,7 +38,20 @@
                     <ColumnDefinition Width="50*" />
                 </Grid.ColumnDefinitions>
 
-                <StackLayout Grid.Row="0" Grid.Column="0">
+                <StackLayout
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Padding="10"
+                    Orientation="Vertical">
+                    <controls:MTAdView
+                        x:Name="adMobBanner"
+                        AdSize="Banner"
+                        AdsId="ca-app-pub-3940256099942544/6300978111" />
+                    <!--  Test Banner ID  -->
+                </StackLayout>
+
+                <StackLayout Grid.Row="1" Grid.Column="0">
                     <Label FontSize="Small" Text="{x:Static localization:AppSnippets.WeightKg}" />
                     <Entry
                         FontSize="Medium"
@@ -49,7 +63,7 @@
                     </Entry>
                 </StackLayout>
 
-                <StackLayout Grid.Row="0" Grid.Column="1">
+                <StackLayout Grid.Row="1" Grid.Column="1">
                     <Label FontSize="Small" Text="{x:Static localization:AppSnippets.BMI}" />
                     <Entry
                         FontSize="Medium"
@@ -61,7 +75,7 @@
                     </Entry>
                 </StackLayout>
 
-                <StackLayout Grid.Row="1" Grid.Column="0">
+                <StackLayout Grid.Row="2" Grid.Column="0">
                     <Label FontSize="Small" Text="{x:Static localization:AppSnippets.BodyFatPercent}" />
 
                     <Entry
@@ -73,7 +87,7 @@
                         </Entry.Behaviors>
                     </Entry>
                 </StackLayout>
-                <StackLayout Grid.Row="1" Grid.Column="1">
+                <StackLayout Grid.Row="2" Grid.Column="1">
                     <Label FontSize="Small" Text="{x:Static localization:AppSnippets.MuscleMassKg}" />
 
                     <Entry
@@ -86,7 +100,7 @@
                     </Entry>
                 </StackLayout>
 
-                <StackLayout Grid.Row="2" Grid.Column="0">
+                <StackLayout Grid.Row="3" Grid.Column="0">
                     <Label FontSize="Small" Text="{x:Static localization:AppSnippets.WaterPercent}" />
 
                     <Entry
@@ -99,7 +113,7 @@
                     </Entry>
 
                 </StackLayout>
-                <StackLayout Grid.Row="2" Grid.Column="1">
+                <StackLayout Grid.Row="3" Grid.Column="1">
                     <Label FontSize="Small" Text="{x:Static localization:AppSnippets.BoneMassPercent}" />
 
                     <Entry
@@ -113,7 +127,7 @@
 
                 </StackLayout>
 
-                <StackLayout Grid.Row="3" Grid.Column="0">
+                <StackLayout Grid.Row="4" Grid.Column="0">
                     <Label FontSize="Small" Text="{x:Static localization:AppSnippets.VisceralFat}" />
 
                     <Entry
@@ -126,7 +140,7 @@
                     </Entry>
 
                 </StackLayout>
-                <StackLayout Grid.Row="3" Grid.Column="1">
+                <StackLayout Grid.Row="4" Grid.Column="1">
                     <Label FontSize="Small" Text="{x:Static localization:AppSnippets.BodyAgeYears}" />
 
                     <Entry
@@ -140,7 +154,7 @@
 
                 </StackLayout>
 
-                <StackLayout Grid.Row="4" Grid.Column="0">
+                <StackLayout Grid.Row="5" Grid.Column="0">
                     <Label FontSize="Small" Text="{x:Static localization:AppSnippets.BodyType}" />
 
                     <Entry
@@ -154,7 +168,7 @@
 
                 </StackLayout>
 
-                <StackLayout Grid.Row="4" Grid.Column="1">
+                <StackLayout Grid.Row="5" Grid.Column="1">
                     <Label FontSize="Small" Text="{x:Static localization:AppSnippets.TimeOfMeasurement}" />
 
                     <StackLayout Orientation="Horizontal">
@@ -173,7 +187,7 @@
 
 
                 <StackLayout
-                    Grid.Row="5"
+                    Grid.Row="6"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
                     IsVisible="{Binding ShowEmail}">
@@ -191,7 +205,7 @@
                 </StackLayout>
 
                 <StackLayout
-                    Grid.Row="6"
+                    Grid.Row="7"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
                     IsVisible="{Binding ShowPassword}">
@@ -207,7 +221,7 @@
 
 
                 <StackLayout
-                    Grid.Row="7"
+                    Grid.Row="8"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
                     Padding="10"
@@ -218,6 +232,7 @@
                         Command="{Binding UploadCommand}"
                         Text="{x:Static localization:AppSnippets.UploadToGarminCloud}"
                         TextColor="White" />
+
                     <StackLayout IsVisible="{Binding IsAutomaticCalculation}">
                         <Label FontSize="Small" Text="{x:Static localization:AppSnippets.ValuesThatWillNotBeSentToTheCloud}" />
                         <StackLayout Orientation="Horizontal">
@@ -235,7 +250,9 @@
                         </StackLayout>
                     </StackLayout>
 
+
                 </StackLayout>
+
 
             </Grid>
             <StackLayout

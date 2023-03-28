@@ -3,6 +3,7 @@
     x:Class="MiScaleExporter.MAUI.Views.AboutPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Plugin.MauiMTAdmob.Controls;assembly=Plugin.MauiMTAdmob"
     xmlns:localization="clr-namespace:MiScaleExporter.MAUI.Resources.Localization"
     xmlns:vm="clr-namespace:MiScaleExporter.MAUI.ViewModels"
     Title="{Binding Title}">
@@ -56,6 +57,12 @@
                     Command="{Binding OpenGithubCommand}"
                     Text="{x:Static localization:AppSnippets.VisitProjectRepository}"
                     TextColor="White" />
+                <controls:MTAdView
+                    x:Name="adMobBanner"
+                    AdSize="Banner"
+                    AdsId="ca-app-pub-3940256099942544/6300978111" />
+
+                <!--  Test Banner ID  -->
 
             </StackLayout>
         </ScrollView>
