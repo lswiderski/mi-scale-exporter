@@ -5,6 +5,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:behaviors="clr-namespace:MiScaleExporter.MAUI.Behaviors;assembly=MiScaleExporter.MAUI"
+    xmlns:controls="clr-namespace:Plugin.MauiMTAdmob.Controls;assembly=Plugin.MauiMTAdmob"
     xmlns:localization="clr-namespace:MiScaleExporter.MAUI.Resources.Localization"
     xmlns:models="clr-namespace:MiScaleExporter.Models"
     xmlns:vm="clr-namespace:MiScaleExporter.MAUI.ViewModels"
@@ -57,6 +58,10 @@
                         Command="{Binding CancelCommand}"
                         Text="{x:Static localization:AppSnippets.CancelSearch}"
                         TextColor="White" />
+                    <controls:MTAdView
+                        x:Name="adMobBanner"
+                        AdSize="Banner"
+                        AdsId="ca-app-pub-3940256099942544/6300978111" />
                 </StackLayout>
             </ScrollView>
         </Grid>
