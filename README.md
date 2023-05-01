@@ -11,6 +11,10 @@ Tested on Oneplus 5T (Android 10) and Mi Body Composition Scale (XMTZC02HM)
 - Google play: https://play.google.com/store/apps/details?id=com.lukaszswiderski.MiScaleExporter
 - APK/AAB installers: https://github.com/lswiderski/mi-scale-exporter/releases
 
+## iOS/iPadOS version
+
+Check out this web project: https://github.com/lswiderski/WebBodyComposition
+
 ## Instruction
 
 - Stand on your scale. Measure yourself. Complete the user form data, Scale Bluetooth address and get data from the scale. Mi Body Composition Scale is active up to 15 min after the measurement. (Bluetooth address can be found in Zepp Life > Profile > My devices > Mi Body Composition Scale > Bluetooth address (hold to copy)).
@@ -29,7 +33,7 @@ Tested on Oneplus 5T (Android 10) and Mi Body Composition Scale (XMTZC02HM)
 
 - Proxy API repository: https://github.com/lswiderski/bodycomposition-webapi
 
-- If you afraid of your data, you can host your own API server. Just change the server address in Settings. For now you can use default one: https://frog01-20364.wykr.es/
+- If you afraid of your data, you can host your own API server. Just change the server address in Settings. For now you can use default one: https://frog01-20364.wykr.es
 
 ## Diagram of the flow with Web Proxy
 
@@ -54,7 +58,7 @@ sequenceDiagram
 ## API Endpoint used in the app ([source](https://github.com/lswiderski/bodycomposition-webapi))
 
 ```http
-https://frog01-20364.wykr.es/
+https://frog01-20364.wykr.es
 ```
 
 ## Diagram of the flow with direct send to Garmin Cloud
