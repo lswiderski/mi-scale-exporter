@@ -108,7 +108,7 @@ sequenceDiagram
 
 ![calculated body composition](https://github.com/lswiderski/mi-scale-exporter/blob/main/resources/img/screenshots/bodycomposition.jpg)
 
-- results in Gamrin Cloud
+- results in Garmin Cloud
 
 ![garmin result](https://github.com/lswiderski/mi-scale-exporter/blob/main/resources/img/screenshots/garmin.png)
 
