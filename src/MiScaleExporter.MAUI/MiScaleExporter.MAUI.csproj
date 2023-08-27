@@ -45,16 +45,16 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-android|AnyCPU'">
-	  <ApplicationDisplayVersion>2.0.5</ApplicationDisplayVersion>
-	  <ApplicationVersion>22</ApplicationVersion>
+	  <ApplicationDisplayVersion>2.0.6</ApplicationDisplayVersion>
+	  <ApplicationVersion>23</ApplicationVersion>
 	  <AndroidUseAapt2>True</AndroidUseAapt2>
 	  <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
 	  <AndroidPackageFormat>aab</AndroidPackageFormat>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-android|AnyCPU'">
-	  <ApplicationDisplayVersion>2.0.5</ApplicationDisplayVersion>
-	  <ApplicationVersion>22</ApplicationVersion>
+	  <ApplicationDisplayVersion>2.0.6</ApplicationDisplayVersion>
+	  <ApplicationVersion>23</ApplicationVersion>
 	  <AndroidPackageFormat>aab</AndroidPackageFormat>
 	  <AndroidUseAapt2>True</AndroidUseAapt2>
 	  <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
