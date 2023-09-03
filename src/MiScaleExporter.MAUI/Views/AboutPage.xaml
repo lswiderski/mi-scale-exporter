@@ -60,10 +60,7 @@
                 <controls:MTAdView
                     x:Name="adMobBanner"
                     AdSize="Banner"
-                    AdsId="ca-app-pub-3940256099942544/6300978111" />
-
-                <!--  Test Banner ID  -->
-
+                    AdsId="ca-app-pub-1938975042085430/4160336701" />
             </StackLayout>
         </ScrollView>
     </Grid>

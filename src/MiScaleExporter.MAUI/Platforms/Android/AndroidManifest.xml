@@ -13,6 +13,6 @@
 	<uses-permission android:name="com.google.android.gms.permission.AD_ID" />
 	<uses-feature android:name="android.hardware.bluetooth_le" android:required="false" />
 	<application android:label="MiScale Exporter" android:usesCleartextTraffic="true" android:theme="@style/MainTheme" android:icon="@mipmap/launcher_foreground" android:roundIcon="@mipmap/launcher_foreground_round" android:allowBackup="false" android:requestLegacyExternalStorage="true">
-		<meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-3940256099942544~6300978111" />
+		<meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-1938975042085430~7383010816" />
 	</application>
 </manifest>
