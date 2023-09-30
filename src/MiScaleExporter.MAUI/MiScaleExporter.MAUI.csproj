@@ -45,17 +45,17 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-android|AnyCPU'">
-	  <ApplicationDisplayVersion>2.0.7</ApplicationDisplayVersion>
-	  <ApplicationVersion>24</ApplicationVersion>
+	  <ApplicationDisplayVersion>2.0.8</ApplicationDisplayVersion>
+	  <ApplicationVersion>25</ApplicationVersion>
 	  <AndroidUseAapt2>True</AndroidUseAapt2>
 	  <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
-	  <AndroidPackageFormat>aab</AndroidPackageFormat>
+	  <AndroidPackageFormat>apk</AndroidPackageFormat>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-android|AnyCPU'">
-	  <ApplicationDisplayVersion>2.0.7</ApplicationDisplayVersion>
-	  <ApplicationVersion>24</ApplicationVersion>
-	  <AndroidPackageFormat>aab</AndroidPackageFormat>
+	  <ApplicationDisplayVersion>2.0.8</ApplicationDisplayVersion>
+	  <ApplicationVersion>25</ApplicationVersion>
+	  <AndroidPackageFormat>apk</AndroidPackageFormat>
 	  <AndroidUseAapt2>True</AndroidUseAapt2>
 	  <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
 	</PropertyGroup>
@@ -86,7 +86,7 @@
 	  <PackageReference Include="Autofac" Version="6.4.0" />
 	  <PackageReference Include="Autofac.Extras.CommonServiceLocator" Version="6.0.1" />
 	  <PackageReference Include="CommunityToolkit.Maui" Version="1.3.0" />
-	  <PackageReference Include="GarminWeightScaleUploader.Library" Version="0.2.1" />
+	  <PackageReference Include="LSGarminWeightScaleUploader.Library" Version="0.3.2" />
 	  <PackageReference Include="MiScaleBodyComposition" Version="1.0.6" />
 	  <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 	  <PackageReference Include="Plugin.BLE" Version="2.1.2" />

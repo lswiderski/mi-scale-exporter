@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="24" android:versionName="2.0.7" package="com.lukaszswiderski.MiScaleExporter" android:installLocation="preferExternal">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="25" android:versionName="2.0.8" package="com.lukaszswiderski.MiScaleExporter" android:installLocation="preferExternal">
 	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="33" />
 	<uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
 	<uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
@@ -12,7 +12,7 @@
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="com.google.android.gms.permission.AD_ID" />
 	<uses-feature android:name="android.hardware.bluetooth_le" android:required="false" />
-	<application android:label="MiScale Exporter" android:usesCleartextTraffic="true" android:theme="@style/MainTheme" android:icon="@mipmap/launcher_foreground" android:roundIcon="@mipmap/launcher_foreground_round" android:allowBackup="false" android:requestLegacyExternalStorage="true">
+	<application android:label="MiScale Exporter" android:usesCleartextTraffic="true" android:theme="@style/MainTheme" android:icon="@mipmap/launcher_foreground" android:allowBackup="false" android:requestLegacyExternalStorage="true">
 		<meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-1938975042085430~7383010816" />
 	</application>
 </manifest>
