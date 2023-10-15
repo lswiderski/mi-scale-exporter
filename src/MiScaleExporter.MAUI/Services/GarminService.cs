@@ -5,10 +5,14 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using GarminWeightScaleUploader.Lib.Models;
+using Microsoft.Extensions.Logging;
 using MiScaleExporter.Models;
 using Newtonsoft.Json;
+using NLog;
+using NLog.Extensions.Logging;
 using Xamarin.Android.Net;
+using YetAnotherGarminConnectClient;
+using YetAnotherGarminConnectClient.Dto.Garmin.Fit;
 
 namespace MiScaleExporter.Services;
 
@@ -16,12 +20,20 @@ public class GarminService : IGarminService
 {
     private HttpClient _httpClient;
     private ILogService _logService;
-
+    private Microsoft.Extensions.Logging.ILogger _logger;
     private readonly string _tmpDir;
 
     public GarminService(ILogService logService)
     {
         _logService = logService;
+        var configuration = LogService.CreateLogger();
+        using (ILoggerFactory factory = LoggerFactory.Create(builder =>
+        builder.AddNLog(configuration))
+    )
+        {
+            _logger =  factory.CreateLogger<GarminService>();
+        }
+
         if (DeviceInfo.Platform == DevicePlatform.Android)
         {
             _httpClient = new HttpClient(new AndroidMessageHandler())
@@ -40,6 +52,7 @@ public class GarminService : IGarminService
         }
 
         _tmpDir = Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tmp")).FullName;
+        
     }
 
     public async Task<GarminApiResponse> UploadAsync(BodyComposition bodyComposition, DateTime time, string email, string password)
@@ -90,9 +103,28 @@ public class GarminService : IGarminService
             };
 
             var data = scaleDTO with { Email = email, Password = password };
-            var garminApiReponse = await GarminWeightScaleUploader.Lib.GarminWeightScaleUploader.UploadAsync(data, userProfileSettings);
-            result.IsSuccess = garminApiReponse;
-            return result;
+            var garminClient = await ClientFactory.Create();
+            try
+            {
+                var garminApiReponse = await garminClient.UploadWeight(data, userProfileSettings);
+                var logs = LogService.GetLogs();
+                var errorlogs = LogService.GetErrorLogs();
+
+                result.IsSuccess = garminApiReponse.IsSuccess;
+
+                if(!result.IsSuccess) {
+                    throw new Exception(garminApiReponse.ErrorLogs.FirstOrDefault());
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var logs = LogService.GetLogs();
+                var errorlogs = LogService.GetErrorLogs();
+                throw;
+            }
+            
+            
         }
         catch (Exception ex)
         {
