@@ -258,6 +258,9 @@
   <data name="Male" xml:space="preserve">
     <value>Mężczyzna</value>
   </data>
+  <data name="MFACode" xml:space="preserve">
+    <value>Kod MFA</value>
+  </data>
   <data name="MiBodyCompositionScale" xml:space="preserve">
     <value>Mi Body Composition Scale 1 / 2</value>
   </data>

@@ -23,5 +23,6 @@ namespace MiScaleExporter.Models
         public bool IsStabilized { get; set; }
         public DateTime Date { get; set; }
         public byte[] ReceivedRawData { get; set; } 
+        public string MFACode { get; set; }
     }
 }

@@ -52,6 +52,14 @@ namespace MiScaleExporter.MAUI.ViewModels
             var message = response.IsSuccess ? AppSnippets.Uploaded : response.Message;
             await Application.Current.MainPage.DisplayAlert(AppSnippets.Response, message, AppSnippets.OK);
             this.IsBusyForm = false;
+            if (response.MFARequested)
+            {
+                this.ShowMFACode = true;
+            }
+            else
+            {
+                this.ShowMFACode = false;
+            }
             // This will pop the current page off the navigation stack
             await Shell.Current.GoToAsync("..?autoUpload=false");
         }
@@ -71,6 +79,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                 BMI = DoubleValueParser.ParseValueFromUsersCulture(_bmi) ?? 0,
                 BMR = DoubleValueParser.ParseValueFromUsersCulture(_bmr) ?? 0,
                 WaterPercentage = DoubleValueParser.ParseValueFromUsersCulture(_waterPercentage) ?? 0,
+                MFACode = _mfaCode,
             };
             return bc;
         }
@@ -226,6 +235,23 @@ namespace MiScaleExporter.MAUI.ViewModels
         {
             get => _isBusyForm;
             set => SetProperty(ref _isBusyForm, value);
+        }
+
+        private bool _showMFACode;
+        public bool ShowMFACode
+        {
+            get => _showMFACode;
+            set => SetProperty(ref _showMFACode, value);
+        }
+
+        private string _mfaCode;
+        public string MFACode
+        {
+            get => _mfaCode;
+            set
+            {
+                SetProperty(ref _mfaCode, value);
+            }
         }
 
         public string Email

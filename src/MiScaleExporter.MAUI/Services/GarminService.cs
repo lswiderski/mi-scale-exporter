@@ -21,7 +21,8 @@ public class GarminService : IGarminService
     private HttpClient _httpClient;
     private ILogService _logService;
     private Microsoft.Extensions.Logging.ILogger _logger;
-    private readonly string _tmpDir;
+    private bool _garminClientAlreadyCreatedForMFA = false;
+    private IClient _garminClient;
 
     public GarminService(ILogService logService)
     {
@@ -50,8 +51,6 @@ public class GarminService : IGarminService
                 Timeout = TimeSpan.FromMinutes(5),
             };
         }
-
-        _tmpDir = Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tmp")).FullName;
         
     }
 
@@ -99,20 +98,37 @@ public class GarminService : IGarminService
                 MetabolicAge = Convert.ToByte(bodyComposition.MetabolicAge),
                 BodyMassIndex = Convert.ToSingle(bodyComposition.BMI),
                 Email = email,
-                Password = password
+                Password = password,
             };
 
-            var data = scaleDTO with { Email = email, Password = password };
-            var garminClient = await ClientFactory.Create();
+            var data = scaleDTO with { Email = email, Password = password};
+            if (!_garminClientAlreadyCreatedForMFA)
+            {
+                _garminClient = await ClientFactory.Create();
+            }
+           
             try
             {
-                var garminApiReponse = await garminClient.UploadWeight(data, userProfileSettings);
+                var garminApiReponse = await _garminClient.UploadWeight(data, userProfileSettings, bodyComposition.MFACode);
                 var logs = LogService.GetLogs();
                 var errorlogs = LogService.GetErrorLogs();
 
                 result.IsSuccess = garminApiReponse.IsSuccess;
+                result.MFARequested = garminApiReponse.MFACodeRequested;
 
-                if(!result.IsSuccess) {
+                if (result.MFARequested)
+                {
+                    result.Message = "Please provide MFA/2FA Code";
+                    _garminClientAlreadyCreatedForMFA = true;
+                }
+
+                if (result.IsSuccess)
+                {
+                    _garminClientAlreadyCreatedForMFA = false;
+                }
+
+                if (!result.IsSuccess && !result.MFARequested) {
+                   
                     throw new Exception(garminApiReponse.ErrorLogs.FirstOrDefault());
                 }
                 return result;

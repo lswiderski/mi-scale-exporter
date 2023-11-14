@@ -484,6 +484,15 @@ namespace MiScaleExporter.MAUI.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to MFA Code.
+        /// </summary>
+        internal static string MFACode {
+            get {
+                return ResourceManager.GetString("MFACode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mi Body Composition Scale 1 / 2.
         /// </summary>
         internal static string MiBodyCompositionScale {
