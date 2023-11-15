@@ -55,10 +55,14 @@ namespace MiScaleExporter.MAUI.ViewModels
             if (response.MFARequested)
             {
                 this.ShowMFACode = true;
+                this.ShowEmail = false;
+                this.ShowPassword = false;
             }
             else
             {
                 this.ShowMFACode = false;
+                this.ShowEmail = !string.IsNullOrWhiteSpace(_email);
+                this.ShowPassword = !string.IsNullOrWhiteSpace(_password);
             }
             // This will pop the current page off the navigation stack
             await Shell.Current.GoToAsync("..?autoUpload=false");
