@@ -159,6 +159,9 @@
   <data name="BuyMeACoffee" xml:space="preserve">
     <value>Buy me a coffee</value>
   </data>
+  <data name="CancelMFARequest" xml:space="preserve">
+    <value>Cancel MFA Request</value>
+  </data>
   <data name="CancelSearch" xml:space="preserve">
     <value>Cancel Search</value>
   </data>

@@ -18,6 +18,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             Date = DateTime.Now;
             Time = DateTime.Now.TimeOfDay;
             UploadCommand = new Command(OnUpload, ValidateSave);
+            CancelMFACommand = new Command(OnCancelMFA);
             this.PropertyChanged +=
                 (_, __) => UploadCommand.ChangeCanExecute();
         }
@@ -57,16 +58,27 @@ namespace MiScaleExporter.MAUI.ViewModels
                 this.ShowMFACode = true;
                 this.ShowEmail = false;
                 this.ShowPassword = false;
+                this.ExternalApiClientId = response.ExternalApiClientId;
             }
             else
             {
                 this.ShowMFACode = false;
                 this.MFACode = null;
-                this.ShowEmail = !string.IsNullOrWhiteSpace(_email);
-                this.ShowPassword = !string.IsNullOrWhiteSpace(_password);
+                this.ExternalApiClientId = null;
+                this.ShowEmail = string.IsNullOrWhiteSpace(Preferences.Get(PreferencesKeys.GarminUserEmail, string.Empty));
+                this.ShowPassword = string.IsNullOrWhiteSpace(await SecureStorage.GetAsync(PreferencesKeys.GarminUserPassword));
             }
             // This will pop the current page off the navigation stack
             await Shell.Current.GoToAsync("..?autoUpload=false");
+        }
+
+        private async void OnCancelMFA()
+        {
+            this.ShowMFACode = false;
+            this.MFACode = null;
+            this.ExternalApiClientId = null;
+            this.ShowEmail = string.IsNullOrWhiteSpace(Preferences.Get(PreferencesKeys.GarminUserEmail, string.Empty));
+            this.ShowPassword = string.IsNullOrWhiteSpace(await SecureStorage.GetAsync(PreferencesKeys.GarminUserPassword));
         }
 
         private BodyComposition PrepareRequest()
@@ -85,6 +97,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                 BMR = DoubleValueParser.ParseValueFromUsersCulture(_bmr) ?? 0,
                 WaterPercentage = DoubleValueParser.ParseValueFromUsersCulture(_waterPercentage) ?? 0,
                 MFACode = _mfaCode,
+                ExternalApiClientId = _externalApiClientId,
             };
             return bc;
         }
@@ -99,7 +112,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             MuscleMass = App.BodyComposition.MuscleMass.ToString();
             IdealWeight = App.BodyComposition.IdealWeight.ToString();
             BMR = App.BodyComposition.BMR.ToString(); ;
-            MetabolicAge = App.BodyComposition.MetabolicAge.ToString(); 
+            MetabolicAge = App.BodyComposition.MetabolicAge.ToString();
             ProteinPercentage = App.BodyComposition.ProteinPercentage.ToString();
             VisceralFat = App.BodyComposition.VisceralFat.ToString();
             Fat = App.BodyComposition.Fat.ToString();
@@ -109,6 +122,7 @@ namespace MiScaleExporter.MAUI.ViewModels
         }
 
         public Command UploadCommand { get; }
+        public Command CancelMFACommand { get; }
 
         private string _weight;
 
@@ -249,6 +263,15 @@ namespace MiScaleExporter.MAUI.ViewModels
             set => SetProperty(ref _showMFACode, value);
         }
 
+        private string _externalApiClientId;
+        public string ExternalApiClientId
+        {
+            get => _externalApiClientId;
+            set
+            {
+                SetProperty(ref _externalApiClientId, value);
+            }
+        }
         private string _mfaCode;
         public string MFACode
         {

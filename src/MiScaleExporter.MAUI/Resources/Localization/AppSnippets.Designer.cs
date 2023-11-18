@@ -187,6 +187,15 @@ namespace MiScaleExporter.MAUI.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel MFA Request.
+        /// </summary>
+        internal static string CancelMFARequest {
+            get {
+                return ResourceManager.GetString("CancelMFARequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel Search.
         /// </summary>
         internal static string CancelSearch {

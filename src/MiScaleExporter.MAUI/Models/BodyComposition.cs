@@ -24,5 +24,6 @@ namespace MiScaleExporter.Models
         public DateTime Date { get; set; }
         public byte[] ReceivedRawData { get; set; } 
         public string MFACode { get; set; }
+        public string ExternalApiClientId { get; set; }
     }
 }

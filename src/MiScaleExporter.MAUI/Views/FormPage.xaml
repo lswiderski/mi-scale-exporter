@@ -245,11 +245,19 @@
                     Padding="10"
                     Orientation="Vertical">
                             <Button
-                        Margin="0,10,0,0"
-                        BackgroundColor="{StaticResource Primary}"
-                        Command="{Binding UploadCommand}"
-                        Text="{x:Static localization:AppSnippets.UploadToGarminCloud}"
-                        TextColor="White" />
+                                Margin="0,10,0,0"
+                                BackgroundColor="{StaticResource Primary}"
+                                Command="{Binding UploadCommand}"
+                                Text="{x:Static localization:AppSnippets.UploadToGarminCloud}"
+                                TextColor="White" />
+
+                            <Button
+                                Margin="0,10,0,0"
+                                BackgroundColor="{StaticResource DarkRed}"
+                                Command="{Binding CancelMFACommand}"
+                                Text="{x:Static localization:AppSnippets.CancelMFARequest}"
+                                TextColor="White" 
+                                IsVisible="{Binding ShowMFACode}"/>
 
                             <StackLayout IsVisible="{Binding IsAutomaticCalculation}">
                                 <Label FontSize="Small" Text="{x:Static localization:AppSnippets.ValuesThatWillNotBeSentToTheCloud}" />
@@ -276,7 +284,7 @@
 
 
                 </StackLayout>
-               
+
             </StackLayout>
         </ScrollView>
         <StackLayout

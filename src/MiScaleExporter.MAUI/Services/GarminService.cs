@@ -22,7 +22,6 @@ public class GarminService : IGarminService
     private ILogService _logService;
     private Microsoft.Extensions.Logging.ILogger _logger;
     private IClient _garminClient;
-    private string _externalApiClientId;
 
     public GarminService(ILogService logService)
     {
@@ -35,13 +34,16 @@ public class GarminService : IGarminService
             _logger = factory.CreateLogger<GarminService>();
         }
 
+        System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
         if (DeviceInfo.Platform == DevicePlatform.Android)
         {
             _httpClient = new HttpClient(new AndroidMessageHandler())
             {
                 Timeout = TimeSpan.FromMinutes(5),
                 DefaultVersionPolicy = HttpVersionPolicy.RequestVersionOrHigher,
-                DefaultRequestVersion = HttpVersion.Version11
+                DefaultRequestVersion = HttpVersion.Version11,
+
             };
         }
         else
@@ -165,10 +167,10 @@ public class GarminService : IGarminService
             TimeStamp = unixTime,
         };
 
-        if (!string.IsNullOrEmpty(_externalApiClientId))
+        if (!string.IsNullOrEmpty(bodyComposition.ExternalApiClientId))
         {
             request.MFACode = bodyComposition.MFACode;
-            request.ClientID = _externalApiClientId;
+            request.ClientID = bodyComposition.ExternalApiClientId;
         }
         return await UploadToGarminCloud(request);
     }
@@ -187,20 +189,22 @@ public class GarminService : IGarminService
             using (var reader = new StreamReader(stream))
             {
                 var message = await reader.ReadToEndAsync();
-                var apiResponse = JsonConvert.DeserializeObject<GarminExternalApiResponse>(message);
+                if (response.IsSuccessStatusCode)
+                {
+                    var apiResponse = JsonConvert.DeserializeObject<GarminExternalApiResponse>(message);
 
-                if (apiResponse.AuthStatus == YetAnotherGarminConnectClient.Dto.AuthStatus.MFARedirected)
-                {
-                    result.Message = "Please provide MFA/2FA Code";
-                    result.MFARequested = true;
-                    _externalApiClientId = apiResponse.ClientId;
+                    if (apiResponse.AuthStatus == YetAnotherGarminConnectClient.Dto.AuthStatus.MFARedirected)
+                    {
+                        result.Message = "Please provide MFA/2FA Code";
+                        result.MFARequested = true;
+                        result.ExternalApiClientId = apiResponse.ClientId;
+                        return result;
+                    }
                 }
-                else
-                {
-                    _externalApiClientId = null;
-                    result.IsSuccess = response.IsSuccessStatusCode;
-                    result.Message = apiResponse.AuthStatus.ToString();
-                }
+
+                result.ExternalApiClientId = null;
+                result.IsSuccess = response.IsSuccessStatusCode;
+                result.Message = message;
 
                 return result;
             }
