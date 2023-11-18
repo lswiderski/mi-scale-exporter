@@ -547,11 +547,29 @@ namespace MiScaleExporter.MAUI.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Muscle mass as %.
+        /// </summary>
+        internal static string MuscleMassAsPercentage {
+            get {
+                return ResourceManager.GetString("MuscleMassAsPercentage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Muscle Mass (Kg).
         /// </summary>
         internal static string MuscleMassKg {
             get {
                 return ResourceManager.GetString("MuscleMassKg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Muscle Mass (%).
+        /// </summary>
+        internal static string MuscleMassPer {
+            get {
+                return ResourceManager.GetString("MuscleMassPer", resourceCulture);
             }
         }
         

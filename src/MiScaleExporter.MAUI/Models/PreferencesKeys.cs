@@ -15,4 +15,5 @@ public static class PreferencesKeys
     public static string UseExternalAPI = "UseExternalAPI";
     public static string ShowDebugInfo = "ShowDebugInfo";
     public static string HideAds = "HideAds";
+    public static string MuscleMassAsPercentage = "MuscleMassAsPercentage";
 }

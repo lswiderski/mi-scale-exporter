@@ -17,6 +17,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             Title = AppSnippets.GarminBodyCompositionForm;
             Date = DateTime.Now;
             Time = DateTime.Now.TimeOfDay;
+            _muscleMassAsKg = true;
             UploadCommand = new Command(OnUpload, ValidateSave);
             CancelMFACommand = new Command(OnCancelMFA);
             this.PropertyChanged +=
@@ -27,9 +28,12 @@ namespace MiScaleExporter.MAUI.ViewModels
         {
             this._email = Preferences.Get(PreferencesKeys.GarminUserEmail, string.Empty);
             this._password = await SecureStorage.GetAsync(PreferencesKeys.GarminUserPassword);
-
+            
             this.ShowEmail = string.IsNullOrWhiteSpace(_email);
             this.ShowPassword = string.IsNullOrWhiteSpace(_password);
+
+            this.MuscleMassAsPercentage = Preferences.Get(PreferencesKeys.MuscleMassAsPercentage, false);
+            this.MuscleMassAsKg = !Preferences.Get(PreferencesKeys.MuscleMassAsPercentage, false);
         }
         private bool ValidateSave()
         {
@@ -99,6 +103,13 @@ namespace MiScaleExporter.MAUI.ViewModels
                 MFACode = _mfaCode,
                 ExternalApiClientId = _externalApiClientId,
             };
+
+            if (Preferences.Get(PreferencesKeys.MuscleMassAsPercentage, false) 
+                && bc.MuscleMass != 0 
+                && bc.Weight != 0)
+            {
+                bc.MuscleMass = (bc.MuscleMass / 100) * bc.Weight;
+            }
             return bc;
         }
 
@@ -280,6 +291,20 @@ namespace MiScaleExporter.MAUI.ViewModels
             {
                 SetProperty(ref _mfaCode, value);
             }
+        }
+
+        private bool _muscleMassAsPercentage;
+        public bool MuscleMassAsPercentage
+        {
+            get => _muscleMassAsPercentage;
+            set => SetProperty(ref _muscleMassAsPercentage, value);
+        }
+
+        private bool _muscleMassAsKg;
+        public bool MuscleMassAsKg
+        {
+            get => _muscleMassAsKg;
+            set => SetProperty(ref _muscleMassAsKg, value);
         }
 
         public string Email

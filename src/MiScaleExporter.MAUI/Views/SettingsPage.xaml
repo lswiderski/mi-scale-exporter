@@ -149,6 +149,7 @@
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
 
                                 <Grid.ColumnDefinitions>
@@ -191,10 +192,21 @@
                                 <CheckBox
                                     Grid.Row="3"
                                     Grid.Column="0"
-                                    IsChecked="{Binding HideAds, Mode=TwoWay}"
+                                    IsChecked="{Binding MuscleMassAsPercentage, Mode=TwoWay}"
                                     VerticalOptions="Center" />
                                 <Label
                                     Grid.Row="3"
+                                    Grid.Column="1"
+                                    FontSize="Small"
+                                    Text="{x:Static localization:AppSnippets.MuscleMassAsPercentage}"
+                                    VerticalOptions="Center" />
+                                <CheckBox
+                                    Grid.Row="4"
+                                    Grid.Column="0"
+                                    IsChecked="{Binding HideAds, Mode=TwoWay}"
+                                    VerticalOptions="Center" />
+                                <Label
+                                    Grid.Row="4"
                                     Grid.Column="1"
                                     FontSize="Small"
                                     Text="{x:Static localization:AppSnippets.SettingsHideAds}"

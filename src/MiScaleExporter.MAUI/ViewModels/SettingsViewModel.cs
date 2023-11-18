@@ -20,6 +20,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                     Preferences.Remove(PreferencesKeys.UseExternalAPI);
                     Preferences.Remove(PreferencesKeys.ShowDebugInfo);
                     Preferences.Remove(PreferencesKeys.HideAds);
+                    Preferences.Remove(PreferencesKeys.MuscleMassAsPercentage);
                 }
             );
         }
@@ -34,6 +35,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             this._useExternalAPI = Preferences.Get(PreferencesKeys.UseExternalAPI, false);
             this._showDebugInfo = Preferences.Get(PreferencesKeys.ShowDebugInfo, false);
             this._hideAds = Preferences.Get(PreferencesKeys.HideAds, false);
+            this._muscleMassAsPercentage = Preferences.Get(PreferencesKeys.MuscleMassAsPercentage, false);
 
             this._age = Preferences.Get(PreferencesKeys.UserAge, 25);
             this._height = Preferences.Get(PreferencesKeys.UserHeight, 170);
@@ -99,6 +101,19 @@ namespace MiScaleExporter.MAUI.ViewModels
                 SetProperty(ref _useExternalAPI, value);
             }
         }
+
+        private bool _muscleMassAsPercentage;
+
+        public bool MuscleMassAsPercentage
+        {
+            get => _muscleMassAsPercentage;
+            set
+            {
+                Preferences.Set(PreferencesKeys.MuscleMassAsPercentage, value);
+                SetProperty(ref _muscleMassAsPercentage, value);
+            }
+        }
+        
 
         private bool _showDebugInfo;
 

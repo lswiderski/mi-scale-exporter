@@ -279,8 +279,14 @@
   <data name="MiSmartScale" xml:space="preserve">
     <value>Mi Smart Scale</value>
   </data>
+  <data name="MuscleMassAsPercentage" xml:space="preserve">
+    <value>Masa mięśniowa jako %</value>
+  </data>
   <data name="MuscleMassKg" xml:space="preserve">
     <value>Masa mięśniowa (Kg)</value>
+  </data>
+  <data name="MuscleMassPer" xml:space="preserve">
+    <value>Masa mięśniowa (%)</value>
   </data>
   <data name="NotFound" xml:space="preserve">
     <value>Nie znaleziono</value>

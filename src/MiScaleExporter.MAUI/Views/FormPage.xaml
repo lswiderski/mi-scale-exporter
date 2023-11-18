@@ -94,8 +94,8 @@
                             </Entry>
                         </StackLayout>
                         <StackLayout Grid.Row="2" Grid.Column="1">
-                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.MuscleMassKg}" />
-
+                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.MuscleMassKg}" IsVisible="{Binding MuscleMassAsKg}" />
+                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.MuscleMassPer}" IsVisible="{Binding MuscleMassAsPercentage}" />
                             <Entry
                         FontSize="Medium"
                         Keyboard="Numeric"
