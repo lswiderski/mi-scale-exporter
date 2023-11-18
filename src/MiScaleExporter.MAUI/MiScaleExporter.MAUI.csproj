@@ -48,7 +48,7 @@
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-android|AnyCPU'">
 	  <ApplicationDisplayVersion>2.0.10</ApplicationDisplayVersion>
-	  <ApplicationVersion>27</ApplicationVersion>
+	  <ApplicationVersion>28</ApplicationVersion>
 	  <AndroidUseAapt2>True</AndroidUseAapt2>
 	  <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
 	  <AndroidPackageFormat>apk</AndroidPackageFormat>
@@ -57,7 +57,7 @@
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-android|AnyCPU'">
 	  <ApplicationDisplayVersion>2.0.10</ApplicationDisplayVersion>
-	  <ApplicationVersion>27</ApplicationVersion>
+	  <ApplicationVersion>28</ApplicationVersion>
 	  <AndroidPackageFormat>apk</AndroidPackageFormat>
 	  <AndroidUseAapt2>True</AndroidUseAapt2>
 	  <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
