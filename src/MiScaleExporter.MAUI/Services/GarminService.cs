@@ -21,8 +21,8 @@ public class GarminService : IGarminService
     private HttpClient _httpClient;
     private ILogService _logService;
     private Microsoft.Extensions.Logging.ILogger _logger;
-    private bool _garminClientAlreadyCreatedForMFA = false;
     private IClient _garminClient;
+    private string _externalApiClientId;
 
     public GarminService(ILogService logService)
     {
@@ -32,7 +32,7 @@ public class GarminService : IGarminService
         builder.AddNLog(configuration))
     )
         {
-            _logger =  factory.CreateLogger<GarminService>();
+            _logger = factory.CreateLogger<GarminService>();
         }
 
         if (DeviceInfo.Platform == DevicePlatform.Android)
@@ -51,7 +51,7 @@ public class GarminService : IGarminService
                 Timeout = TimeSpan.FromMinutes(5),
             };
         }
-        
+
     }
 
     public async Task<GarminApiResponse> UploadAsync(BodyComposition bodyComposition, DateTime time, string email, string password)
@@ -101,12 +101,12 @@ public class GarminService : IGarminService
                 Password = password,
             };
 
-            var data = scaleDTO with { Email = email, Password = password};
-            if (!_garminClientAlreadyCreatedForMFA)
+            var data = scaleDTO with { Email = email, Password = password };
+            if (string.IsNullOrEmpty(bodyComposition.MFACode))
             {
                 _garminClient = await ClientFactory.Create();
             }
-           
+
             try
             {
                 var garminApiReponse = await _garminClient.UploadWeight(data, userProfileSettings, bodyComposition.MFACode);
@@ -119,16 +119,11 @@ public class GarminService : IGarminService
                 if (result.MFARequested)
                 {
                     result.Message = "Please provide MFA/2FA Code";
-                    _garminClientAlreadyCreatedForMFA = true;
                 }
 
-                if (result.IsSuccess)
+                if (!result.IsSuccess && !result.MFARequested)
                 {
-                    _garminClientAlreadyCreatedForMFA = false;
-                }
 
-                if (!result.IsSuccess && !result.MFARequested) {
-                   
                     throw new Exception(garminApiReponse.ErrorLogs.FirstOrDefault());
                 }
                 return result;
@@ -139,8 +134,8 @@ public class GarminService : IGarminService
                 var errorlogs = LogService.GetErrorLogs();
                 throw;
             }
-            
-            
+
+
         }
         catch (Exception ex)
         {
@@ -167,8 +162,14 @@ public class GarminService : IGarminService
             BodyMassIndex = bodyComposition.BMI,
             PercentHydration = bodyComposition.WaterPercentage,
             PhysiqueRating = bodyComposition.BodyType,
-            TimeStamp = unixTime
+            TimeStamp = unixTime,
         };
+
+        if (!string.IsNullOrEmpty(_externalApiClientId))
+        {
+            request.MFACode = bodyComposition.MFACode;
+            request.ClientID = _externalApiClientId;
+        }
         return await UploadToGarminCloud(request);
     }
 
@@ -177,17 +178,30 @@ public class GarminService : IGarminService
         var result = new GarminApiResponse();
         try
         {
-
             var dataAsString = JsonConvert.SerializeObject(request);
             var content = new StringContent(dataAsString, Encoding.UTF8, "application/json");
 
             var response = await PostAsync("/upload", content);
-            result.IsSuccess = response.IsSuccessStatusCode;
 
             using (var stream = await response.Content.ReadAsStreamAsync())
             using (var reader = new StreamReader(stream))
             {
-                result.Message = await reader.ReadToEndAsync();
+                var message = await reader.ReadToEndAsync();
+                var apiResponse = JsonConvert.DeserializeObject<GarminExternalApiResponse>(message);
+
+                if (apiResponse.AuthStatus == YetAnotherGarminConnectClient.Dto.AuthStatus.MFARedirected)
+                {
+                    result.Message = "Please provide MFA/2FA Code";
+                    result.MFARequested = true;
+                    _externalApiClientId = apiResponse.ClientId;
+                }
+                else
+                {
+                    _externalApiClientId = null;
+                    result.IsSuccess = response.IsSuccessStatusCode;
+                    result.Message = apiResponse.AuthStatus.ToString();
+                }
+
                 return result;
             }
         }

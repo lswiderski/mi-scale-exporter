@@ -61,6 +61,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             else
             {
                 this.ShowMFACode = false;
+                this.MFACode = null;
                 this.ShowEmail = !string.IsNullOrWhiteSpace(_email);
                 this.ShowPassword = !string.IsNullOrWhiteSpace(_password);
             }
