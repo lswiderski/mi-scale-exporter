@@ -25,13 +25,13 @@ Check out this web project: https://github.com/lswiderski/WebBodyComposition
 
 - You can save the Garmin password in this App but you don't have to. Passwords Managers like KeePass2 works well too. If you do not provide a password in the settings, you will be asked for it each time before sending. No password will be saved in app.
 
-- The unofficial Garmin API does not support 2FA. To use this application, you must disable it.
+- This app support 2FA/MFA codes (since v2.1.0)
 
 - This App pass your data, email and password directly to Garmin Connect Cloud or you can change it to proxy API server and then it sends to Garmin Cloud.
 
 - The Proxy API does not store or log anything, it's just a middleware between this App and Garmin services.
 
-- Proxy API repository: https://github.com/lswiderski/bodycomposition-webapi
+- Proxy API repository: https://github.com/lswiderski/yet-another-garmin-connect-client
 
 - If you afraid of your data, you can host your own API server. Just change the server address in Settings. For now you can use default one: https://frog01-20364.wykr.es
 
@@ -55,7 +55,7 @@ sequenceDiagram
 
 ```
 
-## API Endpoint used in the app ([source](https://github.com/lswiderski/bodycomposition-webapi))
+## API Endpoint used in the app ([source](https://github.com/lswiderski/yet-another-garmin-connect-client))
 
 ```http
 https://frog01-20364.wykr.es
@@ -84,7 +84,7 @@ sequenceDiagram
 - Autofac
 - Plugin.BLE - To receive data via Bluetooth from Mi scale
 - Xamarin.Essentials
-- API Backend in GOlang
+- API Backend in C# (YAGCC project)
 
 ## Images
 
