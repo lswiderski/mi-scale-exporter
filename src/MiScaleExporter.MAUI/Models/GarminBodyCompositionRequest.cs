@@ -16,4 +16,6 @@ public record GarminBodyCompositionRequest
     public string Password { get; set; }
     public string ClientID { get; set; }
     public string MFACode { get; set; }
+    public string AccessToken { get; set; }
+    public string TokenSecret { get; set; }
 }

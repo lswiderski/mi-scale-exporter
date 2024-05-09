@@ -9,6 +9,8 @@ public static class PreferencesKeys
     public static string GarminUserEmail = "GarminUserEmail";
     public static string GarminUserSavePassword = "GarminUserSavePassword";
     public static string GarminUserPassword = "GarminUserPassword";
+    public static string GarminUserAccessToken = "GarminUserAccessToken";
+    public static string GarminUserTokenSecret = "GarminUserTokenSecret";
     public static string ApiServerAddressOverride = "ApiServerAddressOverride";
     public static string ScaleType = "ScaleType";
     public static string OneClickScanAndUpload = "OneClickScanAndUpload";

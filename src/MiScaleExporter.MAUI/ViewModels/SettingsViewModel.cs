@@ -272,6 +272,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                 {
                     SetProperty(ref _email, value);
                     Preferences.Set(PreferencesKeys.GarminUserEmail, value);
+                    this._clearTokens();
                 }
                 
             }
@@ -288,9 +289,16 @@ namespace MiScaleExporter.MAUI.ViewModels
                 {
                     SetProperty(ref _password, value);
                     SecureStorage.SetAsync(PreferencesKeys.GarminUserPassword, value);
+                    this._clearTokens();
                 }
                
             }
+        }
+
+        private void _clearTokens()
+        {
+            SecureStorage.SetAsync(PreferencesKeys.GarminUserAccessToken, string.Empty);
+            SecureStorage.SetAsync(PreferencesKeys.GarminUserTokenSecret, string.Empty);
         }
 
     }

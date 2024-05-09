@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Android.Net;
 using Microsoft.Extensions.Logging;
 using MiScaleExporter.Models;
 using Newtonsoft.Json;
@@ -56,7 +57,7 @@ public class GarminService : IGarminService
 
     }
 
-    public async Task<GarminApiResponse> UploadAsync(BodyComposition bodyComposition, DateTime time, string email, string password)
+    public async Task<GarminApiResponse> UploadAsync(BodyComposition bodyComposition, DateTime time, CredentialsData credencials)
     {
 
         if (DeviceInfo.Platform == DevicePlatform.Android) //Older android versions do not support TLS 1.3, so force to use external api for them
@@ -68,15 +69,15 @@ public class GarminService : IGarminService
         }
         if (Preferences.Get(PreferencesKeys.UseExternalAPI, false))
         {
-            return await UploadViaExternalAPIAsync(bodyComposition, time, email, password);
+            return await UploadViaExternalAPIAsync(bodyComposition, time, credencials);
         }
         else
         {
-            return await UploadViaDirectCallToGarminAsync(bodyComposition, time, email, password);
+            return await UploadViaDirectCallToGarminAsync(bodyComposition, time, credencials);
         }
     }
 
-    private async Task<GarminApiResponse> UploadViaDirectCallToGarminAsync(BodyComposition bodyComposition, DateTime time, string email, string password)
+    private async Task<GarminApiResponse> UploadViaDirectCallToGarminAsync(BodyComposition bodyComposition, DateTime time, CredentialsData credencials)
     {
         var result = new GarminApiResponse();
         try
@@ -86,6 +87,7 @@ public class GarminService : IGarminService
                 Age = Preferences.Get(PreferencesKeys.UserAge, 25),
                 Height = Preferences.Get(PreferencesKeys.UserHeight, 170),
             };
+
             var scaleDTO = new GarminWeightScaleDTO
             {
                 TimeStamp = time,
@@ -99,11 +101,8 @@ public class GarminService : IGarminService
                 PhysiqueRating = Convert.ToByte(bodyComposition.BodyType),
                 MetabolicAge = Convert.ToByte(bodyComposition.MetabolicAge),
                 BodyMassIndex = Convert.ToSingle(bodyComposition.BMI),
-                Email = email,
-                Password = password,
             };
 
-            var data = scaleDTO with { Email = email, Password = password };
             if (string.IsNullOrEmpty(bodyComposition.MFACode))
             {
                 _garminClient = await ClientFactory.Create();
@@ -111,12 +110,14 @@ public class GarminService : IGarminService
 
             try
             {
-                var garminApiReponse = await _garminClient.UploadWeight(data, userProfileSettings, bodyComposition.MFACode);
+                var garminApiReponse = await _garminClient.UploadWeight(scaleDTO, userProfileSettings, credencials, bodyComposition.MFACode);
                 var logs = LogService.GetLogs();
                 var errorlogs = LogService.GetErrorLogs();
 
                 result.IsSuccess = garminApiReponse.IsSuccess;
                 result.MFARequested = garminApiReponse.MFACodeRequested;
+                result.AccessToken = garminApiReponse.AccessToken;
+                result.TokenSecret = garminApiReponse.TokenSecret;
 
                 if (result.MFARequested)
                 {
@@ -148,13 +149,15 @@ public class GarminService : IGarminService
 
     }
 
-    private async Task<GarminApiResponse> UploadViaExternalAPIAsync(BodyComposition bodyComposition, DateTime time, string email, string password)
+    private async Task<GarminApiResponse> UploadViaExternalAPIAsync(BodyComposition bodyComposition, DateTime time, CredentialsData credencials)
     {
         var unixTime = ((DateTimeOffset)time).ToUnixTimeSeconds();
         var request = new GarminBodyCompositionRequest
         {
-            Email = email,
-            Password = password,
+            Email = credencials.Email,
+            Password = credencials.Password,
+            AccessToken = credencials.AccessToken,
+            TokenSecret = credencials.TokenSecret,
             Weight = bodyComposition.Weight,
             BoneMass = bodyComposition.BoneMass,
             MuscleMass = bodyComposition.MuscleMass,
@@ -193,7 +196,10 @@ public class GarminService : IGarminService
                 {
                     var apiResponse = JsonConvert.DeserializeObject<GarminExternalApiResponse>(message);
 
-                    if (apiResponse.AuthStatus == YetAnotherGarminConnectClient.Dto.AuthStatus.MFARedirected)
+                    result.AccessToken = apiResponse?.UploadResult?.AccessToken;
+                    result.TokenSecret = apiResponse?.UploadResult?.TokenSecret;
+
+                    if (apiResponse?.UploadResult?.AuthStatus == YetAnotherGarminConnectClient.Dto.AuthStatus.MFARedirected)
                     {
                         result.Message = "Please provide MFA/2FA Code";
                         result.MFARequested = true;

@@ -6,4 +6,6 @@ public class GarminApiResponse
     public string Message { get; set; }
     public bool MFARequested { get; set; }
     public string ExternalApiClientId { get; set; }
+    public string AccessToken { get; set; }
+    public string TokenSecret { get; set; }
 }

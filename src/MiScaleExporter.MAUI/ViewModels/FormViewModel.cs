@@ -4,6 +4,7 @@ using MiScaleExporter.MAUI.Utils;
 using MiScaleExporter.Models;
 using MiScaleExporter.Services;
 using System.Globalization;
+using YetAnotherGarminConnectClient.Dto.Garmin.Fit;
 
 namespace MiScaleExporter.MAUI.ViewModels
 {
@@ -28,7 +29,11 @@ namespace MiScaleExporter.MAUI.ViewModels
         {
             this._email = Preferences.Get(PreferencesKeys.GarminUserEmail, string.Empty);
             this._password = await SecureStorage.GetAsync(PreferencesKeys.GarminUserPassword);
-            
+
+            this._accessToken = await SecureStorage.GetAsync(PreferencesKeys.GarminUserAccessToken);
+            this._tokenSecret = await SecureStorage.GetAsync(PreferencesKeys.GarminUserTokenSecret);
+            this._saveTokens = !string.IsNullOrWhiteSpace(_email) && !string.IsNullOrWhiteSpace(_password);
+
             this.ShowEmail = string.IsNullOrWhiteSpace(_email);
             this.ShowPassword = string.IsNullOrWhiteSpace(_password);
 
@@ -53,10 +58,29 @@ namespace MiScaleExporter.MAUI.ViewModels
         private async void OnUpload()
         {
             this.IsBusyForm = true;
-            var response = await this._garminService.UploadAsync(this.PrepareRequest(), Date.Date.Add(Time), _email, _password);
-            var message = response.IsSuccess ? AppSnippets.Uploaded : response.Message;
+            var credencials = new CredentialsData
+            {
+                Email = _email,
+                Password = _password,
+                AccessToken = this._accessToken,
+                TokenSecret = this._tokenSecret,
+            };
+            var response = await this._garminService.UploadAsync(this.PrepareRequest(), Date.Date.Add(Time), credencials);
+            var message = response.IsSuccess ? AppSnippets.Uploaded : response.Message; 
             await Application.Current.MainPage.DisplayAlert(AppSnippets.Response, message, AppSnippets.OK);
             this.IsBusyForm = false;
+            if (this._saveTokens)
+            {
+                this._accessToken = response.AccessToken;
+                this._tokenSecret = response.TokenSecret;
+            }
+            else
+            {
+                this._accessToken = string.Empty;
+                this._tokenSecret = string.Empty;
+            }
+            await SecureStorage.SetAsync(PreferencesKeys.GarminUserAccessToken, this._accessToken);
+            await SecureStorage.SetAsync(PreferencesKeys.GarminUserTokenSecret, this._tokenSecret);
             if (response.MFARequested)
             {
                 this.ShowMFACode = true;
@@ -234,6 +258,11 @@ namespace MiScaleExporter.MAUI.ViewModels
         private string _email;
 
         private string _password;
+
+        private string _accessToken;
+
+        private string _tokenSecret;
+        private bool _saveTokens;
 
         private DateTime _date;
 
