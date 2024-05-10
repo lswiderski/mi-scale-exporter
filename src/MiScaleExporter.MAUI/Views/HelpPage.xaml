@@ -50,14 +50,6 @@
             <Label
                 FontAttributes="Bold"
                 FontSize="Small"
-                Text="{x:Static localization:AppSnippets.HelpCannotSync2FA}" />
-            <Label
-                Padding="15,0,0,0"
-                FontSize="Small"
-                Text="{x:Static localization:AppSnippets.HelpCannotSync2FADescription}" />
-            <Label
-                FontAttributes="Bold"
-                FontSize="Small"
                 Text="{x:Static localization:AppSnippets.HelpExternalApi}" />
             <Label
                 Padding="15,0,0,0"

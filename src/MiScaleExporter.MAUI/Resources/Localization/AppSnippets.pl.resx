@@ -123,6 +123,9 @@
   <data name="AboutMeasureInstruction" xml:space="preserve">
     <value>Ustaw w ustawieniach adres bluetooth wagi, oraz swoje dane. Stań na swojej wadze. Zmierz się. Mi Body Composition Scale jest aktywna do 15 min po dokonaniu pomiaru.</value>
   </data>
+  <data name="AboutMFAAndStoringData" xml:space="preserve">
+    <value>Aplikacja obsługuje teraz funkcje bezpieczeństwa MFA/2FA. Jeśli zapiszesz dane uwierzytelniające w ustawieniach, tokeny autoryzacyjne zostaną zapamiętane i nie będziesz za każdym razem proszony o podanie kodu MFA.</value>
+  </data>
   <data name="AboutUpload" xml:space="preserve">
     <value>Następnie możesz przejrzeć swoje dane i przesłać je do Garmin Cloud. Jeśli nie masz wagi Mi Scale i możesz po prostu ręcznie wprowadzić dane i przesłac je do Garmin Connect.</value>
   </data>
@@ -198,14 +201,8 @@
   <data name="Help" xml:space="preserve">
     <value>Pomoc</value>
   </data>
-  <data name="HelpCannotSync2FA" xml:space="preserve">
-    <value>5. Nie można zsynchronizować. Brakujące ciasteczka</value>
-  </data>
-  <data name="HelpCannotSync2FADescription" xml:space="preserve">
-    <value>Prawdopodobnie masz włączone 2FA. To nie jest obsługiwane. Jeśli chcesz korzystać z tej aplikacji, musisz je wyłączyć.</value>
-  </data>
   <data name="HelpCoffee" xml:space="preserve">
-    <value>9. Kawa</value>
+    <value>8. Kawa</value>
   </data>
   <data name="HelpCoffeeDescription" xml:space="preserve">
     <value>Należy pamiętać, że jest to mój projekt hobbystyczny. Został on stworzony dla moich wewnętrznych potrzeb i wierzę, że może być przydatny również dla innych. Nie otrzymuję żadnego wynagrodzenia za stworzenie i utrzymanie tego projektu. Jeśli chcesz wesprzeć rozwój lub podziękować mi, możesz postawić mi kawę.</value>
@@ -220,19 +217,19 @@
     <value>Adres Bluetooth można znaleźć w Zepp Life &gt; Profil &gt; Moje urządzenia &gt; Mi Body Composition Scale &gt; Adres Bluetooth (przytrzymaj, aby skopiować)</value>
   </data>
   <data name="HelpExternalApi" xml:space="preserve">
-    <value>6. Zewnętrzne Api</value>
+    <value>5. Zewnętrzne Api</value>
   </data>
   <data name="HelpExternalApiDescription" xml:space="preserve">
     <value>Zewnętrzny interfejs API jest używany jako proxy dla starszych telefonów z systemem Android (9 lub niższy). Domyślny adres to https://frog01-20364.wykr.es/. Możesz hostować własną wersję API, a ta aplikacja wyśle dane do twojego systemu zamiast do Garmina. Sprawdź repozytorium projektu, aby uzyskać więcej informacji.</value>
   </data>
   <data name="HelpFeedback" xml:space="preserve">
-    <value>8. Informacje zwrotne i kontakt</value>
+    <value>7. Informacje zwrotne i kontakt</value>
   </data>
   <data name="HelpFeedbackDescription" xml:space="preserve">
     <value>Jeśli znalazłeś błąd, potrzebujesz jakiejś funkcji lub masz pomysł, podziel się nim ze mną w repozytorium projektu.</value>
   </data>
   <data name="HelpGarminAndXiaomi" xml:space="preserve">
-    <value>7. Garmin i Xiaomi</value>
+    <value>6. Garmin i Xiaomi</value>
   </data>
   <data name="HelpGarminAndXiaomiDescription" xml:space="preserve">
     <value>Ta aplikacja jest otwarto-źródłowym projektem społeczności i nie ma żadnych powiązań z Garminem lub Xiaomi. Używasz jej na własne ryzyko. Zawsze możesz sprawdzić kod źródłowy na Githubie.</value>

@@ -123,6 +123,9 @@
   <data name="AboutMeasureInstruction" xml:space="preserve">
     <value>Set the bluetooth address of the scale, and your data in the settings. Stand on your scale. Measure yourself. Mi Body Composition Scale is active up to 15 min after the measurement.</value>
   </data>
+  <data name="AboutMFAAndStoringData" xml:space="preserve">
+    <value>The application now supports MFA/2FA security features. If you save credentials in settings, authorization tokens will be remembered and you won't be asked every time for MFA code.</value>
+  </data>
   <data name="AboutUpload" xml:space="preserve">
     <value>Then you can review your data and upload it to Garmin Cloud. If you do not have Mi scale and just want to manually insert the data, you can so.</value>
   </data>
@@ -198,14 +201,8 @@
   <data name="Help" xml:space="preserve">
     <value>Help</value>
   </data>
-  <data name="HelpCannotSync2FA" xml:space="preserve">
-    <value>5. Cannot Sync. Missing Cookies</value>
-  </data>
-  <data name="HelpCannotSync2FADescription" xml:space="preserve">
-    <value>You probably have 2FA enabled. It's not supported. Please turn it off if you want to use this application.</value>
-  </data>
   <data name="HelpCoffee" xml:space="preserve">
-    <value>9. Coffee</value>
+    <value>8. Coffee</value>
   </data>
   <data name="HelpCoffeeDescription" xml:space="preserve">
     <value>Keep in mind that this is my hobby project. It was created for my inner needs and I believe it may be useful to others as well. I do not receive any compensation for creating and maintaining this project. If you want to support the development or thank me, you can buy me a coffee.</value>
@@ -220,19 +217,19 @@
     <value>Bluetooth address can be found in Zepp Life &gt; Profile &gt; My devices &gt; Mi Body Composition Scale &gt; Bluetooth address (hold to copy)</value>
   </data>
   <data name="HelpExternalApi" xml:space="preserve">
-    <value>6. External Api</value>
+    <value>5. External Api</value>
   </data>
   <data name="HelpExternalApiDescription" xml:space="preserve">
     <value>External API is used as a proxy for older Android phones (9 or lower). The default address is https://frog01-20364.wykr.es/. You can host your own version of the API and this app will send the data to your system instead of Garmin. Check out the project repository for more information.</value>
   </data>
   <data name="HelpFeedback" xml:space="preserve">
-    <value>8. Feedback &amp; Contact</value>
+    <value>7. Feedback &amp; Contact</value>
   </data>
   <data name="HelpFeedbackDescription" xml:space="preserve">
     <value>If you found a bug, need a feature or have an idea, share it with me at the project repository.</value>
   </data>
   <data name="HelpGarminAndXiaomi" xml:space="preserve">
-    <value>7. Garmin and Xiaomi</value>
+    <value>6. Garmin and Xiaomi</value>
   </data>
   <data name="HelpGarminAndXiaomiDescription" xml:space="preserve">
     <value>This application is an open source community project and I have no affiliation with Garmin or Xiaomi. You use it at your own risk. You can always check out the source code on Github.</value>

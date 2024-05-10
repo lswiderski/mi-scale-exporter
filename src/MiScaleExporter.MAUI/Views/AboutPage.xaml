@@ -23,7 +23,7 @@
                 <Label FontSize="Small" Text="{x:Static localization:AppSnippets.AboutGarmin}" />
                 <Label FontSize="Small" Text="{x:Static localization:AppSnippets.AboutMeasureInstruction}" />
                 <Label FontSize="Small" Text="{x:Static localization:AppSnippets.AboutUpload}" />
-
+                <Label FontSize="Small" Text="{x:Static localization:AppSnippets.AboutMFAAndStoringData}" />
             </StackLayout>
         </ScrollView>
         <ScrollView Grid.Row="1">

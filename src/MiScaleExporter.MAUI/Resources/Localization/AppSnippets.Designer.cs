@@ -79,6 +79,15 @@ namespace MiScaleExporter.MAUI.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The application now supports MFA/2FA security features. If you save credentials in settings, authorization tokens will be remembered and you won&apos;t be asked every time for MFA code..
+        /// </summary>
+        internal static string AboutMFAAndStoringData {
+            get {
+                return ResourceManager.GetString("AboutMFAAndStoringData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Then you can review your data and upload it to Garmin Cloud. If you do not have Mi scale and just want to manually insert the data, you can so..
         /// </summary>
         internal static string AboutUpload {
@@ -304,25 +313,7 @@ namespace MiScaleExporter.MAUI.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 5. Cannot Sync. Missing Cookies.
-        /// </summary>
-        internal static string HelpCannotSync2FA {
-            get {
-                return ResourceManager.GetString("HelpCannotSync2FA", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to You probably have 2FA enabled. It&apos;s not supported. Please turn it off if you want to use this application..
-        /// </summary>
-        internal static string HelpCannotSync2FADescription {
-            get {
-                return ResourceManager.GetString("HelpCannotSync2FADescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 9. Coffee.
+        ///   Looks up a localized string similar to 8. Coffee.
         /// </summary>
         internal static string HelpCoffee {
             get {
@@ -367,7 +358,7 @@ namespace MiScaleExporter.MAUI.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 6. External Api.
+        ///   Looks up a localized string similar to 5. External Api.
         /// </summary>
         internal static string HelpExternalApi {
             get {
@@ -385,7 +376,7 @@ namespace MiScaleExporter.MAUI.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 8. Feedback &amp; Contact.
+        ///   Looks up a localized string similar to 7. Feedback &amp; Contact.
         /// </summary>
         internal static string HelpFeedback {
             get {
@@ -403,7 +394,7 @@ namespace MiScaleExporter.MAUI.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 7. Garmin and Xiaomi.
+        ///   Looks up a localized string similar to 6. Garmin and Xiaomi.
         /// </summary>
         internal static string HelpGarminAndXiaomi {
             get {
