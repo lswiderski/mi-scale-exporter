@@ -46,15 +46,16 @@
                         </Grid.ColumnDefinitions>
 
                         <StackLayout
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="2"
-                    Padding="10"
-                    Orientation="Vertical">
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="2"
+                            Padding="10"
+                            Orientation="Vertical">
+                            
                             <controls:MTAdView
-                        x:Name="adMobBanner"
-                        AdSize="Banner"
-                        AdsId="ca-app-pub-1938975042085430/4160336701" />
+                                AdSize="AnchoredAdaptive"
+                                x:Name="adMobBanner"
+                                 AdsId="ca-app-pub-1938975042085430/4160336701" />
                         </StackLayout>
 
                         <StackLayout Grid.Row="1" Grid.Column="0" >
@@ -80,6 +81,7 @@
                                 </Entry.Behaviors>
                             </Entry>
                         </StackLayout>
+                       
 
                         <StackLayout Grid.Row="2" Grid.Column="0">
                             <Label FontSize="Small" Text="{x:Static localization:AppSnippets.BodyFatPercent}" />

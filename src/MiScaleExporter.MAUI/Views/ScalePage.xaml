@@ -60,7 +60,7 @@
                         TextColor="White" />
                     <controls:MTAdView
                         x:Name="adMobBanner"
-                        AdSize="Banner"
+                        AdSize="AnchoredAdaptive"
                         AdsId="ca-app-pub-1938975042085430/4160336701" />
                 </StackLayout>
             </ScrollView>
