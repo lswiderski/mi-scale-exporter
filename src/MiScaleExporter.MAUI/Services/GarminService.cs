@@ -108,41 +108,32 @@ public class GarminService : IGarminService
                 _garminClient = await ClientFactory.Create();
             }
 
-            try
+            var garminApiReponse = await _garminClient.UploadWeight(scaleDTO, userProfileSettings, credencials, bodyComposition.MFACode);
+            var logs = LogService.GetLogs();
+            var errorlogs = LogService.GetErrorLogs();
+
+            result.IsSuccess = garminApiReponse.IsSuccess;
+            result.MFARequested = garminApiReponse.MFACodeRequested;
+            result.AccessToken = garminApiReponse.AccessToken;
+            result.TokenSecret = garminApiReponse.TokenSecret;
+
+            if (result.MFARequested)
             {
-                var garminApiReponse = await _garminClient.UploadWeight(scaleDTO, userProfileSettings, credencials, bodyComposition.MFACode);
-                var logs = LogService.GetLogs();
-                var errorlogs = LogService.GetErrorLogs();
-
-                result.IsSuccess = garminApiReponse.IsSuccess;
-                result.MFARequested = garminApiReponse.MFACodeRequested;
-                result.AccessToken = garminApiReponse.AccessToken;
-                result.TokenSecret = garminApiReponse.TokenSecret;
-
-                if (result.MFARequested)
-                {
-                    result.Message = "Please provide MFA/2FA Code";
-                }
-
-                if (!result.IsSuccess && !result.MFARequested)
-                {
-
-                    throw new Exception(garminApiReponse.ErrorLogs.FirstOrDefault());
-                }
-                return result;
-            }
-            catch (Exception ex)
-            {
-                var logs = LogService.GetLogs();
-                var errorlogs = LogService.GetErrorLogs();
-                throw;
+                result.Message = "Please provide MFA/2FA Code";
             }
 
-
+            if (!result.IsSuccess && !result.MFARequested)
+            {
+                var errorMessage = garminApiReponse?.ErrorLogs?.FirstOrDefault() ?? errorlogs?.FirstOrDefault() ?? "Error";
+                throw new Exception(errorMessage);
+            }
+            return result;
         }
         catch (Exception ex)
         {
-            _logService.LogError(ex.Message);
+            var logs = LogService.GetLogs();
+            var errorlogs = LogService.GetErrorLogs();
+            _logService.LogError(ex?.Message);
             result.Message = ex.Message;
             return result;
         }

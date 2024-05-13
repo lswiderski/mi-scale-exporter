@@ -66,13 +66,13 @@ namespace MiScaleExporter.MAUI.ViewModels
                 TokenSecret = this._tokenSecret,
             };
             var response = await this._garminService.UploadAsync(this.PrepareRequest(), Date.Date.Add(Time), credencials);
-            var message = response.IsSuccess ? AppSnippets.Uploaded : response.Message; 
+            var message = (response?.IsSuccess ?? false) ? AppSnippets.Uploaded : response?.Message; 
             await Application.Current.MainPage.DisplayAlert(AppSnippets.Response, message, AppSnippets.OK);
             this.IsBusyForm = false;
             if (this._saveTokens)
             {
-                this._accessToken = response.AccessToken;
-                this._tokenSecret = response.TokenSecret;
+                this._accessToken = response?.AccessToken ?? string.Empty;
+                this._tokenSecret = response?.TokenSecret ?? string.Empty;
             }
             else
             {
@@ -81,12 +81,12 @@ namespace MiScaleExporter.MAUI.ViewModels
             }
             await SecureStorage.SetAsync(PreferencesKeys.GarminUserAccessToken, this._accessToken);
             await SecureStorage.SetAsync(PreferencesKeys.GarminUserTokenSecret, this._tokenSecret);
-            if (response.MFARequested)
+            if (response?.MFARequested ?? false)    
             {
                 this.ShowMFACode = true;
                 this.ShowEmail = false;
                 this.ShowPassword = false;
-                this.ExternalApiClientId = response.ExternalApiClientId;
+                this.ExternalApiClientId = response?.ExternalApiClientId;
             }
             else
             {
