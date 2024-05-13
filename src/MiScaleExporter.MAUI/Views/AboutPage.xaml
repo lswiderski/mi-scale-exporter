@@ -45,12 +45,12 @@
                     Text="{x:Static localization:AppSnippets.OpenHelp}"
                     TextColor="White" />
                 <Label FontSize="Small" Text="{x:Static localization:AppSnippets.DoYouLikeAndWouldYouLikeToSupport}" />
-                <Button
+                <ImageButton
                     Margin="0,10,0,0"
-                    BackgroundColor="{StaticResource Primary}"
                     Command="{Binding OpenCoffeeCommand}"
-                    Text="{x:Static localization:AppSnippets.BuyMeACoffee}"
-                    TextColor="White" />
+                    Source="Images/buymeacoffe.png"
+                    HeightRequest="50"
+                    />
                 <Button
                     Margin="0,10,0,0"
                     BackgroundColor="{StaticResource Primary}"
