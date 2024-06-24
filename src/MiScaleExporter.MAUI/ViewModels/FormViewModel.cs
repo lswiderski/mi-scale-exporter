@@ -20,6 +20,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             Time = DateTime.Now.TimeOfDay;
             _muscleMassAsKg = true;
             UploadCommand = new Command(OnUpload, ValidateSave);
+            GenerateFitFileCommand = new Command(OnGenerateFitFile);
             CancelMFACommand = new Command(OnCancelMFA);
             this.PropertyChanged +=
                 (_, __) => UploadCommand.ChangeCanExecute();
@@ -100,6 +101,29 @@ namespace MiScaleExporter.MAUI.ViewModels
             await Shell.Current.GoToAsync("..?autoUpload=false");
         }
 
+        private async void OnGenerateFitFile()
+        {
+            this.IsBusyForm = true;
+
+            var response = await this._garminService.GenerateFitFileAsync(this.PrepareRequest(), Date.Date.Add(Time));
+
+            if (!response.IsSuccess)
+            {
+                await Application.Current.MainPage.DisplayAlert(AppSnippets.Response, response?.Message, AppSnippets.OK);
+            }
+            else
+            {
+                string fileExactLocation = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), $"activity_{Date.Date.Add(Time).ToShortDateString()}.fit");
+                File.WriteAllBytes(fileExactLocation, response.file);
+
+            }
+           
+            this.IsBusyForm = false;
+
+            // This will pop the current page off the navigation stack
+            await Shell.Current.GoToAsync("..?autoUpload=false");
+        }
+
         private async void OnCancelMFA()
         {
             this.ShowMFACode = false;
@@ -158,6 +182,8 @@ namespace MiScaleExporter.MAUI.ViewModels
 
         public Command UploadCommand { get; }
         public Command CancelMFACommand { get; }
+
+        public Command GenerateFitFileCommand { get; }
 
         private string _weight;
 

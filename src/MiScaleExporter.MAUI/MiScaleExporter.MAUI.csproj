@@ -86,7 +86,7 @@
 	  <PackageReference Include="NLog.Extensions.Logging" Version="5.3.9" />
 	  <PackageReference Include="Plugin.BLE" Version="2.1.2" />
 	  <PackageReference Include="Plugin.MauiMTAdmob" Version="1.4.2" />
-	  <PackageReference Include="YetAnotherGarminConnectClient" Version="0.0.10" />
+	  <PackageReference Include="YetAnotherGarminConnectClient" Version="0.0.11" />
 	</ItemGroup>
 
 	<ItemGroup>

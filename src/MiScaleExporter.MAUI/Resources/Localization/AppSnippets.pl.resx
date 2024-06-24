@@ -192,6 +192,9 @@
   <data name="GarminSettings" xml:space="preserve">
     <value>Ustawienia Garmin</value>
   </data>
+  <data name="GenerateOnlyFitFile" xml:space="preserve">
+    <value>Generuj tylko plik .fit</value>
+  </data>
   <data name="GoToScan" xml:space="preserve">
     <value>Przejdź do skanowania</value>
   </data>

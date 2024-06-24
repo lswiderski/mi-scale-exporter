@@ -286,6 +286,15 @@ namespace MiScaleExporter.MAUI.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Generate only .fit file.
+        /// </summary>
+        internal static string GenerateOnlyFitFile {
+            get {
+                return ResourceManager.GetString("GenerateOnlyFitFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Go to scan.
         /// </summary>
         internal static string GoToScan {

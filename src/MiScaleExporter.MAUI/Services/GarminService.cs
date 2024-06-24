@@ -140,6 +140,54 @@ public class GarminService : IGarminService
 
     }
 
+    public async Task<GarminFitFileCreationResult> GenerateFitFileAsync(BodyComposition bodyComposition, DateTime time)
+    {
+        var result = new GarminFitFileCreationResult();
+        try
+        {
+            var userProfileSettings = new UserProfileSettings
+            {
+                Age = Preferences.Get(PreferencesKeys.UserAge, 25),
+                Height = Preferences.Get(PreferencesKeys.UserHeight, 170),
+            };
+
+            var scaleDTO = new GarminWeightScaleDTO
+            {
+                TimeStamp = time,
+                Weight = Convert.ToSingle(bodyComposition.Weight),
+                PercentFat = Convert.ToSingle(bodyComposition.Fat),
+                PercentHydration = Convert.ToSingle(bodyComposition.WaterPercentage),
+                BoneMass = Convert.ToSingle(bodyComposition.BoneMass),
+                MuscleMass = Convert.ToSingle(bodyComposition.MuscleMass),
+                VisceralFatRating = Convert.ToByte(bodyComposition.VisceralFat),
+                VisceralFatMass = Convert.ToSingle(bodyComposition.VisceralFat),
+                PhysiqueRating = Convert.ToByte(bodyComposition.BodyType),
+                MetabolicAge = Convert.ToByte(bodyComposition.MetabolicAge),
+                BodyMassIndex = Convert.ToSingle(bodyComposition.BMI),
+               
+            };
+
+            _garminClient = await ClientFactory.Create();
+
+            var file = _garminClient.GenerateWeightFitFile(scaleDTO, userProfileSettings);
+            var logs = LogService.GetLogs();
+            var errorlogs = LogService.GetErrorLogs();
+
+            result.IsSuccess = file != null;
+
+            return result;
+        }
+        catch (Exception ex)
+        {
+            var logs = LogService.GetLogs();
+            var errorlogs = LogService.GetErrorLogs();
+            _logService.LogError(ex?.Message);
+            result.Message = ex.Message;
+            return result;
+        }
+
+    }
+
     private async Task<GarminApiResponse> UploadViaExternalAPIAsync(BodyComposition bodyComposition, DateTime time, CredentialsData credencials)
     {
         var unixTime = ((DateTimeOffset)time).ToUnixTimeSeconds();
