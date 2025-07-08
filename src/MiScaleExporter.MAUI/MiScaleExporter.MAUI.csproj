@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net8.0-android</TargetFrameworks>
+		<TargetFrameworks>net9.0-android</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net6.0-tizen</TargetFrameworks> -->
 		<OutputType>Exe</OutputType>
@@ -24,15 +24,15 @@
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">23.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|AnyCPU'">
-	  <ApplicationDisplayVersion>2.2.4</ApplicationDisplayVersion>
-	  <ApplicationVersion>33</ApplicationVersion>
+	  <ApplicationDisplayVersion>2.2.5</ApplicationDisplayVersion>
+	  <ApplicationVersion>34</ApplicationVersion>
 	  <AndroidUseAapt2>True</AndroidUseAapt2>
 	  <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
 	  <AndroidPackageFormat>apk</AndroidPackageFormat>
@@ -41,8 +41,8 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
-	  <ApplicationDisplayVersion>2.2.4</ApplicationDisplayVersion>
-	  <ApplicationVersion>33</ApplicationVersion>
+	  <ApplicationDisplayVersion>2.2.5</ApplicationDisplayVersion>
+	  <ApplicationVersion>34</ApplicationVersion>
 	  <AndroidPackageFormat>apk</AndroidPackageFormat>
 	  <AndroidUseAapt2>True</AndroidUseAapt2>
 	  <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
@@ -73,19 +73,19 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-  		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.21" />
-  		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.21" />
+  		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.81" />
+  		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.81" />
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="Autofac" Version="8.0.0" />
+	  <PackageReference Include="Autofac" Version="8.3.0" />
 	  <PackageReference Include="Autofac.Extras.CommonServiceLocator" Version="6.1.0" />
-	  <PackageReference Include="CommunityToolkit.Maui" Version="8.0.1" />
+	  <PackageReference Include="CommunityToolkit.Maui" Version="12.1.0" />
 	  <PackageReference Include="MiScaleBodyComposition" Version="1.0.6" />
 	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	  <PackageReference Include="NLog" Version="5.3.1" />
 	  <PackageReference Include="NLog.Extensions.Logging" Version="5.3.9" />
-	  <PackageReference Include="Plugin.BLE" Version="2.1.2" />
-	  <PackageReference Include="Plugin.MauiMTAdmob" Version="1.4.2" />
+	  <PackageReference Include="Plugin.BLE" Version="3.2.0-beta.1" />
+	  <PackageReference Include="Plugin.MauiMTAdmob" Version="2.0.2" />
 	  <PackageReference Include="YetAnotherGarminConnectClient" Version="0.0.11" />
 	</ItemGroup>
 
