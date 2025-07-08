@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="33" android:versionName="2.2.4" package="com.lukaszswiderski.MiScaleExporter" android:installLocation="preferExternal">
-	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="34" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="34" android:versionName="2.2.5" package="com.lukaszswiderski.MiScaleExporter" android:installLocation="auto">
+	<uses-sdk android:minSdkVersion="23" android:targetSdkVersion="36" />
 	<uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
 	<uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
 	<uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
