@@ -16,7 +16,7 @@ namespace MiScaleExporter.MAUI.ViewModels
         private Models.Sex _sex;
         private ScaleType _scaleType;
 
-      
+        private string _bindkey;
 
         public ScaleViewModel(IScale scale, ILogService logService)
         {
@@ -57,6 +57,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             this._sex = (Models.Sex)Preferences.Get(PreferencesKeys.UserSex, (byte)Models.Sex.Male);
             this._address = Preferences.Get(PreferencesKeys.MiScaleBluetoothAddress, string.Empty);
             this._scaleType = (ScaleType)Preferences.Get(PreferencesKeys.ScaleType, (byte)ScaleType.MiBodyCompositionScale);
+            this._bindkey = Preferences.Get(PreferencesKeys.S400Bindkey, string.Empty);
         }
 
         private async void OnScan()
@@ -109,7 +110,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             ScaleMeasurement.Instance.Weight = "0";
             this.IsBusyForm = true;
             await this._scale.GetBodyCompositonAsync(_address,
-                new User { Sex = _sex, Age = _age, Height = _height, ScaleType = _scaleType });
+                new User { Sex = _sex, Age = _age, Height = _height, ScaleType = _scaleType, BindKey = _bindkey });
             this.OnStop();
         }
 

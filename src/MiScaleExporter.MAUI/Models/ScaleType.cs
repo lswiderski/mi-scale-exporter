@@ -8,5 +8,6 @@ namespace MiScaleExporter.Models
     {
         MiBodyCompositionScale = 0,
         MiSmartScale = 1,
+        S400 = 2,
     }
 }

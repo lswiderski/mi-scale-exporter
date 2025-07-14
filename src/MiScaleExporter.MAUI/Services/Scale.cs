@@ -164,7 +164,7 @@ namespace MiScaleExporter.Services
                     .FirstOrDefault();
                 _scannedData = data;
 
-                var bc = this._dataInterpreter.ComputeData(data, _user);
+                var bc = this._dataInterpreter.ComputeData(data, _user, _scaleBlutetoothAddress);
                 if (bc is not null)
                 {
                     bc.ReceivedRawData = _scannedData;

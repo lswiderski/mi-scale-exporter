@@ -52,6 +52,15 @@ namespace MiScaleExporter.MAUI.Views
             }
 
         }
+        private void ScaleTypeSetToS400(object sender, CheckedChangedEventArgs e)
+        {
+            if (e.Value)
+            {
+                vm.ScaleTypeSetToS400();
+            }
+
+        }
+        
 
         protected override async void OnAppearing()
         {

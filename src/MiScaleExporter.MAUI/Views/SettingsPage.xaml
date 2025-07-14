@@ -89,9 +89,16 @@
                                 GroupName="ScaleType"
                                 IsChecked="{Binding IsMiSmartScaleSelected}"
                                 Value="1" />
+                            <RadioButton
+                                CheckedChanged="ScaleTypeSetToS400"
+                                Content="Xiaomi S400"
+                                GroupName="ScaleType"
+                                IsChecked="{Binding IsS400Selected}"
+                                Value="1" />
                             <Label FontSize="Small" Text="{x:Static localization:AppSnippets.BluetoothAddress}" />
                             <Entry FontSize="Medium" Text="{Binding Address, Mode=TwoWay}" />
-
+                            <Label FontSize="Small" Text="S400 bindkey" />
+                            <Entry FontSize="Medium" Text="{Binding Bindkey, Mode=TwoWay}" />
                         </StackLayout>
 
                     </Border>

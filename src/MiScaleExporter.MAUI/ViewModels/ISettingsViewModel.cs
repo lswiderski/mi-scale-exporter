@@ -12,6 +12,7 @@ namespace MiScaleExporter.MAUI.ViewModels
         void SexRadioSetToFemale();
         void ScaleTypeSetToBodyCompositionScale();
         void ScaleTypeSetToMiscale();
+        void ScaleTypeSetToS400();
         Task LoadPreferencesAsync();
     }
 }

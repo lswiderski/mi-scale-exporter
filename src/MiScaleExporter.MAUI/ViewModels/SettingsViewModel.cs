@@ -44,6 +44,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             this._scaleType = (ScaleType)Preferences.Get(PreferencesKeys.ScaleType, (byte)ScaleType.MiBodyCompositionScale);
             this._email = Preferences.Get(PreferencesKeys.GarminUserEmail, string.Empty);
             this._password = await SecureStorage.GetAsync(PreferencesKeys.GarminUserPassword);
+            this._bindkey = Preferences.Get(PreferencesKeys.S400Bindkey, string.Empty);
             NotifyAllPropertiesChanged();
         }
 
@@ -159,6 +160,12 @@ namespace MiScaleExporter.MAUI.ViewModels
             this.ScaleType = ScaleType.MiSmartScale;
         }
 
+        public void ScaleTypeSetToS400()
+        {
+            this.ScaleType = ScaleType.S400;
+        }
+        
+
         public void CheckPreferences()
         {
 
@@ -173,6 +180,18 @@ namespace MiScaleExporter.MAUI.ViewModels
             {
                 SetProperty(ref _address, value);
                 Preferences.Set(PreferencesKeys.MiScaleBluetoothAddress, value);
+            }
+        }
+
+        private string _bindkey;
+
+        public string Bindkey
+        {
+            get => _bindkey;
+            set
+            {
+                SetProperty(ref _bindkey, value);
+                Preferences.Set(PreferencesKeys.S400Bindkey, value);
             }
         }
 
@@ -245,6 +264,10 @@ namespace MiScaleExporter.MAUI.ViewModels
             get => _scaleType == ScaleType.MiSmartScale;
         }
 
+        public bool IsS400Selected
+        {
+            get => _scaleType == ScaleType.S400;
+        }
 
         private ScaleType _scaleType;
 

@@ -18,4 +18,5 @@ public static class PreferencesKeys
     public static string ShowDebugInfo = "ShowDebugInfo";
     public static string HideAds = "HideAds";
     public static string MuscleMassAsPercentage = "MuscleMassAsPercentage";
+    public static string S400Bindkey = "S400Bindkey";
 }
