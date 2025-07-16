@@ -5,7 +5,22 @@ namespace MiScaleExporter.Services
 {
     public class DataInterpreter : IDataInterpreter
     {
-        private MiScaleBodyComposition.S400 _s400Scale;
+        private void ValidateAesKey(string aesKey)
+        {
+            if (string.IsNullOrEmpty(aesKey) || aesKey.Length != 32)
+            {
+                throw new ArgumentException("AES key must be a 32-character hexadecimal string.");
+            }
+        }
+        private void ValidateBluetoothAddress(string btAddress)
+        {
+            if (string.IsNullOrEmpty(btAddress) || btAddress.Length != 17 || !btAddress.All(c => char.IsLetterOrDigit(c) || c == ':'))
+            {
+                throw new ArgumentException("Bluetooth address must be a valid 17-character string in the format XX:XX:XX:XX:XX:XX.");
+            }
+        }
+
+        private MiScaleBodyComposition.S400Scale _s400Scale;
         public BodyComposition ComputeData(byte[] data, User _user, string btAddress)
         {
 
@@ -83,22 +98,23 @@ namespace MiScaleExporter.Services
 
                     if (_s400Scale == null)
                     {
-                        _s400Scale = new MiScaleBodyComposition.S400();
+                        _s400Scale = new MiScaleBodyComposition.S400Scale();
                     }
 
-                    if(data.Length> 13)
+                    if(data.Length == 26)
                     {
-
-                        byte[] dataForInput = new byte[data.Length - 2];
-                        Array.Copy(data, 2, dataForInput, 0, dataForInput.Length);
+                        this.ValidateAesKey(_user.BindKey);
+                        this.ValidateBluetoothAddress(btAddress);
 
                         var s400Result = _s400Scale.GetBodyComposition(user, new S400InputData
                         {
+                            //AesKeyBytes = aesKey,
+                            //MacBytes = mac,
+                            Data = data,
                             AesKey = _user.BindKey,
                             MacOriginal = btAddress,
-                            Data = dataForInput
                         });
-
+                        
                         if (s400Result != null)
                         {
                             var bodyComposition = new BodyComposition
@@ -124,9 +140,14 @@ namespace MiScaleExporter.Services
 
                         }
                     }
-                 
+                    var emptyBC = new BodyComposition
+                    {
+                        Weight = 0,
+                        HasImpedance = false,
+                        IsStabilized = false,
+                    };
+                    return emptyBC;
 
-                    return null;
                 default:
                     throw new NotImplementedException();
             }

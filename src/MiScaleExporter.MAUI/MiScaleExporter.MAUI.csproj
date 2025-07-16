@@ -80,12 +80,13 @@
 	  <PackageReference Include="Autofac" Version="8.3.0" />
 	  <PackageReference Include="Autofac.Extras.CommonServiceLocator" Version="6.1.0" />
 	  <PackageReference Include="CommunityToolkit.Maui" Version="12.1.0" />
-	  <PackageReference Include="MiScaleBodyComposition" Version="1.0.7" />
+	  <PackageReference Include="MiScaleBodyComposition" Version="1.0.12" />
 	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	  <PackageReference Include="NLog" Version="5.3.1" />
 	  <PackageReference Include="NLog.Extensions.Logging" Version="5.3.9" />
 	  <PackageReference Include="Plugin.BLE" Version="3.2.0-beta.1" />
 	  <PackageReference Include="Plugin.MauiMTAdmob" Version="2.0.2" />
+	  <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
 	  <PackageReference Include="YetAnotherGarminConnectClient" Version="0.0.11" />
 	</ItemGroup>
 
