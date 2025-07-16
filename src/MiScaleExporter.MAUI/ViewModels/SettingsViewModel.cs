@@ -23,9 +23,11 @@ namespace MiScaleExporter.MAUI.ViewModels
                     Preferences.Remove(PreferencesKeys.MuscleMassAsPercentage);
                 }
             );
+            GetBLEKeyCommand = new Command(async () => await Launcher.OpenAsync("https://github.com/PiotrMachowski/Xiaomi-cloud-tokens-extractor"));
         }
 
         public ICommand ResetCommand { get; }
+        public ICommand GetBLEKeyCommand { get; }
 
 
         public async Task LoadPreferencesAsync()
