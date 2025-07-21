@@ -1,0 +1,5 @@
+title: MiScale Exporter
+description: Mobile App to export data from Mi Body Composition Scale and upload it to Garmin Connect Cloud
+show_downloads: true
+google_analytics:
+theme: jekyll-theme-cayman
