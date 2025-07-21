@@ -25,5 +25,10 @@ namespace MiScaleExporter.Models
         public byte[] ReceivedRawData { get; set; } 
         public string MFACode { get; set; }
         public string ExternalApiClientId { get; set; }
+        public List<byte[]> RawDataLog { get; set; }
+        public BodyComposition()
+        {
+            RawDataLog = new List<byte[]>();
+        }
     }
 }

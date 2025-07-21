@@ -72,12 +72,13 @@ namespace MiScaleExporter.Services
                 {
                     var device = a.Device;
                     var bodyCompositionCandidate = GetScanData(device);
-                    if(bodyCompositionCandidate is not null && bodyCompositionCandidate.Weight > _minWeight)
+                    if (bodyCompositionCandidate is not null && bodyCompositionCandidate.Weight > _minWeight)
                     {
                         this.BodyComposition = bodyCompositionCandidate;
                     }
-                   
+
                     this.ProcessReceivedData();
+                    this.SetPreviews(bodyCompositionCandidate);
                 }
                 catch (Exception ex)
                 {
@@ -108,8 +109,6 @@ namespace MiScaleExporter.Services
             {
                 return;
             }
-
-            this.SetPreviews();
 
             _lastSuccessfulBodyComposition = this.BodyComposition;
 
@@ -142,16 +141,34 @@ namespace MiScaleExporter.Services
             }
         }
 
-        private void SetPreviews()
+        public static string BytesToHex(byte[] bytes)
+        {
+            return BitConverter.ToString(bytes).Replace("-", "").ToLower();
+        }
+
+        private void SetPreviews(BodyComposition bodyCompositionCandidate)
         {
             if (Preferences.Get(PreferencesKeys.ShowDebugInfo, false))
             {
-                ScaleMeasurement.Instance.FoundScale = this.BodyComposition != null ? "Connected to scale: Yes" : "Connected to scale: No"; ;
-                ScaleMeasurement.Instance.DebugData = (this.BodyComposition.IsStabilized ? "Stabilized: Yes" : "Stabilized: No") + " " + (this.BodyComposition.HasImpedance ? "Impedance: Yes" : "Impedance: No");
-                ScaleMeasurement.Instance.RawData = string.Join("|", this.BodyComposition.ReceivedRawData);
+                ScaleMeasurement.Instance.FoundScale = bodyCompositionCandidate != null ? "Connected to scale: Yes" : "Connected to scale: No";
+                if (bodyCompositionCandidate != null)
+                {
+                    ScaleMeasurement.Instance.DebugData = (bodyCompositionCandidate.IsStabilized ? "Stabilized: Yes" : "Stabilized: No") + " " + (bodyCompositionCandidate.HasImpedance ? "Impedance: Yes" : "Impedance: No");
+                    if (bodyCompositionCandidate.RawDataLog != null && bodyCompositionCandidate.RawDataLog.Count > 0)
+                    {
+                        ScaleMeasurement.Instance.RawData = string.Join("|", bodyCompositionCandidate.RawDataLog.Select(BytesToHex));
+                    }
+                    else if (bodyCompositionCandidate.ReceivedRawData != null && bodyCompositionCandidate.ReceivedRawData.Length > 0)
+                    {
+                        ScaleMeasurement.Instance.RawData = BytesToHex(bodyCompositionCandidate.ReceivedRawData);
+                    }
+                }
+            }
+            if (this.BodyComposition != null)
+            {
+                ScaleMeasurement.Instance.Weight = this.BodyComposition.Weight.ToString("0.##") + "kg";
             }
 
-            ScaleMeasurement.Instance.Weight = this.BodyComposition.Weight.ToString("0.##") + "kg";
         }
 
         private BodyComposition GetScanData(IDevice device)
@@ -168,6 +185,10 @@ namespace MiScaleExporter.Services
                 if (bc is not null)
                 {
                     bc.ReceivedRawData = _scannedData;
+                    if (!bc.RawDataLog.Contains(_scannedData))
+                    {
+                        bc.RawDataLog.Add(_scannedData);
+                    }
                 }
 
                 return bc;
