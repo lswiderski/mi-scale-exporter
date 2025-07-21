@@ -92,7 +92,7 @@
         <FlyoutItem.Icon>
             <FontImageSource
                 FontFamily="FontAwesome6Solid"
-                Glyph=""
+                Glyph="&#xf05a;"
                 Size="16"
                 Color="{AppThemeBinding Light={StaticResource Black},
                                         Dark={StaticResource White}}" />
@@ -104,7 +104,7 @@
         <FlyoutItem.Icon>
             <FontImageSource
                 FontFamily="FontAwesome6Solid"
-                Glyph=""
+                Glyph="&#xf496;"
                 Size="16"
                 Color="{AppThemeBinding Light={StaticResource Black},
                                         Dark={StaticResource White}}" />
@@ -116,7 +116,7 @@
         <FlyoutItem.Icon>
             <FontImageSource
                 FontFamily="FontAwesome6Solid"
-                Glyph=""
+                Glyph="&#xf0ee;"
                 Size="16"
                 Color="{AppThemeBinding Light={StaticResource Black},
                                         Dark={StaticResource White}}" />
@@ -128,7 +128,7 @@
         <FlyoutItem.Icon>
             <FontImageSource
                 FontFamily="FontAwesome6Solid"
-                Glyph=""
+                Glyph="&#xf013;"
                 Size="16"
                 Color="{AppThemeBinding Light={StaticResource Black},
                                         Dark={StaticResource White}}" />
@@ -139,7 +139,7 @@
         <FlyoutItem.Icon>
             <FontImageSource
                 FontFamily="FontAwesome6Solid"
-                Glyph=""
+                Glyph="&#xf059;"
                 Size="16"
                 Color="{AppThemeBinding Light={StaticResource Black},
                                         Dark={StaticResource White}}" />

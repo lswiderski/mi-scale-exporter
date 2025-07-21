@@ -67,10 +67,6 @@
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <None Remove="Resources\Fonts\FontAwesome6Regular.otf" />
-	  <None Remove="Resources\Fonts\FontAwesome6Solid.otf" />
-	</ItemGroup>
 	
 	<ItemGroup>
   		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.81" />
