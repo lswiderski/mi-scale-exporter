@@ -21,7 +21,7 @@ It also allows you to upload manually entered body composition data to the Garmi
 1. Add Scale to Xiaomi Home App and do first measurement.
 
 2. You will need scale MAC address and BLE Key from Xiaomi Cloud. You can get it on many ways but I recommend 'Xiaomi Cloud Tokens Extractor'
-   Go to https://github.com/PiotrMachowski/Xiaomi-cloud-tokens-extractor and use your preferred way
+   Go to  <a target="_blank" rel="noopener noreferrer" href="https://github.com/PiotrMachowski/Xiaomi-cloud-tokens-extractor">https://github.com/PiotrMachowski/Xiaomi-cloud-tokens-extractor</a> and use your preferred way
    Found Xiaomi Body Composition Scale S400 on the list of your devices and copy BLE KEY and MAC and save it for later.
    <a target="_blank" rel="noopener noreferrer" href="https://github.com/lswiderski/mi-scale-exporter/blob/main/resources/img/screenshots/token_extractor.png"><img src="https://github.com/lswiderski/mi-scale-exporter/raw/main/resources/img/screenshots/token_extractor.png" alt="Xiaomi Cloud Tokens Extractor" style="width: 836px;"></a>
 
