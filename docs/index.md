@@ -83,5 +83,5 @@ It also allows you to upload manually entered body composition data to the Garmi
 
 5. You don't have to enter the code every time you try to send a message. The returned token will be saved in the app and will be valid for several months.
 
-<a target="_blank" rel="noopener noreferrer" href="https://github.com/lswiderski/mi-scale-exporter/blob/main/resources/img/screenshots/garmin.png"><img src="https://github.com/lswiderski/mi-scale-exporter/blob/main/resources/img/screenshots/garmin.png" alt="Garmin results" style="width: 722px; margin: auto;
+<a target="_blank" rel="noopener noreferrer" href="https://github.com/lswiderski/mi-scale-exporter/blob/main/resources/img/screenshots/garmin.png"><img src="https://github.com/lswiderski/mi-scale-exporter/raw/main/resources/img/screenshots/garmin.png" alt="Garmin results" style="width: 722px; margin: auto;
     display: block;"></a>
