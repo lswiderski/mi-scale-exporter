@@ -235,8 +235,13 @@
                                 Command="{Binding ResetCommand}"
                                 Text="{x:Static localization:AppSnippets.ResetToDefault}"
                                 TextColor="White" />
-
-
+                            <Button
+                                Margin="0,10,0,10"
+                                BackgroundColor="{StaticResource Primary}"
+                                Command="{Binding ResetTokensCommand}"
+                                Text="Clear Garmin Tokens"
+                                TextColor="White" />
+                            
                         </StackLayout>
                     </Border>
                 </StackLayout>

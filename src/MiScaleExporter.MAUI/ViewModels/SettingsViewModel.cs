@@ -24,10 +24,12 @@ namespace MiScaleExporter.MAUI.ViewModels
                 }
             );
             GetBLEKeyCommand = new Command(async () => await Launcher.OpenAsync("https://lswiderski.github.io/mi-scale-exporter/#steps-to-connect-xiaomi-body-composition-scale-s400"));
+            ResetTokensCommand = new Command(_clearTokens);
         }
 
         public ICommand ResetCommand { get; }
         public ICommand GetBLEKeyCommand { get; }
+        public ICommand ResetTokensCommand { get; }
 
 
         public async Task LoadPreferencesAsync()
