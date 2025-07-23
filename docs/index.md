@@ -43,15 +43,16 @@ It also allows you to upload manually entered body composition data to the Garmi
 
 ## Steps to Connect Xiaomi Body Composition Scale S400:
 
-1. Add Scale to Xiaomi Home App and do first measurement.
+1. Add Scale to Xiaomi Home App and do first measurement. You can disable Heart rate measurement to fast up whole process.
 
 2. You will need scale MAC address and BLE Key from Xiaomi Cloud. You can get it on many ways but I recommend 'Xiaomi Cloud Tokens Extractor'
-   Go to  <a target="_blank" rel="noopener noreferrer" href="https://github.com/PiotrMachowski/Xiaomi-cloud-tokens-extractor">https://github.com/PiotrMachowski/Xiaomi-cloud-tokens-extractor</a> and use your preferred way
-   Found Xiaomi Body Composition Scale S400 on the list of your devices and copy BLE KEY and MAC and save it for later.
+   Go to  <a target="_blank" rel="noopener noreferrer" href="https://github.com/PiotrMachowski/Xiaomi-cloud-tokens-extractor">https://github.com/PiotrMachowski/Xiaomi-cloud-tokens-extractor</a> and use your preferred way.
+   
+   Find Xiaomi Body Composition Scale S400 on the list of your devices and copy BLE KEY and MAC and save it for later.
 
    <a target="_blank" rel="noopener noreferrer" href="https://github.com/lswiderski/mi-scale-exporter/blob/main/resources/img/screenshots/token_extractor.png"><img src="https://github.com/lswiderski/mi-scale-exporter/raw/main/resources/img/screenshots/token_extractor.png" alt="Xiaomi Cloud Tokens Extractor" style="width: 836px; margin: auto; display: block;"></a>
 
-3. Now you need to completely kill the app (so that it doesn't run in the background either). Or remove the scale from the list of devices - if you use other devices with Xiaomi Home. The scale will only send the needed data when it is not able to connect to the Xiaomi Home app! Every time when you add Scale as new device to Xiaomi Home new BLE key will be generated. You can disable Heart rate measurement to fast up whole process.
+3. Now you need to completely kill the app (so that it doesn't run in the background either). Or remove the scale from the list of devices - if you use other devices with Xiaomi Home. The scale will only send the needed data when it is not able to connect to the Xiaomi Home app! Every time when you add Scale as new device to Xiaomi Home new BLE key will be generated. 
 
    <a target="_blank" rel="noopener noreferrer" href="https://github.com/lswiderski/mi-scale-exporter/blob/main/resources/img/screenshots/xiaomi_home.png"><img src="https://github.com/lswiderski/mi-scale-exporter/raw/main/resources/img/screenshots/xiaomi_home.png" alt="Xiaomi Homer" style="width: 400px; margin: auto;
     display: block;"></a>
@@ -65,9 +66,9 @@ It also allows you to upload manually entered body composition data to the Garmi
    
    [![Watch the video](https://img.youtube.com/vi/HtOZZwnkZHw/0.jpg)](https://www.youtube.com/shorts/HtOZZwnkZHw)
 
-7. These types of scales do not measure body composition. They measure weight and impedance and estimate the result based on those measurements. The scale sends 3 values: Weight, impedance and Heart rate. To receive body composition data, impedance is processed by an algorithm known to be similar to that used by the Mi Body Composition Scale 2 (different from that used by the S400). Because of this, the result may differ from that of the Xiaomi Home app. For this calculation proper age, height and sex is needed.
+6. These types of scales do not measure body composition. They measure weight and impedance and estimate the result based on those measurements. The scale sends 3 values: Weight, impedance and Heart rate. To receive body composition data, impedance is processed by an algorithm known to be similar to that used by the Mi Body Composition Scale 2 (different from that used by the S400). Because of this, the result may differ from that of the Xiaomi Home app. For this calculation proper age, height and sex is needed.
 
-8. Bear in mind that it is an experimental solution and errors may occur. If you encounter them, please contact me.
+7. Bear in mind that it is an experimental solution and errors may occur. If you encounter them, please contact me.
 
 ## Garmin Connect Upload
 
