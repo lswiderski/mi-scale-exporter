@@ -7,6 +7,7 @@ using MiScaleExporter.MAUI.ViewModels;
 using IContainer = Autofac.IContainer;
 using MiScaleExporter.Droid;
 using System.Globalization;
+using CommunityToolkit.Maui.Storage;
 
 namespace MiScaleExporter.MAUI
 {
@@ -54,6 +55,7 @@ namespace MiScaleExporter.MAUI
             builder.RegisterType<LogService>().As<ILogService>().SingleInstance();
             builder.RegisterType<SettingsViewModel>().As<ISettingsViewModel>().InstancePerLifetimeScope();
             builder.RegisterType<AboutViewModel>().AsSelf();
+            builder.RegisterInstance<IFileSaver>(FileSaver.Default).SingleInstance();
 
             App.Container = builder.Build();
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocator(Container));

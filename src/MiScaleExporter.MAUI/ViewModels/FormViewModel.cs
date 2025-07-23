@@ -1,9 +1,12 @@
-﻿using MiScaleExporter.MAUI;
+﻿using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Storage;
+using MiScaleExporter.MAUI;
 using MiScaleExporter.MAUI.Resources.Localization;
 using MiScaleExporter.MAUI.Utils;
 using MiScaleExporter.Models;
 using MiScaleExporter.Services;
 using System.Globalization;
+using System.Threading;
 using YetAnotherGarminConnectClient.Dto.Garmin.Fit;
 
 namespace MiScaleExporter.MAUI.ViewModels
@@ -11,8 +14,9 @@ namespace MiScaleExporter.MAUI.ViewModels
     public class FormViewModel : BaseViewModel, IFormViewModel
     {
         private readonly IGarminService _garminService;
+        private readonly IFileSaver _fileSaver;
 
-        public FormViewModel(IGarminService garminService)
+        public FormViewModel(IGarminService garminService, IFileSaver fileSaver)
         {
             _garminService = garminService;
             Title = AppSnippets.GarminBodyCompositionForm;
@@ -20,10 +24,12 @@ namespace MiScaleExporter.MAUI.ViewModels
             Time = DateTime.Now.TimeOfDay;
             _muscleMassAsKg = true;
             UploadCommand = new Command(OnUpload, ValidateSave);
-            GenerateFitFileCommand = new Command(OnGenerateFitFile);
+            GenerateFitFileCommand = new Command(OnGenerateFitFileAsync);
             CancelMFACommand = new Command(OnCancelMFA);
             this.PropertyChanged +=
                 (_, __) => UploadCommand.ChangeCanExecute();
+
+            this._fileSaver = fileSaver;
         }
 
         public async Task LoadPreferencesAsync()
@@ -101,13 +107,13 @@ namespace MiScaleExporter.MAUI.ViewModels
             await Shell.Current.GoToAsync("..?autoUpload=false");
         }
 
-        private async void OnGenerateFitFile()
+        private async void OnGenerateFitFileAsync()
         {
             this.IsBusyForm = true;
 
             var response = await this._garminService.GenerateFitFileAsync(this.PrepareRequest(), Date.Date.Add(Time));
 
-            if (!response.IsSuccess)
+            if (!response.IsSuccess && response.file != null)
             {
                 await Application.Current.MainPage.DisplayAlert(AppSnippets.Response, response?.Message, AppSnippets.OK);
             }
@@ -116,6 +122,16 @@ namespace MiScaleExporter.MAUI.ViewModels
                 string fileExactLocation = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), $"activity_{Date.Date.Add(Time).ToShortDateString()}.fit");
                 File.WriteAllBytes(fileExactLocation, response.file);
 
+                using var stream = new MemoryStream(response.file);
+                var fileSaverResult = await _fileSaver.SaveAsync($"activity_{Date.Date.Add(Time).ToShortDateString()}.fit", stream);
+                if (fileSaverResult.IsSuccessful)
+                {
+                    await Toast.Make($"The file was saved successfully to location: {fileSaverResult.FilePath}").Show();
+                }
+                else
+                {
+                    await Toast.Make($"The file was not saved successfully with error: {fileSaverResult.Exception.Message}").Show();
+                }
             }
            
             this.IsBusyForm = false;
