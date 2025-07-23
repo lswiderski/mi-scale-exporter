@@ -23,7 +23,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                     Preferences.Remove(PreferencesKeys.MuscleMassAsPercentage);
                 }
             );
-            GetBLEKeyCommand = new Command(async () => await Launcher.OpenAsync("https://github.com/PiotrMachowski/Xiaomi-cloud-tokens-extractor"));
+            GetBLEKeyCommand = new Command(async () => await Launcher.OpenAsync("https://lswiderski.github.io/mi-scale-exporter/#steps-to-connect-xiaomi-body-composition-scale-s400"));
         }
 
         public ICommand ResetCommand { get; }

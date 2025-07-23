@@ -6,6 +6,8 @@ public partial class HelpPage : ContentPage
 {
     public ICommand OpenGithubCommand { get; }
     public ICommand OpenCoffeeCommand { get; }
+    public ICommand S400HelpCommand { get; } = new Command(async () =>
+        await Launcher.OpenAsync("https://lswiderski.github.io/mi-scale-exporter/#steps-to-connect-xiaomi-body-composition-scale-s400"));
 
     public HelpPage()
 	{

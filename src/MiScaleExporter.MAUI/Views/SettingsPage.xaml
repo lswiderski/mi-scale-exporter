@@ -91,7 +91,7 @@
                                 Value="1" />
                             <RadioButton
                                 CheckedChanged="ScaleTypeSetToS400"
-                                Content="Xiaomi S400"
+                                Content="Mi Scale S400"
                                 GroupName="ScaleType"
                                 IsChecked="{Binding IsS400Selected}"
                                 Value="1" />
@@ -99,8 +99,8 @@
                             <Entry FontSize="Medium" Text="{Binding Address, Mode=TwoWay}" />
                        
                             <StackLayout Orientation="Horizontal" Spacing="10">
-                                <Label FontSize="Small" Text="S400 BLE Key" />
-                                <Label FontSize="Small" Text="how to get it"  TextDecorations="Underline" TextColor="#007CC3">
+                                <Label FontSize="Small" Text="BLE Key (S400 only)" />
+                                <Label FontSize="Small" Text="(how to get it)"  TextDecorations="Underline" TextColor="#007CC3">
 
                                     <Label.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding GetBLEKeyCommand}" />
