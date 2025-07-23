@@ -12,6 +12,9 @@ and upload it to [Garmin Connect Cloud.](#garmin-connect-upload)
 
 It also allows you to upload manually entered body composition data to the Garmin cloud.
 
+> [!CAUTION]  
+> This application is not supported or endorsed by Xiaomi or Garmin. So it could stop working at any moment. It is intended for personal use only and is not to be used for financial gain. The creator takes no responsibility for any consequences that may arise from its use.
+
 ## If you like my work, you can buy me a coffee
 
 <a href="https://www.buymeacoffee.com/lukaszswiderski" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
