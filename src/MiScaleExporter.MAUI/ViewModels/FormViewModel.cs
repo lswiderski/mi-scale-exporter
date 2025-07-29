@@ -119,9 +119,6 @@ namespace MiScaleExporter.MAUI.ViewModels
             }
             else
             {
-                string fileExactLocation = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), $"activity_{Date.Date.Add(Time).ToShortDateString()}.fit");
-                File.WriteAllBytes(fileExactLocation, response.file);
-
                 using var stream = new MemoryStream(response.file);
                 var fileSaverResult = await _fileSaver.SaveAsync($"activity_{Date.Date.Add(Time).ToShortDateString()}.fit", stream);
                 if (fileSaverResult.IsSuccessful)

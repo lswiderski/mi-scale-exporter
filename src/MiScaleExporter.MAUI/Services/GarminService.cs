@@ -173,8 +173,12 @@ public class GarminService : IGarminService
             var logs = LogService.GetLogs();
             var errorlogs = LogService.GetErrorLogs();
 
+            if(errorlogs.Count > 0)
+            {
+                result.Message = string.Join(Environment.NewLine, errorlogs);
+            }
             result.IsSuccess = file != null;
-
+            result.file = file;
             return result;
         }
         catch (Exception ex)
