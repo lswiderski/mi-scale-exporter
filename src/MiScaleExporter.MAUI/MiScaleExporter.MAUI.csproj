@@ -31,8 +31,8 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|AnyCPU'">
-	  <ApplicationDisplayVersion>2.3.0</ApplicationDisplayVersion>
-	  <ApplicationVersion>35</ApplicationVersion>
+	  <ApplicationDisplayVersion>2.3.1</ApplicationDisplayVersion>
+	  <ApplicationVersion>36</ApplicationVersion>
 	  <AndroidUseAapt2>True</AndroidUseAapt2>
 	  <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
 	  <AndroidPackageFormat>apk</AndroidPackageFormat>
@@ -41,8 +41,8 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
-	  <ApplicationDisplayVersion>2.3.0</ApplicationDisplayVersion>
-	  <ApplicationVersion>35</ApplicationVersion>
+	  <ApplicationDisplayVersion>2.3.1</ApplicationDisplayVersion>
+	  <ApplicationVersion>36</ApplicationVersion>
 	  <AndroidPackageFormat>apk</AndroidPackageFormat>
 	  <AndroidUseAapt2>True</AndroidUseAapt2>
 	  <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="35" android:versionName="2.3.0" package="com.lukaszswiderski.MiScaleExporter" android:installLocation="auto">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="36" android:versionName="2.3.1" package="com.lukaszswiderski.MiScaleExporter" android:installLocation="auto">
 	<uses-sdk android:minSdkVersion="23" android:targetSdkVersion="36" />
 	<uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
 	<uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
