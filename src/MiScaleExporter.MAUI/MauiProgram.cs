@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui;
-using Plugin.MauiMTAdmob;
+using Plugin.AdMob;
+using Plugin.AdMob.Configuration;
 
 namespace MiScaleExporter.MAUI
 {
@@ -15,7 +16,13 @@ namespace MiScaleExporter.MAUI
                 fonts.AddFont("FontAwesome6Regular.otf", "FontAwesome6Regular");
                 fonts.AddFont("FontAwesome6Solid.otf", "FontAwesome6Solid");
             }).UseMauiCommunityToolkit()
-             .UseMauiMTAdmob();
+             .UseAdMob();
+
+#if DEBUG
+            //AdConfig.UseTestAdUnitIds = true;
+
+#endif
+            AdConfig.DefaultBannerAdUnitId = "ca-app-pub-1938975042085430/4160336701";
             return builder.Build();
         }
     }

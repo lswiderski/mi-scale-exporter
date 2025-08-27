@@ -5,7 +5,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:behaviors="clr-namespace:MiScaleExporter.MAUI.Behaviors;assembly=MiScaleExporter.MAUI"
-    xmlns:controls="clr-namespace:Plugin.MauiMTAdmob.Controls;assembly=Plugin.MauiMTAdmob"
+    xmlns:admob="clr-namespace:Plugin.AdMob;assembly=Plugin.AdMob"
     xmlns:localization="clr-namespace:MiScaleExporter.MAUI.Resources.Localization"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     Title="{Binding Title}">
@@ -24,6 +24,11 @@
                         AbsoluteLayout.LayoutFlags="All"
                >
             <StackLayout  Orientation="Vertical"  HorizontalOptions="FillAndExpand">
+                <admob:BannerAd
+x:Name="adMobBanner"
+AdUnitId="ca-app-pub-1938975042085430/4160336701"
+AdSize="SmartBanner"
+ />
                 <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
                     <Grid  
                 Padding="10,10,10,10"
@@ -52,10 +57,6 @@
                             Padding="10"
                             Orientation="Vertical">
                             
-                            <controls:MTAdView
-                                AdSize="AnchoredAdaptive"
-                                x:Name="adMobBanner"
-                                 AdsId="ca-app-pub-1938975042085430/4160336701" />
                         </StackLayout>
 
                         <StackLayout Grid.Row="1" Grid.Column="0" >

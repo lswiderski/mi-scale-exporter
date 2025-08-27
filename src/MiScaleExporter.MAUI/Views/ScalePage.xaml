@@ -5,7 +5,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:behaviors="clr-namespace:MiScaleExporter.MAUI.Behaviors;assembly=MiScaleExporter.MAUI"
-    xmlns:controls="clr-namespace:Plugin.MauiMTAdmob.Controls;assembly=Plugin.MauiMTAdmob"
+    xmlns:admob="clr-namespace:Plugin.AdMob;assembly=Plugin.AdMob"
     xmlns:localization="clr-namespace:MiScaleExporter.MAUI.Resources.Localization"
     xmlns:models="clr-namespace:MiScaleExporter.Models"
     xmlns:vm="clr-namespace:MiScaleExporter.MAUI.ViewModels"
@@ -17,15 +17,22 @@
             HorizontalOptions="FillAndExpand">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
+            <admob:BannerAd
+x:Name="adMobBanner" Grid.Row="0"
+AdUnitId="ca-app-pub-1938975042085430/4160336701"
+AdSize="SmartBanner"
+ />
             <StackLayout
-                Grid.Row="0"
+                Grid.Row="1"
                 HorizontalOptions="Center"
                 Orientation="Horizontal">
+              
                 <Label
                     Margin="0,100,0,0"
                     FontSize="90"
@@ -34,7 +41,7 @@
                     VerticalTextAlignment="End" />
             </StackLayout>
 
-            <ScrollView Grid.Row="1" HorizontalOptions="FillAndExpand">
+            <ScrollView Grid.Row="2" HorizontalOptions="FillAndExpand">
                 <StackLayout
                     Padding="15,24,15,24"
                     Orientation="Vertical"
@@ -58,10 +65,7 @@
                         Command="{Binding CancelCommand}"
                         Text="{x:Static localization:AppSnippets.CancelSearch}"
                         TextColor="White" />
-                    <controls:MTAdView
-                        x:Name="adMobBanner"
-                        AdSize="AnchoredAdaptive"
-                        AdsId="ca-app-pub-1938975042085430/4160336701" />
+                    
                 </StackLayout>
             </ScrollView>
         </Grid>

@@ -7,7 +7,6 @@ using Autofac;
 using MiScaleExporter.MAUI;
 using MiScaleExporter.MAUI.ViewModels;
 using MiScaleExporter.Models;
-using Plugin.MauiMTAdmob.Controls;
 
 namespace MiScaleExporter.MAUI.Views
 {
@@ -26,7 +25,6 @@ namespace MiScaleExporter.MAUI.Views
         protected override void OnAppearing()
         {
             this.adMobBanner.IsVisible = !Preferences.Get(PreferencesKeys.HideAds, false);
-            this.adMobBanner.LoadAd();
         }
     }
 }

@@ -3,7 +3,7 @@
     x:Class="MiScaleExporter.MAUI.Views.AboutPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:controls="clr-namespace:Plugin.MauiMTAdmob.Controls;assembly=Plugin.MauiMTAdmob"
+    xmlns:admob="clr-namespace:Plugin.AdMob;assembly=Plugin.AdMob"
     xmlns:localization="clr-namespace:MiScaleExporter.MAUI.Resources.Localization"
     xmlns:vm="clr-namespace:MiScaleExporter.MAUI.ViewModels"
     Title="{Binding Title}">
@@ -12,21 +12,29 @@
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <ScrollView Grid.Row="0">
-            <StackLayout
+        <admob:BannerAd Grid.Row="0"
+x:Name="adMobBanner"
+AdUnitId="ca-app-pub-1938975042085430/4160336701"
+AdSize="Banner"
+ />
+        <ScrollView Grid.Row="1">
+
+                <StackLayout
                 Padding="15,24,15,24"
                 Orientation="Vertical"
                 Spacing="10">
-                <Label FontSize="Small" Text="{x:Static localization:AppSnippets.AboutGarmin}" />
-                <Label FontSize="Small" Text="{x:Static localization:AppSnippets.AboutMeasureInstruction}" />
-                <Label FontSize="Small" Text="{x:Static localization:AppSnippets.AboutUpload}" />
-                <Label FontSize="Small" Text="{x:Static localization:AppSnippets.AboutMFAAndStoringData}" />
-            </StackLayout>
+
+                    <Label FontSize="Small" Text="{x:Static localization:AppSnippets.AboutGarmin}" />
+                    <Label FontSize="Small" Text="{x:Static localization:AppSnippets.AboutMeasureInstruction}" />
+                    <Label FontSize="Small" Text="{x:Static localization:AppSnippets.AboutUpload}" />
+                    <Label FontSize="Small" Text="{x:Static localization:AppSnippets.AboutMFAAndStoringData}" />
+                </StackLayout>
         </ScrollView>
-        <ScrollView Grid.Row="1">
+        <ScrollView Grid.Row="2">
             <StackLayout
                 Padding="15,24,15,24"
                 Orientation="Vertical"
@@ -57,10 +65,7 @@
                     Command="{Binding OpenGithubCommand}"
                     Text="{x:Static localization:AppSnippets.VisitProjectRepository}"
                     TextColor="White" />
-                <controls:MTAdView
-                    x:Name="adMobBanner"
-                    AdSize="AnchoredAdaptive"
-                    AdsId="ca-app-pub-1938975042085430/4160336701" />
+                
 
             </StackLayout>
         </ScrollView>

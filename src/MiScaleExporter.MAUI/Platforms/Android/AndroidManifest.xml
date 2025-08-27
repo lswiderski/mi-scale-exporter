@@ -9,12 +9,14 @@
 	<uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	<uses-permission android:name="com.google.android.gms.permission.AD_ID" />
 	<uses-feature android:name="android.hardware.bluetooth_le" android:required="false" />
 	<application android:label="MiScale Exporter" android:usesCleartextTraffic="true" android:theme="@style/MainTheme" android:icon="@mipmap/launcher_foreground" android:allowBackup="false" android:requestLegacyExternalStorage="true">
+		<activity android:name="com.google.android.gms.ads.AdActivity" android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" android:theme="@android:style/Theme.Translucent" />
 		<meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-1938975042085430~7383010816" />
 	</application>
 </manifest>

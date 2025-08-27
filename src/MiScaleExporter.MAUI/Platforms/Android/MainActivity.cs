@@ -4,7 +4,6 @@ using Android.OS;
 using Android.Runtime;
 using MiScaleExporter.Droid;
 using MiScaleExporter.Permission;
-using Plugin.MauiMTAdmob;
 
 namespace MiScaleExporter.MAUI
 {
@@ -16,8 +15,6 @@ namespace MiScaleExporter.MAUI
             base.OnCreate(savedInstanceState);
 
             Platform.Init(this, savedInstanceState);
-            CrossMauiMTAdmob.Current.Init(this, "ca-app-pub-1938975042085430~7383010816");
-            CrossMauiMTAdmob.Current.UserPersonalizedAds = false;
             DependencyService.Register<IBluetoothConnectPermission, BluetoothConnectPermission>();
             // LoadApplication(app);
         }
@@ -27,5 +24,7 @@ namespace MiScaleExporter.MAUI
 
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+
+       
     }
 }
