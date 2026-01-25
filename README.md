@@ -2,6 +2,8 @@
 
 Mobile App to export data from Mi Body Composition Scale (works with Mi Scale too) and upload it to Garmin Connect Cloud. It also allows you to upload manually entered body composition data to the Garmin cloud.
 
+Instruction: [https://lswiderski.github.io/mi-scale-exporter/](https://lswiderski.github.io/mi-scale-exporter/)
+
 Tested on Oneplus 5T (Android 10) and Mi Body Composition Scale (XMTZC02HM)
 
 ## Download
