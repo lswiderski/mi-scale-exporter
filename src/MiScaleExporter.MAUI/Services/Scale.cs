@@ -18,7 +18,7 @@ namespace MiScaleExporter.Services
         private byte[] _scannedData;
         private string _scaleBlutetoothAddress;
         private DateTime? _lastSuccessfulMeasure;
-        private static bool _impedanceWaitFinished = false;
+        private bool _impedanceWaitFinished = false;
         private bool _impedanceWaitStarted = false;
         private int _minWeight = 10; // in kilograms
         private const double KgToLbsConversion = 2.20462;

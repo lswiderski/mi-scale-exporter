@@ -20,7 +20,6 @@ namespace MiScaleExporter.Services
             }
         }
 
-        private MiScaleBodyComposition.S400Scale _s400Scale;
         public BodyComposition ComputeData(byte[] data, User _user, string btAddress)
         {
 
@@ -96,20 +95,14 @@ namespace MiScaleExporter.Services
                     }
                 case ScaleType.S400:
 
-                    if (_s400Scale == null)
-                    {
-                        _s400Scale = new MiScaleBodyComposition.S400Scale();
-                    }
-
                     if(data.Length == 26)
                     {
                         this.ValidateAesKey(_user.BindKey);
                         this.ValidateBluetoothAddress(btAddress);
 
-                        var s400Result = _s400Scale.GetBodyComposition(user, new S400InputData
+                        var s400Scale = new MiScaleBodyComposition.S400Scale();
+                        var s400Result = s400Scale.GetBodyComposition(user, new S400InputData
                         {
-                            //AesKeyBytes = aesKey,
-                            //MacBytes = mac,
                             Data = data,
                             AesKey = _user.BindKey,
                             MacOriginal = btAddress,
