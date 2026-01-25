@@ -105,7 +105,11 @@ public class GarminService : IGarminService
 
             if (string.IsNullOrEmpty(bodyComposition.MFACode))
             {
-                _garminClient = await ClientFactory.Create();
+                var useChinaServer = Preferences.Get(PreferencesKeys.UseChinaServer, false);
+                var garminServer = useChinaServer 
+                    ? YetAnotherGarminConnectClient.Dto.GarminServer.CHINA 
+                    : YetAnotherGarminConnectClient.Dto.GarminServer.GLOBAL;
+                _garminClient = await ClientFactory.Create(garminServer);
             }
 
             var garminApiReponse = await _garminClient.UploadWeight(scaleDTO, userProfileSettings, credencials, bodyComposition.MFACode);

@@ -167,6 +167,7 @@
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
 
                                 <Grid.ColumnDefinitions>
@@ -231,10 +232,21 @@
                                 <CheckBox
                                     Grid.Row="5"
                                     Grid.Column="0"
-                                    IsChecked="{Binding HideAds, Mode=TwoWay}"
+                                    IsChecked="{Binding UseChinaServer, Mode=TwoWay}"
                                     VerticalOptions="Center" />
                                 <Label
                                     Grid.Row="5"
+                                    Grid.Column="1"
+                                    FontSize="Small"
+                                    Text="Use China Server"
+                                    VerticalOptions="Center" />
+                                <CheckBox
+                                    Grid.Row="6"
+                                    Grid.Column="0"
+                                    IsChecked="{Binding HideAds, Mode=TwoWay}"
+                                    VerticalOptions="Center" />
+                                <Label
+                                    Grid.Row="6"
                                     Grid.Column="1"
                                     FontSize="Small"
                                     Text="{x:Static localization:AppSnippets.SettingsHideAds}"
