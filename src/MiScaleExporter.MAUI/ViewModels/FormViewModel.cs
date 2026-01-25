@@ -46,6 +46,9 @@ namespace MiScaleExporter.MAUI.ViewModels
 
             this.MuscleMassAsPercentage = Preferences.Get(PreferencesKeys.MuscleMassAsPercentage, false);
             this.MuscleMassAsKg = !Preferences.Get(PreferencesKeys.MuscleMassAsPercentage, false);
+
+            this.Date = DateTime.Now;
+            this.Time = DateTime.Now.TimeOfDay;
         }
         private bool ValidateSave()
         {
@@ -162,7 +165,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                 BMR = DoubleValueParser.ParseValueFromUsersCulture(_bmr) ?? 0,
                 WaterPercentage = DoubleValueParser.ParseValueFromUsersCulture(_waterPercentage) ?? 0,
                 MFACode = _mfaCode,
-                ExternalApiClientId = _externalApiClientId,
+                ExternalApiClientId = _externalApiClientId
             };
 
             if (Preferences.Get(PreferencesKeys.MuscleMassAsPercentage, false) 
@@ -190,6 +193,8 @@ namespace MiScaleExporter.MAUI.ViewModels
             Fat = App.BodyComposition.Fat.ToString();
             WaterPercentage = App.BodyComposition.WaterPercentage.ToString();
             BodyType = App.BodyComposition.BodyType;
+            //Date = App.BodyComposition.Date;
+            //Time = App.BodyComposition.Date.TimeOfDay;
             IsAutomaticCalculation = true;
         }
 
