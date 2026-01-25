@@ -21,6 +21,7 @@ namespace MiScaleExporter.Services
         private static bool _impedanceWaitFinished = false;
         private bool _impedanceWaitStarted = false;
         private int _minWeight = 10; // in kilograms
+        private const double KgToLbsConversion = 2.20462;
 
         private User _user;
 
@@ -166,9 +167,14 @@ namespace MiScaleExporter.Services
             }
             if (this.BodyComposition != null)
             {
-                ScaleMeasurement.Instance.Weight = this.BodyComposition.Weight.ToString("0.##") + "kg";
+                ScaleMeasurement.Instance.Weight = GetWeightScanningLabel(this.BodyComposition.Weight, Preferences.Get(PreferencesKeys.DisplayWeightInLbs, false));
             }
 
+        }
+
+        private string GetWeightScanningLabel(double valueInKg, bool convertToLbs)
+        {
+            return $"{(convertToLbs ? valueInKg * KgToLbsConversion : valueInKg).ToString("0.##")}{(convertToLbs ? "lbs" : "kg")}";
         }
 
         private BodyComposition GetScanData(IDevice device)

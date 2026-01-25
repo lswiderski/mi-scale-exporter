@@ -21,6 +21,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                     Preferences.Remove(PreferencesKeys.ShowDebugInfo);
                     Preferences.Remove(PreferencesKeys.HideAds);
                     Preferences.Remove(PreferencesKeys.MuscleMassAsPercentage);
+                    Preferences.Remove(PreferencesKeys.DisplayWeightInLbs);
                 }
             );
             GetBLEKeyCommand = new Command(async () => await Launcher.OpenAsync("https://lswiderski.github.io/mi-scale-exporter/#steps-to-connect-xiaomi-body-composition-scale-s400"));
@@ -40,6 +41,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             this._showDebugInfo = Preferences.Get(PreferencesKeys.ShowDebugInfo, false);
             this._hideAds = Preferences.Get(PreferencesKeys.HideAds, false);
             this._muscleMassAsPercentage = Preferences.Get(PreferencesKeys.MuscleMassAsPercentage, false);
+            this._displayWeightInLbs = Preferences.Get(PreferencesKeys.DisplayWeightInLbs, false);
 
             this._age = Preferences.Get(PreferencesKeys.UserAge, 25);
             this._height = Preferences.Get(PreferencesKeys.UserHeight, 170);
@@ -118,7 +120,18 @@ namespace MiScaleExporter.MAUI.ViewModels
                 SetProperty(ref _muscleMassAsPercentage, value);
             }
         }
-        
+
+        private bool _displayWeightInLbs;
+
+        public bool DisplayWeightInLbs
+        {
+            get => _displayWeightInLbs;
+            set
+            {
+                Preferences.Set(PreferencesKeys.DisplayWeightInLbs, value);
+                SetProperty(ref _displayWeightInLbs, value);
+            }
+        }
 
         private bool _showDebugInfo;
 

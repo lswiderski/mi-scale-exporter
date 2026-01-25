@@ -60,7 +60,8 @@ AdSize="SmartBanner"
                         </StackLayout>
 
                         <StackLayout Grid.Row="1" Grid.Column="0" >
-                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.WeightKg}" />
+                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.WeightKg}" IsVisible="{Binding ShowWeightInKg}"/>
+                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.WeightLbs}" IsVisible="{Binding ShowWeightInLbs}" />
                             <Entry
                         FontSize="Medium"
                         Keyboard="Numeric"
@@ -97,6 +98,7 @@ AdSize="SmartBanner"
                             </Entry>
                         </StackLayout>
                         <StackLayout Grid.Row="2" Grid.Column="1">
+                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.MuscleMassLbs}" IsVisible="{Binding MuscleMassAsLbs}" />
                             <Label FontSize="Small" Text="{x:Static localization:AppSnippets.MuscleMassKg}" IsVisible="{Binding MuscleMassAsKg}" />
                             <Label FontSize="Small" Text="{x:Static localization:AppSnippets.MuscleMassPer}" IsVisible="{Binding MuscleMassAsPercentage}" />
                             <Entry
@@ -123,8 +125,8 @@ AdSize="SmartBanner"
 
                         </StackLayout>
                         <StackLayout Grid.Row="3" Grid.Column="1">
-                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.BoneMassPercent}" />
-
+                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.BoneMassPercent}" IsVisible="{Binding ShowWeightInKg}"/>
+                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.BoneMassLbs}" IsVisible="{Binding ShowWeightInLbs}" />
                             <Entry
                         FontSize="Medium"
                         Keyboard="Numeric"
@@ -280,8 +282,10 @@ AdSize="SmartBanner"
                                     <Label FontSize="Small" Text="{Binding BMR, Mode=TwoWay}" />
                                 </StackLayout>
                                 <StackLayout Orientation="Horizontal">
-                                    <Label FontSize="Small" Text="{x:Static localization:AppSnippets.IdealWeightKg}" />
+                                    <Label FontSize="Small" Text="{x:Static localization:AppSnippets.IdealWeightKg}" IsVisible="{Binding ShowWeightInKg}" />
+                                    <Label FontSize="Small" Text="{x:Static localization:AppSnippets.IdealWeightLbs}" IsVisible="{Binding ShowWeightInLbs}" />
                                     <Label FontSize="Small" Text="{Binding IdealWeight, Mode=TwoWay}" />
+
                                 </StackLayout>
                             </StackLayout>
 

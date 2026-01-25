@@ -15,6 +15,7 @@ namespace MiScaleExporter.MAUI.ViewModels
     {
         private readonly IGarminService _garminService;
         private readonly IFileSaver _fileSaver;
+        private const double KgToLbsConversion = 2.20462;
 
         public FormViewModel(IGarminService garminService, IFileSaver fileSaver)
         {
@@ -23,6 +24,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             Date = DateTime.Now;
             Time = DateTime.Now.TimeOfDay;
             _muscleMassAsKg = true;
+            _showWeightInKg = true;
             UploadCommand = new Command(OnUpload, ValidateSave);
             GenerateFitFileCommand = new Command(OnGenerateFitFileAsync);
             CancelMFACommand = new Command(OnCancelMFA);
@@ -44,8 +46,14 @@ namespace MiScaleExporter.MAUI.ViewModels
             this.ShowEmail = string.IsNullOrWhiteSpace(_email);
             this.ShowPassword = string.IsNullOrWhiteSpace(_password);
 
+            this._displayWeightInLbs = Preferences.Get(PreferencesKeys.DisplayWeightInLbs, false);
+            this.ShowWeightInKg = !_displayWeightInLbs;
+            this.ShowWeightInLbs = _displayWeightInLbs;
+
             this.MuscleMassAsPercentage = Preferences.Get(PreferencesKeys.MuscleMassAsPercentage, false);
-            this.MuscleMassAsKg = !Preferences.Get(PreferencesKeys.MuscleMassAsPercentage, false);
+            this.MuscleMassAsKg = (!MuscleMassAsPercentage && ShowWeightInKg);
+            this.MuscleMassAsLbs = (!MuscleMassAsPercentage && !ShowWeightInKg);
+
 
             this.Date = DateTime.Now;
             this.Time = DateTime.Now.TimeOfDay;
@@ -155,9 +163,9 @@ namespace MiScaleExporter.MAUI.ViewModels
             {
                 Fat = DoubleValueParser.ParseValueFromUsersCulture(_fat) ?? 0,
                 BodyType = _bodyType ?? 0,
-                Weight = DoubleValueParser.ParseValueFromUsersCulture(_weight) ?? 0,
-                BoneMass = DoubleValueParser.ParseValueFromUsersCulture(_boneMass) ?? 0,
-                MuscleMass = DoubleValueParser.ParseValueFromUsersCulture(_muscleMass) ?? 0,
+                Weight = ConvertToKg(DoubleValueParser.ParseValueFromUsersCulture(_weight) ?? 0),
+                BoneMass = ConvertToKg(DoubleValueParser.ParseValueFromUsersCulture(_boneMass) ?? 0),
+                MuscleMass = ConvertToKg(DoubleValueParser.ParseValueFromUsersCulture(_muscleMass) ?? 0),
                 MetabolicAge = DoubleValueParser.ParseValueFromUsersCulture(_metabolicAge) ?? 0,
                 ProteinPercentage = DoubleValueParser.ParseValueFromUsersCulture(_proteinPercentage) ?? 0,
                 VisceralFat = DoubleValueParser.ParseValueFromUsersCulture(_visceralFat) ?? 0,
@@ -181,20 +189,18 @@ namespace MiScaleExporter.MAUI.ViewModels
         {
             if (App.BodyComposition is null) return;
 
-            Weight = Math.Round(App.BodyComposition.Weight, 2).ToString();
+            Weight = ConvertFromKg(App.BodyComposition.Weight).ToString("0.##");
             BMI = App.BodyComposition.BMI.ToString();
-            BoneMass = App.BodyComposition.BoneMass.ToString();
-            MuscleMass = App.BodyComposition.MuscleMass.ToString();
-            IdealWeight = App.BodyComposition.IdealWeight.ToString();
-            BMR = App.BodyComposition.BMR.ToString(); ;
+            BoneMass = ConvertFromKg(App.BodyComposition.BoneMass).ToString("0.##");
+            MuscleMass = ConvertFromKg(App.BodyComposition.MuscleMass).ToString("0.##");
+            IdealWeight = ConvertFromKg(App.BodyComposition.IdealWeight).ToString("0.##");
+            BMR = App.BodyComposition.BMR.ToString();
             MetabolicAge = App.BodyComposition.MetabolicAge.ToString();
             ProteinPercentage = App.BodyComposition.ProteinPercentage.ToString();
             VisceralFat = App.BodyComposition.VisceralFat.ToString();
             Fat = App.BodyComposition.Fat.ToString();
             WaterPercentage = App.BodyComposition.WaterPercentage.ToString();
             BodyType = App.BodyComposition.BodyType;
-            //Date = App.BodyComposition.Date;
-            //Time = App.BodyComposition.Date.TimeOfDay;
             IsAutomaticCalculation = true;
         }
 
@@ -379,6 +385,38 @@ namespace MiScaleExporter.MAUI.ViewModels
             get => _muscleMassAsKg;
             set => SetProperty(ref _muscleMassAsKg, value);
         }
+
+        private bool _muscleMassAsLbs;
+        public bool MuscleMassAsLbs
+        {
+            get => _muscleMassAsLbs;
+            set => SetProperty(ref _muscleMassAsLbs, value);
+        }
+
+        private bool _showWeightInKg;
+        public bool ShowWeightInKg
+        {
+            get => _showWeightInKg;
+            set => SetProperty(ref _showWeightInKg, value);
+        }
+        private bool _showWeightInLbs;
+        public bool ShowWeightInLbs
+        {
+            get => _showWeightInLbs;
+            set => SetProperty(ref _showWeightInLbs, value);
+        }
+
+        private double ConvertFromKg(double valueInKg)
+        {
+            return _displayWeightInLbs ? valueInKg * KgToLbsConversion : valueInKg;
+        }
+
+        private double ConvertToKg(double displayValue)
+        {
+            return _displayWeightInLbs ? displayValue / KgToLbsConversion : displayValue;
+        }
+
+        private bool _displayWeightInLbs;
 
         public string Email
         {

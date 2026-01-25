@@ -159,6 +159,9 @@
   <data name="BoneMassPercent" xml:space="preserve">
     <value>Bone mass (Kg)</value>
   </data>
+  <data name="BoneMassLbs" xml:space="preserve">
+    <value>Bone mass (Lbs)</value>
+  </data>
   <data name="BuyMeACoffee" xml:space="preserve">
     <value>Buy me a coffee</value>
   </data>
@@ -258,6 +261,9 @@
   <data name="IdealWeightKg" xml:space="preserve">
     <value>Ideal Weight (Kg):</value>
   </data>
+  <data name="IdealWeightLbs" xml:space="preserve">
+    <value>Ideal Weight (Lbs):</value>
+  </data>
   <data name="Male" xml:space="preserve">
     <value>Male</value>
   </data>
@@ -284,6 +290,9 @@
   </data>
   <data name="MuscleMassKg" xml:space="preserve">
     <value>Muscle Mass (Kg)</value>
+  </data>
+  <data name="MuscleMassLbs" xml:space="preserve">
+    <value>Muscle Mass (Lbs)</value>
   </data>
   <data name="MuscleMassPer" xml:space="preserve">
     <value>Muscle Mass (%)</value>
@@ -377,5 +386,8 @@
   </data>
   <data name="WeightKg" xml:space="preserve">
     <value>Weight (Kg)</value>
+  </data>
+  <data name="WeightLbs" xml:space="preserve">
+    <value>Weight (Lbs)</value>
   </data>
 </root>

@@ -19,7 +19,7 @@ namespace MiScaleExporter.MAUI.Resources.Localization {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class AppSnippets {
@@ -174,6 +174,15 @@ namespace MiScaleExporter.MAUI.Resources.Localization {
         internal static string BodyType {
             get {
                 return ResourceManager.GetString("BodyType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bone mass (Lbs).
+        /// </summary>
+        internal static string BoneMassLbs {
+            get {
+                return ResourceManager.GetString("BoneMassLbs", resourceCulture);
             }
         }
         
@@ -484,6 +493,15 @@ namespace MiScaleExporter.MAUI.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ideal Weight (Lbs):.
+        /// </summary>
+        internal static string IdealWeightLbs {
+            get {
+                return ResourceManager.GetString("IdealWeightLbs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Male.
         /// </summary>
         internal static string Male {
@@ -561,6 +579,15 @@ namespace MiScaleExporter.MAUI.Resources.Localization {
         internal static string MuscleMassKg {
             get {
                 return ResourceManager.GetString("MuscleMassKg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Muscle Mass (Lbs).
+        /// </summary>
+        internal static string MuscleMassLbs {
+            get {
+                return ResourceManager.GetString("MuscleMassLbs", resourceCulture);
             }
         }
         
@@ -840,6 +867,15 @@ namespace MiScaleExporter.MAUI.Resources.Localization {
         internal static string WeightKg {
             get {
                 return ResourceManager.GetString("WeightKg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Weight (Lbs).
+        /// </summary>
+        internal static string WeightLbs {
+            get {
+                return ResourceManager.GetString("WeightLbs", resourceCulture);
             }
         }
     }

@@ -159,6 +159,9 @@
   <data name="BoneMassPercent" xml:space="preserve">
     <value>Masa kostna (Kg)</value>
   </data>
+  <data name="BoneMassLbs" xml:space="preserve">
+    <value>Masa kostna (Lbs)</value>
+  </data>
   <data name="BuyMeACoffee" xml:space="preserve">
     <value>Postaw mi kawę</value>
   </data>
@@ -258,6 +261,9 @@
   <data name="IdealWeightKg" xml:space="preserve">
     <value>Idealna masa ciała (Kg):</value>
   </data>
+  <data name="IdealWeightLbs" xml:space="preserve">
+    <value>Idealna masa ciała (Lbs):</value>
+  </data>
   <data name="Male" xml:space="preserve">
     <value>Mężczyzna</value>
   </data>
@@ -284,6 +290,9 @@
   </data>
   <data name="MuscleMassKg" xml:space="preserve">
     <value>Masa mięśniowa (Kg)</value>
+  </data>
+  <data name="MuscleMassLbs" xml:space="preserve">
+    <value>Masa mięśniowa (Lbs)</value>
   </data>
   <data name="MuscleMassPer" xml:space="preserve">
     <value>Masa mięśniowa (%)</value>
@@ -377,5 +386,8 @@
   </data>
   <data name="WeightKg" xml:space="preserve">
     <value>Waga (Kg)</value>
+  </data>
+  <data name="WeightLbs" xml:space="preserve">
+    <value>Waga (Lbs)</value>
   </data>
 </root>
