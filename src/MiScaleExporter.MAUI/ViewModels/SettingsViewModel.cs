@@ -12,6 +12,8 @@ namespace MiScaleExporter.MAUI.ViewModels
         public SettingsViewModel()
         {
             this.Title = AppSnippets.Settings;
+            // Initialize birthDate with a reasonable default to avoid binding issues
+            this._birthDate = DateTime.Today.AddYears(-25);
             ResetCommand = new Command(() =>
                 {
                     Preferences.Remove(PreferencesKeys.ApiServerAddressOverride);
@@ -23,6 +25,11 @@ namespace MiScaleExporter.MAUI.ViewModels
                     Preferences.Remove(PreferencesKeys.MuscleMassAsPercentage);
                     Preferences.Remove(PreferencesKeys.DisplayWeightInLbs);
                     Preferences.Remove(PreferencesKeys.UseChinaServer);
+                    Preferences.Remove(PreferencesKeys.UserAge);
+                    Preferences.Remove(PreferencesKeys.UserBirthDate);
+                    Preferences.Remove(PreferencesKeys.UseBirthDateMode);
+                    this.UseBirthDateMode = false;
+                    this.ManualAge = "25";
                 }
             );
             GetBLEKeyCommand = new Command(async () => await Launcher.OpenAsync("https://lswiderski.github.io/mi-scale-exporter/#steps-to-connect-xiaomi-body-composition-scale-s400"));
@@ -36,31 +43,55 @@ namespace MiScaleExporter.MAUI.ViewModels
 
         public async Task LoadPreferencesAsync()
         {
-            this._apiAddress = Preferences.Get(PreferencesKeys.ApiServerAddressOverride, string.Empty);
-            this._oneClickScanAndUpload = Preferences.Get(PreferencesKeys.OneClickScanAndUpload, false);
-            this._useExternalAPI = Preferences.Get(PreferencesKeys.UseExternalAPI, false);
-            this._showDebugInfo = Preferences.Get(PreferencesKeys.ShowDebugInfo, false);
-            this._hideAds = Preferences.Get(PreferencesKeys.HideAds, false);
-            this._muscleMassAsPercentage = Preferences.Get(PreferencesKeys.MuscleMassAsPercentage, false);
-            this._displayWeightInLbs = Preferences.Get(PreferencesKeys.DisplayWeightInLbs, false);
-            this._useChinaServer = Preferences.Get(PreferencesKeys.UseChinaServer, false);
+            _isLoadingPreferences = true;
+            try
+            {
+                this._apiAddress = Preferences.Get(PreferencesKeys.ApiServerAddressOverride, string.Empty);
+                this._oneClickScanAndUpload = Preferences.Get(PreferencesKeys.OneClickScanAndUpload, false);
+                this._useExternalAPI = Preferences.Get(PreferencesKeys.UseExternalAPI, false);
+                this._showDebugInfo = Preferences.Get(PreferencesKeys.ShowDebugInfo, false);
+                this._hideAds = Preferences.Get(PreferencesKeys.HideAds, false);
+                this._muscleMassAsPercentage = Preferences.Get(PreferencesKeys.MuscleMassAsPercentage, false);
+                this._displayWeightInLbs = Preferences.Get(PreferencesKeys.DisplayWeightInLbs, false);
+                this._useChinaServer = Preferences.Get(PreferencesKeys.UseChinaServer, false);
 
-            this._age = Preferences.Get(PreferencesKeys.UserAge, 25);
-            this._height = Preferences.Get(PreferencesKeys.UserHeight, 170);
-            this._sex = (Sex)Preferences.Get(PreferencesKeys.UserSex, (byte)Sex.Male);
-            this._address = Preferences.Get(PreferencesKeys.MiScaleBluetoothAddress, string.Empty);
-            this._scaleType = (ScaleType)Preferences.Get(PreferencesKeys.ScaleType, (byte)ScaleType.MiBodyCompositionScale);
-            this._email = Preferences.Get(PreferencesKeys.GarminUserEmail, string.Empty);
-            this._password = await SecureStorage.GetAsync(PreferencesKeys.GarminUserPassword);
-            this._bindkey = Preferences.Get(PreferencesKeys.S400Bindkey, string.Empty);
-            NotifyAllPropertiesChanged();
+                // Load age or birthday mode
+                this._useBirthDateMode = Preferences.Get(PreferencesKeys.UseBirthDateMode, false);
+                
+                if (_useBirthDateMode)
+                {
+                    // Load birthday
+                    var birthDateTicks = Preferences.Get(PreferencesKeys.UserBirthDate, 0L);
+                    this._birthDate = birthDateTicks > 0 ? new DateTime(birthDateTicks) : DateTime.Today.AddYears(-25);
+                    this._manualAge = 0; // Not used in birthday mode
+                }
+                else
+                {
+                    // Load manual age
+                    this._manualAge = Preferences.Get(PreferencesKeys.UserAge, 25);
+                    this._birthDate = DateTime.Today.AddYears(-_manualAge); // For reference only
+                }
+                
+                this._height = Preferences.Get(PreferencesKeys.UserHeight, 170);
+                this._sex = (Sex)Preferences.Get(PreferencesKeys.UserSex, (byte)Sex.Male);
+                this._address = Preferences.Get(PreferencesKeys.MiScaleBluetoothAddress, string.Empty);
+                this._scaleType = (ScaleType)Preferences.Get(PreferencesKeys.ScaleType, (byte)ScaleType.MiBodyCompositionScale);
+                this._email = Preferences.Get(PreferencesKeys.GarminUserEmail, string.Empty);
+                this._password = await SecureStorage.GetAsync(PreferencesKeys.GarminUserPassword);
+                this._bindkey = Preferences.Get(PreferencesKeys.S400Bindkey, string.Empty);
+                NotifyAllPropertiesChanged();
+            }
+            finally
+            {
+                _isLoadingPreferences = false;
+            }
         }
 
         private bool ValidateProfile()
         {
             return !String.IsNullOrWhiteSpace(_address)
                                         && _height > 0 && _height < 220
-                                        && _age > 0 && _age < 99;
+                                        && Age > 0 && Age < 99;
         }
 
         private string _apiAddress;
@@ -228,17 +259,78 @@ namespace MiScaleExporter.MAUI.ViewModels
 
         private int _age;
 
-        public string Age
+        public int Age
         {
-            get => _age.ToString();
+            get
+            {
+                if (_useBirthDateMode)
+                {
+                    // Calculate age from birthday
+                    var today = DateTime.Today;
+                    var age = today.Year - _birthDate.Year;
+                    if (_birthDate.Date > today.AddYears(-age))
+                    {
+                        age--;
+                    }
+                    return age;
+                }
+                else
+                {
+                    // Return manually entered age
+                    return _manualAge;
+                }
+            }
+        }
+
+        private int _manualAge;
+
+        public string ManualAge
+        {
+            get => _manualAge.ToString();
             set
             {
                 if (value is null) return;
                 if (int.TryParse(value, out var result))
                 {
-                    SetProperty(ref _age, result);
+                    SetProperty(ref _manualAge, result);
                     if (result == 0) return;
                     Preferences.Set(PreferencesKeys.UserAge, result);
+                    OnPropertyChanged(nameof(Age));
+                }
+            }
+        }
+
+        private bool _useBirthDateMode;
+
+        public bool UseBirthDateMode
+        {
+            get => _useBirthDateMode;
+            set
+            {
+                if (SetProperty(ref _useBirthDateMode, value))
+                {
+                    Preferences.Set(PreferencesKeys.UseBirthDateMode, value);
+                    OnPropertyChanged(nameof(Age));
+                }
+            }
+        }
+
+        private DateTime _birthDate;
+        private bool _isLoadingPreferences = false;
+
+        public DateTime BirthDate
+        {
+            get => _birthDate;
+            set
+            {
+                if (SetProperty(ref _birthDate, value))
+                {
+                    // Only save to preferences if we're not in the middle of loading
+                    if (!_isLoadingPreferences)
+                    {
+                        Preferences.Set(PreferencesKeys.UserBirthDate, value.Ticks);
+                        OnPropertyChanged(nameof(Age));
+                    }
                 }
             }
         }

@@ -3,6 +3,8 @@
 public static class PreferencesKeys
 {
     public static string UserAge = "UserAge";
+    public static string UserBirthDate = "UserBirthDate";
+    public static string UseBirthDateMode = "UseBirthDateMode";
     public static string UserHeight = "UserHeight";
     public static string UserSex = "UserSex";
     public static string MiScaleBluetoothAddress = "MiScaleBluetoothAddress";

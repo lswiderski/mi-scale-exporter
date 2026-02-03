@@ -42,14 +42,56 @@
                                 HorizontalOptions="Fill"
                                 Color="Gray" />
                             <Label FontSize="Small" Text="{x:Static localization:AppSnippets.Age}" />
-                            <Entry
-                                FontSize="Medium"
-                                Keyboard="Numeric"
-                                Text="{Binding Age, Mode=TwoWay}">
-                                <Entry.Behaviors>
-                                    <behaviors:NumericIntValidationBehavior />
-                                </Entry.Behaviors>
-                            </Entry>
+                            <HorizontalStackLayout Spacing="20">
+                                <StackLayout Orientation="Horizontal" Spacing="10" HorizontalOptions="FillAndExpand">
+                                    <RadioButton
+                                        GroupName="AgeMode"
+                                        IsChecked="{Binding UseBirthDateMode, Converter={StaticResource InvertedBoolConverter}}"
+                                        VerticalOptions="Center"
+                                         Content="Enter age manually"/>
+                                </StackLayout>
+                                <StackLayout Orientation="Horizontal" Spacing="10" HorizontalOptions="FillAndExpand">
+                                    <RadioButton
+                                        GroupName="AgeMode"
+                                        IsChecked="{Binding UseBirthDateMode}"
+                                        VerticalOptions="Center" 
+                                        Content="Use birth date"/>
+                                   
+                                </StackLayout>
+                            </HorizontalStackLayout>
+
+                            <StackLayout IsVisible="{Binding UseBirthDateMode, Converter={StaticResource InvertedBoolConverter}}">
+                                <Entry
+                                    FontSize="Medium"
+                                    Keyboard="Numeric"
+                                    Text="{Binding ManualAge, Mode=TwoWay}">
+                                    <Entry.Behaviors>
+                                        <behaviors:NumericIntValidationBehavior />
+                                    </Entry.Behaviors>
+                                </Entry>
+                            </StackLayout>
+
+                            <StackLayout IsVisible="{Binding UseBirthDateMode}">
+                                <DatePicker
+                                    FontSize="Medium"
+                                    Date="{Binding BirthDate, Mode=TwoWay}"
+                                    Format="dd/MM/yyyy" />
+                                <StackLayout Orientation="Horizontal" Spacing="10">
+                                    <Label 
+                                        FontSize="Small" 
+                                        Text="Your age:"
+                                        VerticalOptions="Center" />
+                                    <Label 
+                                        FontSize="Medium" 
+                                        Text="{Binding Age}"
+                                        VerticalOptions="Center"
+                                        FontAttributes="Bold" />
+                                    <Label 
+                                        FontSize="Small" 
+                                        Text="years old"
+                                        VerticalOptions="Center" />
+                                </StackLayout>
+                            </StackLayout>
 
                             <Label FontSize="Small" Text="{x:Static localization:AppSnippets.Height}" />
                             <Entry
