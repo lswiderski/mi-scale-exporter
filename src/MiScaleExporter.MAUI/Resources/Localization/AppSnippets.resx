@@ -318,6 +318,9 @@
   <data name="PermissionLocationRequired" xml:space="preserve">
     <value>Permission to use Location (Bluetooth) is required to scan.</value>
   </data>
+  <data name="BluetoothDisabled" xml:space="preserve">
+    <value>Bluetooth is disabled. Please enable Bluetooth to scan for your Mi Scale.</value>
+  </data>
   <data name="Problem" xml:space="preserve">
     <value>Problem</value>
   </data>

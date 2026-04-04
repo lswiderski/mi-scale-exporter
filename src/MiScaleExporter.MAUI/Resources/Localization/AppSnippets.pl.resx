@@ -318,6 +318,9 @@
   <data name="PermissionLocationRequired" xml:space="preserve">
     <value>Do skanowania wymagane jest pozwolenie na korzystanie z funkcji Lokalizacji (Bluetooth).</value>
   </data>
+  <data name="BluetoothDisabled" xml:space="preserve">
+    <value>Bluetooth jest wyłączony. Włącz Bluetooth, aby skanować wagę Mi Scale.</value>
+  </data>
   <data name="Problem" xml:space="preserve">
     <value>Problem</value>
   </data>

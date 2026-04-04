@@ -2,6 +2,8 @@
 using MiScaleExporter.Services;
 using MiScaleExporter.Permission;
 using MiScaleExporter.MAUI.Resources.Localization;
+using Plugin.BLE;
+using Plugin.BLE.Abstractions;
 
 namespace MiScaleExporter.MAUI.ViewModels
 {
@@ -98,6 +100,16 @@ namespace MiScaleExporter.MAUI.ViewModels
                     }
                 }
 
+            }
+
+            // Check if Bluetooth is enabled
+            if (CrossBluetoothLE.Current.State != BluetoothState.On)
+            {
+                await Application.Current.MainPage.DisplayAlert(
+                    AppSnippets.Problem,
+                    AppSnippets.BluetoothDisabled,
+                    AppSnippets.OK);
+                return false;
             }
 
             return true;
