@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="MiScaleExporter.MAUI.Views.ResultPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:conv="clr-namespace:MiScaleExporter.MAUI.Converters"
+    xmlns:controls="clr-namespace:MiScaleExporter.MAUI.Controls"
+    xmlns:localization="clr-namespace:MiScaleExporter.MAUI.Resources.Localization"
+    xmlns:models="clr-namespace:MiScaleExporter.Models;assembly=MiScaleExporter.MAUI"
+    Title="{Binding Title}"
+    BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceLight}, Dark={StaticResource SurfaceDark}}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <conv:MetricStatusToColorConverter x:Key="StatusColor" />
+            <conv:StringToBoolConverter x:Key="StringToBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="16,20,16,32" Spacing="16">
+
+            <!-- Auto-upload success banner: visible only when navigated with ?uploaded=true -->
+            <Border
+                x:Name="UploadedBanner"
+                Padding="14,8"
+                HorizontalOptions="Fill"
+                IsVisible="False"
+                StrokeThickness="0"
+                BackgroundColor="{StaticResource StatusStandardColor}"
+                StrokeShape="RoundRectangle 14">
+                <Label
+                    HorizontalOptions="Center"
+                    Style="{StaticResource StatusPillTextStyle}"
+                    Text="{x:Static localization:AppSnippets.UploadedToGarmin}" />
+            </Border>
+
+            <!-- Guest-measurement banner: visible only when navigated with ?guest=true -->
+            <Border
+                x:Name="GuestBanner"
+                Padding="14,8"
+                HorizontalOptions="Fill"
+                IsVisible="False"
+                StrokeThickness="0"
+                BackgroundColor="{AppThemeBinding Light={StaticResource MutedTextLight}, Dark={StaticResource MutedTextDark}}"
+                StrokeShape="RoundRectangle 14">
+                <Label
+                    HorizontalOptions="Center"
+                    Style="{StaticResource StatusPillTextStyle}"
+                    Text="{x:Static localization:AppSnippets.GuestNotSaved}" />
+            </Border>
+
+            <!-- Header card: big weight + status banner -->
+            <Border Style="{StaticResource CardStyle}">
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="6">
+                    <Label
+                        Grid.Row="0"
+                        Style="{StaticResource SectionLabelStyle}"
+                        Text="{Binding SubtitleDisplay}" />
+
+                    <HorizontalStackLayout Grid.Row="1" Spacing="8" VerticalOptions="End">
+                        <Label
+                            Style="{StaticResource BigWeightLabelStyle}"
+                            Text="{Binding WeightDisplay}" />
+                        <Label
+                            Style="{StaticResource WeightUnitLabelStyle}"
+                            Text="{Binding WeightUnit}" />
+                        <HorizontalStackLayout
+                            IsVisible="{Binding HasWeightDelta}"
+                            Spacing="2"
+                            VerticalOptions="Center">
+                            <Label
+                                Style="{StaticResource DeltaArrowStyle}"
+                                Text="{Binding WeightDeltaArrow}" />
+                            <Label
+                                Style="{StaticResource DeltaValueStyle}"
+                                Text="{Binding WeightDeltaFormatted}" />
+                        </HorizontalStackLayout>
+                    </HorizontalStackLayout>
+
+                    <Border
+                        Grid.Row="2"
+                        Padding="10,4"
+                        HorizontalOptions="Start"
+                        StrokeThickness="0"
+                        BackgroundColor="{Binding WeightStatus, Converter={StaticResource StatusColor}}"
+                        StrokeShape="RoundRectangle 12"
+                        IsVisible="{Binding WeightStatusLabel, Converter={StaticResource StringToBoolConverter}, FallbackValue=True}">
+                        <Label
+                            Style="{StaticResource StatusPillTextStyle}"
+                            Text="{Binding WeightStatusLabel}" />
+                    </Border>
+
+                    <Label
+                        Grid.Row="3"
+                        Style="{StaticResource MutedCaptionStyle}"
+                        Text="{Binding MeasuredAtDisplay}" />
+                </Grid>
+            </Border>
+
+            <!-- Body composition donut: total weight split into mass components.
+                 Visible only when full impedance composition is available. -->
+            <Border IsVisible="{Binding HasComposition}" Style="{StaticResource CardStyle}">
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="16">
+                    <controls:CompositionDonutView
+                        Grid.Column="0"
+                        VerticalOptions="Center"
+                        WidthRequest="170"
+                        HeightRequest="170"
+                        Fat="{Binding CompFat}"
+                        Muscle="{Binding CompMuscle}"
+                        Bone="{Binding CompBone}"
+                        Other="{Binding CompOther}"
+                        CenterText="{Binding WeightDisplay}"
+                        CenterSubText="{Binding WeightUnit}"
+                        TextColor="{AppThemeBinding Light={StaticResource OnSurfaceLight}, Dark={StaticResource OnSurfaceDark}}" />
+
+                    <VerticalStackLayout
+                        Grid.Column="1"
+                        Spacing="12"
+                        VerticalOptions="Center">
+                        <HorizontalStackLayout Spacing="8">
+                            <BoxView
+                                CornerRadius="3"
+                                HeightRequest="12"
+                                VerticalOptions="Center"
+                                WidthRequest="12"
+                                Color="#F4A23B" />
+                            <Label
+                                Style="{StaticResource MetricLabelStyle}"
+                                VerticalOptions="Center"
+                                Text="{Binding CompFatDisplay}" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="8">
+                            <BoxView
+                                CornerRadius="3"
+                                HeightRequest="12"
+                                VerticalOptions="Center"
+                                WidthRequest="12"
+                                Color="#3FB6A8" />
+                            <Label
+                                Style="{StaticResource MetricLabelStyle}"
+                                VerticalOptions="Center"
+                                Text="{Binding CompMuscleDisplay}" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="8">
+                            <BoxView
+                                CornerRadius="3"
+                                HeightRequest="12"
+                                VerticalOptions="Center"
+                                WidthRequest="12"
+                                Color="#6C8AE4" />
+                            <Label
+                                Style="{StaticResource MetricLabelStyle}"
+                                VerticalOptions="Center"
+                                Text="{Binding CompBoneDisplay}" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="8" IsVisible="{Binding HasOther}">
+                            <BoxView
+                                CornerRadius="3"
+                                HeightRequest="12"
+                                VerticalOptions="Center"
+                                WidthRequest="12"
+                                Color="#B0B6BE" />
+                            <Label
+                                Style="{StaticResource MetricLabelStyle}"
+                                VerticalOptions="Center"
+                                Text="{Binding CompOtherDisplay}" />
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+
+            <!-- Section header -->
+            <Label Style="{StaticResource SectionHeaderStyle}" Text="{x:Static localization:AppSnippets.BodyCompositionSection}" />
+
+            <!-- Metric cards -->
+            <CollectionView ItemsSource="{Binding Metrics}" SelectionMode="None">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="12" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:MetricCardModel">
+                        <Border Style="{StaticResource CardStyle}">
+                            <Grid
+                                ColumnDefinitions="6,*,Auto"
+                                ColumnSpacing="12"
+                                RowDefinitions="Auto,Auto,Auto"
+                                RowSpacing="2">
+
+                                <!-- Colored status band on the left -->
+                                <BoxView
+                                    Grid.RowSpan="3"
+                                    Grid.Column="0"
+                                    CornerRadius="3"
+                                    IsVisible="{Binding HasStatus}"
+                                    Color="{Binding Status, Converter={StaticResource StatusColor}}" />
+
+                                <Label
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    Style="{StaticResource MetricLabelStyle}"
+                                    Text="{Binding Label}" />
+
+                                <HorizontalStackLayout
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Spacing="4">
+                                    <Label
+                                        Style="{StaticResource MetricValueStyle}"
+                                        Text="{Binding FormattedValue}" />
+                                    <Label
+                                        Style="{StaticResource MetricUnitStyle}"
+                                        Text="{Binding Unit}" />
+                                </HorizontalStackLayout>
+
+                                <Label
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    Style="{StaticResource MutedCaptionStyle}"
+                                    IsVisible="{Binding HasStatus}"
+                                    Text="{Binding StatusLabel}" />
+
+                                <VerticalStackLayout
+                                    Grid.RowSpan="3"
+                                    Grid.Column="2"
+                                    HorizontalOptions="End"
+                                    IsVisible="{Binding HasDelta}"
+                                    VerticalOptions="Center">
+                                    <Label
+                                        HorizontalOptions="End"
+                                        Style="{StaticResource DeltaArrowStyle}"
+                                        Text="{Binding DeltaArrow}" />
+                                    <Label
+                                        HorizontalOptions="End"
+                                        Style="{StaticResource DeltaValueStyle}"
+                                        Text="{Binding DeltaFormatted}" />
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Button
+                x:Name="UploadButton"
+                Margin="0,12,0,0"
+                Clicked="OnUploadClicked"
+                Text="{x:Static localization:AppSnippets.UploadToGarminCloud}" />
+
+            <Button
+                Margin="0,4,0,0"
+                Clicked="OnShareClicked"
+                Text="{x:Static localization:AppSnippets.ResultShare}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

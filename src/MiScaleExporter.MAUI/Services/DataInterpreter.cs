@@ -22,6 +22,7 @@ namespace MiScaleExporter.Services
 
         public BodyComposition ComputeData(byte[] data, User _user, string btAddress)
         {
+            if (data == null) return null;
 
             var user = new MiScaleBodyComposition.User(_user.Height, _user.Age, (MiScaleBodyComposition.Sex)(byte)_user.Sex);
             switch (_user.ScaleType)
@@ -64,6 +65,15 @@ namespace MiScaleExporter.Services
                     }
                     else
                     {
+                        if (data.Length < 13)
+                        {
+                            return new BodyComposition
+                            {
+                                Weight = 0,
+                                HasImpedance = hasImpedance,
+                                IsStabilized = false,
+                            };
+                        }
                         var bodyComposition = new BodyComposition
                         {
                             Weight = GetWeight(data),

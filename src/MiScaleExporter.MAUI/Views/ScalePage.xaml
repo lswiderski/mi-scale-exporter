@@ -4,92 +4,133 @@
     x:Class="MiScaleExporter.MAUI.Views.ScalePage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:behaviors="clr-namespace:MiScaleExporter.MAUI.Behaviors;assembly=MiScaleExporter.MAUI"
     xmlns:admob="clr-namespace:Plugin.AdMob;assembly=Plugin.AdMob"
     xmlns:localization="clr-namespace:MiScaleExporter.MAUI.Resources.Localization"
     xmlns:models="clr-namespace:MiScaleExporter.Models"
-    xmlns:vm="clr-namespace:MiScaleExporter.MAUI.ViewModels"
     Title="{Binding Title}">
-    <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-        <Grid
-            AbsoluteLayout.LayoutBounds="0,0,1,1"
-            AbsoluteLayout.LayoutFlags="All"
-            HorizontalOptions="FillAndExpand">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <admob:BannerAd
-x:Name="adMobBanner" Grid.Row="0"
-AdUnitId="ca-app-pub-1938975042085430/4160336701"
-AdSize="SmartBanner"
- />
-            <StackLayout
-                Grid.Row="1"
-                HorizontalOptions="Center"
-                Orientation="Horizontal">
-              
-                <Label
-                    Margin="0,100,0,0"
-                    FontSize="90"
-                    Text="{Binding Source={x:Static models:ScaleMeasurement.Instance}, Path=Weight}"
-                    VerticalOptions="CenterAndExpand"
-                    VerticalTextAlignment="End" />
-            </StackLayout>
+    <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-            <ScrollView Grid.Row="2" HorizontalOptions="FillAndExpand">
-                <StackLayout
-                    Padding="15,24,15,24"
-                    Orientation="Vertical"
-                    Spacing="10"
-                    VerticalOptions="EndAndExpand">
-                    <Label FontSize="Small" Text="{Binding Source={x:Static models:ScaleMeasurement.Instance}, Path=FoundScale}" />
-                    <Label FontSize="Small" Text="{Binding Source={x:Static models:ScaleMeasurement.Instance}, Path=DebugData}" />
-                    <Label FontSize="Small" Text="{Binding Source={x:Static models:ScaleMeasurement.Instance}, Path=RawData}" />
+        <admob:BannerAd
+            x:Name="adMobBanner"
+            Grid.Row="0"
+            AdSize="SmartBanner"
+            AdUnitId="ca-app-pub-1938975042085430/4160336701" />
 
-                    <Label FontSize="Small" Text="{Binding ScanningLabel}" />
+        <ScrollView Grid.Row="1">
+            <StackLayout Padding="16,24,16,24" Spacing="16">
 
+                <Border Style="{StaticResource CardStyle}">
+                    <StackLayout Spacing="12">
+                        <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
+                            <Label
+                                Grid.Column="0"
+                                Style="{StaticResource SectionHeaderStyle}"
+                                Text="{x:Static localization:AppSnippets.GuestMode}"
+                                VerticalOptions="Center" />
+                            <Switch
+                                Grid.Column="1"
+                                IsToggled="{Binding IsGuestMode}"
+                                VerticalOptions="Center" />
+                        </Grid>
+
+                        <StackLayout IsVisible="{Binding IsGuestMode}" Spacing="8">
+                            <Label
+                                Style="{StaticResource MetricLabelStyle}"
+                                Text="{x:Static localization:AppSnippets.Age}" />
+                            <Entry Keyboard="Numeric" Text="{Binding GuestAge, Mode=TwoWay}" />
+
+                            <Label
+                                Style="{StaticResource MetricLabelStyle}"
+                                Text="{x:Static localization:AppSnippets.Height}" />
+                            <Entry Keyboard="Numeric" Text="{Binding GuestHeight, Mode=TwoWay}" />
+
+                            <Label
+                                Style="{StaticResource MetricLabelStyle}"
+                                Text="{x:Static localization:AppSnippets.Sex}" />
+                            <Picker SelectedIndex="{Binding GuestSexIndex, Mode=TwoWay}">
+                                <Picker.Items>
+                                    <x:Static Member="localization:AppSnippets.Male" />
+                                    <x:Static Member="localization:AppSnippets.Female" />
+                                </Picker.Items>
+                            </Picker>
+
+                            <Button
+                                Margin="0,8,0,0"
+                                Command="{Binding GuestScanCommand}"
+                                Text="{x:Static localization:AppSnippets.MeasureAsGuest}" />
+                        </StackLayout>
+                    </StackLayout>
+                </Border>
+
+                <Border Style="{StaticResource CardStyle}">
+                    <StackLayout HorizontalOptions="Center" Spacing="12">
+                        <Label
+                            HorizontalOptions="Center"
+                            HorizontalTextAlignment="Center"
+                            Style="{StaticResource BigWeightLabelStyle}"
+                            Text="{Binding Source={x:Static models:ScaleMeasurement.Instance}, Path=Weight}" />
+
+                        <Label
+                            HorizontalOptions="Center"
+                            HorizontalTextAlignment="Center"
+                            Style="{StaticResource SectionHeaderStyle}"
+                            Text="{Binding Source={x:Static models:ScaleMeasurement.Instance}, Path=PhaseLabel}" />
+
+                        <ProgressBar
+                            Margin="0,4,0,0"
+                            HorizontalOptions="FillAndExpand"
+                            Progress="{Binding Source={x:Static models:ScaleMeasurement.Instance}, Path=Progress}" />
+
+                        <Label
+                            HorizontalOptions="Center"
+                            HorizontalTextAlignment="Center"
+                            Style="{StaticResource MutedCaptionStyle}"
+                            Text="{x:Static localization:AppSnippets.ScanHelper}" />
+
+                        <ActivityIndicator
+                            Margin="0,4,0,0"
+                            HorizontalOptions="Center"
+                            IsRunning="{Binding Source={x:Static models:ScaleMeasurement.Instance}, Path=IsScanning}"
+                            IsVisible="{Binding Source={x:Static models:ScaleMeasurement.Instance}, Path=IsScanning}" />
+                    </StackLayout>
+                </Border>
+
+                <StackLayout Spacing="10">
                     <Button
-                        Margin="0,10,0,0"
-                        BackgroundColor="{StaticResource Primary}"
                         Command="{Binding StopCommand}"
-                        Text="{x:Static localization:AppSnippets.StopMeasure}"
-                        TextColor="White" />
+                        Text="{x:Static localization:AppSnippets.StopMeasure}" />
                     <Button
-                        Margin="0,10,0,0"
-                        BackgroundColor="{StaticResource Primary}"
+                        BackgroundColor="Transparent"
+                        BorderColor="{StaticResource Primary}"
+                        BorderWidth="1"
                         Command="{Binding CancelCommand}"
                         Text="{x:Static localization:AppSnippets.CancelSearch}"
-                        TextColor="White" />
-                    
+                        TextColor="{StaticResource Primary}" />
                 </StackLayout>
-            </ScrollView>
-        </Grid>
-        <StackLayout
-            Padding="12"
-            AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
-            AbsoluteLayout.LayoutFlags="PositionProportional"
-            IsVisible="{Binding IsBusyForm}">
-            <Frame>
-                <StackLayout>
-                    <ActivityIndicator
-                        BackgroundColor="White"
-                        IsRunning="{Binding IsBusyForm}"
-                        Color="#80000000" />
 
+                <StackLayout Spacing="4">
                     <Label
-                        HorizontalOptions="Center"
-                        Text="{x:Static localization:AppSnippets.Scanning}"
-                        TextColor="Black" />
+                        FontSize="Small"
+                        Style="{StaticResource MutedCaptionStyle}"
+                        Text="{Binding Source={x:Static models:ScaleMeasurement.Instance}, Path=FoundScale}" />
+                    <Label
+                        FontSize="Small"
+                        Style="{StaticResource MutedCaptionStyle}"
+                        Text="{Binding Source={x:Static models:ScaleMeasurement.Instance}, Path=DebugData}" />
+                    <Label
+                        FontSize="Small"
+                        Style="{StaticResource MutedCaptionStyle}"
+                        Text="{Binding Source={x:Static models:ScaleMeasurement.Instance}, Path=RawData}" />
+                    <Label
+                        FontSize="Small"
+                        Style="{StaticResource MutedCaptionStyle}"
+                        Text="{Binding ScanningLabel}" />
                 </StackLayout>
-
-            </Frame>
-
-
-        </StackLayout>
-    </AbsoluteLayout>
+            </StackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>

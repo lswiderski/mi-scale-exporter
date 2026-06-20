@@ -61,6 +61,15 @@ namespace MiScaleExporter.MAUI.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bluetooth is disabled. Please enable Bluetooth to scan for your Mi Scale..
+        /// </summary>
+        internal static string BluetoothDisabled {
+            get {
+                return ResourceManager.GetString("BluetoothDisabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This application is an open source community project and I have no affiliation with Garmin..
         /// </summary>
         internal static string AboutGarmin {
@@ -309,6 +318,33 @@ namespace MiScaleExporter.MAUI.Resources.Localization {
         internal static string GoToScan {
             get {
                 return ResourceManager.GetString("GoToScan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Guest mode.
+        /// </summary>
+        internal static string GuestMode {
+            get {
+                return ResourceManager.GetString("GuestMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Guest measurement — not uploaded or saved.
+        /// </summary>
+        internal static string GuestNotSaved {
+            get {
+                return ResourceManager.GetString("GuestNotSaved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Measure as guest.
+        /// </summary>
+        internal static string MeasureAsGuest {
+            get {
+                return ResourceManager.GetString("MeasureAsGuest", resourceCulture);
             }
         }
         
@@ -799,6 +835,15 @@ namespace MiScaleExporter.MAUI.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Uploaded to Garmin ✓.
+        /// </summary>
+        internal static string UploadedToGarmin {
+            get {
+                return ResourceManager.GetString("UploadedToGarmin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Uploading....
         /// </summary>
         internal static string Uploading {
@@ -876,6 +921,519 @@ namespace MiScaleExporter.MAUI.Resources.Localization {
         internal static string WeightLbs {
             get {
                 return ResourceManager.GetString("WeightLbs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Body composition.
+        /// </summary>
+        internal static string BodyCompositionSection {
+            get {
+                return ResourceManager.GetString("BodyCompositionSection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Share.
+        /// </summary>
+        internal static string ResultShare {
+            get {
+                return ResourceManager.GetString("ResultShare", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Share measurement.
+        /// </summary>
+        internal static string ShareTitle {
+            get {
+                return ResourceManager.GetString("ShareTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Underweight.
+        /// </summary>
+        internal static string BmiUnderweight {
+            get {
+                return ResourceManager.GetString("BmiUnderweight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Healthy.
+        /// </summary>
+        internal static string BmiHealthy {
+            get {
+                return ResourceManager.GetString("BmiHealthy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Overweight.
+        /// </summary>
+        internal static string BmiOverweight {
+            get {
+                return ResourceManager.GetString("BmiOverweight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Low.
+        /// </summary>
+        internal static string StatusLow {
+            get {
+                return ResourceManager.GetString("StatusLow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Standard.
+        /// </summary>
+        internal static string StatusStandard {
+            get {
+                return ResourceManager.GetString("StatusStandard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to High.
+        /// </summary>
+        internal static string StatusHigh {
+            get {
+                return ResourceManager.GetString("StatusHigh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stand barefoot on the scale for full body composition..
+        /// </summary>
+        internal static string WeightOnlyHint {
+            get {
+                return ResourceManager.GetString("WeightOnlyHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Searching for your scale….
+        /// </summary>
+        internal static string PhaseSearching {
+            get {
+                return ResourceManager.GetString("PhaseSearching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scale found.
+        /// </summary>
+        internal static string PhaseScaleFound {
+            get {
+                return ResourceManager.GetString("PhaseScaleFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reading measurement….
+        /// </summary>
+        internal static string PhaseReading {
+            get {
+                return ResourceManager.GetString("PhaseReading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stabilizing — stand still….
+        /// </summary>
+        internal static string PhaseStabilizing {
+            get {
+                return ResourceManager.GetString("PhaseStabilizing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Done.
+        /// </summary>
+        internal static string PhaseSuccess {
+            get {
+                return ResourceManager.GetString("PhaseSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Couldn't read the scale.
+        /// </summary>
+        internal static string PhaseFailed {
+            get {
+                return ResourceManager.GetString("PhaseFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancelled.
+        /// </summary>
+        internal static string PhaseCancelled {
+            get {
+                return ResourceManager.GetString("PhaseCancelled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Step on the scale and stand still..
+        /// </summary>
+        internal static string ScanHelper {
+            get {
+                return ResourceManager.GetString("ScanHelper", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fat.
+        /// </summary>
+        internal static string CompFat {
+            get {
+                return ResourceManager.GetString("CompFat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Muscle.
+        /// </summary>
+        internal static string CompMuscle {
+            get {
+                return ResourceManager.GetString("CompMuscle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bone.
+        /// </summary>
+        internal static string CompBone {
+            get {
+                return ResourceManager.GetString("CompBone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Other.
+        /// </summary>
+        internal static string CompOther {
+            get {
+                return ResourceManager.GetString("CompOther", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bridge your Xiaomi scale to Garmin Connect.
+        /// </summary>
+        internal static string OnboardingSubtitle {
+            get {
+                return ResourceManager.GetString("OnboardingSubtitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Let's set you up in 3 steps.
+        /// </summary>
+        internal static string OnboardingWelcomeCaption {
+            get {
+                return ResourceManager.GetString("OnboardingWelcomeCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can skip this and add it later in Settings.
+        /// </summary>
+        internal static string OnboardingGarminOptional {
+            get {
+                return ResourceManager.GetString("OnboardingGarminOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start measuring.
+        /// </summary>
+        internal static string OnboardingFinish {
+            get {
+                return ResourceManager.GetString("OnboardingFinish", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skip for now.
+        /// </summary>
+        internal static string OnboardingSkip {
+            get {
+                return ResourceManager.GetString("OnboardingSkip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your profile.
+        /// </summary>
+        internal static string OnboardingProfileTitle {
+            get {
+                return ResourceManager.GetString("OnboardingProfileTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter age manually.
+        /// </summary>
+        internal static string OnboardingAgeManual {
+            get {
+                return ResourceManager.GetString("OnboardingAgeManual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use birth date.
+        /// </summary>
+        internal static string OnboardingAgeBirthDate {
+            get {
+                return ResourceManager.GetString("OnboardingAgeBirthDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your age:.
+        /// </summary>
+        internal static string OnboardingAgeYouAre {
+            get {
+                return ResourceManager.GetString("OnboardingAgeYouAre", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to years old.
+        /// </summary>
+        internal static string OnboardingAgeYearsOld {
+            get {
+                return ResourceManager.GetString("OnboardingAgeYearsOld", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your scale.
+        /// </summary>
+        internal static string OnboardingScaleTitle {
+            get {
+                return ResourceManager.GetString("OnboardingScaleTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Garmin Connect (optional).
+        /// </summary>
+        internal static string OnboardingGarminTitle {
+            get {
+                return ResourceManager.GetString("OnboardingGarminTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How to find it.
+        /// </summary>
+        internal static string HowToFindAddress {
+            get {
+                return ResourceManager.GetString("HowToFindAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Measure now.
+        /// </summary>
+        internal static string MeasureNow {
+            get {
+                return ResourceManager.GetString("MeasureNow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Profile.
+        /// </summary>
+        internal static string HomeProfile {
+            get {
+                return ResourceManager.GetString("HomeProfile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scale.
+        /// </summary>
+        internal static string HomeScale {
+            get {
+                return ResourceManager.GetString("HomeScale", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Garmin.
+        /// </summary>
+        internal static string HomeGarmin {
+            get {
+                return ResourceManager.GetString("HomeGarmin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set up.
+        /// </summary>
+        internal static string HomeSetUp {
+            get {
+                return ResourceManager.GetString("HomeSetUp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ready.
+        /// </summary>
+        internal static string HomeConfigured {
+            get {
+                return ResourceManager.GetString("HomeConfigured", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Re-run setup.
+        /// </summary>
+        internal static string ReRunSetup {
+            get {
+                return ResourceManager.GetString("ReRunSetup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to About this app.
+        /// </summary>
+        internal static string AboutThisApp {
+            get {
+                return ResourceManager.GetString("AboutThisApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Profile.
+        /// </summary>
+        internal static string SettingsProfile {
+            get {
+                return ResourceManager.GetString("SettingsProfile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preferences.
+        /// </summary>
+        internal static string SettingsPreferences {
+            get {
+                return ResourceManager.GetString("SettingsPreferences", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Advanced.
+        /// </summary>
+        internal static string SettingsAdvanced {
+            get {
+                return ResourceManager.GetString("SettingsAdvanced", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display weight in lbs.
+        /// </summary>
+        internal static string DisplayWeightInLbs {
+            get {
+                return ResourceManager.GetString("DisplayWeightInLbs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use China server.
+        /// </summary>
+        internal static string UseChinaServer {
+            get {
+                return ResourceManager.GetString("UseChinaServer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear Garmin tokens.
+        /// </summary>
+        internal static string ClearGarminTokens {
+            get {
+                return ResourceManager.GetString("ClearGarminTokens", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to BLE key (S400 only).
+        /// </summary>
+        internal static string BleKeyLabel {
+            get {
+                return ResourceManager.GetString("BleKeyLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connect to Garmin.
+        /// </summary>
+        internal static string ConnectGarmin {
+            get {
+                return ResourceManager.GetString("ConnectGarmin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connecting….
+        /// </summary>
+        internal static string GarminConnecting {
+            get {
+                return ResourceManager.GetString("GarminConnecting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connected ✓.
+        /// </summary>
+        internal static string GarminConnected {
+            get {
+                return ResourceManager.GetString("GarminConnected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the 2FA code from your authenticator or SMS.
+        /// </summary>
+        internal static string GarminEnterMfa {
+            get {
+                return ResourceManager.GetString("GarminEnterMfa", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Verify code.
+        /// </summary>
+        internal static string VerifyMfaCode {
+            get {
+                return ResourceManager.GetString("VerifyMfaCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Automatically upload to Garmin after each measurement.
+        /// </summary>
+        internal static string AutoUploadToggle {
+            get {
+                return ResourceManager.GetString("AutoUploadToggle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Couldn't connect — check email/password.
+        /// </summary>
+        internal static string GarminConnectFailed {
+            get {
+                return ResourceManager.GetString("GarminConnectFailed", resourceCulture);
             }
         }
     }

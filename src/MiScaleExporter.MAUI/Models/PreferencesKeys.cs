@@ -23,4 +23,6 @@ public static class PreferencesKeys
     public static string S400Bindkey = "S400Bindkey";
     public static string DisplayWeightInLbs = "DisplayWeightInLbs";
     public static string UseChinaServer = "UseChinaServer";
+    public static string PreviousMeasurementJson = "PreviousMeasurementJson";
+    public static string OnboardingCompleted = "OnboardingCompleted";
 }

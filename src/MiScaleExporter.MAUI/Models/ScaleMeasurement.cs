@@ -73,6 +73,60 @@ namespace MiScaleExporter.Models
             }
         }
 
+        private ScanPhase _phase = ScanPhase.Idle;
+        public ScanPhase Phase
+        {
+            get => _phase;
+            set
+            {
+                if (_phase != value)
+                {
+                    _phase = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Phase)));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsScanning)));
+                }
+            }
+        }
+
+        private string _phaseLabel;
+        public string PhaseLabel
+        {
+            get => _phaseLabel;
+            set
+            {
+                if (_phaseLabel != value)
+                {
+                    _phaseLabel = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PhaseLabel)));
+                }
+            }
+        }
+
+        private double _progress;
+        public double Progress
+        {
+            get => _progress;
+            set
+            {
+                if (_progress != value)
+                {
+                    _progress = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Progress)));
+                }
+            }
+        }
+
+        public bool IsScanning
+        {
+            get
+            {
+                return _phase == ScanPhase.Searching
+                    || _phase == ScanPhase.ScaleFound
+                    || _phase == ScanPhase.Reading
+                    || _phase == ScanPhase.Stabilizing;
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
     }
 }

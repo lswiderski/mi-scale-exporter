@@ -9,5 +9,12 @@ namespace MiScaleExporter.MAUI.ViewModels
     {
         Task CheckPreferencesAsync();
         Task LoadPreferencesAsync();
+
+        bool IsGuestMode { get; set; }
+        string GuestAge { get; set; }
+        string GuestHeight { get; set; }
+        MiScaleExporter.Models.Sex GuestSex { get; set; }
+        int GuestSexIndex { get; set; }
+        Command GuestScanCommand { get; }
     }
 }
