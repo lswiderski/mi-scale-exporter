@@ -61,7 +61,7 @@ namespace MiScaleExporter.Services
                             Date = bc.Date,
 
                         };
-                        return bodyComposition;
+                        return FatCalibration.ApplySaved(bodyComposition);
                     }
                     else
                     {
@@ -139,7 +139,7 @@ namespace MiScaleExporter.Services
                                 Date = s400Result.Date,
 
                             };
-                            return bodyComposition;
+                            return FatCalibration.ApplySaved(bodyComposition);
 
                         }
                     }

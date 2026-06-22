@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Maui.Graphics;
 using MiScaleExporter.MAUI.Resources.Localization;
+using MiScaleExporter.MAUI.Utils;
 using MiScaleExporter.Models;
 using MiScaleExporter.Services;
 
@@ -38,14 +41,23 @@ namespace MiScaleExporter.MAUI.ViewModels
                     Preferences.Remove(PreferencesKeys.UserAge);
                     Preferences.Remove(PreferencesKeys.UserBirthDate);
                     Preferences.Remove(PreferencesKeys.UseBirthDateMode);
+                    Preferences.Remove(PreferencesKeys.UseFatCalibration);
+                    Preferences.Remove(PreferencesKeys.FatCalibrationPoints);
                     this.UseBirthDateMode = false;
                     this.ManualAge = "25";
+                    this._useFatCalibration = false;
+                    OnPropertyChanged(nameof(UseFatCalibration));
+                    this.CalibrationPoints.Clear();
+                    OnPropertyChanged(nameof(CalibrationSummary));
                 }
             );
             GetBLEKeyCommand = new Command(async () => await Launcher.OpenAsync("https://lswiderski.github.io/mi-scale-exporter/#steps-to-connect-xiaomi-body-composition-scale-s400"));
             ResetTokensCommand = new Command(_clearTokens);
             ConnectGarminCommand = new Command(async () => await ConnectGarminAsync());
             VerifyMfaCommand = new Command(async () => await VerifyMfaAsync());
+            AddCalibrationPointCommand = new Command(AddCalibrationPoint);
+            RemoveCalibrationPointCommand = new Command<FatCalibrationPoint>(RemoveCalibrationPoint);
+            _newPointDate = DateTime.Today;
         }
 
         public ICommand ResetCommand { get; }
@@ -53,6 +65,8 @@ namespace MiScaleExporter.MAUI.ViewModels
         public ICommand ResetTokensCommand { get; }
         public ICommand ConnectGarminCommand { get; }
         public ICommand VerifyMfaCommand { get; }
+        public ICommand AddCalibrationPointCommand { get; }
+        public ICommand RemoveCalibrationPointCommand { get; }
 
         private string _garminStatusText;
         public string GarminStatusText
@@ -184,6 +198,12 @@ namespace MiScaleExporter.MAUI.ViewModels
                 this._email = Preferences.Get(PreferencesKeys.GarminUserEmail, string.Empty);
                 this._password = await SecureStorage.GetAsync(PreferencesKeys.GarminUserPassword);
                 this._bindkey = Preferences.Get(PreferencesKeys.S400Bindkey, string.Empty);
+
+                this._useFatCalibration = Preferences.Get(PreferencesKeys.UseFatCalibration, false);
+                this.CalibrationPoints = new ObservableCollection<FatCalibrationPoint>(
+                    FatCalibration.LoadPoints().OrderBy(p => p.Date));
+                OnPropertyChanged(nameof(CalibrationSummary));
+
                 NotifyAllPropertiesChanged();
             }
             finally
@@ -556,6 +576,112 @@ namespace MiScaleExporter.MAUI.ViewModels
         {
             SecureStorage.SetAsync(PreferencesKeys.GarminUserAccessToken, string.Empty);
             SecureStorage.SetAsync(PreferencesKeys.GarminUserTokenSecret, string.Empty);
+        }
+
+        // ---- Body fat calibration --------------------------------------------------------
+
+        private bool _useFatCalibration;
+
+        public bool UseFatCalibration
+        {
+            get => _useFatCalibration;
+            set
+            {
+                Preferences.Set(PreferencesKeys.UseFatCalibration, value);
+                SetProperty(ref _useFatCalibration, value);
+                OnPropertyChanged(nameof(CalibrationSummary));
+            }
+        }
+
+        private ObservableCollection<FatCalibrationPoint> _calibrationPoints = new();
+
+        public ObservableCollection<FatCalibrationPoint> CalibrationPoints
+        {
+            get => _calibrationPoints;
+            private set => SetProperty(ref _calibrationPoints, value);
+        }
+
+        private DateTime _newPointDate;
+
+        public DateTime NewPointDate
+        {
+            get => _newPointDate;
+            set => SetProperty(ref _newPointDate, value);
+        }
+
+        private string _newPointScaleFat;
+
+        public string NewPointScaleFat
+        {
+            get => _newPointScaleFat;
+            set => SetProperty(ref _newPointScaleFat, value);
+        }
+
+        private string _newPointTrueFat;
+
+        public string NewPointTrueFat
+        {
+            get => _newPointTrueFat;
+            set => SetProperty(ref _newPointTrueFat, value);
+        }
+
+        /// <summary>Human-readable description of the current fit, shown under the table.</summary>
+        public string CalibrationSummary
+        {
+            get
+            {
+                var count = _calibrationPoints?.Count ?? 0;
+                if (count == 0)
+                {
+                    return "No calibration points yet. Add at least one to enable correction.";
+                }
+
+                var fit = FatCalibration.ComputeFit(_calibrationPoints.ToList());
+                var formula = $"corrected = {fit.A:0.###} × scale {(fit.B >= 0 ? "+" : "−")} {Math.Abs(fit.B):0.##}";
+                var quality = double.IsNaN(fit.R2)
+                    ? (count == 1 ? "single-point ratio" : "fit quality unavailable")
+                    : $"R² = {fit.R2:0.000}";
+                var status = _useFatCalibration ? "active" : "disabled";
+                return $"{count} point{(count == 1 ? "" : "s")} · {formula} · {quality} · {status}";
+            }
+        }
+
+        private void AddCalibrationPoint()
+        {
+            var scaleFat = DoubleValueParser.ParseValueFromUsersCulture(_newPointScaleFat);
+            var trueFat = DoubleValueParser.ParseValueFromUsersCulture(_newPointTrueFat);
+            if (scaleFat is not > 0 || trueFat is not > 0)
+            {
+                return;
+            }
+
+            _calibrationPoints.Add(new FatCalibrationPoint
+            {
+                Date = _newPointDate == default ? DateTime.Today : _newPointDate,
+                ScaleFat = scaleFat.Value,
+                TrueFat = trueFat.Value,
+            });
+
+            CalibrationPoints = new ObservableCollection<FatCalibrationPoint>(
+                _calibrationPoints.OrderBy(p => p.Date));
+
+            FatCalibration.SavePoints(_calibrationPoints);
+
+            NewPointScaleFat = string.Empty;
+            NewPointTrueFat = string.Empty;
+            OnPropertyChanged(nameof(CalibrationSummary));
+        }
+
+        private void RemoveCalibrationPoint(FatCalibrationPoint point)
+        {
+            if (point == null || !_calibrationPoints.Contains(point))
+            {
+                return;
+            }
+
+            _calibrationPoints.Remove(point);
+            FatCalibration.SavePoints(_calibrationPoints);
+            OnPropertyChanged(nameof(CalibrationSummary));
         }
 
     }

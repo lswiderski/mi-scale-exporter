@@ -5,6 +5,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:behaviors="clr-namespace:MiScaleExporter.MAUI.Behaviors;assembly=MiScaleExporter.MAUI"
     xmlns:localization="clr-namespace:MiScaleExporter.MAUI.Resources.Localization"
+    xmlns:models="clr-namespace:MiScaleExporter.Models;assembly=MiScaleExporter.MAUI"
+    x:Name="SettingsRoot"
     Title="{Binding Title}"
     BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceLight}, Dark={StaticResource SurfaceDark}}">
 
@@ -310,6 +312,105 @@
                             OnColor="{StaticResource Primary}"
                             IsToggled="{Binding HideAds, Mode=TwoWay}" />
                     </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Body Fat Calibration -->
+            <Border Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Style="{StaticResource SectionHeaderStyle}" Text="Body Fat Calibration" />
+
+                    <Label
+                        Style="{StaticResource MutedCaptionStyle}"
+                        Text="Correct the scale's body fat % toward trusted reference measurements (e.g. medical scans). Each point pairs what the scale reported with the reference value at the same time. A line (corrected = a × scale + b) is fitted across all points; muscle mass, water % and protein % are recomputed to match. Bone mass, BMR, visceral fat, metabolic age and BMI are unaffected." />
+
+                    <Grid ColumnDefinitions="*,Auto" Padding="0,8">
+                        <Label
+                            Grid.Column="0"
+                            Style="{StaticResource FieldLabelStyle}"
+                            FontAttributes="Bold"
+                            LineBreakMode="WordWrap"
+                            VerticalOptions="Center"
+                            Text="Apply calibration to measurements" />
+                        <Switch
+                            Grid.Column="1"
+                            OnColor="{StaticResource Primary}"
+                            IsToggled="{Binding UseFatCalibration, Mode=TwoWay}" />
+                    </Grid>
+
+                    <CollectionView ItemsSource="{Binding CalibrationPoints}">
+                        <CollectionView.EmptyView>
+                            <Label Style="{StaticResource MutedCaptionStyle}" Text="No calibration points added yet." />
+                        </CollectionView.EmptyView>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:FatCalibrationPoint">
+                                <Grid Padding="0,4" ColumnSpacing="8" ColumnDefinitions="*,Auto,Auto,Auto">
+                                    <Label
+                                        Grid.Column="0"
+                                        Style="{StaticResource FieldLabelStyle}"
+                                        Text="{Binding Date, StringFormat='{0:yyyy-MM-dd}'}"
+                                        VerticalOptions="Center" />
+                                    <Label
+                                        Grid.Column="1"
+                                        Style="{StaticResource MutedCaptionStyle}"
+                                        Text="{Binding ScaleFat, StringFormat='scale {0:0.#}%'}"
+                                        VerticalOptions="Center" />
+                                    <Label
+                                        Grid.Column="2"
+                                        Style="{StaticResource MutedCaptionStyle}"
+                                        Text="{Binding TrueFat, StringFormat='ref {0:0.#}%'}"
+                                        VerticalOptions="Center" />
+                                    <Button
+                                        Grid.Column="3"
+                                        Padding="0"
+                                        BackgroundColor="Transparent"
+                                        Command="{Binding BindingContext.RemoveCalibrationPointCommand, Source={x:Reference SettingsRoot}}"
+                                        CommandParameter="{Binding .}"
+                                        FontSize="Small"
+                                        Text="✕"
+                                        TextColor="#DC2626"
+                                        WidthRequest="40" />
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <Label Style="{StaticResource FieldLabelStyle}" Text="Add a point" />
+                    <DatePicker
+                        Date="{Binding NewPointDate, Mode=TwoWay}"
+                        FontSize="Medium"
+                        Format="yyyy-MM-dd" />
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                        <Entry
+                            Grid.Column="0"
+                            Style="{StaticResource FieldEntryStyle}"
+                            Keyboard="Numeric"
+                            Placeholder="Scale fat %"
+                            Text="{Binding NewPointScaleFat, Mode=TwoWay}">
+                            <Entry.Behaviors>
+                                <behaviors:NumericDoubleValidationBehavior />
+                            </Entry.Behaviors>
+                        </Entry>
+                        <Entry
+                            Grid.Column="1"
+                            Style="{StaticResource FieldEntryStyle}"
+                            Keyboard="Numeric"
+                            Placeholder="Reference fat %"
+                            Text="{Binding NewPointTrueFat, Mode=TwoWay}">
+                            <Entry.Behaviors>
+                                <behaviors:NumericDoubleValidationBehavior />
+                            </Entry.Behaviors>
+                        </Entry>
+                    </Grid>
+                    <Button
+                        Margin="0,4,0,0"
+                        Command="{Binding AddCalibrationPointCommand}"
+                        Style="{StaticResource SecondaryButtonStyle}"
+                        Text="Add point" />
+
+                    <Label
+                        Style="{StaticResource MutedCaptionStyle}"
+                        Text="{Binding CalibrationSummary}" />
                 </VerticalStackLayout>
             </Border>
 

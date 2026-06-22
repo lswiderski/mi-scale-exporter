@@ -1,0 +1,14 @@
+# Normalize all text files to LF in the repository (matches existing history).
+# Overrides any core.autocrlf setting so editors/IDEs stop showing phantom
+# line-ending changes.
+* text=auto eol=lf
+
+# Explicitly binary assets (never normalize / diff as text).
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.otf binary
+*.ttf binary
+*.keystore binary

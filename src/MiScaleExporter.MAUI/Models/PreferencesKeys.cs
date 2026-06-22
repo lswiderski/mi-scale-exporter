@@ -25,4 +25,6 @@ public static class PreferencesKeys
     public static string UseChinaServer = "UseChinaServer";
     public static string PreviousMeasurementJson = "PreviousMeasurementJson";
     public static string OnboardingCompleted = "OnboardingCompleted";
+    public static string UseFatCalibration = "UseFatCalibration";
+    public static string FatCalibrationPoints = "FatCalibrationPoints";
 }

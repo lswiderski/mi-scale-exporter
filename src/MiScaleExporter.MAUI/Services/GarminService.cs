@@ -139,6 +139,8 @@ public class GarminService : IGarminService
             var errorlogs = LogService.GetErrorLogs();
             _logService.LogError(ex?.Message);
             result.Message = ex.Message;
+            result.AccessToken = string.Empty;
+            result.TokenSecret = string.Empty;
             return result;
         }
 
