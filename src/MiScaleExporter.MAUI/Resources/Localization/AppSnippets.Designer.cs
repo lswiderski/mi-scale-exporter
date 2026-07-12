@@ -887,5 +887,95 @@ namespace MiScaleExporter.MAUI.Resources.Localization {
                 return ResourceManager.GetString("WeightLbs", resourceCulture);
             }
         }
+
+        internal static string S400DualFrequencyMetrics {
+            get {
+                return ResourceManager.GetString("S400DualFrequencyMetrics", resourceCulture);
+            }
+        }
+
+        internal static string Impedance250KHz {
+            get {
+                return ResourceManager.GetString("Impedance250KHz", resourceCulture);
+            }
+        }
+
+        internal static string Impedance50KHz {
+            get {
+                return ResourceManager.GetString("Impedance50KHz", resourceCulture);
+            }
+        }
+
+        internal static string LeanBodyMass {
+            get {
+                return ResourceManager.GetString("LeanBodyMass", resourceCulture);
+            }
+        }
+
+        internal static string ExtracellularWater {
+            get {
+                return ResourceManager.GetString("ExtracellularWater", resourceCulture);
+            }
+        }
+
+        internal static string IntracellularWater {
+            get {
+                return ResourceManager.GetString("IntracellularWater", resourceCulture);
+            }
+        }
+
+        internal static string EcwTbwRatio {
+            get {
+                return ResourceManager.GetString("EcwTbwRatio", resourceCulture);
+            }
+        }
+
+        internal static string BodyCellMass {
+            get {
+                return ResourceManager.GetString("BodyCellMass", resourceCulture);
+            }
+        }
+
+        internal static string SkeletalMuscleMass {
+            get {
+                return ResourceManager.GetString("SkeletalMuscleMass", resourceCulture);
+            }
+        }
+
+        internal static string SkeletalMuscleMassKg {
+            get {
+                return ResourceManager.GetString("SkeletalMuscleMassKg", resourceCulture);
+            }
+        }
+
+        internal static string SkeletalMuscleMassLbs {
+            get {
+                return ResourceManager.GetString("SkeletalMuscleMassLbs", resourceCulture);
+            }
+        }
+
+        internal static string SkeletalMuscleMassPer {
+            get {
+                return ResourceManager.GetString("SkeletalMuscleMassPer", resourceCulture);
+            }
+        }
+
+        internal static string SkeletalMuscleMassSentToGarmin {
+            get {
+                return ResourceManager.GetString("SkeletalMuscleMassSentToGarmin", resourceCulture);
+            }
+        }
+
+        internal static string TotalMuscleMass {
+            get {
+                return ResourceManager.GetString("TotalMuscleMass", resourceCulture);
+            }
+        }
+
+        internal static string HeartRate {
+            get {
+                return ResourceManager.GetString("HeartRate", resourceCulture);
+            }
+        }
     }
 }

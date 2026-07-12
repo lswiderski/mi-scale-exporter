@@ -159,13 +159,32 @@ namespace MiScaleExporter.MAUI.ViewModels
 
         private BodyComposition PrepareRequest()
         {
+            var weight = ConvertToKg(DoubleValueParser.ParseValueFromUsersCulture(_weight) ?? 0);
+            var garminMuscleMass = DoubleValueParser.ParseValueFromUsersCulture(_muscleMass) ?? 0;
+            if (Preferences.Get(PreferencesKeys.MuscleMassAsPercentage, false)
+                && garminMuscleMass != 0
+                && weight != 0)
+            {
+                garminMuscleMass = (garminMuscleMass / 100) * weight;
+            }
+            else
+            {
+                garminMuscleMass = ConvertToKg(garminMuscleMass);
+            }
+
+            var displayedTotalMuscleMass = DoubleValueParser.ParseValueFromUsersCulture(_totalMuscleMass);
+            var totalMuscleMass = ShowS400Metrics && displayedTotalMuscleMass.HasValue
+                ? ConvertToKg(displayedTotalMuscleMass.Value)
+                : garminMuscleMass;
+
             var bc = new BodyComposition
             {
                 Fat = DoubleValueParser.ParseValueFromUsersCulture(_fat) ?? 0,
                 BodyType = _bodyType ?? 0,
-                Weight = ConvertToKg(DoubleValueParser.ParseValueFromUsersCulture(_weight) ?? 0),
+                Weight = weight,
                 BoneMass = ConvertToKg(DoubleValueParser.ParseValueFromUsersCulture(_boneMass) ?? 0),
-                MuscleMass = ConvertToKg(DoubleValueParser.ParseValueFromUsersCulture(_muscleMass) ?? 0),
+                MuscleMass = totalMuscleMass,
+                SkeletalMuscleMass = ShowS400Metrics ? garminMuscleMass : null,
                 MetabolicAge = DoubleValueParser.ParseValueFromUsersCulture(_metabolicAge) ?? 0,
                 ProteinPercentage = DoubleValueParser.ParseValueFromUsersCulture(_proteinPercentage) ?? 0,
                 VisceralFat = DoubleValueParser.ParseValueFromUsersCulture(_visceralFat) ?? 0,
@@ -175,13 +194,6 @@ namespace MiScaleExporter.MAUI.ViewModels
                 MFACode = _mfaCode,
                 ExternalApiClientId = _externalApiClientId
             };
-
-            if (Preferences.Get(PreferencesKeys.MuscleMassAsPercentage, false) 
-                && bc.MuscleMass != 0 
-                && bc.Weight != 0)
-            {
-                bc.MuscleMass = (bc.MuscleMass / 100) * bc.Weight;
-            }
             return bc;
         }
 
@@ -192,7 +204,6 @@ namespace MiScaleExporter.MAUI.ViewModels
             Weight = ConvertFromKg(App.BodyComposition.Weight).ToString("0.##");
             BMI = App.BodyComposition.BMI.ToString();
             BoneMass = ConvertFromKg(App.BodyComposition.BoneMass).ToString("0.##");
-            MuscleMass = ConvertFromKg(App.BodyComposition.MuscleMass).ToString("0.##");
             IdealWeight = ConvertFromKg(App.BodyComposition.IdealWeight).ToString("0.##");
             BMR = App.BodyComposition.BMR.ToString();
             MetabolicAge = App.BodyComposition.MetabolicAge.ToString();
@@ -201,6 +212,25 @@ namespace MiScaleExporter.MAUI.ViewModels
             Fat = App.BodyComposition.Fat.ToString();
             WaterPercentage = App.BodyComposition.WaterPercentage.ToString();
             BodyType = App.BodyComposition.BodyType;
+            ShowS400Metrics = App.BodyComposition.HasDualFrequencyImpedance;
+            var garminMuscleMass = App.BodyComposition.SkeletalMuscleMass ?? App.BodyComposition.MuscleMass;
+            MuscleMass = FormatMuscleMassForEntry(garminMuscleMass, App.BodyComposition.Weight);
+            if (ShowS400Metrics)
+            {
+                TotalMuscleMass = ConvertFromKg(App.BodyComposition.MuscleMass).ToString("0.##");
+                HeartRate = App.BodyComposition.HeartRate?.ToString("0");
+                ImpedanceLow = App.BodyComposition.ImpedanceLow?.ToString("0.0");
+                ImpedanceHigh = App.BodyComposition.ImpedanceHigh?.ToString("0.0");
+                LeanBodyMass = App.BodyComposition.LeanBodyMass.HasValue
+                    ? ConvertFromKg(App.BodyComposition.LeanBodyMass.Value).ToString("0.##")
+                    : null;
+                ExtracellularWater = App.BodyComposition.ExtracellularWater?.ToString("0.##");
+                IntracellularWater = App.BodyComposition.IntracellularWater?.ToString("0.##");
+                EcwTbwRatio = App.BodyComposition.EcwTbwRatio?.ToString("0.#");
+                BodyCellMass = App.BodyComposition.BodyCellMass.HasValue
+                    ? ConvertFromKg(App.BodyComposition.BodyCellMass.Value).ToString("0.##")
+                    : null;
+            }
             IsAutomaticCalculation = true;
         }
 
@@ -304,6 +334,78 @@ namespace MiScaleExporter.MAUI.ViewModels
             get => _waterPercentage;
             set => SetProperty(ref _waterPercentage, DoubleValueParser.CheckValue(value));
         }
+
+        private bool _showS400Metrics;
+        public bool ShowS400Metrics
+        {
+            get => _showS400Metrics;
+            set => SetProperty(ref _showS400Metrics, value);
+        }
+
+        private string _impedanceLow;
+        public string ImpedanceLow
+        {
+            get => _impedanceLow;
+            set => SetProperty(ref _impedanceLow, value);
+        }
+
+        private string _impedanceHigh;
+        public string ImpedanceHigh
+        {
+            get => _impedanceHigh;
+            set => SetProperty(ref _impedanceHigh, value);
+        }
+
+        private string _leanBodyMass;
+        public string LeanBodyMass
+        {
+            get => _leanBodyMass;
+            set => SetProperty(ref _leanBodyMass, value);
+        }
+
+        private string _extracellularWater;
+        public string ExtracellularWater
+        {
+            get => _extracellularWater;
+            set => SetProperty(ref _extracellularWater, value);
+        }
+
+        private string _intracellularWater;
+        public string IntracellularWater
+        {
+            get => _intracellularWater;
+            set => SetProperty(ref _intracellularWater, value);
+        }
+
+        private string _ecwTbwRatio;
+        public string EcwTbwRatio
+        {
+            get => _ecwTbwRatio;
+            set => SetProperty(ref _ecwTbwRatio, value);
+        }
+
+        private string _bodyCellMass;
+        public string BodyCellMass
+        {
+            get => _bodyCellMass;
+            set => SetProperty(ref _bodyCellMass, value);
+        }
+
+        private string _totalMuscleMass;
+        public string TotalMuscleMass
+        {
+            get => _totalMuscleMass;
+            set => SetProperty(ref _totalMuscleMass, value);
+        }
+
+        private string _heartRate;
+        public string HeartRate
+        {
+            get => _heartRate;
+            set => SetProperty(ref _heartRate, value);
+        }
+
+        public string MassUnit => _displayWeightInLbs ? "lbs" : "kg";
 
         private string _email;
 
@@ -414,6 +516,16 @@ namespace MiScaleExporter.MAUI.ViewModels
         private double ConvertToKg(double displayValue)
         {
             return _displayWeightInLbs ? displayValue / KgToLbsConversion : displayValue;
+        }
+
+        private string FormatMuscleMassForEntry(double muscleMassKg, double weightKg)
+        {
+            if (MuscleMassAsPercentage && weightKg > 0)
+            {
+                return ((muscleMassKg / weightKg) * 100).ToString("0.##");
+            }
+
+            return ConvertFromKg(muscleMassKg).ToString("0.##");
         }
 
         private bool _displayWeightInLbs;

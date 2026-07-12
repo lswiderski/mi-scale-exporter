@@ -89,13 +89,20 @@
 	  <PackageReference Include="Autofac.Extras.CommonServiceLocator" Version="6.1.0" />
 	  <PackageReference Include="CommunityToolkit.Maui" Version="12.1.0" />
 	  <PackageReference Include="MiScaleBodyComposition" Version="1.0.12" />
+	  <PackageReference Include="Xiaomi.BodyComposition.S400" Version="1.1.1" Condition="!Exists('$(XiaomiBodyCompositionS400Project)')" />
 	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	  <PackageReference Include="NLog" Version="5.3.1" />
 	  <PackageReference Include="NLog.Extensions.Logging" Version="5.3.9" />
 	  <PackageReference Include="Plugin.AdMob" Version="2.3.2-beta.7" />
 	  <PackageReference Include="Plugin.BLE" Version="3.2.0-beta.1" />
 	  <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
-	  <PackageReference Include="YetAnotherGarminConnectClient" Version="0.0.17" />
+	  <PackageReference Include="YetAnotherGarminConnectClient" Version="0.0.18" Condition="!Exists('$(YetAnotherGarminConnectClientProject)')" />
+	</ItemGroup>
+	<ItemGroup Condition="Exists('$(XiaomiBodyCompositionS400Project)')">
+	  <ProjectReference Include="$(XiaomiBodyCompositionS400Project)" />
+	</ItemGroup>
+	<ItemGroup Condition="Exists('$(YetAnotherGarminConnectClientProject)')">
+	  <ProjectReference Include="$(YetAnotherGarminConnectClientProject)" />
 	</ItemGroup>
 
 	<ItemGroup>

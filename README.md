@@ -17,6 +17,12 @@ Tested on Oneplus 5T (Android 10) and Mi Body Composition Scale (XMTZC02HM)
 
 Check out this web project: https://github.com/lswiderski/WebBodyComposition
 
+## Xiaomi S400 dual-frequency support
+
+The S400 integration uses [Xiaomi.BodyComposition.S400](https://github.com/jomzxc/MiScaleBodyComposition) to pair its separate 50 kHz and 250 kHz impedance advertisements before calculating body composition. The S400 skeletal muscle mass is sent through Garmin's native muscle-mass field, and BMR is sent through the native basal-metabolism field.
+
+Garmin weight records do not support protein, ideal weight, total muscle mass, heart rate, impedance, lean body mass, extracellular or intracellular water, ECW/TBW ratio, or body cell mass. Those values remain visible locally and are not included in Garmin uploads. The calculations follow the dual-frequency model documented by [dckiller51/bodymiscale](https://github.com/dckiller51/bodymiscale/blob/main/README_S400_UPGRADE.md). They are estimates for personal trend tracking, not clinical measurements or medical advice.
+
 ## Instruction
 
 - Stand on your scale. Measure yourself. Complete the user form data, Scale Bluetooth address and get data from the scale. Mi Body Composition Scale is active up to 15 min after the measurement. (Bluetooth address can be found in Zepp Life > Profile > My devices > Mi Body Composition Scale > Bluetooth address (hold to copy)).
@@ -87,6 +93,18 @@ sequenceDiagram
 - Plugin.BLE - To receive data via Bluetooth from Mi scale
 - Xamarin.Essentials
 - API Backend in C# (YAGCC project)
+
+## Dependency release prerequisites
+
+This branch targets `Xiaomi.BodyComposition.S400` 1.1.1 and `YetAnotherGarminConnectClient` 0.0.18. Publish those packages before building from a clean clone. The dependency changes are preserved in [`patches/xiaomi-s400-1.1.1-release.patch`](patches/xiaomi-s400-1.1.1-release.patch) and [`patches/yagcc-basal-met.patch`](patches/yagcc-basal-met.patch).
+
+For local source development, package references can be replaced explicitly without relying on sibling-directory discovery:
+
+```powershell
+dotnet build src/MiScaleExporter.MAUI/MiScaleExporter.MAUI.csproj `
+  -p:XiaomiBodyCompositionS400Project=C:\path\to\MiScaleBodyComposition.csproj `
+  -p:YetAnotherGarminConnectClientProject=C:\path\to\YetAnotherGarminConnectClient.csproj
+```
 
 ## Images
 

@@ -88,20 +88,8 @@ public class GarminService : IGarminService
                 Height = Preferences.Get(PreferencesKeys.UserHeight, 170),
             };
 
-            var scaleDTO = new GarminWeightScaleDTO
-            {
-                TimeStamp = time,
-                Weight = Convert.ToSingle(bodyComposition.Weight),
-                PercentFat = Convert.ToSingle(bodyComposition.Fat),
-                PercentHydration = Convert.ToSingle(bodyComposition.WaterPercentage),
-                BoneMass = Convert.ToSingle(bodyComposition.BoneMass),
-                MuscleMass = Convert.ToSingle(bodyComposition.MuscleMass),
-                VisceralFatRating = Convert.ToByte(bodyComposition.VisceralFat),
-                VisceralFatMass = Convert.ToSingle(bodyComposition.VisceralFat),
-                PhysiqueRating = Convert.ToByte(bodyComposition.BodyType),
-                MetabolicAge = Convert.ToByte(bodyComposition.MetabolicAge),
-                BodyMassIndex = Convert.ToSingle(bodyComposition.BMI),
-            };
+            var exportData = GarminWeightExportMapper.Map(bodyComposition, time);
+            var scaleDTO = GarminWeightExportMapper.ToGarminDto(exportData);
 
             if (string.IsNullOrEmpty(bodyComposition.MFACode))
             {
@@ -157,21 +145,8 @@ public class GarminService : IGarminService
                 Height = Preferences.Get(PreferencesKeys.UserHeight, 170),
             };
 
-            var scaleDTO = new GarminWeightScaleDTO
-            {
-                TimeStamp = time,
-                Weight = Convert.ToSingle(bodyComposition.Weight),
-                PercentFat = Convert.ToSingle(bodyComposition.Fat),
-                PercentHydration = Convert.ToSingle(bodyComposition.WaterPercentage),
-                BoneMass = Convert.ToSingle(bodyComposition.BoneMass),
-                MuscleMass = Convert.ToSingle(bodyComposition.MuscleMass),
-                VisceralFatRating = Convert.ToByte(bodyComposition.VisceralFat),
-                VisceralFatMass = Convert.ToSingle(bodyComposition.VisceralFat),
-                PhysiqueRating = Convert.ToByte(bodyComposition.BodyType),
-                MetabolicAge = Convert.ToByte(bodyComposition.MetabolicAge),
-                BodyMassIndex = Convert.ToSingle(bodyComposition.BMI),
-               
-            };
+            var exportData = GarminWeightExportMapper.Map(bodyComposition, time);
+            var scaleDTO = GarminWeightExportMapper.ToGarminDto(exportData);
 
             _garminClient = await ClientFactory.Create();
 
@@ -200,24 +175,8 @@ public class GarminService : IGarminService
 
     private async Task<GarminApiResponse> UploadViaExternalAPIAsync(BodyComposition bodyComposition, DateTime time, CredentialsData credencials)
     {
-        var unixTime = ((DateTimeOffset)time).ToUnixTimeSeconds();
-        var request = new GarminBodyCompositionRequest
-        {
-            Email = credencials.Email,
-            Password = credencials.Password,
-            AccessToken = credencials.AccessToken,
-            TokenSecret = credencials.TokenSecret,
-            Weight = bodyComposition.Weight,
-            BoneMass = bodyComposition.BoneMass,
-            MuscleMass = bodyComposition.MuscleMass,
-            MetabolicAge = bodyComposition.MetabolicAge,
-            PercentFat = bodyComposition.Fat,
-            VisceralFatRating = bodyComposition.VisceralFat,
-            BodyMassIndex = bodyComposition.BMI,
-            PercentHydration = bodyComposition.WaterPercentage,
-            PhysiqueRating = bodyComposition.BodyType,
-            TimeStamp = unixTime,
-        };
+        var exportData = GarminWeightExportMapper.Map(bodyComposition, time);
+        var request = GarminWeightExportMapper.ToProxyRequest(exportData, credencials);
 
         if (!string.IsNullOrEmpty(bodyComposition.ExternalApiClientId))
         {

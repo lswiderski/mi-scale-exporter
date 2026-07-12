@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MiScaleExporter.MAUI", "src\MiScaleExporter.MAUI\MiScaleExporter.MAUI.csproj", "{39C1BB45-DB3C-4C1A-A3C0-5CBB35C753D0}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MiScaleExporter.UnitTests", "tests\MiScaleExporter.UnitTests\MiScaleExporter.UnitTests.csproj", "{D4E8FCD4-C9AA-4D4A-A384-33E2BE5394E1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{39C1BB45-DB3C-4C1A-A3C0-5CBB35C753D0}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{39C1BB45-DB3C-4C1A-A3C0-5CBB35C753D0}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 		{39C1BB45-DB3C-4C1A-A3C0-5CBB35C753D0}.Release|iPhoneSimulator.Deploy.0 = Release|Any CPU
+		{D4E8FCD4-C9AA-4D4A-A384-33E2BE5394E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4E8FCD4-C9AA-4D4A-A384-33E2BE5394E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4E8FCD4-C9AA-4D4A-A384-33E2BE5394E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4E8FCD4-C9AA-4D4A-A384-33E2BE5394E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

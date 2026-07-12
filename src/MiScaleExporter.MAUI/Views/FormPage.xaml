@@ -98,9 +98,9 @@ AdSize="SmartBanner"
                             </Entry>
                         </StackLayout>
                         <StackLayout Grid.Row="2" Grid.Column="1">
-                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.MuscleMassLbs}" IsVisible="{Binding MuscleMassAsLbs}" />
-                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.MuscleMassKg}" IsVisible="{Binding MuscleMassAsKg}" />
-                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.MuscleMassPer}" IsVisible="{Binding MuscleMassAsPercentage}" />
+                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.SkeletalMuscleMassLbs}" IsVisible="{Binding MuscleMassAsLbs}" />
+                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.SkeletalMuscleMassKg}" IsVisible="{Binding MuscleMassAsKg}" />
+                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.SkeletalMuscleMassPer}" IsVisible="{Binding MuscleMassAsPercentage}" />
                             <Entry
                         FontSize="Medium"
                         Keyboard="Numeric"
@@ -271,6 +271,17 @@ AdSize="SmartBanner"
                                 IsVisible="{Binding ShowMFACode}"/>
 
                             <StackLayout IsVisible="{Binding IsAutomaticCalculation}">
+                                <StackLayout Orientation="Horizontal">
+                                    <Label FontSize="Small" Text="{x:Static localization:AppSnippets.BasalMetabolosimKCal}" />
+                                    <Entry
+                                        FontSize="Small"
+                                        Keyboard="Numeric"
+                                        Text="{Binding BMR, Mode=TwoWay}" />
+                                </StackLayout>
+                                <Label
+                                    FontSize="Small"
+                                    IsVisible="{Binding ShowS400Metrics}"
+                                    Text="{x:Static localization:AppSnippets.SkeletalMuscleMassSentToGarmin}" />
                                 <Label FontSize="Small" Text="{x:Static localization:AppSnippets.ValuesThatWillNotBeSentToTheCloud}" />
                                 <StackLayout Orientation="Horizontal">
                                     <Label FontSize="Small" Text="{x:Static localization:AppSnippets.ProteinPercent}" />
@@ -278,14 +289,58 @@ AdSize="SmartBanner"
 
                                 </StackLayout>
                                 <StackLayout Orientation="Horizontal">
-                                    <Label FontSize="Small" Text="{x:Static localization:AppSnippets.BasalMetabolosimKCal}" />
-                                    <Label FontSize="Small" Text="{Binding BMR, Mode=TwoWay}" />
-                                </StackLayout>
-                                <StackLayout Orientation="Horizontal">
                                     <Label FontSize="Small" Text="{x:Static localization:AppSnippets.IdealWeightKg}" IsVisible="{Binding ShowWeightInKg}" />
                                     <Label FontSize="Small" Text="{x:Static localization:AppSnippets.IdealWeightLbs}" IsVisible="{Binding ShowWeightInLbs}" />
                                     <Label FontSize="Small" Text="{Binding IdealWeight, Mode=TwoWay}" />
 
+                                </StackLayout>
+                                <StackLayout Margin="0,8,0,0" IsVisible="{Binding ShowS400Metrics}">
+                                    <Label FontAttributes="Bold" FontSize="Small" Text="{x:Static localization:AppSnippets.S400DualFrequencyMetrics}" />
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label FontSize="Small" Text="{x:Static localization:AppSnippets.TotalMuscleMass}" />
+                                        <Label FontSize="Small" Text="{Binding TotalMuscleMass}" />
+                                        <Label FontSize="Small" Text="{Binding MassUnit, StringFormat=' {0}'}" />
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label FontSize="Small" Text="{x:Static localization:AppSnippets.HeartRate}" />
+                                        <Label FontSize="Small" Text="{Binding HeartRate}" />
+                                        <Label FontSize="Small" Text=" bpm" />
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label FontSize="Small" Text="{x:Static localization:AppSnippets.Impedance250KHz}" />
+                                        <Label FontSize="Small" Text="{Binding ImpedanceLow}" />
+                                        <Label FontSize="Small" Text=" Ω" />
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label FontSize="Small" Text="{x:Static localization:AppSnippets.Impedance50KHz}" />
+                                        <Label FontSize="Small" Text="{Binding ImpedanceHigh}" />
+                                        <Label FontSize="Small" Text=" Ω" />
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label FontSize="Small" Text="{x:Static localization:AppSnippets.LeanBodyMass}" />
+                                        <Label FontSize="Small" Text="{Binding LeanBodyMass}" />
+                                        <Label FontSize="Small" Text="{Binding MassUnit, StringFormat=' {0}'}" />
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label FontSize="Small" Text="{x:Static localization:AppSnippets.ExtracellularWater}" />
+                                        <Label FontSize="Small" Text="{Binding ExtracellularWater}" />
+                                        <Label FontSize="Small" Text=" L" />
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label FontSize="Small" Text="{x:Static localization:AppSnippets.IntracellularWater}" />
+                                        <Label FontSize="Small" Text="{Binding IntracellularWater}" />
+                                        <Label FontSize="Small" Text=" L" />
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label FontSize="Small" Text="{x:Static localization:AppSnippets.EcwTbwRatio}" />
+                                        <Label FontSize="Small" Text="{Binding EcwTbwRatio}" />
+                                        <Label FontSize="Small" Text=" %" />
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label FontSize="Small" Text="{x:Static localization:AppSnippets.BodyCellMass}" />
+                                        <Label FontSize="Small" Text="{Binding BodyCellMass}" />
+                                        <Label FontSize="Small" Text="{Binding MassUnit, StringFormat=' {0}'}" />
+                                    </StackLayout>
                                 </StackLayout>
                             </StackLayout>
 

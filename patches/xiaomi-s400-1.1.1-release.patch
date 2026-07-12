@@ -1,0 +1,22 @@
+diff --git a/src/MiScaleBodyComposition.csproj b/src/MiScaleBodyComposition.csproj
+--- a/src/MiScaleBodyComposition.csproj
++++ b/src/MiScaleBodyComposition.csproj
+@@ -7,5 +7,5 @@
+     <RootNamespace>Xiaomi.BodyComposition.S400</RootNamespace>
+     <Company>jomszxc</Company>
+-    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+-    <FileVersion>1.1.0.0</FileVersion>
++    <AssemblyVersion>1.1.1.0</AssemblyVersion>
++    <FileVersion>1.1.1.0</FileVersion>
+     <PackageId>Xiaomi.BodyComposition.S400</PackageId>
+@@ -18,3 +18,3 @@
+     <PackageReadmeFile>README.md</PackageReadmeFile>
+-    <PackageReleaseNotes>S400-only release with dual-frequency impedance pairing and full S400 body-composition metrics. Legacy Xiaomi scale implementations have been removed.</PackageReleaseNotes>
++    <PackageReleaseNotes>Corrects the package assembly identity and includes dual-frequency S400 metrics and heart rate.</PackageReleaseNotes>
+     <RepositoryUrl>https://github.com/jomzxc/Xiaomi.BodyComposition.S400</RepositoryUrl>
+@@ -26,4 +26,4 @@
+     <RepositoryType>git</RepositoryType>
+     <PackageTags>xiaomi, s400, dual-frequency, bluetooth, ble, bodycomposition, impedance</PackageTags>
+-    <PackageVersion>1.1.0</PackageVersion>
++    <PackageVersion>1.1.1</PackageVersion>
+     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>

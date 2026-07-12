@@ -1,23 +1,14 @@
-﻿using MiScaleBodyComposition.Contracts;
-using MiScaleExporter.Models;
+﻿using MiScaleExporter.Models;
 
 namespace MiScaleExporter.Services
 {
     public class DataInterpreter : IDataInterpreter
     {
-        private void ValidateAesKey(string aesKey)
+        private readonly S400DataInterpreter _s400DataInterpreter = new S400DataInterpreter();
+
+        public void ResetMeasurement()
         {
-            if (string.IsNullOrEmpty(aesKey) || aesKey.Length != 32)
-            {
-                throw new ArgumentException("AES key must be a 32-character hexadecimal string.");
-            }
-        }
-        private void ValidateBluetoothAddress(string btAddress)
-        {
-            if (string.IsNullOrEmpty(btAddress) || btAddress.Length != 17 || !btAddress.All(c => char.IsLetterOrDigit(c) || c == ':'))
-            {
-                throw new ArgumentException("Bluetooth address must be a valid 17-character string in the format XX:XX:XX:XX:XX:XX.");
-            }
+            _s400DataInterpreter.ResetMeasurement();
         }
 
         public BodyComposition ComputeData(byte[] data, User _user, string btAddress)
@@ -94,52 +85,9 @@ namespace MiScaleExporter.Services
                         return null;
                     }
                 case ScaleType.S400:
-
-                    if(data.Length == 26)
-                    {
-                        this.ValidateAesKey(_user.BindKey);
-                        this.ValidateBluetoothAddress(btAddress);
-
-                        var s400Scale = new MiScaleBodyComposition.S400Scale();
-                        var s400Result = s400Scale.GetBodyComposition(user, new S400InputData
-                        {
-                            Data = data,
-                            AesKey = _user.BindKey,
-                            MacOriginal = btAddress,
-                        });
-                        
-                        if (s400Result != null)
-                        {
-                            var bodyComposition = new BodyComposition
-                            {
-                                Weight = s400Result.Weight,
-                                BMI = s400Result.BMI,
-                                ProteinPercentage = s400Result.ProteinPercentage,
-                                IdealWeight = s400Result.IdealWeight,
-                                BMR = s400Result.BMR,
-                                BoneMass = s400Result.BoneMass,
-                                Fat = s400Result.Fat,
-                                MetabolicAge = s400Result.MetabolicAge,
-                                MuscleMass = s400Result.MuscleMass,
-                                VisceralFat = s400Result.VisceralFat,
-                                WaterPercentage = s400Result.Water,
-                                BodyType = s400Result.BodyType,
-                                HasImpedance = true,
-                                IsStabilized = true,
-                                Date = s400Result.Date,
-
-                            };
-                            return FatCalibration.ApplySaved(bodyComposition);
-
-                        }
-                    }
-                    var emptyBC = new BodyComposition
-                    {
-                        Weight = 0,
-                        HasImpedance = false,
-                        IsStabilized = false,
-                    };
-                    return emptyBC;
+                    // Keep the S400 model internally consistent. The legacy fat
+                    // calibration recalculates water and protein with single-frequency formulas.
+                    return _s400DataInterpreter.ComputeData(data, _user, btAddress);
 
                 default:
                     throw new NotImplementedException();

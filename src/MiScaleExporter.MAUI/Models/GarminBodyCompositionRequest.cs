@@ -7,11 +7,14 @@ public record GarminBodyCompositionRequest
     public double PercentFat { get; set; }
     public double PercentHydration { get; set; }
     public double BoneMass { get; set; }
+    public double SkeletalMuscleMass { get; set; }
+    // Sent during the proxy transition so servers on the older contract retain the value.
     public double MuscleMass { get; set; }
     public double VisceralFatRating{ get; set; }
     public int PhysiqueRating { get; set; }
     public double MetabolicAge { get; set; }
     public double BodyMassIndex { get; set; }
+    public double? BasalMet { get; set; }
     public string Email { get; set; }
     public string Password { get; set; }
     public string ClientID { get; set; }

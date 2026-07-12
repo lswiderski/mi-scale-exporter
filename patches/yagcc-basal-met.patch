@@ -1,0 +1,178 @@
+diff --git a/src/Api/Contracts/BodyCompositionRequest.cs b/src/Api/Contracts/BodyCompositionRequest.cs
+index 5b5cfac..33c0318 100644
+--- a/src/Api/Contracts/BodyCompositionRequest.cs
++++ b/src/Api/Contracts/BodyCompositionRequest.cs
+@@ -11,0 +12,3 @@ namespace Api.Contracts
++        public float? SkeletalMuscleMass { set; get; }
++
++        // Retained so older proxy clients continue to upload this value.
+@@ -17,0 +21 @@ namespace Api.Contracts
++        public float? BasalMet { get; set; }
+diff --git a/src/Api/Endpoints/UploadEndpoints.cs b/src/Api/Endpoints/UploadEndpoints.cs
+index a60d2da..906a3a2 100644
+--- a/src/Api/Endpoints/UploadEndpoints.cs
++++ b/src/Api/Endpoints/UploadEndpoints.cs
+@@ -59 +59 @@ public static class UploadEndpoints
+-                    MuscleMass = request.MuscleMass,
++                    SkeletalMuscleMass = request.SkeletalMuscleMass ?? request.MuscleMass,
+@@ -64,0 +65 @@ public static class UploadEndpoints
++                    BasalMet = request.BasalMet,
+@@ -160 +161 @@ public static class UploadEndpoints
+-}
+\ No newline at end of file
++}
+diff --git a/src/YAGCC/Commands/UploadBodyComposition/UploadBodyCompositionCommand.cs b/src/YAGCC/Commands/UploadBodyComposition/UploadBodyCompositionCommand.cs
+index e14b3a9..1660117 100644
+--- a/src/YAGCC/Commands/UploadBodyComposition/UploadBodyCompositionCommand.cs
++++ b/src/YAGCC/Commands/UploadBodyComposition/UploadBodyCompositionCommand.cs
+@@ -45 +45 @@ namespace YAGCC.Commands.UploadBodyComposition
+-                    MuscleMass = request.MuscleMass,
++                    SkeletalMuscleMass = request.SkeletalMuscleMass,
+diff --git a/src/YAGCC/Commands/UploadBodyComposition/UploadBodyCompositionCommandSettings.cs b/src/YAGCC/Commands/UploadBodyComposition/UploadBodyCompositionCommandSettings.cs
+index d1caf15..ca45edf 100644
+--- a/src/YAGCC/Commands/UploadBodyComposition/UploadBodyCompositionCommandSettings.cs
++++ b/src/YAGCC/Commands/UploadBodyComposition/UploadBodyCompositionCommandSettings.cs
+@@ -29,3 +29,3 @@ namespace YAGCC.Commands.UploadBodyComposition
+-        [CommandOption("-m|--muscle-mass")]
+-        [Description("Set your muscle mass in kilograms")]
+-        public float? MuscleMass { set; get; }
++        [CommandOption("-m|--skeletal-muscle-mass|--muscle-mass")]
++        [Description("Set your skeletal muscle mass in kilograms")]
++        public float? SkeletalMuscleMass { set; get; }
+diff --git a/src/YetAnotherGarminConnectClient/Dto/Garmin/Fit/Models.cs b/src/YetAnotherGarminConnectClient/Dto/Garmin/Fit/Models.cs
+index 4709333..de2ef07 100644
+--- a/src/YetAnotherGarminConnectClient/Dto/Garmin/Fit/Models.cs
++++ b/src/YetAnotherGarminConnectClient/Dto/Garmin/Fit/Models.cs
+@@ -32 +32,14 @@ namespace YetAnotherGarminConnectClient.Dto.Garmin.Fit
+-        public float? MuscleMass { set; get; }
++        /// <summary>
++        /// Skeletal muscle mass in kilograms. Garmin's FIT profile names this field muscle_mass.
++        /// </summary>
++        public float? SkeletalMuscleMass { set; get; }
++
++        /// <summary>
++        /// Backwards-compatible alias for <see cref="SkeletalMuscleMass"/>.
++        /// </summary>
++        [Obsolete("Use SkeletalMuscleMass. Garmin's muscle_mass FIT field represents skeletal muscle mass.")]
++        public float? MuscleMass
++        {
++            get => SkeletalMuscleMass;
++            set => SkeletalMuscleMass = value;
++        }
+@@ -37,0 +51 @@ namespace YetAnotherGarminConnectClient.Dto.Garmin.Fit
++        public float? BasalMet { set; get; }
+diff --git a/src/YetAnotherGarminConnectClient/FitFileCreator.cs b/src/YetAnotherGarminConnectClient/FitFileCreator.cs
+index b259a44..3e860a8 100644
+--- a/src/YetAnotherGarminConnectClient/FitFileCreator.cs
++++ b/src/YetAnotherGarminConnectClient/FitFileCreator.cs
+@@ -55,2 +55,4 @@ namespace YetAnotherGarminConnectClient
+-                if (garminWeightScaleData.MuscleMass is not null)
+-                    weightMesg.SetMuscleMass(garminWeightScaleData.MuscleMass);
++                if (garminWeightScaleData.SkeletalMuscleMass is not null)
++                    weightMesg.SetMuscleMass(garminWeightScaleData.SkeletalMuscleMass);
++                if (garminWeightScaleData.BasalMet is not null)
++                    weightMesg.SetBasalMet(garminWeightScaleData.BasalMet);
+diff --git a/tests/Api/Helpers/BodyCompositionRequestBuilder.cs b/tests/Api/Helpers/BodyCompositionRequestBuilder.cs
+index c0975f6..15a2766 100644
+--- a/tests/Api/Helpers/BodyCompositionRequestBuilder.cs
++++ b/tests/Api/Helpers/BodyCompositionRequestBuilder.cs
+@@ -38 +38 @@ namespace Api.Tests.Helpers
+-                MuscleMass = 30.0f,
++                SkeletalMuscleMass = 30.0f,
+@@ -43,0 +44 @@ namespace Api.Tests.Helpers
++                BasalMet = 1650f,
+diff --git a/tests/ClientTests.cs b/tests/ClientTests.cs
+index 5834a63..586017e 100644
+--- a/tests/ClientTests.cs
++++ b/tests/ClientTests.cs
+@@ -37 +37 @@ namespace YetAnotherGarminConnectClient.Tests
+-                MuscleMass = 32f,
++                SkeletalMuscleMass = 32f,
+@@ -223 +223 @@ namespace YetAnotherGarminConnectClient.Tests
+-}
+\ No newline at end of file
++}
+diff --git a/tests/FitFileCreatorTests.cs b/tests/FitFileCreatorTests.cs
+new file mode 100644
+index 0000000..8e8151b
+--- /dev/null
++++ b/tests/FitFileCreatorTests.cs
+@@ -0,0 +1,71 @@
++using Dynastream.Fit;
++using NUnit.Framework;
++using YetAnotherGarminConnectClient.Dto.Garmin.Fit;
++
++namespace YetAnotherGarminConnectClient.Tests;
++
++[TestFixture]
++public class FitFileCreatorTests
++{
++    [Test]
++    public void WeightFitFileRoundTripsBasalMetAndSkeletalMuscleMass()
++    {
++        var data = new GarminWeightScaleData
++        {
++            TimeStamp = new System.DateTime(2026, 7, 12, 8, 30, 0, DateTimeKind.Utc),
++            Weight = 74.2f,
++            SkeletalMuscleMass = 40.0f,
++            BasalMet = 1650f,
++        };
++        var profile = new UserProfileSettings { Age = 29, Height = 182 };
++
++        var bytes = FitFileCreator.CreateWeightBodyCompositionFitFile(data, profile);
++        var decode = new Decode();
++        var broadcaster = new MesgBroadcaster();
++        WeightScaleMesg? decoded = null;
++
++        decode.MesgEvent += broadcaster.OnMesg;
++        broadcaster.WeightScaleMesgEvent += (_, args) => decoded = new WeightScaleMesg(args.mesg);
++
++        using var stream = new MemoryStream(bytes);
++        Assert.That(decode.Read(stream), Is.True);
++        Assert.That(decoded, Is.Not.Null);
++        Assert.That(decoded!.GetBasalMet(), Is.EqualTo(1650f).Within(0.25f));
++        Assert.That(decoded.GetMuscleMass(), Is.EqualTo(40.0f).Within(0.01f));
++    }
++
++    [Test]
++    public void WeightFitFileOmitsBasalMetWhenItIsNull()
++    {
++        var data = new GarminWeightScaleData
++        {
++            TimeStamp = new System.DateTime(2026, 7, 12, 8, 30, 0, DateTimeKind.Utc),
++            Weight = 74.2f,
++            BasalMet = null,
++        };
++        var profile = new UserProfileSettings { Age = 29, Height = 182 };
++
++        var bytes = FitFileCreator.CreateWeightBodyCompositionFitFile(data, profile);
++        var decode = new Decode();
++        var broadcaster = new MesgBroadcaster();
++        WeightScaleMesg? decoded = null;
++
++        decode.MesgEvent += broadcaster.OnMesg;
++        broadcaster.WeightScaleMesgEvent += (_, args) => decoded = new WeightScaleMesg(args.mesg);
++
++        using var stream = new MemoryStream(bytes);
++        Assert.That(decode.Read(stream), Is.True);
++        Assert.That(decoded, Is.Not.Null);
++        Assert.That(decoded!.GetBasalMet(), Is.Null);
++    }
++
++    [Test]
++    public void LegacyMuscleMassAliasPopulatesSkeletalMuscleMass()
++    {
++#pragma warning disable CS0618
++        var data = new GarminWeightScaleData { MuscleMass = 39.5f };
++#pragma warning restore CS0618
++
++        Assert.That(data.SkeletalMuscleMass, Is.EqualTo(39.5f));
++    }
++}
+diff --git a/tests/GarminConnectClientTests.cs b/tests/GarminConnectClientTests.cs
+index d5a8a90..c198239 100644
+--- a/tests/GarminConnectClientTests.cs
++++ b/tests/GarminConnectClientTests.cs
+@@ -43 +43 @@ namespace YetAnotherGarminConnectClient.Tests
+-                MuscleMass = 32f,
++                SkeletalMuscleMass = 32f,

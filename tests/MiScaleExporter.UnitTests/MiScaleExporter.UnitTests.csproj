@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+    <PackageReference Include="NUnit" Version="3.13.2" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
+    <PackageReference Include="Xiaomi.BodyComposition.S400" Version="1.1.1" Condition="!Exists('$(XiaomiBodyCompositionS400Project)')" />
+    <PackageReference Include="YetAnotherGarminConnectClient" Version="0.0.18" Condition="!Exists('$(YetAnotherGarminConnectClientProject)')" />
+  </ItemGroup>
+
+  <ItemGroup Condition="Exists('$(XiaomiBodyCompositionS400Project)')">
+    <ProjectReference Include="$(XiaomiBodyCompositionS400Project)" />
+  </ItemGroup>
+
+  <ItemGroup Condition="Exists('$(YetAnotherGarminConnectClientProject)')">
+    <ProjectReference Include="$(YetAnotherGarminConnectClientProject)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\src\MiScaleExporter.MAUI\Models\BodyComposition.cs" Link="Models\BodyComposition.cs" />
+    <Compile Include="..\..\src\MiScaleExporter.MAUI\Models\GarminBodyCompositionRequest.cs" Link="Models\GarminBodyCompositionRequest.cs" />
+    <Compile Include="..\..\src\MiScaleExporter.MAUI\Models\GarminWeightExportData.cs" Link="Models\GarminWeightExportData.cs" />
+    <Compile Include="..\..\src\MiScaleExporter.MAUI\Models\ScaleType.cs" Link="Models\ScaleType.cs" />
+    <Compile Include="..\..\src\MiScaleExporter.MAUI\Models\Sex.cs" Link="Models\Sex.cs" />
+    <Compile Include="..\..\src\MiScaleExporter.MAUI\Models\User.cs" Link="Models\User.cs" />
+    <Compile Include="..\..\src\MiScaleExporter.MAUI\Services\S400DataInterpreter.cs" Link="Services\S400DataInterpreter.cs" />
+    <Compile Include="..\..\src\MiScaleExporter.MAUI\Services\GarminWeightExportMapper.cs" Link="Services\GarminWeightExportMapper.cs" />
+  </ItemGroup>
+
+</Project>

@@ -396,4 +396,49 @@
   <data name="WeightLbs" xml:space="preserve">
     <value>Weight (Lbs)</value>
   </data>
+  <data name="S400DualFrequencyMetrics" xml:space="preserve">
+    <value>S400 metrics kept locally:</value>
+  </data>
+  <data name="Impedance250KHz" xml:space="preserve">
+    <value>Impedance (250 kHz):</value>
+  </data>
+  <data name="Impedance50KHz" xml:space="preserve">
+    <value>Impedance (50 kHz):</value>
+  </data>
+  <data name="LeanBodyMass" xml:space="preserve">
+    <value>Lean body mass:</value>
+  </data>
+  <data name="ExtracellularWater" xml:space="preserve">
+    <value>Extracellular water:</value>
+  </data>
+  <data name="IntracellularWater" xml:space="preserve">
+    <value>Intracellular water:</value>
+  </data>
+  <data name="EcwTbwRatio" xml:space="preserve">
+    <value>ECW/TBW ratio:</value>
+  </data>
+  <data name="BodyCellMass" xml:space="preserve">
+    <value>Body cell mass:</value>
+  </data>
+  <data name="SkeletalMuscleMass" xml:space="preserve">
+    <value>Skeletal muscle mass:</value>
+  </data>
+  <data name="SkeletalMuscleMassKg" xml:space="preserve">
+    <value>Skeletal Muscle Mass (Kg)</value>
+  </data>
+  <data name="SkeletalMuscleMassLbs" xml:space="preserve">
+    <value>Skeletal Muscle Mass (Lbs)</value>
+  </data>
+  <data name="SkeletalMuscleMassPer" xml:space="preserve">
+    <value>Skeletal Muscle Mass (%)</value>
+  </data>
+  <data name="SkeletalMuscleMassSentToGarmin" xml:space="preserve">
+    <value>For S400 measurements, the editable muscle mass above is skeletal muscle mass and will be sent to Garmin.</value>
+  </data>
+  <data name="TotalMuscleMass" xml:space="preserve">
+    <value>Total muscle mass:</value>
+  </data>
+  <data name="HeartRate" xml:space="preserve">
+    <value>Heart rate:</value>
+  </data>
 </root>

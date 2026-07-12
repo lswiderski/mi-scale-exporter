@@ -66,7 +66,9 @@ It also allows you to upload manually entered body composition data to the Garmi
    
    [![Watch the video](https://img.youtube.com/vi/HtOZZwnkZHw/0.jpg)](https://www.youtube.com/shorts/HtOZZwnkZHw)
 
-6. These types of scales do not measure body composition. They measure weight and impedance and estimate the result based on those measurements. The scale sends 3 values: Weight, impedance and Heart rate. To receive body composition data, impedance is processed by an algorithm known to be similar to that used by the Mi Body Composition Scale 2 (different from that used by the S400). Because of this, the result may differ from that of the Xiaomi Home app. For this calculation proper age, height and sex is needed.
+6. The S400 sends weight, separate 50 kHz and 250 kHz impedance readings, and optional heart rate. MiScale Exporter uses [Xiaomi.BodyComposition.S400](https://github.com/jomzxc/MiScaleBodyComposition) to wait for both impedance advertisements and calculate fat, water, protein, BMR, metabolic age, lean body mass, extracellular and intracellular water, ECW/TBW ratio, body cell mass, and skeletal muscle mass. Proper age, height, and sex are required. BMR and skeletal muscle mass use Garmin's native weight fields. Protein, ideal weight, total muscle mass, heart rate, impedance, lean body mass, water compartments, ECW/TBW ratio, and body cell mass remain local because Garmin has no native weight fields for them.
+
+   The model follows the formulas documented by [dckiller51/bodymiscale](https://github.com/dckiller51/bodymiscale/blob/main/README_S400_UPGRADE.md). Dual-frequency foot-to-foot BIA values are estimates for personal trend tracking and should not be treated as clinical measurements or medical advice.
 
 7. Bear in mind that it is an experimental solution and errors may occur. If you encounter them, please contact me.
 

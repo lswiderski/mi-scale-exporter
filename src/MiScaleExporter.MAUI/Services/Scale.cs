@@ -45,6 +45,7 @@ namespace MiScaleExporter.Services
 
         public async Task<BodyComposition> GetBodyCompositonAsync(string scaleAddress, User user)
         {
+            _dataInterpreter.ResetMeasurement();
             this.BodyComposition = null;
             _lastSuccessfulBodyComposition = null;
             _receivedBodyComposition = null;
