@@ -1,0 +1,349 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="MiScaleExporter.MAUI.Views.OnboardingPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:behaviors="clr-namespace:MiScaleExporter.MAUI.Behaviors;assembly=MiScaleExporter.MAUI"
+    xmlns:localization="clr-namespace:MiScaleExporter.MAUI.Resources.Localization"
+    xmlns:vm="clr-namespace:MiScaleExporter.MAUI.ViewModels"
+    Title="{x:Static localization:AppSnippets.MiScaleExporter}"
+    BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceLight}, Dark={StaticResource SurfaceDark}}"
+    NavigationPage.HasNavigationBar="False">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="16,28,16,32" Spacing="16">
+
+            <!-- Welcome hero -->
+            <Border Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="8">
+                    <Label
+                        Style="{StaticResource HeroTitleStyle}"
+                        Text="{x:Static localization:AppSnippets.MiScaleExporter}" />
+                    <Label
+                        Style="{StaticResource HeroSubtitleStyle}"
+                        Text="{x:Static localization:AppSnippets.OnboardingSubtitle}" />
+                    <Label
+                        Margin="0,4,0,0"
+                        Style="{StaticResource MutedCaptionStyle}"
+                        Text="{x:Static localization:AppSnippets.OnboardingWelcomeCaption}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Profile -->
+            <Border Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="10">
+                    <Label
+                        Style="{StaticResource SectionHeaderStyle}"
+                        Text="{x:Static localization:AppSnippets.OnboardingProfileTitle}" />
+
+                    <Label Style="{StaticResource FieldLabelStyle}" Text="{x:Static localization:AppSnippets.Age}" />
+                    <Border
+                        Padding="3"
+                        StrokeThickness="1"
+                        Stroke="{AppThemeBinding Light={StaticResource CardStrokeLight}, Dark={StaticResource CardStrokeDark}}"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceLight}, Dark={StaticResource SurfaceDark}}">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="12" />
+                        </Border.StrokeShape>
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="3">
+                            <Border
+                                Grid.Column="0"
+                                Style="{StaticResource SegmentItemStyle}"
+                                BackgroundColor="{Binding IsManualAgeSelected, Converter={StaticResource SegmentColorConverter}}">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="AgeModeSetToManual" />
+                                </Border.GestureRecognizers>
+                                <Label
+                                    Text="{x:Static localization:AppSnippets.OnboardingAgeManual}"
+                                    FontAttributes="Bold"
+                                    FontSize="14"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center"
+                                    HorizontalTextAlignment="Center"
+                                    LineBreakMode="WordWrap"
+                                    TextColor="{Binding IsManualAgeSelected, Converter={StaticResource SegmentColorConverter}, ConverterParameter=text}" />
+                            </Border>
+                            <Border
+                                Grid.Column="1"
+                                Style="{StaticResource SegmentItemStyle}"
+                                BackgroundColor="{Binding IsBirthDateSelected, Converter={StaticResource SegmentColorConverter}}">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="AgeModeSetToBirthDate" />
+                                </Border.GestureRecognizers>
+                                <Label
+                                    Text="{x:Static localization:AppSnippets.OnboardingAgeBirthDate}"
+                                    FontAttributes="Bold"
+                                    FontSize="14"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center"
+                                    HorizontalTextAlignment="Center"
+                                    LineBreakMode="WordWrap"
+                                    TextColor="{Binding IsBirthDateSelected, Converter={StaticResource SegmentColorConverter}, ConverterParameter=text}" />
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <Entry
+                        Style="{StaticResource FieldEntryStyle}"
+                        Keyboard="Numeric"
+                        IsVisible="{Binding UseBirthDateMode, Converter={StaticResource InvertedBoolConverter}}"
+                        Text="{Binding ManualAge, Mode=TwoWay}">
+                        <Entry.Behaviors>
+                            <behaviors:NumericIntValidationBehavior />
+                        </Entry.Behaviors>
+                    </Entry>
+
+                    <VerticalStackLayout Spacing="6" IsVisible="{Binding UseBirthDateMode}">
+                        <DatePicker
+                            Date="{Binding BirthDate, Mode=TwoWay}"
+                            MaximumDate="{Binding MaxBirthDate}"
+                            FontSize="Medium"
+                            Format="dd/MM/yyyy" />
+                        <HorizontalStackLayout Spacing="6">
+                            <Label Style="{StaticResource MutedCaptionStyle}" Text="{x:Static localization:AppSnippets.OnboardingAgeYouAre}" VerticalOptions="Center" />
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="Medium"
+                                Text="{Binding Age}"
+                                TextColor="{AppThemeBinding Light={StaticResource OnSurfaceLight}, Dark={StaticResource OnSurfaceDark}}"
+                                VerticalOptions="Center" />
+                            <Label Style="{StaticResource MutedCaptionStyle}" Text="{x:Static localization:AppSnippets.OnboardingAgeYearsOld}" VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+
+                    <Label Style="{StaticResource FieldLabelStyle}" Text="{x:Static localization:AppSnippets.Height}" />
+                    <Entry
+                        Style="{StaticResource FieldEntryStyle}"
+                        Keyboard="Numeric"
+                        Text="{Binding Height, Mode=TwoWay}">
+                        <Entry.Behaviors>
+                            <behaviors:NumericIntValidationBehavior />
+                        </Entry.Behaviors>
+                    </Entry>
+
+                    <Label Style="{StaticResource FieldLabelStyle}" Text="{x:Static localization:AppSnippets.Sex}" />
+                    <Border
+                        Padding="3"
+                        StrokeThickness="1"
+                        Stroke="{AppThemeBinding Light={StaticResource CardStrokeLight}, Dark={StaticResource CardStrokeDark}}"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceLight}, Dark={StaticResource SurfaceDark}}">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="12" />
+                        </Border.StrokeShape>
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="3">
+                            <Border
+                                Grid.Column="0"
+                                Style="{StaticResource SegmentItemStyle}"
+                                BackgroundColor="{Binding IsFemaleSelected, Converter={StaticResource SegmentColorConverter}}">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="SexRadioSetToFemale" />
+                                </Border.GestureRecognizers>
+                                <Label
+                                    Text="{x:Static localization:AppSnippets.Female}"
+                                    FontAttributes="Bold"
+                                    FontSize="14"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center"
+                                    HorizontalTextAlignment="Center"
+                                    LineBreakMode="WordWrap"
+                                    TextColor="{Binding IsFemaleSelected, Converter={StaticResource SegmentColorConverter}, ConverterParameter=text}" />
+                            </Border>
+                            <Border
+                                Grid.Column="1"
+                                Style="{StaticResource SegmentItemStyle}"
+                                BackgroundColor="{Binding IsMaleSelected, Converter={StaticResource SegmentColorConverter}}">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="SexRadioSetToMale" />
+                                </Border.GestureRecognizers>
+                                <Label
+                                    Text="{x:Static localization:AppSnippets.Male}"
+                                    FontAttributes="Bold"
+                                    FontSize="14"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center"
+                                    HorizontalTextAlignment="Center"
+                                    LineBreakMode="WordWrap"
+                                    TextColor="{Binding IsMaleSelected, Converter={StaticResource SegmentColorConverter}, ConverterParameter=text}" />
+                            </Border>
+                        </Grid>
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Scale -->
+            <Border Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="10">
+                    <Label
+                        Style="{StaticResource SectionHeaderStyle}"
+                        Text="{x:Static localization:AppSnippets.OnboardingScaleTitle}" />
+
+                    <Label Style="{StaticResource FieldLabelStyle}" Text="{x:Static localization:AppSnippets.ScaleModel}" />
+                    <Border
+                        Padding="3"
+                        StrokeThickness="1"
+                        Stroke="{AppThemeBinding Light={StaticResource CardStrokeLight}, Dark={StaticResource CardStrokeDark}}"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceLight}, Dark={StaticResource SurfaceDark}}">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="12" />
+                        </Border.StrokeShape>
+                        <Grid ColumnDefinitions="*,*,*" ColumnSpacing="3">
+                            <Border
+                                Grid.Column="0"
+                                Style="{StaticResource SegmentItemStyle}"
+                                BackgroundColor="{Binding IsMiBodyCompositionScaleSelected, Converter={StaticResource SegmentColorConverter}}">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="ScaleTypeSetToBodyCompositionScale" />
+                                </Border.GestureRecognizers>
+                                <Label
+                                    Text="{x:Static localization:AppSnippets.MiBodyCompositionScale}"
+                                    FontAttributes="Bold"
+                                    FontSize="13"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center"
+                                    HorizontalTextAlignment="Center"
+                                    LineBreakMode="WordWrap"
+                                    TextColor="{Binding IsMiBodyCompositionScaleSelected, Converter={StaticResource SegmentColorConverter}, ConverterParameter=text}" />
+                            </Border>
+                            <Border
+                                Grid.Column="1"
+                                Style="{StaticResource SegmentItemStyle}"
+                                BackgroundColor="{Binding IsMiSmartScaleSelected, Converter={StaticResource SegmentColorConverter}}">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="ScaleTypeSetToMiscale" />
+                                </Border.GestureRecognizers>
+                                <Label
+                                    Text="{x:Static localization:AppSnippets.MiSmartScale}"
+                                    FontAttributes="Bold"
+                                    FontSize="13"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center"
+                                    HorizontalTextAlignment="Center"
+                                    LineBreakMode="WordWrap"
+                                    TextColor="{Binding IsMiSmartScaleSelected, Converter={StaticResource SegmentColorConverter}, ConverterParameter=text}" />
+                            </Border>
+                            <Border
+                                Grid.Column="2"
+                                Style="{StaticResource SegmentItemStyle}"
+                                BackgroundColor="{Binding IsS400Selected, Converter={StaticResource SegmentColorConverter}}">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="ScaleTypeSetToS400" />
+                                </Border.GestureRecognizers>
+                                <Label
+                                    Text="Mi Scale S400"
+                                    FontAttributes="Bold"
+                                    FontSize="13"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center"
+                                    HorizontalTextAlignment="Center"
+                                    LineBreakMode="WordWrap"
+                                    TextColor="{Binding IsS400Selected, Converter={StaticResource SegmentColorConverter}, ConverterParameter=text}" />
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                        <Label
+                            Grid.Column="0"
+                            Style="{StaticResource FieldLabelStyle}"
+                            VerticalOptions="Center"
+                            Text="{x:Static localization:AppSnippets.BluetoothAddress}" />
+                        <Label
+                            Grid.Column="1"
+                            Style="{StaticResource LinkLabelStyle}"
+                            VerticalOptions="Center"
+                            Text="{x:Static localization:AppSnippets.HowToFindAddress}">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding HowToFindAddressCommand}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </Grid>
+                    <Entry
+                        Style="{StaticResource FieldEntryStyle}"
+                        Placeholder="00:00:00:00:00:00"
+                        Text="{Binding Address, Mode=TwoWay}" />
+
+                    <VerticalStackLayout Spacing="6" IsVisible="{Binding IsS400}">
+                        <Label Style="{StaticResource FieldLabelStyle}" Text="{x:Static localization:AppSnippets.BleKeyLabel}" />
+                        <Entry
+                            Style="{StaticResource FieldEntryStyle}"
+                            Text="{Binding BindKey, Mode=TwoWay}" />
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Garmin (optional) -->
+            <Border Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="10">
+                    <Label
+                        Style="{StaticResource SectionHeaderStyle}"
+                        Text="{x:Static localization:AppSnippets.OnboardingGarminTitle}" />
+
+                    <Label Style="{StaticResource FieldLabelStyle}" Text="{x:Static localization:AppSnippets.Email}" />
+                    <Entry
+                        Style="{StaticResource FieldEntryStyle}"
+                        Keyboard="Email"
+                        Text="{Binding Email, Mode=TwoWay}" />
+
+                    <Label Style="{StaticResource FieldLabelStyle}" Text="{x:Static localization:AppSnippets.Password}" />
+                    <Entry
+                        Style="{StaticResource FieldEntryStyle}"
+                        IsPassword="True"
+                        Text="{Binding Password, Mode=TwoWay}" />
+
+                    <Button
+                        Margin="0,4,0,0"
+                        Command="{Binding ConnectGarminCommand}"
+                        Style="{StaticResource SecondaryButtonStyle}"
+                        Text="{x:Static localization:AppSnippets.ConnectGarmin}" />
+
+                    <Label
+                        IsVisible="{Binding HasGarminStatus}"
+                        FontAttributes="Bold"
+                        FontSize="14"
+                        Text="{Binding GarminStatusText}"
+                        TextColor="{Binding GarminStatusColor}" />
+
+                    <VerticalStackLayout Spacing="6" IsVisible="{Binding ShowMfaInput}">
+                        <Label Style="{StaticResource FieldLabelStyle}" Text="{x:Static localization:AppSnippets.GarminEnterMfa}" />
+                        <Entry
+                            Style="{StaticResource FieldEntryStyle}"
+                            Keyboard="Numeric"
+                            Text="{Binding MfaCode, Mode=TwoWay}" />
+                        <Button
+                            Command="{Binding VerifyMfaCommand}"
+                            Style="{StaticResource SecondaryButtonStyle}"
+                            Text="{x:Static localization:AppSnippets.VerifyMfaCode}" />
+                    </VerticalStackLayout>
+
+                    <Grid ColumnDefinitions="*,Auto" Padding="0,8,0,0">
+                        <Label
+                            Grid.Column="0"
+                            Style="{StaticResource FieldLabelStyle}"
+                            VerticalOptions="Center"
+                            Text="{x:Static localization:AppSnippets.AutoUploadToggle}" />
+                        <Switch
+                            Grid.Column="1"
+                            OnColor="{StaticResource Primary}"
+                            IsToggled="{Binding AutoUpload, Mode=TwoWay}" />
+                    </Grid>
+
+                    <Label
+                        Style="{StaticResource MutedCaptionStyle}"
+                        Text="{x:Static localization:AppSnippets.OnboardingGarminOptional}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Actions -->
+            <Button
+                Margin="0,8,0,0"
+                Command="{Binding FinishCommand}"
+                Style="{StaticResource PrimaryButtonStyle}"
+                Text="{x:Static localization:AppSnippets.OnboardingFinish}" />
+            <Button
+                Command="{Binding SkipCommand}"
+                Style="{StaticResource SecondaryButtonStyle}"
+                Text="{x:Static localization:AppSnippets.OnboardingSkip}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

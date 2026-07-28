@@ -23,6 +23,15 @@ namespace MiScaleExporter.MAUI.Views
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+            // Block guest data from ever entering FormPage via the flyout drawer. Clear the
+            // global BC and bounce back to ScalePage so the guest's measurement can never be
+            // uploaded to the owner's Garmin account.
+            if (App.IsGuestMeasurement)
+            {
+                App.BodyComposition = null;
+                await Shell.Current.GoToAsync("//ScalePage");
+                return;
+            }
             this.adMobBanner.IsVisible = !Preferences.Get(PreferencesKeys.HideAds, false);
             await vm.LoadPreferencesAsync();
             vm.LoadBodyComposition();

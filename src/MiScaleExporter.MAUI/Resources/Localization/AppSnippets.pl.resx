@@ -201,6 +201,15 @@
   <data name="GoToScan" xml:space="preserve">
     <value>Przejdź do skanowania</value>
   </data>
+  <data name="GuestMode" xml:space="preserve">
+    <value>Tryb gościa</value>
+  </data>
+  <data name="GuestNotSaved" xml:space="preserve">
+    <value>Pomiar gościa — niezapisany i niewysłany</value>
+  </data>
+  <data name="MeasureAsGuest" xml:space="preserve">
+    <value>Zmierz gościa</value>
+  </data>
   <data name="Height" xml:space="preserve">
     <value>Wzrost</value>
   </data>
@@ -366,6 +375,9 @@
   <data name="Uploaded" xml:space="preserve">
     <value>Przesłano</value>
   </data>
+  <data name="UploadedToGarmin" xml:space="preserve">
+    <value>Wysłano do Garmin ✓</value>
+  </data>
   <data name="Uploading" xml:space="preserve">
     <value>Wysyłanie...</value>
   </data>
@@ -392,5 +404,176 @@
   </data>
   <data name="WeightLbs" xml:space="preserve">
     <value>Waga (Lbs)</value>
+  </data>
+  <data name="BodyCompositionSection" xml:space="preserve">
+    <value>Skład ciała</value>
+  </data>
+  <data name="ResultShare" xml:space="preserve">
+    <value>Udostępnij</value>
+  </data>
+  <data name="ShareTitle" xml:space="preserve">
+    <value>Udostępnij pomiar</value>
+  </data>
+  <data name="BmiUnderweight" xml:space="preserve">
+    <value>Niedowaga</value>
+  </data>
+  <data name="BmiHealthy" xml:space="preserve">
+    <value>Prawidłowa</value>
+  </data>
+  <data name="BmiOverweight" xml:space="preserve">
+    <value>Nadwaga</value>
+  </data>
+  <data name="StatusLow" xml:space="preserve">
+    <value>Niski</value>
+  </data>
+  <data name="StatusStandard" xml:space="preserve">
+    <value>Standardowy</value>
+  </data>
+  <data name="StatusHigh" xml:space="preserve">
+    <value>Wysoki</value>
+  </data>
+  <data name="WeightOnlyHint" xml:space="preserve">
+    <value>Stań boso na wadze, aby uzyskać pełny skład ciała.</value>
+  </data>
+  <data name="PhaseSearching" xml:space="preserve">
+    <value>Szukanie wagi…</value>
+  </data>
+  <data name="PhaseScaleFound" xml:space="preserve">
+    <value>Znaleziono wagę</value>
+  </data>
+  <data name="PhaseReading" xml:space="preserve">
+    <value>Odczyt pomiaru…</value>
+  </data>
+  <data name="PhaseStabilizing" xml:space="preserve">
+    <value>Stabilizacja — stój nieruchomo…</value>
+  </data>
+  <data name="PhaseSuccess" xml:space="preserve">
+    <value>Gotowe</value>
+  </data>
+  <data name="PhaseFailed" xml:space="preserve">
+    <value>Nie udało się odczytać wagi</value>
+  </data>
+  <data name="PhaseCancelled" xml:space="preserve">
+    <value>Anulowano</value>
+  </data>
+  <data name="ScanHelper" xml:space="preserve">
+    <value>Wejdź na wagę i stój nieruchomo.</value>
+  </data>
+  <data name="CompFat" xml:space="preserve">
+    <value>Tłuszcz</value>
+  </data>
+  <data name="CompMuscle" xml:space="preserve">
+    <value>Mięśnie</value>
+  </data>
+  <data name="CompBone" xml:space="preserve">
+    <value>Kości</value>
+  </data>
+  <data name="CompOther" xml:space="preserve">
+    <value>Inne</value>
+  </data>
+  <data name="OnboardingSubtitle" xml:space="preserve">
+    <value>Połącz wagę Xiaomi z Garmin Connect</value>
+  </data>
+  <data name="OnboardingWelcomeCaption" xml:space="preserve">
+    <value>Skonfigurujmy aplikację w 3 krokach</value>
+  </data>
+  <data name="OnboardingGarminOptional" xml:space="preserve">
+    <value>Możesz to pominąć i dodać później w Ustawieniach.</value>
+  </data>
+  <data name="OnboardingFinish" xml:space="preserve">
+    <value>Zacznij pomiar</value>
+  </data>
+  <data name="OnboardingSkip" xml:space="preserve">
+    <value>Pomiń na razie</value>
+  </data>
+  <data name="OnboardingProfileTitle" xml:space="preserve">
+    <value>Twój profil</value>
+  </data>
+  <data name="OnboardingAgeManual" xml:space="preserve">
+    <value>Podaj wiek ręcznie</value>
+  </data>
+  <data name="OnboardingAgeBirthDate" xml:space="preserve">
+    <value>Użyj daty urodzenia</value>
+  </data>
+  <data name="OnboardingAgeYouAre" xml:space="preserve">
+    <value>Twój wiek:</value>
+  </data>
+  <data name="OnboardingAgeYearsOld" xml:space="preserve">
+    <value>lat</value>
+  </data>
+  <data name="OnboardingScaleTitle" xml:space="preserve">
+    <value>Twoja waga</value>
+  </data>
+  <data name="OnboardingGarminTitle" xml:space="preserve">
+    <value>Garmin Connect (opcjonalnie)</value>
+  </data>
+  <data name="HowToFindAddress" xml:space="preserve">
+    <value>Jak go znaleźć</value>
+  </data>
+  <data name="MeasureNow" xml:space="preserve">
+    <value>Zmierz teraz</value>
+  </data>
+  <data name="HomeProfile" xml:space="preserve">
+    <value>Profil</value>
+  </data>
+  <data name="HomeScale" xml:space="preserve">
+    <value>Waga</value>
+  </data>
+  <data name="HomeGarmin" xml:space="preserve">
+    <value>Garmin</value>
+  </data>
+  <data name="HomeSetUp" xml:space="preserve">
+    <value>Skonfiguruj</value>
+  </data>
+  <data name="HomeConfigured" xml:space="preserve">
+    <value>Gotowe</value>
+  </data>
+  <data name="ReRunSetup" xml:space="preserve">
+    <value>Uruchom konfigurację ponownie</value>
+  </data>
+  <data name="AboutThisApp" xml:space="preserve">
+    <value>O aplikacji</value>
+  </data>
+  <data name="SettingsProfile" xml:space="preserve">
+    <value>Profil</value>
+  </data>
+  <data name="SettingsPreferences" xml:space="preserve">
+    <value>Preferencje</value>
+  </data>
+  <data name="SettingsAdvanced" xml:space="preserve">
+    <value>Zaawansowane</value>
+  </data>
+  <data name="DisplayWeightInLbs" xml:space="preserve">
+    <value>Waga w funtach</value>
+  </data>
+  <data name="UseChinaServer" xml:space="preserve">
+    <value>Użyj serwera w Chinach</value>
+  </data>
+  <data name="ClearGarminTokens" xml:space="preserve">
+    <value>Wyczyść tokeny Garmin</value>
+  </data>
+  <data name="BleKeyLabel" xml:space="preserve">
+    <value>Klucz BLE (tylko S400)</value>
+  </data>
+  <data name="ConnectGarmin" xml:space="preserve">
+    <value>Połącz z Garmin</value>
+  </data>
+  <data name="GarminConnecting" xml:space="preserve">
+    <value>Łączenie…</value>
+  </data>
+  <data name="GarminConnected" xml:space="preserve">
+    <value>Połączono ✓</value>
+  </data>
+  <data name="GarminEnterMfa" xml:space="preserve">
+    <value>Wprowadź kod 2FA z aplikacji uwierzytelniającej lub SMS</value>
+  </data>
+  <data name="VerifyMfaCode" xml:space="preserve">
+    <value>Zweryfikuj kod</value>
+  </data>
+  <data name="AutoUploadToggle" xml:space="preserve">
+    <value>Automatycznie wysyłaj do Garmin po każdym pomiarze</value>
+  </data>
+  <data name="GarminConnectFailed" xml:space="preserve">
+    <value>Nie udało się połączyć — sprawdź email/hasło</value>
   </data>
 </root>

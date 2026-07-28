@@ -66,56 +66,131 @@ namespace MiScaleExporter.MAUI.ViewModels
 
         public void AutoUpload()
         {
+            // Guest data must never auto-upload, even if a stale BC is sitting under the guest flag.
+            if (App.IsGuestMeasurement) return;
             if (!string.IsNullOrWhiteSpace(_email)
                  && !string.IsNullOrWhiteSpace(_password))
             {
+                _isAutoUpload = true;
                 OnUpload();
             }
         }
 
+        private bool _isAutoUpload;
+
         private async void OnUpload()
         {
+            // Guest data must never reach the Garmin upload path, even via manual taps or
+            // stale flag/BC combinations.
+            if (App.IsGuestMeasurement) return;
+            var wasAutoUpload = _isAutoUpload;
             this.IsBusyForm = true;
-            var credencials = new CredentialsData
+            try
             {
-                Email = _email,
-                Password = _password,
-                AccessToken = this._accessToken,
-                TokenSecret = this._tokenSecret,
-            };
-            var response = await this._garminService.UploadAsync(this.PrepareRequest(), Date.Date.Add(Time), credencials);
-            var message = (response?.IsSuccess ?? false) ? AppSnippets.Uploaded : response?.Message; 
-            await Application.Current.MainPage.DisplayAlert(AppSnippets.Response, message, AppSnippets.OK);
-            this.IsBusyForm = false;
-            if (this._saveTokens)
-            {
-                this._accessToken = response?.AccessToken ?? string.Empty;
-                this._tokenSecret = response?.TokenSecret ?? string.Empty;
+                var credencials = new CredentialsData
+                {
+                    Email = _email,
+                    Password = _password,
+                    AccessToken = this._accessToken,
+                    TokenSecret = this._tokenSecret,
+                };
+
+                GarminApiResponse response = null;
+                bool responseIsSynthetic = false;
+                var request = this.PrepareRequest();
+                var measuredAt = Date.Date.Add(Time);
+                try
+                {
+                    response = await this._garminService.UploadAsync(request, measuredAt, credencials);
+                }
+                catch
+                {
+                    // Transient (network/IO) failure: wait briefly and retry exactly once.
+                    // Do NOT retry on a returned IsSuccess==false (logical failure, e.g. bad creds/MFA).
+                    await Task.Delay(1500);
+                    try
+                    {
+                        response = await this._garminService.UploadAsync(request, measuredAt, credencials);
+                    }
+                    catch (Exception ex2)
+                    {
+                        responseIsSynthetic = true;
+                        response = new GarminApiResponse
+                        {
+                            IsSuccess = false,
+                            MFARequested = false,
+                            Message = ex2.Message,
+                        };
+                    }
+                }
+
+                // --- Token-save logic preserved exactly as before ---
+                // Guard: when the response is synthetic (both upload attempts threw — pure transient
+                // failure), skip the token-save block entirely so we don't wipe the user's saved
+                // Garmin OAuth tokens in SecureStorage on a flaky network.
+                if (!responseIsSynthetic)
+                {
+                    if (this._saveTokens)
+                    {
+                        this._accessToken = response?.AccessToken ?? string.Empty;
+                        this._tokenSecret = response?.TokenSecret ?? string.Empty;
+                    }
+                    else
+                    {
+                        this._accessToken = string.Empty;
+                        this._tokenSecret = string.Empty;
+                    }
+                    await SecureStorage.SetAsync(PreferencesKeys.GarminUserAccessToken, this._accessToken);
+                    await SecureStorage.SetAsync(PreferencesKeys.GarminUserTokenSecret, this._tokenSecret);
+                }
+
+                // --- MFA state-setting logic preserved exactly as before ---
+                if (response?.MFARequested ?? false)
+                {
+                    this.ShowMFACode = true;
+                    this.ShowEmail = false;
+                    this.ShowPassword = false;
+                    this.ExternalApiClientId = response?.ExternalApiClientId;
+                    // MFA requested: stay on FormPage so the user can enter the code.
+                    return;
+                }
+                else
+                {
+                    this.ShowMFACode = false;
+                    this.MFACode = null;
+                    this.ExternalApiClientId = null;
+                    this.ShowEmail = string.IsNullOrWhiteSpace(Preferences.Get(PreferencesKeys.GarminUserEmail, string.Empty));
+                    this.ShowPassword = string.IsNullOrWhiteSpace(await SecureStorage.GetAsync(PreferencesKeys.GarminUserPassword));
+                }
+
+                if (response?.IsSuccess ?? false)
+                {
+                    if (wasAutoUpload)
+                    {
+                        // Silent auto-upload success: non-blocking toast, then land on the Result screen.
+                        // Absolute flyout-root base (//ScalePage) + the registered global ResultPage route,
+                        // so the back-stack is ScalePage -> ResultPage (FormPage is a flyout root, so ".." is unsafe).
+                        try { await Toast.Make(AppSnippets.UploadedToGarmin).Show(); } catch { }
+                        await Shell.Current.GoToAsync("//ScalePage/ResultPage?uploaded=true");
+                    }
+                    else
+                    {
+                        await Application.Current.MainPage.DisplayAlert(AppSnippets.Response, AppSnippets.Uploaded, AppSnippets.OK);
+                        await Shell.Current.GoToAsync("..?autoUpload=false");
+                    }
+                }
+                else
+                {
+                    // Failure (both modes): show the error and pop back to ScalePage. Do NOT route to ResultPage.
+                    await Application.Current.MainPage.DisplayAlert(AppSnippets.Response, response?.Message, AppSnippets.OK);
+                    await Shell.Current.GoToAsync("..?autoUpload=false");
+                }
             }
-            else
+            finally
             {
-                this._accessToken = string.Empty;
-                this._tokenSecret = string.Empty;
+                this.IsBusyForm = false;
+                _isAutoUpload = false;
             }
-            await SecureStorage.SetAsync(PreferencesKeys.GarminUserAccessToken, this._accessToken);
-            await SecureStorage.SetAsync(PreferencesKeys.GarminUserTokenSecret, this._tokenSecret);
-            if (response?.MFARequested ?? false)    
-            {
-                this.ShowMFACode = true;
-                this.ShowEmail = false;
-                this.ShowPassword = false;
-                this.ExternalApiClientId = response?.ExternalApiClientId;
-            }
-            else
-            {
-                this.ShowMFACode = false;
-                this.MFACode = null;
-                this.ExternalApiClientId = null;
-                this.ShowEmail = string.IsNullOrWhiteSpace(Preferences.Get(PreferencesKeys.GarminUserEmail, string.Empty));
-                this.ShowPassword = string.IsNullOrWhiteSpace(await SecureStorage.GetAsync(PreferencesKeys.GarminUserPassword));
-            }
-            // This will pop the current page off the navigation stack
-            await Shell.Current.GoToAsync("..?autoUpload=false");
         }
 
         private async void OnGenerateFitFileAsync()
@@ -188,6 +263,12 @@ namespace MiScaleExporter.MAUI.ViewModels
         public void LoadBodyComposition()
         {
             if (App.BodyComposition is null) return;
+
+            if (App.BodyComposition.Date != default)
+            {
+                Date = App.BodyComposition.Date.Date;
+                Time = App.BodyComposition.Date.TimeOfDay;
+            }
 
             Weight = ConvertFromKg(App.BodyComposition.Weight).ToString("0.##");
             BMI = App.BodyComposition.BMI.ToString();

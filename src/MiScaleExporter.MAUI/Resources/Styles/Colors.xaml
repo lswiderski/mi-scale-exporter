@@ -41,4 +41,22 @@
     <Color x:Key="Blue200Accent">#72ACF1</Color>
     <Color x:Key="Blue300Accent">#A7CBF6</Color>
 
+    <!-- Palette used by Card / Result / status pills. -->
+    <Color x:Key="SurfaceLight">#F4F6F8</Color>
+    <Color x:Key="SurfaceDark">#121417</Color>
+    <Color x:Key="CardBackgroundLight">#FFFFFF</Color>
+    <Color x:Key="CardBackgroundDark">#1E2227</Color>
+    <Color x:Key="CardStrokeLight">#E3E6EA</Color>
+    <Color x:Key="CardStrokeDark">#2A2F36</Color>
+    <Color x:Key="OnSurfaceLight">#1A1D21</Color>
+    <Color x:Key="OnSurfaceDark">#F2F4F7</Color>
+    <Color x:Key="MutedTextLight">#6B7280</Color>
+    <Color x:Key="MutedTextDark">#9AA0A6</Color>
+
+    <!-- Status bands (Low / Standard / High). Tuned for AA contrast against white text. -->
+    <Color x:Key="StatusLowColor">#3B82F6</Color>
+    <Color x:Key="StatusStandardColor">#16A34A</Color>
+    <Color x:Key="StatusHighColor">#DC2626</Color>
+    <Color x:Key="StatusUnknownColor">#9CA3AF</Color>
+
 </ResourceDictionary>

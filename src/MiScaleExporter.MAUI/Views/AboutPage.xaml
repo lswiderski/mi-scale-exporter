@@ -3,72 +3,158 @@
     x:Class="MiScaleExporter.MAUI.Views.AboutPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:admob="clr-namespace:Plugin.AdMob;assembly=Plugin.AdMob"
     xmlns:localization="clr-namespace:MiScaleExporter.MAUI.Resources.Localization"
     xmlns:vm="clr-namespace:MiScaleExporter.MAUI.ViewModels"
-    Title="{Binding Title}">
+    Title="{Binding Title}"
+    BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceLight}, Dark={StaticResource SurfaceDark}}">
 
-    <ContentPage.Resources />
+    <ScrollView>
+        <VerticalStackLayout Padding="16,20,16,28" Spacing="16">
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <admob:BannerAd Grid.Row="0"
-x:Name="adMobBanner"
-AdUnitId="ca-app-pub-1938975042085430/4160336701"
-AdSize="Banner"
- />
-        <ScrollView Grid.Row="1">
+            <!-- Hero header -->
+            <Border Style="{StaticResource CardStyle}">
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="6" VerticalOptions="Center">
+                        <Label
+                            Style="{StaticResource HeroTitleStyle}"
+                            Text="{x:Static localization:AppSnippets.MiScaleExporter}" />
+                        <Label
+                            Style="{StaticResource HeroSubtitleStyle}"
+                            Text="{x:Static localization:AppSnippets.OnboardingSubtitle}" />
+                    </VerticalStackLayout>
+                    <Image
+                        Grid.Column="1"
+                        HeightRequest="56"
+                        WidthRequest="56"
+                        VerticalOptions="Center"
+                        Source="scale.png" />
+                </Grid>
+            </Border>
 
-                <StackLayout
-                Padding="15,24,15,24"
-                Orientation="Vertical"
-                Spacing="10">
+            <!-- Primary CTA -->
+            <Button
+                Command="{Binding GoToScanCommand}"
+                Style="{StaticResource PrimaryButtonStyle}"
+                Text="{x:Static localization:AppSnippets.MeasureNow}" />
 
-                    <Label FontSize="Small" Text="{x:Static localization:AppSnippets.AboutGarmin}" />
-                    <Label FontSize="Small" Text="{x:Static localization:AppSnippets.AboutMeasureInstruction}" />
-                    <Label FontSize="Small" Text="{x:Static localization:AppSnippets.AboutUpload}" />
-                    <Label FontSize="Small" Text="{x:Static localization:AppSnippets.AboutMFAAndStoringData}" />
-                </StackLayout>
-        </ScrollView>
-        <ScrollView Grid.Row="2">
-            <StackLayout
-                Padding="15,24,15,24"
-                Orientation="Vertical"
-                Spacing="10">
+            <!-- Setup status row -->
+            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="12">
+                <Border Grid.Column="0" Style="{StaticResource CardStyle}" Padding="10,14">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding GoToSettingsCommand}" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="6" HorizontalOptions="Center">
+                        <Label
+                            FontSize="13"
+                            FontAttributes="Bold"
+                            HorizontalOptions="Center"
+                            TextColor="{AppThemeBinding Light={StaticResource OnSurfaceLight}, Dark={StaticResource OnSurfaceDark}}"
+                            Text="{x:Static localization:AppSnippets.HomeProfile}" />
+                        <Label
+                            FontSize="18"
+                            HorizontalOptions="Center"
+                            IsVisible="{Binding ProfileConfigured}"
+                            TextColor="{StaticResource StatusStandardColor}"
+                            Text="&#x2714;" />
+                        <Label
+                            HorizontalOptions="Center"
+                            Style="{StaticResource MutedCaptionStyle}"
+                            Text="{Binding ProfileStatus}" />
+                    </VerticalStackLayout>
+                </Border>
+                <Border Grid.Column="1" Style="{StaticResource CardStyle}" Padding="10,14">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding GoToSettingsCommand}" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="6" HorizontalOptions="Center">
+                        <Label
+                            FontSize="13"
+                            FontAttributes="Bold"
+                            HorizontalOptions="Center"
+                            TextColor="{AppThemeBinding Light={StaticResource OnSurfaceLight}, Dark={StaticResource OnSurfaceDark}}"
+                            Text="{x:Static localization:AppSnippets.HomeScale}" />
+                        <Label
+                            FontSize="18"
+                            HorizontalOptions="Center"
+                            IsVisible="{Binding ScaleConfigured}"
+                            TextColor="{StaticResource StatusStandardColor}"
+                            Text="&#x2714;" />
+                        <Label
+                            HorizontalOptions="Center"
+                            Style="{StaticResource MutedCaptionStyle}"
+                            Text="{Binding ScaleStatus}" />
+                    </VerticalStackLayout>
+                </Border>
+                <Border Grid.Column="2" Style="{StaticResource CardStyle}" Padding="10,14">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding GoToSettingsCommand}" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="6" HorizontalOptions="Center">
+                        <Label
+                            FontSize="13"
+                            FontAttributes="Bold"
+                            HorizontalOptions="Center"
+                            TextColor="{AppThemeBinding Light={StaticResource OnSurfaceLight}, Dark={StaticResource OnSurfaceDark}}"
+                            Text="{x:Static localization:AppSnippets.HomeGarmin}" />
+                        <Label
+                            FontSize="18"
+                            HorizontalOptions="Center"
+                            IsVisible="{Binding GarminConfigured}"
+                            TextColor="{StaticResource StatusStandardColor}"
+                            Text="&#x2714;" />
+                        <Label
+                            HorizontalOptions="Center"
+                            Style="{StaticResource MutedCaptionStyle}"
+                            Text="{Binding GarminStatus}" />
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
 
-                <Button
-                    Margin="0,10,0,0"
-                    BackgroundColor="{StaticResource Primary}"
-                    Command="{Binding GoToScanCommand}"
-                    Text="{x:Static localization:AppSnippets.GoToScan}"
-                    TextColor="White" />
-                <Button
-                    Margin="0,10,0,0"
-                    BackgroundColor="{StaticResource Primary}"
-                    Command="{Binding OpenHelpCommand}"
-                    Text="{x:Static localization:AppSnippets.OpenHelp}"
-                    TextColor="White" />
-                <Label FontSize="Small" Text="{x:Static localization:AppSnippets.DoYouLikeAndWouldYouLikeToSupport}" />
-                <ImageButton
-                    Margin="0,10,0,0"
-                    Command="{Binding OpenCoffeeCommand}"
-                    Source="Images/buymeacoffe.png"
-                    HeightRequest="50"
-                    />
-                <Button
-                    Margin="0,10,0,0"
-                    BackgroundColor="{StaticResource Primary}"
-                    Command="{Binding OpenGithubCommand}"
-                    Text="{x:Static localization:AppSnippets.VisitProjectRepository}"
-                    TextColor="White" />
-                
+            <!-- Secondary actions -->
+            <Button
+                Command="{Binding OpenHelpCommand}"
+                Style="{StaticResource SecondaryButtonStyle}"
+                Text="{x:Static localization:AppSnippets.OpenHelp}" />
+            <Button
+                Command="{Binding RerunSetupCommand}"
+                Style="{StaticResource SecondaryButtonStyle}"
+                Text="{x:Static localization:AppSnippets.ReRunSetup}" />
+            <Button
+                Command="{Binding OpenGithubCommand}"
+                Style="{StaticResource SecondaryButtonStyle}"
+                Text="{x:Static localization:AppSnippets.VisitProjectRepository}" />
 
-            </StackLayout>
-        </ScrollView>
-    </Grid>
+            <!-- Support -->
+            <Border Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="10">
+                    <Label
+                        Style="{StaticResource MutedCaptionStyle}"
+                        Text="{x:Static localization:AppSnippets.DoYouLikeAndWouldYouLikeToSupport}" />
+                    <ImageButton
+                        Command="{Binding OpenCoffeeCommand}"
+                        HeightRequest="50"
+                        HorizontalOptions="Start"
+                        Source="Images/buymeacoffe.png" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- About this app (secondary) -->
+            <Border Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="8">
+                    <Label
+                        Style="{StaticResource SectionHeaderStyle}"
+                        Text="{x:Static localization:AppSnippets.AboutThisApp}" />
+                    <Label Style="{StaticResource MutedCaptionStyle}" Text="{x:Static localization:AppSnippets.AboutGarmin}" />
+                    <Label Style="{StaticResource MutedCaptionStyle}" Text="{x:Static localization:AppSnippets.AboutMeasureInstruction}" />
+                    <Label Style="{StaticResource MutedCaptionStyle}" Text="{x:Static localization:AppSnippets.AboutUpload}" />
+                    <Label Style="{StaticResource MutedCaptionStyle}" Text="{x:Static localization:AppSnippets.AboutMFAAndStoringData}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- AdMob banner injected here in code-behind (Android only, preview-safe) -->
+            <VerticalStackLayout x:Name="AdContainer" Spacing="0" />
+
+        </VerticalStackLayout>
+    </ScrollView>
 
 </ContentPage>

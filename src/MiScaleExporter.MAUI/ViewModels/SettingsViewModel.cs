@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
+using Microsoft.Maui.Graphics;
 using MiScaleExporter.MAUI.Resources.Localization;
 using MiScaleExporter.MAUI.Utils;
 using MiScaleExporter.Models;
@@ -13,8 +15,15 @@ namespace MiScaleExporter.MAUI.ViewModels
 {
     public class SettingsViewModel : BaseViewModel, ISettingsViewModel
     {
-        public SettingsViewModel()
+        private static readonly Color SuccessColor = Color.FromArgb("#16A34A");
+        private static readonly Color ErrorColor = Color.FromArgb("#DC2626");
+        private static readonly Color NeutralColor = Color.FromArgb("#6B7280");
+
+        private readonly IGarminAuthService _authService;
+
+        public SettingsViewModel(IGarminAuthService authService)
         {
+            _authService = authService;
             this.Title = AppSnippets.Settings;
             // Initialize birthDate with a reasonable default to avoid binding issues
             this._birthDate = DateTime.Today.AddYears(-25);
@@ -44,6 +53,8 @@ namespace MiScaleExporter.MAUI.ViewModels
             );
             GetBLEKeyCommand = new Command(async () => await Launcher.OpenAsync("https://lswiderski.github.io/mi-scale-exporter/#steps-to-connect-xiaomi-body-composition-scale-s400"));
             ResetTokensCommand = new Command(_clearTokens);
+            ConnectGarminCommand = new Command(async () => await ConnectGarminAsync());
+            VerifyMfaCommand = new Command(async () => await VerifyMfaAsync());
             AddCalibrationPointCommand = new Command(AddCalibrationPoint);
             RemoveCalibrationPointCommand = new Command<FatCalibrationPoint>(RemoveCalibrationPoint);
             _newPointDate = DateTime.Today;
@@ -52,8 +63,101 @@ namespace MiScaleExporter.MAUI.ViewModels
         public ICommand ResetCommand { get; }
         public ICommand GetBLEKeyCommand { get; }
         public ICommand ResetTokensCommand { get; }
+        public ICommand ConnectGarminCommand { get; }
+        public ICommand VerifyMfaCommand { get; }
         public ICommand AddCalibrationPointCommand { get; }
         public ICommand RemoveCalibrationPointCommand { get; }
+
+        private string _garminStatusText;
+        public string GarminStatusText
+        {
+            get => _garminStatusText;
+            set
+            {
+                if (SetProperty(ref _garminStatusText, value))
+                {
+                    OnPropertyChanged(nameof(HasGarminStatus));
+                }
+            }
+        }
+
+        public bool HasGarminStatus => !string.IsNullOrEmpty(_garminStatusText);
+
+        private Color _garminStatusColor = NeutralColor;
+        public Color GarminStatusColor
+        {
+            get => _garminStatusColor;
+            set => SetProperty(ref _garminStatusColor, value);
+        }
+
+        private bool _showMfaInput;
+        public bool ShowMfaInput
+        {
+            get => _showMfaInput;
+            set => SetProperty(ref _showMfaInput, value);
+        }
+
+        private string _mfaCode;
+        public string MfaCode
+        {
+            get => _mfaCode;
+            set => SetProperty(ref _mfaCode, value);
+        }
+
+        private async Task ConnectGarminAsync()
+        {
+            if (string.IsNullOrWhiteSpace(_email) || string.IsNullOrWhiteSpace(_password))
+            {
+                ShowMfaInput = false;
+                GarminStatusColor = ErrorColor;
+                GarminStatusText = AppSnippets.GarminConnectFailed;
+                return;
+            }
+
+            ShowMfaInput = false;
+            GarminStatusColor = NeutralColor;
+            GarminStatusText = AppSnippets.GarminConnecting;
+
+            var result = await _authService.AuthenticateAsync(_email.Trim(), _password);
+            ApplyAuthResult(result);
+        }
+
+        private async Task VerifyMfaAsync()
+        {
+            GarminStatusColor = NeutralColor;
+            GarminStatusText = AppSnippets.GarminConnecting;
+
+            var result = await _authService.CompleteMfaAsync(_mfaCode);
+            ApplyAuthResult(result);
+        }
+
+        private void ApplyAuthResult(GarminAuthResult result)
+        {
+            switch (result?.Status)
+            {
+                case GarminAuthStatus.Success:
+                    ShowMfaInput = false;
+                    GarminStatusColor = SuccessColor;
+                    GarminStatusText = AppSnippets.GarminConnected;
+                    // Default-on intent only when the user has never set the preference explicitly.
+                    if (!Preferences.ContainsKey(PreferencesKeys.OneClickScanAndUpload))
+                    {
+                        this.OneClickScanAndUpload = true;
+                    }
+                    break;
+                case GarminAuthStatus.MfaRequired:
+                    ShowMfaInput = true;
+                    GarminStatusColor = NeutralColor;
+                    GarminStatusText = AppSnippets.GarminEnterMfa;
+                    break;
+                default:
+                    GarminStatusColor = ErrorColor;
+                    GarminStatusText = string.IsNullOrWhiteSpace(result?.Message)
+                        ? AppSnippets.GarminConnectFailed
+                        : result.Message;
+                    break;
+            }
+        }
 
 
         public async Task LoadPreferencesAsync()
@@ -62,7 +166,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             try
             {
                 this._apiAddress = Preferences.Get(PreferencesKeys.ApiServerAddressOverride, string.Empty);
-                this._oneClickScanAndUpload = Preferences.Get(PreferencesKeys.OneClickScanAndUpload, false);
+                this._oneClickScanAndUpload = Preferences.Get(PreferencesKeys.OneClickScanAndUpload, true);
                 this._useExternalAPI = Preferences.Get(PreferencesKeys.UseExternalAPI, false);
                 this._showDebugInfo = Preferences.Get(PreferencesKeys.ShowDebugInfo, false);
                 this._hideAds = Preferences.Get(PreferencesKeys.HideAds, false);
@@ -339,6 +443,7 @@ namespace MiScaleExporter.MAUI.ViewModels
         private DateTime _birthDate;
         private bool _isLoadingPreferences = false;
 
+        public DateTime MaxBirthDate => DateTime.Today;
         public DateTime BirthDate
         {
             get => _birthDate;
@@ -393,6 +498,8 @@ namespace MiScaleExporter.MAUI.ViewModels
                 if (_sex == value) return;
                 SetProperty(ref _sex, value);
                 Preferences.Set(PreferencesKeys.UserSex, (byte)value);
+                OnPropertyChanged(nameof(IsMaleSelected));
+                OnPropertyChanged(nameof(IsFemaleSelected));
             }
         }
 
@@ -424,6 +531,9 @@ namespace MiScaleExporter.MAUI.ViewModels
                 {
                     SetProperty(ref _scaleType, value);
                     Preferences.Set(PreferencesKeys.ScaleType, (byte)value);
+                    OnPropertyChanged(nameof(IsMiBodyCompositionScaleSelected));
+                    OnPropertyChanged(nameof(IsMiSmartScaleSelected));
+                    OnPropertyChanged(nameof(IsS400Selected));
                 }
               
             }

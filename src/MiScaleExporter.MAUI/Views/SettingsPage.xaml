@@ -6,445 +6,474 @@
     xmlns:behaviors="clr-namespace:MiScaleExporter.MAUI.Behaviors;assembly=MiScaleExporter.MAUI"
     xmlns:localization="clr-namespace:MiScaleExporter.MAUI.Resources.Localization"
     xmlns:models="clr-namespace:MiScaleExporter.Models;assembly=MiScaleExporter.MAUI"
-    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-    xmlns:vm="clr-namespace:MiScaleExporter.MAUI.ViewModels"
     x:Name="SettingsRoot"
-    Title="{Binding Title}">
-    <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-        <Grid
-            AbsoluteLayout.LayoutBounds="0,0,1,1"
-            AbsoluteLayout.LayoutFlags="All"
-            HorizontalOptions="FillAndExpand">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <ScrollView Grid.Row="1" HorizontalOptions="FillAndExpand">
-                <StackLayout
-                    Padding="15,24,15,24"
-                    Orientation="Vertical"
-                    Spacing="20">
-                    <Border>
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="20" />
-                        </Border.StrokeShape>
-                        <StackLayout
-                            Padding="15,24,15,24"
-                            Orientation="Vertical"
-                            Spacing="10">
+    Title="{Binding Title}"
+    BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceLight}, Dark={StaticResource SurfaceDark}}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="16,20,16,28" Spacing="16">
+
+            <!-- Profile -->
+            <Border Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Style="{StaticResource SectionHeaderStyle}" Text="{x:Static localization:AppSnippets.SettingsProfile}" />
+
+                    <Label Style="{StaticResource FieldLabelStyle}" Text="{x:Static localization:AppSnippets.Age}" />
+                    <HorizontalStackLayout Spacing="24">
+                        <RadioButton
+                            GroupName="AgeMode"
+                            Content="Enter age manually"
+                            IsChecked="{Binding UseBirthDateMode, Converter={StaticResource InvertedBoolConverter}}"
+                            VerticalOptions="Center" />
+                        <RadioButton
+                            GroupName="AgeMode"
+                            Content="Use birth date"
+                            IsChecked="{Binding UseBirthDateMode}"
+                            VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+
+                    <StackLayout IsVisible="{Binding UseBirthDateMode, Converter={StaticResource InvertedBoolConverter}}">
+                        <Entry
+                            Style="{StaticResource FieldEntryStyle}"
+                            Keyboard="Numeric"
+                            Text="{Binding ManualAge, Mode=TwoWay}">
+                            <Entry.Behaviors>
+                                <behaviors:NumericIntValidationBehavior />
+                            </Entry.Behaviors>
+                        </Entry>
+                    </StackLayout>
+
+                    <StackLayout IsVisible="{Binding UseBirthDateMode}" Spacing="6">
+                        <DatePicker
+                            Date="{Binding BirthDate, Mode=TwoWay}"
+                            MaximumDate="{Binding MaxBirthDate}"
+                            FontSize="Medium"
+                            Format="dd/MM/yyyy" />
+                        <HorizontalStackLayout Spacing="6">
+                            <Label Style="{StaticResource MutedCaptionStyle}" Text="Your age:" VerticalOptions="Center" />
                             <Label
                                 FontAttributes="Bold"
-                                FontSize="Small"
-                                Text="{x:Static localization:AppSnippets.ScaleSettings}" />
-                            <BoxView
-                                HeightRequest="2"
-                                HorizontalOptions="Fill"
-                                Color="Gray" />
-                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.Age}" />
-                            <HorizontalStackLayout Spacing="20">
-                                <StackLayout Orientation="Horizontal" Spacing="10" HorizontalOptions="FillAndExpand">
-                                    <RadioButton
-                                        GroupName="AgeMode"
-                                        IsChecked="{Binding UseBirthDateMode, Converter={StaticResource InvertedBoolConverter}}"
-                                        VerticalOptions="Center"
-                                         Content="Enter age manually"/>
-                                </StackLayout>
-                                <StackLayout Orientation="Horizontal" Spacing="10" HorizontalOptions="FillAndExpand">
-                                    <RadioButton
-                                        GroupName="AgeMode"
-                                        IsChecked="{Binding UseBirthDateMode}"
-                                        VerticalOptions="Center" 
-                                        Content="Use birth date"/>
-                                   
-                                </StackLayout>
-                            </HorizontalStackLayout>
-
-                            <StackLayout IsVisible="{Binding UseBirthDateMode, Converter={StaticResource InvertedBoolConverter}}">
-                                <Entry
-                                    FontSize="Medium"
-                                    Keyboard="Numeric"
-                                    Text="{Binding ManualAge, Mode=TwoWay}">
-                                    <Entry.Behaviors>
-                                        <behaviors:NumericIntValidationBehavior />
-                                    </Entry.Behaviors>
-                                </Entry>
-                            </StackLayout>
-
-                            <StackLayout IsVisible="{Binding UseBirthDateMode}">
-                                <DatePicker
-                                    FontSize="Medium"
-                                    Date="{Binding BirthDate, Mode=TwoWay}"
-                                    Format="dd/MM/yyyy" />
-                                <StackLayout Orientation="Horizontal" Spacing="10">
-                                    <Label 
-                                        FontSize="Small" 
-                                        Text="Your age:"
-                                        VerticalOptions="Center" />
-                                    <Label 
-                                        FontSize="Medium" 
-                                        Text="{Binding Age}"
-                                        VerticalOptions="Center"
-                                        FontAttributes="Bold" />
-                                    <Label 
-                                        FontSize="Small" 
-                                        Text="years old"
-                                        VerticalOptions="Center" />
-                                </StackLayout>
-                            </StackLayout>
-
-                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.Height}" />
-                            <Entry
                                 FontSize="Medium"
-                                Keyboard="Numeric"
-                                Text="{Binding Height, Mode=TwoWay}">
-                                <Entry.Behaviors>
-                                    <behaviors:NumericIntValidationBehavior />
-                                </Entry.Behaviors>
-                            </Entry>
-                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.Sex}" />
-                            <HorizontalStackLayout>
-                                <RadioButton
-                                    CheckedChanged="SexRadioSetToFemale"
-                                    Content="{x:Static localization:AppSnippets.Female}"
-                                    GroupName="Sex"
-                                    IsChecked="{Binding IsFemaleSelected}"
-                                    Value="0" />
-                                <RadioButton
-                                    CheckedChanged="SexRadioSetToMale"
-                                    Content="{x:Static localization:AppSnippets.Male}"
-                                    GroupName="Sex"
-                                    IsChecked="{Binding IsMaleSelected}"
-                                    Value="1" />
-                            </HorizontalStackLayout>
+                                Text="{Binding Age}"
+                                TextColor="{AppThemeBinding Light={StaticResource OnSurfaceLight}, Dark={StaticResource OnSurfaceDark}}"
+                                VerticalOptions="Center" />
+                            <Label Style="{StaticResource MutedCaptionStyle}" Text="years old" VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                    </StackLayout>
 
-                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.ScaleModel}" />
-                            <RadioButton
-                                CheckedChanged="ScaleTypeSetToBodyCompositionScale"
-                                Content="{x:Static localization:AppSnippets.MiBodyCompositionScale}"
-                                GroupName="ScaleType"
-                                IsChecked="{Binding IsMiBodyCompositionScaleSelected}"
-                                Value="0" />
-                            <RadioButton
-                                CheckedChanged="ScaleTypeSetToMiscale"
-                                Content="{x:Static localization:AppSnippets.MiScale}"
-                                GroupName="ScaleType"
-                                IsChecked="{Binding IsMiSmartScaleSelected}"
-                                Value="1" />
-                            <RadioButton
-                                CheckedChanged="ScaleTypeSetToS400"
-                                Content="Mi Scale S400"
-                                GroupName="ScaleType"
-                                IsChecked="{Binding IsS400Selected}"
-                                Value="1" />
-                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.BluetoothAddress}" />
-                            <Entry FontSize="Medium" Text="{Binding Address, Mode=TwoWay}" />
-                       
-                            <StackLayout Orientation="Horizontal" Spacing="10">
-                                <Label FontSize="Small" Text="BLE Key (S400 only)" />
-                                <Label FontSize="Small" Text="(how to get it)"  TextDecorations="Underline" TextColor="#007CC3">
+                    <Label Style="{StaticResource FieldLabelStyle}" Text="{x:Static localization:AppSnippets.Height}" />
+                    <Entry
+                        Style="{StaticResource FieldEntryStyle}"
+                        Keyboard="Numeric"
+                        Text="{Binding Height, Mode=TwoWay}">
+                        <Entry.Behaviors>
+                            <behaviors:NumericIntValidationBehavior />
+                        </Entry.Behaviors>
+                    </Entry>
 
-                                    <Label.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding GetBLEKeyCommand}" />
-                                    </Label.GestureRecognizers>
-                                </Label>
-                            </StackLayout>
-                            <Entry FontSize="Medium" Text="{Binding Bindkey, Mode=TwoWay}" />
-                        </StackLayout>
-
-                    </Border>
-                    <Border>
+                    <Label Style="{StaticResource FieldLabelStyle}" Text="{x:Static localization:AppSnippets.Sex}" />
+                    <Border
+                        Padding="3"
+                        StrokeThickness="1"
+                        Stroke="{AppThemeBinding Light={StaticResource CardStrokeLight}, Dark={StaticResource CardStrokeDark}}"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceLight}, Dark={StaticResource SurfaceDark}}">
                         <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="20" />
+                            <RoundRectangle CornerRadius="12" />
                         </Border.StrokeShape>
-                        <StackLayout
-                            Padding="15,24,15,24"
-                            Orientation="Vertical"
-                            Spacing="10">
-                            <Label
-                                FontAttributes="Bold"
-                                FontSize="Small"
-                                Text="{x:Static localization:AppSnippets.GarminSettings}" />
-                            <BoxView
-                                HeightRequest="2"
-                                HorizontalOptions="Fill"
-                                Color="Gray" />
-                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.Email}" />
-                            <Entry
-                                FontSize="Medium"
-                                Keyboard="Email"
-                                Text="{Binding Email, Mode=TwoWay}" />
-                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.Password}" />
-                            <Entry
-                                FontSize="Medium"
-                                IsPassword="True"
-                                Text="{Binding Password, Mode=TwoWay}" />
-
-                        </StackLayout>
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="3">
+                            <Border
+                                Grid.Column="0"
+                                Style="{StaticResource SegmentItemStyle}"
+                                BackgroundColor="{Binding IsFemaleSelected, Converter={StaticResource SegmentColorConverter}}">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="SexRadioSetToFemale" />
+                                </Border.GestureRecognizers>
+                                <Label
+                                    Text="{x:Static localization:AppSnippets.Female}"
+                                    FontAttributes="Bold"
+                                    FontSize="14"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center"
+                                    HorizontalTextAlignment="Center"
+                                    LineBreakMode="WordWrap"
+                                    TextColor="{Binding IsFemaleSelected, Converter={StaticResource SegmentColorConverter}, ConverterParameter=text}" />
+                            </Border>
+                            <Border
+                                Grid.Column="1"
+                                Style="{StaticResource SegmentItemStyle}"
+                                BackgroundColor="{Binding IsMaleSelected, Converter={StaticResource SegmentColorConverter}}">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="SexRadioSetToMale" />
+                                </Border.GestureRecognizers>
+                                <Label
+                                    Text="{x:Static localization:AppSnippets.Male}"
+                                    FontAttributes="Bold"
+                                    FontSize="14"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center"
+                                    HorizontalTextAlignment="Center"
+                                    LineBreakMode="WordWrap"
+                                    TextColor="{Binding IsMaleSelected, Converter={StaticResource SegmentColorConverter}, ConverterParameter=text}" />
+                            </Border>
+                        </Grid>
                     </Border>
-                    <Border>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Scale -->
+            <Border Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Style="{StaticResource SectionHeaderStyle}" Text="{x:Static localization:AppSnippets.ScaleSettings}" />
+
+                    <Label Style="{StaticResource FieldLabelStyle}" Text="{x:Static localization:AppSnippets.ScaleModel}" />
+                    <Border
+                        Padding="3"
+                        StrokeThickness="1"
+                        Stroke="{AppThemeBinding Light={StaticResource CardStrokeLight}, Dark={StaticResource CardStrokeDark}}"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceLight}, Dark={StaticResource SurfaceDark}}">
                         <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="20" />
+                            <RoundRectangle CornerRadius="12" />
                         </Border.StrokeShape>
-                        <StackLayout
-                            Padding="15,24,15,24"
-                            Orientation="Vertical"
-                            Spacing="10">
-                            <Label
-                                FontAttributes="Bold"
-                                FontSize="Small"
-                                Text="{x:Static localization:AppSnippets.AppSettings}" />
-                            <BoxView
-                                HeightRequest="2"
-                                HorizontalOptions="Fill"
-                                Color="Gray" />
-
-                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.AlternateExternalAPIAddress}" />
-                            <Entry FontSize="Medium" Text="{Binding ApiAddress, Mode=TwoWay}" />
-                            <Grid HorizontalOptions="FillAndExpand" VerticalOptions="Start">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <CheckBox
-                                    Grid.Row="0"
-                                    Grid.Column="0"
-                                    IsChecked="{Binding UseExternalAPI, Mode=TwoWay}"
-                                    VerticalOptions="Center" />
+                        <Grid ColumnDefinitions="*,*,*" ColumnSpacing="3">
+                            <Border
+                                Grid.Column="0"
+                                Style="{StaticResource SegmentItemStyle}"
+                                BackgroundColor="{Binding IsMiBodyCompositionScaleSelected, Converter={StaticResource SegmentColorConverter}}">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="ScaleTypeSetToBodyCompositionScale" />
+                                </Border.GestureRecognizers>
                                 <Label
-                                    Grid.Row="0"
-                                    Grid.Column="1"
-                                    FontSize="Small"
-                                    Text="{x:Static localization:AppSnippets.UseExternalAPI}"
-                                    VerticalOptions="Center" />
-                                <CheckBox
-                                    Grid.Row="1"
-                                    Grid.Column="0"
-                                    IsChecked="{Binding OneClickScanAndUpload, Mode=TwoWay}"
-                                    VerticalOptions="Center" />
+                                    Text="{x:Static localization:AppSnippets.MiBodyCompositionScale}"
+                                    FontAttributes="Bold"
+                                    FontSize="13"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center"
+                                    HorizontalTextAlignment="Center"
+                                    LineBreakMode="WordWrap"
+                                    TextColor="{Binding IsMiBodyCompositionScaleSelected, Converter={StaticResource SegmentColorConverter}, ConverterParameter=text}" />
+                            </Border>
+                            <Border
+                                Grid.Column="1"
+                                Style="{StaticResource SegmentItemStyle}"
+                                BackgroundColor="{Binding IsMiSmartScaleSelected, Converter={StaticResource SegmentColorConverter}}">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="ScaleTypeSetToMiscale" />
+                                </Border.GestureRecognizers>
                                 <Label
-                                    Grid.Row="1"
-                                    Grid.Column="1"
-                                    FontSize="Small"
-                                    Text="{x:Static localization:AppSnippets.OneClickScanUpload}"
-                                    VerticalOptions="Center" />
-                                <CheckBox
-                                    Grid.Row="2"
-                                    Grid.Column="0"
-                                    IsChecked="{Binding ShowDebugInfo, Mode=TwoWay}"
-                                    VerticalOptions="Center" />
+                                    Text="{x:Static localization:AppSnippets.MiSmartScale}"
+                                    FontAttributes="Bold"
+                                    FontSize="13"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center"
+                                    HorizontalTextAlignment="Center"
+                                    LineBreakMode="WordWrap"
+                                    TextColor="{Binding IsMiSmartScaleSelected, Converter={StaticResource SegmentColorConverter}, ConverterParameter=text}" />
+                            </Border>
+                            <Border
+                                Grid.Column="2"
+                                Style="{StaticResource SegmentItemStyle}"
+                                BackgroundColor="{Binding IsS400Selected, Converter={StaticResource SegmentColorConverter}}">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="ScaleTypeSetToS400" />
+                                </Border.GestureRecognizers>
                                 <Label
-                                    Grid.Row="2"
-                                    Grid.Column="1"
-                                    FontSize="Small"
-                                    Text="{x:Static localization:AppSnippets.ShowDebug}"
-                                    VerticalOptions="Center" />
-                                <CheckBox
-                                    Grid.Row="3"
-                                    Grid.Column="0"
-                                    IsChecked="{Binding MuscleMassAsPercentage, Mode=TwoWay}"
-                                    VerticalOptions="Center" />
-                                <Label
-                                    Grid.Row="3"
-                                    Grid.Column="1"
-                                    FontSize="Small"
-                                    Text="{x:Static localization:AppSnippets.MuscleMassAsPercentage}"
-                                    VerticalOptions="Center" />
-                                <CheckBox
-                                    Grid.Row="4"
-                                    Grid.Column="0"
-                                    IsChecked="{Binding DisplayWeightInLbs, Mode=TwoWay}"
-                                    VerticalOptions="Center" />
-                                <Label
-                                    Grid.Row="4"
-                                    Grid.Column="1"
-                                    FontSize="Small"
-                                    Text="Display weight in lbs"
-                                    VerticalOptions="Center" />
-                                <CheckBox
-                                    Grid.Row="5"
-                                    Grid.Column="0"
-                                    IsChecked="{Binding UseChinaServer, Mode=TwoWay}"
-                                    VerticalOptions="Center" />
-                                <Label
-                                    Grid.Row="5"
-                                    Grid.Column="1"
-                                    FontSize="Small"
-                                    Text="Use China Server"
-                                    VerticalOptions="Center" />
-                                <CheckBox
-                                    Grid.Row="6"
-                                    Grid.Column="0"
-                                    IsChecked="{Binding HideAds, Mode=TwoWay}"
-                                    VerticalOptions="Center" />
-                                <Label
-                                    Grid.Row="6"
-                                    Grid.Column="1"
-                                    FontSize="Small"
-                                    Text="{x:Static localization:AppSnippets.SettingsHideAds}"
-                                    VerticalOptions="Center" />
-
-                            </Grid>
-                            <Button
-                                Margin="0,10,0,10"
-                                BackgroundColor="{StaticResource Primary}"
-                                Command="{Binding ResetCommand}"
-                                Text="{x:Static localization:AppSnippets.ResetToDefault}"
-                                TextColor="White" />
-                            <Button
-                                Margin="0,10,0,10"
-                                BackgroundColor="{StaticResource Primary}"
-                                Command="{Binding ResetTokensCommand}"
-                                Text="Clear Garmin Tokens"
-                                TextColor="White" />
-
-                        </StackLayout>
+                                    Text="Mi Scale S400"
+                                    FontAttributes="Bold"
+                                    FontSize="13"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center"
+                                    HorizontalTextAlignment="Center"
+                                    LineBreakMode="WordWrap"
+                                    TextColor="{Binding IsS400Selected, Converter={StaticResource SegmentColorConverter}, ConverterParameter=text}" />
+                            </Border>
+                        </Grid>
                     </Border>
-                    <Border>
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="20" />
-                        </Border.StrokeShape>
-                        <StackLayout
-                            Padding="15,24,15,24"
-                            Orientation="Vertical"
-                            Spacing="10">
-                            <Label
-                                FontAttributes="Bold"
-                                FontSize="Small"
-                                Text="Body Fat Calibration" />
-                            <BoxView
-                                HeightRequest="2"
-                                HorizontalOptions="Fill"
-                                Color="Gray" />
-                            <Label
-                                FontSize="Micro"
-                                Text="Correct the scale's body fat % toward trusted reference measurements (e.g. medical scans). Each point pairs what the scale reported with the reference value at the same time. A line (corrected = a × scale + b) is fitted across all points; muscle mass, water % and protein % are recomputed to match. Bone mass, BMR, visceral fat, metabolic age and BMI are unaffected." />
 
-                            <StackLayout Orientation="Horizontal" Spacing="10">
-                                <CheckBox IsChecked="{Binding UseFatCalibration, Mode=TwoWay}" VerticalOptions="Center" />
-                                <Label
-                                    FontSize="Small"
-                                    Text="Apply calibration to measurements"
-                                    VerticalOptions="Center" />
-                            </StackLayout>
+                    <Label Style="{StaticResource FieldLabelStyle}" Text="{x:Static localization:AppSnippets.BluetoothAddress}" />
+                    <Entry
+                        Style="{StaticResource FieldEntryStyle}"
+                        Placeholder="00:00:00:00:00:00"
+                        Text="{Binding Address, Mode=TwoWay}" />
 
-                            <CollectionView ItemsSource="{Binding CalibrationPoints}">
-                                <CollectionView.EmptyView>
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                        <Label
+                            Grid.Column="0"
+                            Style="{StaticResource FieldLabelStyle}"
+                            VerticalOptions="Center"
+                            Text="{x:Static localization:AppSnippets.BleKeyLabel}" />
+                        <Label
+                            Grid.Column="1"
+                            Style="{StaticResource LinkLabelStyle}"
+                            VerticalOptions="Center"
+                            Text="{x:Static localization:AppSnippets.HowToFindAddress}">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding GetBLEKeyCommand}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </Grid>
+                    <Entry
+                        Style="{StaticResource FieldEntryStyle}"
+                        Text="{Binding Bindkey, Mode=TwoWay}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Garmin -->
+            <Border Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Style="{StaticResource SectionHeaderStyle}" Text="{x:Static localization:AppSnippets.GarminSettings}" />
+
+                    <Label Style="{StaticResource FieldLabelStyle}" Text="{x:Static localization:AppSnippets.Email}" />
+                    <Entry
+                        Style="{StaticResource FieldEntryStyle}"
+                        Keyboard="Email"
+                        Text="{Binding Email, Mode=TwoWay}" />
+
+                    <Label Style="{StaticResource FieldLabelStyle}" Text="{x:Static localization:AppSnippets.Password}" />
+                    <Entry
+                        Style="{StaticResource FieldEntryStyle}"
+                        IsPassword="True"
+                        Text="{Binding Password, Mode=TwoWay}" />
+
+                    <Button
+                        Margin="0,4,0,0"
+                        Command="{Binding ConnectGarminCommand}"
+                        Style="{StaticResource SecondaryButtonStyle}"
+                        Text="{x:Static localization:AppSnippets.ConnectGarmin}" />
+
+                    <Label
+                        IsVisible="{Binding HasGarminStatus}"
+                        FontAttributes="Bold"
+                        FontSize="14"
+                        Text="{Binding GarminStatusText}"
+                        TextColor="{Binding GarminStatusColor}" />
+
+                    <VerticalStackLayout Spacing="6" IsVisible="{Binding ShowMfaInput}">
+                        <Label Style="{StaticResource FieldLabelStyle}" Text="{x:Static localization:AppSnippets.GarminEnterMfa}" />
+                        <Entry
+                            Style="{StaticResource FieldEntryStyle}"
+                            Keyboard="Numeric"
+                            Text="{Binding MfaCode, Mode=TwoWay}" />
+                        <Button
+                            Command="{Binding VerifyMfaCommand}"
+                            Style="{StaticResource SecondaryButtonStyle}"
+                            Text="{x:Static localization:AppSnippets.VerifyMfaCode}" />
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Preferences -->
+            <Border Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="4">
+                    <Label Style="{StaticResource SectionHeaderStyle}" Text="{x:Static localization:AppSnippets.SettingsPreferences}" />
+
+                    <Grid ColumnDefinitions="*,Auto" Padding="0,8">
+                        <Label
+                            Grid.Column="0"
+                            Style="{StaticResource FieldLabelStyle}"
+                            FontAttributes="Bold"
+                            LineBreakMode="WordWrap"
+                            VerticalOptions="Center"
+                            Text="{x:Static localization:AppSnippets.AutoUploadToggle}" />
+                        <Switch
+                            Grid.Column="1"
+                            OnColor="{StaticResource Primary}"
+                            IsToggled="{Binding OneClickScanAndUpload, Mode=TwoWay}" />
+                    </Grid>
+                    <Grid ColumnDefinitions="*,Auto" Padding="0,8">
+                        <Label
+                            Grid.Column="0"
+                            Style="{StaticResource FieldLabelStyle}"
+                            VerticalOptions="Center"
+                            Text="{x:Static localization:AppSnippets.DisplayWeightInLbs}" />
+                        <Switch
+                            Grid.Column="1"
+                            OnColor="{StaticResource Primary}"
+                            IsToggled="{Binding DisplayWeightInLbs, Mode=TwoWay}" />
+                    </Grid>
+                    <Grid ColumnDefinitions="*,Auto" Padding="0,8">
+                        <Label
+                            Grid.Column="0"
+                            Style="{StaticResource FieldLabelStyle}"
+                            VerticalOptions="Center"
+                            Text="{x:Static localization:AppSnippets.MuscleMassAsPercentage}" />
+                        <Switch
+                            Grid.Column="1"
+                            OnColor="{StaticResource Primary}"
+                            IsToggled="{Binding MuscleMassAsPercentage, Mode=TwoWay}" />
+                    </Grid>
+                    <Grid ColumnDefinitions="*,Auto" Padding="0,8">
+                        <Label
+                            Grid.Column="0"
+                            Style="{StaticResource FieldLabelStyle}"
+                            VerticalOptions="Center"
+                            Text="{x:Static localization:AppSnippets.SettingsHideAds}" />
+                        <Switch
+                            Grid.Column="1"
+                            OnColor="{StaticResource Primary}"
+                            IsToggled="{Binding HideAds, Mode=TwoWay}" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Body Fat Calibration -->
+            <Border Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Style="{StaticResource SectionHeaderStyle}" Text="Body Fat Calibration" />
+
+                    <Label
+                        Style="{StaticResource MutedCaptionStyle}"
+                        Text="Correct the scale's body fat % toward trusted reference measurements (e.g. medical scans). Each point pairs what the scale reported with the reference value at the same time. A line (corrected = a × scale + b) is fitted across all points; muscle mass, water % and protein % are recomputed to match. Bone mass, BMR, visceral fat, metabolic age and BMI are unaffected." />
+
+                    <Grid ColumnDefinitions="*,Auto" Padding="0,8">
+                        <Label
+                            Grid.Column="0"
+                            Style="{StaticResource FieldLabelStyle}"
+                            FontAttributes="Bold"
+                            LineBreakMode="WordWrap"
+                            VerticalOptions="Center"
+                            Text="Apply calibration to measurements" />
+                        <Switch
+                            Grid.Column="1"
+                            OnColor="{StaticResource Primary}"
+                            IsToggled="{Binding UseFatCalibration, Mode=TwoWay}" />
+                    </Grid>
+
+                    <CollectionView ItemsSource="{Binding CalibrationPoints}">
+                        <CollectionView.EmptyView>
+                            <Label Style="{StaticResource MutedCaptionStyle}" Text="No calibration points added yet." />
+                        </CollectionView.EmptyView>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:FatCalibrationPoint">
+                                <Grid Padding="0,4" ColumnSpacing="8" ColumnDefinitions="*,Auto,Auto,Auto">
                                     <Label
-                                        FontSize="Micro"
-                                        Text="No calibration points added yet."
-                                        TextColor="Gray" />
-                                </CollectionView.EmptyView>
-                                <CollectionView.ItemTemplate>
-                                    <DataTemplate x:DataType="models:FatCalibrationPoint">
-                                        <Grid Padding="0,4" ColumnSpacing="8">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="Auto" />
-                                                <ColumnDefinition Width="Auto" />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-                                            <Label
-                                                Grid.Column="0"
-                                                FontSize="Small"
-                                                Text="{Binding Date, StringFormat='{0:yyyy-MM-dd}'}"
-                                                VerticalOptions="Center" />
-                                            <Label
-                                                Grid.Column="1"
-                                                FontSize="Small"
-                                                Text="{Binding ScaleFat, StringFormat='scale {0:0.#}%'}"
-                                                VerticalOptions="Center" />
-                                            <Label
-                                                Grid.Column="2"
-                                                FontSize="Small"
-                                                Text="{Binding TrueFat, StringFormat='ref {0:0.#}%'}"
-                                                VerticalOptions="Center" />
-                                            <Button
-                                                Grid.Column="3"
-                                                Padding="0"
-                                                BackgroundColor="Transparent"
-                                                Command="{Binding BindingContext.RemoveCalibrationPointCommand, Source={x:Reference SettingsRoot}}"
-                                                CommandParameter="{Binding .}"
-                                                FontSize="Small"
-                                                Text="✕"
-                                                TextColor="#C0392B"
-                                                WidthRequest="40" />
-                                        </Grid>
-                                    </DataTemplate>
-                                </CollectionView.ItemTemplate>
-                            </CollectionView>
+                                        Grid.Column="0"
+                                        Style="{StaticResource FieldLabelStyle}"
+                                        Text="{Binding Date, StringFormat='{0:yyyy-MM-dd}'}"
+                                        VerticalOptions="Center" />
+                                    <Label
+                                        Grid.Column="1"
+                                        Style="{StaticResource MutedCaptionStyle}"
+                                        Text="{Binding ScaleFat, StringFormat='scale {0:0.#}%'}"
+                                        VerticalOptions="Center" />
+                                    <Label
+                                        Grid.Column="2"
+                                        Style="{StaticResource MutedCaptionStyle}"
+                                        Text="{Binding TrueFat, StringFormat='ref {0:0.#}%'}"
+                                        VerticalOptions="Center" />
+                                    <Button
+                                        Grid.Column="3"
+                                        Padding="0"
+                                        BackgroundColor="Transparent"
+                                        Command="{Binding BindingContext.RemoveCalibrationPointCommand, Source={x:Reference SettingsRoot}}"
+                                        CommandParameter="{Binding .}"
+                                        FontSize="Small"
+                                        Text="✕"
+                                        TextColor="#DC2626"
+                                        WidthRequest="40" />
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
 
-                            <BoxView
-                                HeightRequest="1"
-                                HorizontalOptions="Fill"
-                                Color="LightGray" />
+                    <Label Style="{StaticResource FieldLabelStyle}" Text="Add a point" />
+                    <DatePicker
+                        Date="{Binding NewPointDate, Mode=TwoWay}"
+                        FontSize="Medium"
+                        Format="yyyy-MM-dd" />
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                        <Entry
+                            Grid.Column="0"
+                            Style="{StaticResource FieldEntryStyle}"
+                            Keyboard="Numeric"
+                            Placeholder="Scale fat %"
+                            Text="{Binding NewPointScaleFat, Mode=TwoWay}">
+                            <Entry.Behaviors>
+                                <behaviors:NumericDoubleValidationBehavior />
+                            </Entry.Behaviors>
+                        </Entry>
+                        <Entry
+                            Grid.Column="1"
+                            Style="{StaticResource FieldEntryStyle}"
+                            Keyboard="Numeric"
+                            Placeholder="Reference fat %"
+                            Text="{Binding NewPointTrueFat, Mode=TwoWay}">
+                            <Entry.Behaviors>
+                                <behaviors:NumericDoubleValidationBehavior />
+                            </Entry.Behaviors>
+                        </Entry>
+                    </Grid>
+                    <Button
+                        Margin="0,4,0,0"
+                        Command="{Binding AddCalibrationPointCommand}"
+                        Style="{StaticResource SecondaryButtonStyle}"
+                        Text="Add point" />
 
-                            <Label FontSize="Micro" Text="Add a point" />
-                            <Grid ColumnSpacing="8" RowSpacing="6">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <DatePicker
-                                    Grid.Row="0"
-                                    Grid.ColumnSpan="2"
-                                    Date="{Binding NewPointDate, Mode=TwoWay}"
-                                    FontSize="Small"
-                                    Format="yyyy-MM-dd" />
-                                <Entry
-                                    Grid.Row="1"
-                                    Grid.Column="0"
-                                    FontSize="Small"
-                                    Keyboard="Numeric"
-                                    Placeholder="Scale fat %"
-                                    Text="{Binding NewPointScaleFat, Mode=TwoWay}">
-                                    <Entry.Behaviors>
-                                        <behaviors:NumericDoubleValidationBehavior />
-                                    </Entry.Behaviors>
-                                </Entry>
-                                <Entry
-                                    Grid.Row="1"
-                                    Grid.Column="1"
-                                    FontSize="Small"
-                                    Keyboard="Numeric"
-                                    Placeholder="Reference fat %"
-                                    Text="{Binding NewPointTrueFat, Mode=TwoWay}">
-                                    <Entry.Behaviors>
-                                        <behaviors:NumericDoubleValidationBehavior />
-                                    </Entry.Behaviors>
-                                </Entry>
-                            </Grid>
-                            <Button
-                                Margin="0,4,0,0"
-                                BackgroundColor="{StaticResource Primary}"
-                                Command="{Binding AddCalibrationPointCommand}"
-                                Text="Add point"
-                                TextColor="White" />
+                    <Label
+                        Style="{StaticResource MutedCaptionStyle}"
+                        Text="{Binding CalibrationSummary}" />
+                </VerticalStackLayout>
+            </Border>
 
-                            <Label
-                                FontSize="Micro"
-                                Text="{Binding CalibrationSummary}"
-                                TextColor="Gray" />
-                        </StackLayout>
-                    </Border>
-                </StackLayout>
-            </ScrollView>
-        </Grid>
-    </AbsoluteLayout>
+            <!-- Advanced (secondary / muted) -->
+            <Border Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="6">
+                    <Label Style="{StaticResource SectionHeaderStyle}" Text="{x:Static localization:AppSnippets.SettingsAdvanced}" />
+
+                    <Grid ColumnDefinitions="*,Auto" Padding="0,8">
+                        <Label
+                            Grid.Column="0"
+                            Style="{StaticResource MutedCaptionStyle}"
+                            VerticalOptions="Center"
+                            Text="{x:Static localization:AppSnippets.UseExternalAPI}" />
+                        <Switch
+                            Grid.Column="1"
+                            OnColor="{StaticResource Primary}"
+                            IsToggled="{Binding UseExternalAPI, Mode=TwoWay}" />
+                    </Grid>
+                    <Label Style="{StaticResource MutedCaptionStyle}" Text="{x:Static localization:AppSnippets.AlternateExternalAPIAddress}" />
+                    <Entry
+                        Style="{StaticResource FieldEntryStyle}"
+                        Text="{Binding ApiAddress, Mode=TwoWay}" />
+
+                    <Grid ColumnDefinitions="*,Auto" Padding="0,8">
+                        <Label
+                            Grid.Column="0"
+                            Style="{StaticResource MutedCaptionStyle}"
+                            VerticalOptions="Center"
+                            Text="{x:Static localization:AppSnippets.UseChinaServer}" />
+                        <Switch
+                            Grid.Column="1"
+                            OnColor="{StaticResource Primary}"
+                            IsToggled="{Binding UseChinaServer, Mode=TwoWay}" />
+                    </Grid>
+                    <Grid ColumnDefinitions="*,Auto" Padding="0,8">
+                        <Label
+                            Grid.Column="0"
+                            Style="{StaticResource MutedCaptionStyle}"
+                            VerticalOptions="Center"
+                            Text="{x:Static localization:AppSnippets.ShowDebug}" />
+                        <Switch
+                            Grid.Column="1"
+                            OnColor="{StaticResource Primary}"
+                            IsToggled="{Binding ShowDebugInfo, Mode=TwoWay}" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Reset / Danger -->
+            <Border Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="12">
+                    <Button
+                        Command="{Binding ResetTokensCommand}"
+                        Style="{StaticResource SecondaryButtonStyle}"
+                        Text="{x:Static localization:AppSnippets.ClearGarminTokens}" />
+                    <Button
+                        Command="{Binding ResetCommand}"
+                        Style="{StaticResource DestructiveButtonStyle}"
+                        Text="{x:Static localization:AppSnippets.ResetToDefault}" />
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

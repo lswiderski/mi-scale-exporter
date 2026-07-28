@@ -12,6 +12,7 @@
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <converters:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+            <converters:BoolToSegmentColorConverter x:Key="SegmentColorConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
