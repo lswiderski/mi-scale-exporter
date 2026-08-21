@@ -61,6 +61,15 @@ namespace MiScaleExporter.MAUI.Views
 
         }
 
+        private void ScaleTypeSetToXiaomiHome(object sender, CheckedChangedEventArgs e)
+        {
+            if (e.Value)
+            {
+                vm.ScaleTypeSetToXiaomiHome();
+            }
+
+        }
+
         protected override async void OnAppearing()
         {
             base.OnAppearing();

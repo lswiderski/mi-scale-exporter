@@ -34,12 +34,20 @@ namespace MiScaleExporter.MAUI.ViewModels
                     Preferences.Remove(PreferencesKeys.UseBirthDateMode);
                     Preferences.Remove(PreferencesKeys.UseFatCalibration);
                     Preferences.Remove(PreferencesKeys.FatCalibrationPoints);
+                    Preferences.Remove(PreferencesKeys.XiaomiUserId);
+                    Preferences.Remove(PreferencesKeys.XiaomiPassToken);
+                    Preferences.Remove(PreferencesKeys.XiaomiAccountRegion);
+                    Preferences.Remove(PreferencesKeys.XiaomiScaleModel);
                     this.UseBirthDateMode = false;
                     this.ManualAge = "25";
                     this._useFatCalibration = false;
                     OnPropertyChanged(nameof(UseFatCalibration));
                     this.CalibrationPoints.Clear();
                     OnPropertyChanged(nameof(CalibrationSummary));
+                    this.XiaomiUserId = string.Empty;
+                    this.XiaomiPassToken = string.Empty;
+                    this.XiaomiAccountRegion = string.Empty;
+                    this.XiaomiScaleModel = string.Empty;
                 }
             );
             GetBLEKeyCommand = new Command(async () => await Launcher.OpenAsync("https://lswiderski.github.io/mi-scale-exporter/#steps-to-connect-xiaomi-body-composition-scale-s400"));
@@ -54,6 +62,17 @@ namespace MiScaleExporter.MAUI.ViewModels
         public ICommand ResetTokensCommand { get; }
         public ICommand AddCalibrationPointCommand { get; }
         public ICommand RemoveCalibrationPointCommand { get; }
+
+        public List<string> RegionOptions { get; } = new() { "cn", "de", "ru", "sg", "us", "i2" };
+
+        public List<PickerOption> ScaleModelOptions { get; } = new()
+        {
+            new PickerOption("yunmai.scales.ms104", "S400 - yunmai.scales.ms104"),
+            new PickerOption("yunmai.scales.ms103", "S400 - yunmai.scales.ms103"),
+            new PickerOption("yunmai.scales.ms107", "S400 - yunmai.scales.ms107"),
+            new PickerOption("yunmai.scales.ms106", "S200 - yunmai.scales.ms106"),
+            new PickerOption("yunmai.scales.ms116", "S800 - yunmai.scales.ms116")
+        };
 
 
         public async Task LoadPreferencesAsync()
@@ -94,6 +113,12 @@ namespace MiScaleExporter.MAUI.ViewModels
                 this._email = Preferences.Get(PreferencesKeys.GarminUserEmail, string.Empty);
                 this._password = await SecureStorage.GetAsync(PreferencesKeys.GarminUserPassword);
                 this._bindkey = Preferences.Get(PreferencesKeys.S400Bindkey, string.Empty);
+
+                // Load Xiaomi Settings
+                this._xiaomiUserId = Preferences.Get(PreferencesKeys.XiaomiUserId, string.Empty);
+                this._xiaomiPassToken = Preferences.Get(PreferencesKeys.XiaomiPassToken, string.Empty);
+                this._xiaomiAccountRegion = Preferences.Get(PreferencesKeys.XiaomiAccountRegion, string.Empty);
+                this._xiaomiScaleModel = Preferences.Get(PreferencesKeys.XiaomiScaleModel, string.Empty);
 
                 this._useFatCalibration = Preferences.Get(PreferencesKeys.UseFatCalibration, false);
                 this.CalibrationPoints = new ObservableCollection<FatCalibrationPoint>(
@@ -247,7 +272,12 @@ namespace MiScaleExporter.MAUI.ViewModels
         {
             this.ScaleType = ScaleType.S400;
         }
-        
+
+        public void ScaleTypeSetToXiaomiHome()
+        {
+            this.ScaleType = ScaleType.XiaomiHome;
+        }
+
 
         public void CheckPreferences()
         {
@@ -275,6 +305,69 @@ namespace MiScaleExporter.MAUI.ViewModels
             {
                 SetProperty(ref _bindkey, value);
                 Preferences.Set(PreferencesKeys.S400Bindkey, value);
+            }
+        }
+
+        // ---- Xiaomi Settings --------------------------------------------------------
+
+        private string _xiaomiUserId;
+
+        public string XiaomiUserId
+        {
+            get => _xiaomiUserId;
+            set
+            {
+                SetProperty(ref _xiaomiUserId, value);
+                Preferences.Set(PreferencesKeys.XiaomiUserId, value ?? string.Empty);
+            }
+        }
+
+        private string _xiaomiPassToken;
+
+        public string XiaomiPassToken
+        {
+            get => _xiaomiPassToken;
+            set
+            {
+                SetProperty(ref _xiaomiPassToken, value);
+                Preferences.Set(PreferencesKeys.XiaomiPassToken, value ?? string.Empty);
+            }
+        }
+
+        private string _xiaomiAccountRegion;
+
+        public string XiaomiAccountRegion
+        {
+            get => _xiaomiAccountRegion;
+            set
+            {
+                SetProperty(ref _xiaomiAccountRegion, value);
+                Preferences.Set(PreferencesKeys.XiaomiAccountRegion, value ?? string.Empty);
+            }
+        }
+
+        private string _xiaomiScaleModel;
+
+        public string XiaomiScaleModel
+        {
+            get => _xiaomiScaleModel;
+            set
+            {
+                SetProperty(ref _xiaomiScaleModel, value);
+                Preferences.Set(PreferencesKeys.XiaomiScaleModel, value ?? string.Empty);
+                OnPropertyChanged(nameof(SelectedScaleModelOption));
+            }
+        }
+
+        public PickerOption SelectedScaleModelOption
+        {
+            get => ScaleModelOptions.FirstOrDefault(o => o.Value == _xiaomiScaleModel) ?? ScaleModelOptions.First();
+            set
+            {
+                if (value != null && _xiaomiScaleModel != value.Value)
+                {
+                    XiaomiScaleModel = value.Value;
+                }
             }
         }
 
@@ -413,6 +506,16 @@ namespace MiScaleExporter.MAUI.ViewModels
             get => _scaleType == ScaleType.S400;
         }
 
+        public bool IsXiaomiHomeSelected
+        {
+            get => _scaleType == ScaleType.XiaomiHome;
+        }
+
+        public bool IsS400OrXiaomiHomeSelected
+        {
+            get => _scaleType == ScaleType.S400 || _scaleType == ScaleType.XiaomiHome;
+        }
+
         private ScaleType _scaleType;
 
         public ScaleType ScaleType
@@ -424,8 +527,14 @@ namespace MiScaleExporter.MAUI.ViewModels
                 {
                     SetProperty(ref _scaleType, value);
                     Preferences.Set(PreferencesKeys.ScaleType, (byte)value);
+                    // Notify dependent properties
+                    OnPropertyChanged(nameof(IsMiBodyCompositionScaleSelected));
+                    OnPropertyChanged(nameof(IsMiSmartScaleSelected));
+                    OnPropertyChanged(nameof(IsS400Selected));
+                    OnPropertyChanged(nameof(IsXiaomiHomeSelected));
+                    OnPropertyChanged(nameof(IsS400OrXiaomiHomeSelected));
                 }
-              
+
             }
         }
 

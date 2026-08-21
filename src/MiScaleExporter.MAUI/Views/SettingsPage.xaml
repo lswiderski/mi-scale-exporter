@@ -134,26 +134,88 @@
                                 IsChecked="{Binding IsMiSmartScaleSelected}"
                                 Value="1" />
                             <RadioButton
+    CheckedChanged="ScaleTypeSetToXiaomiHome"
+    Content="Mi S200 S400 S800 - via Xiaomi Home Cloud"
+    GroupName="ScaleType"
+    IsChecked="{Binding IsXiaomiHomeSelected}"
+    Value="3" />
+                            <RadioButton
                                 CheckedChanged="ScaleTypeSetToS400"
-                                Content="Mi Scale S400"
+                                Content="Mi Scale S400 - via Bluetooth"
                                 GroupName="ScaleType"
                                 IsChecked="{Binding IsS400Selected}"
-                                Value="1" />
-                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.BluetoothAddress}" />
-                            <Entry FontSize="Medium" Text="{Binding Address, Mode=TwoWay}" />
-                       
-                            <StackLayout Orientation="Horizontal" Spacing="10">
-                                <Label FontSize="Small" Text="BLE Key (S400 only)" />
-                                <Label FontSize="Small" Text="(how to get it)"  TextDecorations="Underline" TextColor="#007CC3">
-
-                                    <Label.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding GetBLEKeyCommand}" />
-                                    </Label.GestureRecognizers>
-                                </Label>
-                            </StackLayout>
-                            <Entry FontSize="Medium" Text="{Binding Bindkey, Mode=TwoWay}" />
+                                Value="2" />
+                            
+                           
                         </StackLayout>
 
+                    </Border>
+                    <Border  IsVisible="{Binding IsS400OrXiaomiHomeSelected}" >
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20" />
+                        </Border.StrokeShape>
+
+                        <StackLayout
+                            Padding="15,24,15,24"
+Orientation="Vertical"
+Spacing="10">
+                            <Label
+FontAttributes="Bold"
+FontSize="Small"
+Text="Xiaomi Settings" />
+                            <BoxView
+HeightRequest="2"
+HorizontalOptions="Fill"
+Color="Gray" />
+                            <StackLayout IsVisible="{Binding IsS400Selected}" Orientation="Vertical">
+                                <Label FontSize="Small" Text="{x:Static localization:AppSnippets.BluetoothAddress}" />
+                                <Entry FontSize="Medium" Text="{Binding Address, Mode=TwoWay}" />
+
+                                <StackLayout Orientation="Horizontal" Spacing="10">
+                                    <Label FontSize="Small" Text="BLE Key (S400 only)" />
+                                    <Label FontSize="Small" Text="(how to get it)"  TextDecorations="Underline" TextColor="#007CC3">
+
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding GetBLEKeyCommand}" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                </StackLayout>
+                                <Entry FontSize="Medium" Text="{Binding Bindkey, Mode=TwoWay}" />
+                            </StackLayout>
+                            <StackLayout
+                                IsVisible="{Binding IsXiaomiHomeSelected}"
+                                Orientation="Vertical"
+>
+                                
+                                <Label FontSize="Small" Text="User ID" />
+                                <Entry
+    FontSize="Medium"
+    Text="{Binding XiaomiUserId, Mode=TwoWay}"
+    Placeholder="Enter User ID" />
+                                <Label FontSize="Small" Text="Pass Token" />
+                                <Editor
+    FontSize="Medium"
+    Text="{Binding XiaomiPassToken, Mode=TwoWay}"
+    Placeholder="Enter Pass Token"
+    HeightRequest="100" />
+                                <Label FontSize="Small" Text="Account Region" />
+                                <Picker
+    FontSize="Medium"
+    SelectedItem="{Binding XiaomiAccountRegion, Mode=TwoWay}"
+    Title="Select Region"
+    ItemsSource="{Binding RegionOptions}" />
+                                <Label FontSize="Small" Text="Scale Model" />
+                                <Picker
+    FontSize="Medium"
+    SelectedItem="{Binding SelectedScaleModelOption, Mode=TwoWay}"
+    Title="Select Scale Model"
+    ItemsSource="{Binding ScaleModelOptions}"
+    ItemDisplayBinding="{Binding Text}" />
+                            </StackLayout>
+
+                        </StackLayout>
+                        
+                        
                     </Border>
                     <Border>
                         <Border.StrokeShape>
@@ -312,6 +374,7 @@
 
                         </StackLayout>
                     </Border>
+                   
                     <Border>
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="20" />

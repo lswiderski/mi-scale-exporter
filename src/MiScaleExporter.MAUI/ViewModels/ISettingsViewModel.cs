@@ -13,6 +13,7 @@ namespace MiScaleExporter.MAUI.ViewModels
         void ScaleTypeSetToBodyCompositionScale();
         void ScaleTypeSetToMiscale();
         void ScaleTypeSetToS400();
+        void ScaleTypeSetToXiaomiHome();
         Task LoadPreferencesAsync();
     }
 }

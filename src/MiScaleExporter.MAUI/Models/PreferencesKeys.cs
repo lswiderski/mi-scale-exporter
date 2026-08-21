@@ -25,4 +25,8 @@ public static class PreferencesKeys
     public static string UseChinaServer = "UseChinaServer";
     public static string UseFatCalibration = "UseFatCalibration";
     public static string FatCalibrationPoints = "FatCalibrationPoints";
+    public static string XiaomiUserId = "XiaomiUserId";
+    public static string XiaomiPassToken = "XiaomiPassToken";
+    public static string XiaomiAccountRegion = "XiaomiAccountRegion";
+    public static string XiaomiScaleModel = "XiaomiScaleModel";
 }

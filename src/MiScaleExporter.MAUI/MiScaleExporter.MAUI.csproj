@@ -96,7 +96,8 @@
 	  <PackageReference Include="Plugin.AdMob" Version="10.0.90" /> 
 	  <PackageReference Include="Plugin.BLE" Version="3.2.0-beta.1" />
 	  <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
-	  <PackageReference Include="YetAnotherGarminConnectClient" Version="0.0.17" />
+	  <PackageReference Include="YetAnotherGarminConnectClient" Version="0.0.20" />
+	  <PackageReference Include="YetAnotherXiaomiCloudClient" Version="0.0.2" />
 	</ItemGroup>
 
 	<ItemGroup>
