@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="MiScaleExporter.MAUI.Views.XiaomiPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:localization="clr-namespace:MiScaleExporter.MAUI.Resources.Localization"
+    xmlns:vm="clr-namespace:MiScaleExporter.MAUI.ViewModels"
+    Title="{Binding Title}">
+
+
+    <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+        <ScrollView AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
+            <StackLayout Padding="15,24,15,24" Spacing="12">
+                <Button
+                    Text="Download weights from Xiaomi Cloud"
+                    BackgroundColor="{StaticResource Primary}"
+                    TextColor="White"
+                    Command="{Binding DownloadCommand}" />
+
+                <Label Text="If preferences are not set, go to Settings:" IsVisible="{Binding HasPreferencesSet, Converter={StaticResource InvertedBoolConverter}}" />
+                <Button Text="Open Settings" Command="{Binding OpenSettingsCommand}" IsVisible="{Binding HasPreferencesSet, Converter={StaticResource InvertedBoolConverter}}" />
+
+                <CollectionView ItemsSource="{Binding Measurements}" SelectionMode="None" IsVisible="{Binding Measurements.Count, Converter={StaticResource IntGreaterThanZeroConverter}}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border StrokeShape="RoundRectangle" Padding="10" Margin="0,6">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackLayout>
+                                        <Label Text="{Binding Date, StringFormat='{0:yyyy-MM-dd HH:mm}'}" />
+                                        <Label Text="{Binding WeightDisplay}" FontAttributes="Bold" />
+                                    </StackLayout>
+                                    <StackLayout Grid.Column="1" Orientation="Horizontal" Spacing="6">
+                                        <Button Text="Details" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:XiaomiViewModel}}, Path=ShowDetailsCommand}" CommandParameter="{Binding .}" />
+                                        <Button Text="Select" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:XiaomiViewModel}}, Path=SelectCommand}" CommandParameter="{Binding .}" />
+                                    </StackLayout>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <Label Text="No measurements" IsVisible="{Binding Measurements.Count, Converter={StaticResource IntEqualsZeroConverter}}" />
+            </StackLayout>
+        </ScrollView>
+
+        <!-- Overlay loader shown when ViewModel.IsBusy is true -->
+        <StackLayout
+            Padding="12"
+            AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
+            AbsoluteLayout.LayoutFlags="PositionProportional"
+            IsVisible="{Binding IsBusy}">
+            <Frame BackgroundColor="White" CornerRadius="8" Padding="12" HasShadow="True">
+                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                    <ActivityIndicator IsRunning="{Binding IsBusy}" WidthRequest="48" HeightRequest="48" />
+                    <Label Text="Loading..." HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </Frame>
+        </StackLayout>
+    </AbsoluteLayout>
+</ContentPage>

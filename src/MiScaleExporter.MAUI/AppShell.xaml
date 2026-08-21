@@ -112,6 +112,18 @@
         <ShellContent ContentTemplate="{DataTemplate local:ScalePage}" Route="ScalePage" />
     </FlyoutItem>
 
+    <FlyoutItem Title="Xiaomi">
+        <FlyoutItem.Icon>
+            <FontImageSource
+                FontFamily="FontAwesome6Solid"
+                Glyph="&#xf496;"
+                Size="16"
+                Color="{AppThemeBinding Light={StaticResource Black},
+                                        Dark={StaticResource White}}" />
+        </FlyoutItem.Icon>
+        <ShellContent ContentTemplate="{DataTemplate local:XiaomiPage}" Route="XiaomiPage" />
+    </FlyoutItem>
+
     <FlyoutItem Title="{x:Static localization:AppSnippets.GarminForm}">
         <FlyoutItem.Icon>
             <FontImageSource
