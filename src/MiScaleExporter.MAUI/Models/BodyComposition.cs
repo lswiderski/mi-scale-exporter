@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using MiScaleExporter.Core.S400;
 
 namespace MiScaleExporter.Models
 {
@@ -22,7 +23,21 @@ namespace MiScaleExporter.Models
         public bool HasImpedance { get; set; }
         public bool IsStabilized { get; set; }
         public DateTime Date { get; set; }
-        public byte[] ReceivedRawData { get; set; } 
+        public DateTimeOffset? MeasuredAt { get; set; }
+        public string MeasurementId { get; set; }
+        public string AlgorithmVersion { get; set; }
+        public string CalibrationVersion { get; set; }
+        public bool IsCalibrated { get; set; }
+        public int CalibrationPointCount { get; set; }
+        public double? CalibrationRSquared { get; set; }
+        public double AppliedFatCorrection { get; set; }
+        public double BaselineFatPercentage { get; set; }
+        public S400MeasurementQuality? MeasurementQuality { get; set; }
+        public double? Impedance50Khz { get; set; }
+        public double? Impedance250Khz { get; set; }
+        public int? HeartRate { get; set; }
+        public byte? ScaleProfileId { get; set; }
+        public byte[] ReceivedRawData { get; set; }
         public string MFACode { get; set; }
         public string ExternalApiClientId { get; set; }
         public List<byte[]> RawDataLog { get; set; }

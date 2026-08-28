@@ -28,12 +28,17 @@ namespace MiScaleExporter.MAUI.ViewModels
 
             Title = AppSnippets.MiScaleData;
             CancelCommand = new Command(OnCancel);
-            StopCommand = new Command(OnStop);
+            StopCommand = new Command(async () => await _scale.StopSearchAsync());
             GuestScanCommand = new Command(async () => await StartGuestScan());
         }
 
         public async Task CheckPreferencesAsync()
         {
+            if (this.IsBusyForm)
+            {
+                return;
+            }
+
             App.IsGuestMeasurement = false;
             ScaleMeasurement.Instance.Weight = "";
             App.BodyComposition = null;
@@ -52,7 +57,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                     await Shell.Current.GoToAsync($"//Settings");
                 }
             }
-           
+
         }
 
         public async Task LoadPreferencesAsync()
@@ -121,17 +126,22 @@ namespace MiScaleExporter.MAUI.ViewModels
 
         private async Task StartScan()
         {
+            if (this.IsBusyForm)
+            {
+                return;
+            }
+
             ScanningLabel = string.Empty;
             ScaleMeasurement.Instance.Weight = "0";
             this.IsBusyForm = true;
             await this._scale.GetBodyCompositonAsync(_address,
                 new User { Sex = _sex, Age = _age, Height = _height, ScaleType = _scaleType, BindKey = _bindkey });
-            this.OnStop();
+            await this.OnStopAsync();
         }
 
-        private async void OnStop()
+        private async Task OnStopAsync()
         {
-            this._scale.StopSearch();
+            await this._scale.StopSearchAsync();
             this.IsBusyForm = false;
             if (this._scale.BodyComposition is null || !this._scale.BodyComposition.IsValid)
             {
@@ -181,6 +191,7 @@ namespace MiScaleExporter.MAUI.ViewModels
 
         private async void OnCancel()
         {
+            _suppressNextStopAlert = true;
             await this._scale.CancelSearchAsync();
             this.IsBusyForm = false;
         }
@@ -343,8 +354,11 @@ namespace MiScaleExporter.MAUI.ViewModels
             ScanningLabel = string.Empty;
             ScaleMeasurement.Instance.Weight = "0";
             this.IsBusyForm = true;
-            await this._scale.GetBodyCompositonAsync(address, guestUser);
-            this.OnStop();
+            await this._scale.GetBodyCompositonAsync(
+                address,
+                guestUser,
+                persistMeasurementHistory: false);
+            await this.OnStopAsync();
         }
     }
 }

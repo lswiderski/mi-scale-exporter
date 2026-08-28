@@ -78,6 +78,20 @@ namespace MiScaleExporter.MAUI.ViewModels
             private set => SetProperty(ref _subtitleDisplay, value);
         }
 
+        private string _compositionProvenanceDisplay = string.Empty;
+        public string CompositionProvenanceDisplay
+        {
+            get => _compositionProvenanceDisplay;
+            private set => SetProperty(ref _compositionProvenanceDisplay, value);
+        }
+
+        private string _s400DetailsDisplay = string.Empty;
+        public string S400DetailsDisplay
+        {
+            get => _s400DetailsDisplay;
+            private set => SetProperty(ref _s400DetailsDisplay, value);
+        }
+
         private string _weightDeltaArrow = string.Empty;
         public string WeightDeltaArrow
         {
@@ -181,6 +195,8 @@ namespace MiScaleExporter.MAUI.ViewModels
                 HasOther = false;
                 CompFat = CompMuscle = CompBone = CompOther = 0;
                 CompFatDisplay = CompMuscleDisplay = CompBoneDisplay = CompOtherDisplay = string.Empty;
+                CompositionProvenanceDisplay = string.Empty;
+                S400DetailsDisplay = string.Empty;
                 if (composition == null)
                 {
                     WeightDisplay = "—";
@@ -216,29 +232,37 @@ namespace MiScaleExporter.MAUI.ViewModels
                     ? ScaleTypeName
                     : $"{ScaleTypeName} · {AppSnippets.WeightOnlyHint}";
 
+                if (scaleType == ScaleType.S400)
+                {
+                    CompositionProvenanceDisplay = composition.HasImpedance
+                        ? $"Measured: weight and 50/250 kHz impedance · Estimated composition: {composition.AlgorithmVersion ?? "legacy-50khz-v1"}"
+                        : "Measured: weight only · Body composition unavailable";
+                    var details = new List<string>();
+                    if (composition.Impedance50Khz.HasValue)
+                        details.Add($"50 kHz {composition.Impedance50Khz.Value:F1} Ω");
+                    if (composition.Impedance250Khz.HasValue)
+                        details.Add($"250 kHz {composition.Impedance250Khz.Value:F1} Ω");
+                    if (composition.HeartRate.HasValue)
+                        details.Add($"Heart rate {composition.HeartRate.Value} bpm");
+                    S400DetailsDisplay = string.Join(" · ", details);
+                }
+
                 HasComposition = composition.HasImpedance && composition.Weight > 0 && composition.Fat > 0 && composition.MuscleMass > 0;
                 if (HasComposition)
                 {
                     var fatMassKg = composition.Weight * composition.Fat / 100.0;
-                    var muscleKg = composition.MuscleMass;
-                    var boneKg = composition.BoneMass;
-                    var otherKg = Math.Max(0, composition.Weight - fatMassKg - muscleKg - boneKg);
+                    var fatFreeMassKg = Math.Max(0, composition.Weight - fatMassKg);
 
                     var factor = useLbs ? KgToLb : 1.0;
                     CompFat = fatMassKg * factor;
-                    CompMuscle = muscleKg * factor;
-                    CompBone = boneKg * factor;
-                    CompOther = otherKg * factor;
-                    // Xiaomi MuscleMass includes body water, so Fat+Muscle+Bone can exceed
-                    // Weight and otherKg clamps to 0. When that happens omit the Other segment
-                    // (donut skips value<=0) and hide its legend row.
-                    HasOther = CompOther > 0.0001;
+                    CompMuscle = fatFreeMassKg * factor;
+                    CompBone = 0;
+                    CompOther = 0;
+                    HasOther = false;
 
                     var unit = WeightUnit;
                     CompFatDisplay = $"{AppSnippets.CompFat} {CompFat.ToString("F1", CultureInfo.InvariantCulture)} {unit}";
-                    CompMuscleDisplay = $"{AppSnippets.CompMuscle} {CompMuscle.ToString("F1", CultureInfo.InvariantCulture)} {unit}";
-                    CompBoneDisplay = $"{AppSnippets.CompBone} {CompBone.ToString("F1", CultureInfo.InvariantCulture)} {unit}";
-                    CompOtherDisplay = $"{AppSnippets.CompOther} {CompOther.ToString("F1", CultureInfo.InvariantCulture)} {unit}";
+                    CompMuscleDisplay = $"Fat-free mass {CompMuscle.ToString("F1", CultureInfo.InvariantCulture)} {unit}";
                 }
 
                 foreach (var card in _presenter.Build(composition, scaleType, user, previous))

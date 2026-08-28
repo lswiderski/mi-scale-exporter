@@ -39,10 +39,6 @@ namespace MiScaleExporter.Services
                     : Band(value, 50.0, 65.0),
                 MetricKey.VisceralFat => value <= 9 ? MetricStatusLevel.Standard : MetricStatusLevel.High,
                 MetricKey.ProteinPercentage => Band(value, 16.0, 20.0),
-                MetricKey.BoneMass => BoneMass(value, sex),
-                MetricKey.MuscleMass => MuscleMass(value, sex),
-                // 'younger than chronological age' has no Low band intentionally (it is good news).
-                MetricKey.MetabolicAge => value <= age + 3 ? MetricStatusLevel.Standard : MetricStatusLevel.High,
                 // Weight, BMR, IdealWeight, BodyType, Weight are shown without a colored band.
                 _ => MetricStatusLevel.Unknown,
             };

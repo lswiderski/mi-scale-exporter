@@ -52,7 +52,7 @@
 
             <!-- Header card: big weight + status banner -->
             <Border Style="{StaticResource CardStyle}">
-                <Grid RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="6">
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="6">
                     <Label
                         Grid.Row="0"
                         Style="{StaticResource SectionLabelStyle}"
@@ -95,10 +95,24 @@
                         Grid.Row="3"
                         Style="{StaticResource MutedCaptionStyle}"
                         Text="{Binding MeasuredAtDisplay}" />
+
+                    <Label
+                        Grid.Row="4"
+                        IsVisible="{Binding CompositionProvenanceDisplay, Converter={StaticResource StringToBoolConverter}}"
+                        LineBreakMode="WordWrap"
+                        Style="{StaticResource MutedCaptionStyle}"
+                        Text="{Binding CompositionProvenanceDisplay}" />
+
+                    <Label
+                        Grid.Row="5"
+                        IsVisible="{Binding S400DetailsDisplay, Converter={StaticResource StringToBoolConverter}}"
+                        LineBreakMode="WordWrap"
+                        Style="{StaticResource MutedCaptionStyle}"
+                        Text="{Binding S400DetailsDisplay}" />
                 </Grid>
             </Border>
 
-            <!-- Body composition donut: total weight split into mass components.
+              <!-- Body composition donut: non-overlapping fat and fat-free mass.
                  Visible only when full impedance composition is available. -->
             <Border IsVisible="{Binding HasComposition}" Style="{StaticResource CardStyle}">
                 <Grid ColumnDefinitions="Auto,*" ColumnSpacing="16">
@@ -142,30 +156,6 @@
                                 Style="{StaticResource MetricLabelStyle}"
                                 VerticalOptions="Center"
                                 Text="{Binding CompMuscleDisplay}" />
-                        </HorizontalStackLayout>
-                        <HorizontalStackLayout Spacing="8">
-                            <BoxView
-                                CornerRadius="3"
-                                HeightRequest="12"
-                                VerticalOptions="Center"
-                                WidthRequest="12"
-                                Color="#6C8AE4" />
-                            <Label
-                                Style="{StaticResource MetricLabelStyle}"
-                                VerticalOptions="Center"
-                                Text="{Binding CompBoneDisplay}" />
-                        </HorizontalStackLayout>
-                        <HorizontalStackLayout Spacing="8" IsVisible="{Binding HasOther}">
-                            <BoxView
-                                CornerRadius="3"
-                                HeightRequest="12"
-                                VerticalOptions="Center"
-                                WidthRequest="12"
-                                Color="#B0B6BE" />
-                            <Label
-                                Style="{StaticResource MetricLabelStyle}"
-                                VerticalOptions="Center"
-                                Text="{Binding CompOtherDisplay}" />
                         </HorizontalStackLayout>
                     </VerticalStackLayout>
                 </Grid>

@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Storage;
 using MiScaleExporter.MAUI;
 using MiScaleExporter.MAUI.Resources.Localization;
@@ -144,6 +144,23 @@ namespace MiScaleExporter.MAUI.ViewModels
                     await SecureStorage.SetAsync(PreferencesKeys.GarminUserTokenSecret, this._tokenSecret);
                 }
 
+                if (response != null && !response.LocalReceiptSaved)
+                {
+                    await Application.Current.MainPage.DisplayAlert(
+                        AppSnippets.Response,
+                        response.Message,
+                        AppSnippets.OK);
+                    if (response.IsSuccess)
+                    {
+                        await Shell.Current.GoToAsync("//ScalePage/ResultPage?uploaded=true");
+                    }
+                    else
+                    {
+                        await Shell.Current.GoToAsync("..?autoUpload=false");
+                    }
+                    return;
+                }
+
                 // --- MFA state-setting logic preserved exactly as before ---
                 if (response?.MFARequested ?? false)
                 {
@@ -216,7 +233,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                     await Toast.Make($"The file was not saved successfully with error: {fileSaverResult.Exception.Message}").Show();
                 }
             }
-           
+
             this.IsBusyForm = false;
 
             // This will pop the current page off the navigation stack
@@ -248,11 +265,15 @@ namespace MiScaleExporter.MAUI.ViewModels
                 BMR = DoubleValueParser.ParseValueFromUsersCulture(_bmr) ?? 0,
                 WaterPercentage = DoubleValueParser.ParseValueFromUsersCulture(_waterPercentage) ?? 0,
                 MFACode = _mfaCode,
-                ExternalApiClientId = _externalApiClientId
+                ExternalApiClientId = _externalApiClientId,
+                MeasurementId = App.BodyComposition?.MeasurementId,
+                MeasuredAt = App.BodyComposition?.MeasuredAt,
+                MeasurementQuality = App.BodyComposition?.MeasurementQuality,
+                HasImpedance = App.BodyComposition?.HasImpedance == true,
             };
 
-            if (Preferences.Get(PreferencesKeys.MuscleMassAsPercentage, false) 
-                && bc.MuscleMass != 0 
+            if (Preferences.Get(PreferencesKeys.MuscleMassAsPercentage, false)
+                && bc.MuscleMass != 0
                 && bc.Weight != 0)
             {
                 bc.MuscleMass = (bc.MuscleMass / 100) * bc.Weight;

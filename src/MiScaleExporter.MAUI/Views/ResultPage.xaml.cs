@@ -231,6 +231,16 @@ namespace MiScaleExporter.MAUI.Views
                 };
                 var when = App.BodyComposition.Date == default ? DateTime.Now : App.BodyComposition.Date;
                 var resp = await garmin.UploadAsync(App.BodyComposition, when, creds);
+                if (resp != null && !resp.LocalReceiptSaved)
+                {
+                    if (resp.IsSuccess)
+                    {
+                        if (UploadedBanner != null) UploadedBanner.IsVisible = true;
+                        if (UploadButton != null) UploadButton.IsVisible = false;
+                    }
+                    await DisplayAlert(AppSnippets.Response, resp.Message, AppSnippets.OK);
+                    return;
+                }
                 if (resp != null && resp.MFARequested)
                 {
                     var code = await DisplayPromptAsync(AppSnippets.GarminEnterMfa, AppSnippets.GarminEnterMfa, keyboard: Keyboard.Numeric);
@@ -242,6 +252,16 @@ namespace MiScaleExporter.MAUI.Views
                         App.BodyComposition.MFACode = null;
                         App.BodyComposition.ExternalApiClientId = null;
                     }
+                }
+                if (resp != null && !resp.LocalReceiptSaved)
+                {
+                    if (resp.IsSuccess)
+                    {
+                        if (UploadedBanner != null) UploadedBanner.IsVisible = true;
+                        if (UploadButton != null) UploadButton.IsVisible = false;
+                    }
+                    await DisplayAlert(AppSnippets.Response, resp.Message, AppSnippets.OK);
+                    return;
                 }
                 if (resp != null && resp.IsSuccess)
                 {
@@ -261,7 +281,10 @@ namespace MiScaleExporter.MAUI.Views
                     try { await Toast.Make(AppSnippets.GarminConnectFailed).Show(); } catch { }
                 }
             }
-            catch (Exception ex) { TryLogNavFailure(ex); }
+            catch (Exception ex)
+            {
+                TryLogNavFailure(ex);
+            }
             finally { SetUploading(false); }
 #else
             if (!silentIfNoCreds)

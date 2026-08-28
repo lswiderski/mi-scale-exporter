@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
     x:Class="MiScaleExporter.MAUI.Views.SettingPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -322,7 +322,7 @@
 
                     <Label
                         Style="{StaticResource MutedCaptionStyle}"
-                        Text="Correct the scale's body fat % toward trusted reference measurements (e.g. medical scans). Each point pairs what the scale reported with the reference value at the same time. A line (corrected = a × scale + b) is fitted across all points; muscle mass, water % and protein % are recomputed to match. Bone mass, BMR, visceral fat, metabolic age and BMI are unaffected." />
+                        Text="Pair saved S400 measurements with trusted reference values. Fewer than three references are stored but do not alter uploads. With enough references, body fat is corrected conservatively and dependent estimates are recomputed." />
 
                     <Grid ColumnDefinitions="*,Auto" Padding="0,8">
                         <Label
@@ -344,7 +344,7 @@
                         </CollectionView.EmptyView>
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="models:FatCalibrationPoint">
-                                <Grid Padding="0,4" ColumnSpacing="8" ColumnDefinitions="*,Auto,Auto,Auto">
+                                <Grid Padding="0,4" ColumnSpacing="8" ColumnDefinitions="*,Auto,Auto,Auto,Auto">
                                     <Label
                                         Grid.Column="0"
                                         Style="{StaticResource FieldLabelStyle}"
@@ -360,8 +360,13 @@
                                         Style="{StaticResource MutedCaptionStyle}"
                                         Text="{Binding TrueFat, StringFormat='ref {0:0.#}%'}"
                                         VerticalOptions="Center" />
-                                    <Button
+                                    <Label
                                         Grid.Column="3"
+                                        Style="{StaticResource MutedCaptionStyle}"
+                                        Text="{Binding Source}"
+                                        VerticalOptions="Center" />
+                                    <Button
+                                        Grid.Column="4"
                                         Padding="0"
                                         BackgroundColor="Transparent"
                                         Command="{Binding BindingContext.RemoveCalibrationPointCommand, Source={x:Reference SettingsRoot}}"
@@ -376,32 +381,24 @@
                     </CollectionView>
 
                     <Label Style="{StaticResource FieldLabelStyle}" Text="Add a point" />
-                    <DatePicker
-                        Date="{Binding NewPointDate, Mode=TwoWay}"
-                        FontSize="Medium"
-                        Format="yyyy-MM-dd" />
-                    <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
-                        <Entry
-                            Grid.Column="0"
-                            Style="{StaticResource FieldEntryStyle}"
-                            Keyboard="Numeric"
-                            Placeholder="Scale fat %"
-                            Text="{Binding NewPointScaleFat, Mode=TwoWay}">
-                            <Entry.Behaviors>
-                                <behaviors:NumericDoubleValidationBehavior />
-                            </Entry.Behaviors>
-                        </Entry>
-                        <Entry
-                            Grid.Column="1"
-                            Style="{StaticResource FieldEntryStyle}"
-                            Keyboard="Numeric"
-                            Placeholder="Reference fat %"
-                            Text="{Binding NewPointTrueFat, Mode=TwoWay}">
-                            <Entry.Behaviors>
-                                <behaviors:NumericDoubleValidationBehavior />
-                            </Entry.Behaviors>
-                        </Entry>
-                    </Grid>
+                    <Picker
+                        ItemDisplayBinding="{Binding Display}"
+                        ItemsSource="{Binding CalibrationMeasurements}"
+                        SelectedItem="{Binding SelectedCalibrationMeasurement, Mode=TwoWay}"
+                        Title="Saved S400 measurement" />
+                    <Picker
+                        ItemsSource="{Binding CalibrationSources}"
+                        SelectedItem="{Binding NewPointSource, Mode=TwoWay}"
+                        Title="Reference source" />
+                    <Entry
+                        Style="{StaticResource FieldEntryStyle}"
+                        Keyboard="Numeric"
+                        Placeholder="Reference fat %"
+                        Text="{Binding NewPointTrueFat, Mode=TwoWay}">
+                        <Entry.Behaviors>
+                            <behaviors:NumericDoubleValidationBehavior />
+                        </Entry.Behaviors>
+                    </Entry>
                     <Button
                         Margin="0,4,0,0"
                         Command="{Binding AddCalibrationPointCommand}"
@@ -411,6 +408,18 @@
                     <Label
                         Style="{StaticResource MutedCaptionStyle}"
                         Text="{Binding CalibrationSummary}" />
+
+                    <Button
+                        Margin="0,4,0,0"
+                        Command="{Binding ExportMeasurementHistoryCommand}"
+                        Style="{StaticResource SecondaryButtonStyle}"
+                        Text="Export saved S400 history" />
+
+                    <Button
+                        Margin="0,4,0,0"
+                        Command="{Binding ClearMeasurementHistoryCommand}"
+                        Style="{StaticResource SecondaryButtonStyle}"
+                        Text="Clear saved S400 history" />
                 </VerticalStackLayout>
             </Border>
 

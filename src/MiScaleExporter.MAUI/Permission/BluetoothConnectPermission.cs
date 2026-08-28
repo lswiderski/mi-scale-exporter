@@ -1,4 +1,5 @@
-﻿using MiScaleExporter.Permission;
+#if ANDROID
+using MiScaleExporter.Permission;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,3 +16,4 @@ namespace MiScaleExporter.Droid
     }.ToArray();
     }
 }
+#endif

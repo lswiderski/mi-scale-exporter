@@ -1,17 +1,19 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+#if ANDROID
 using Android.Net;
-using Microsoft.Extensions.Logging;
+using Xamarin.Android.Net;
+#endif
+using MiScaleExporter.Core.Composition;
+using MiScaleExporter.Core.Garmin;
+using MiScaleExporter.Core.History;
+using MiScaleExporter.Core.S400;
 using MiScaleExporter.Models;
 using Newtonsoft.Json;
-using NLog;
-using NLog.Extensions.Logging;
-using Xamarin.Android.Net;
 using YetAnotherGarminConnectClient;
 using YetAnotherGarminConnectClient.Dto.Garmin.Fit;
 
@@ -19,46 +21,43 @@ namespace MiScaleExporter.Services;
 
 public class GarminService : IGarminService
 {
-    private HttpClient _httpClient;
-    private ILogService _logService;
-    private Microsoft.Extensions.Logging.ILogger _logger;
+    private readonly HttpClient _httpClient;
+    private readonly ILogService _logService;
     private IClient _garminClient;
+    private readonly IMeasurementHistoryStore _historyStore;
 
-    public GarminService(ILogService logService)
+    public GarminService(
+        ILogService logService,
+        IMeasurementHistoryStore historyStore)
     {
         _logService = logService;
-        var configuration = LogService.CreateLogger();
-        using (ILoggerFactory factory = LoggerFactory.Create(builder =>
-        builder.AddNLog(configuration))
-    )
-        {
-            _logger = factory.CreateLogger<GarminService>();
-        }
+        _historyStore = historyStore;
 
         System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
-        if (DeviceInfo.Platform == DevicePlatform.Android)
+#if ANDROID
+        _httpClient = new HttpClient(new AndroidMessageHandler())
         {
-            _httpClient = new HttpClient(new AndroidMessageHandler())
-            {
-                Timeout = TimeSpan.FromMinutes(5),
-                DefaultVersionPolicy = HttpVersionPolicy.RequestVersionOrHigher,
-                DefaultRequestVersion = HttpVersion.Version11,
-
-            };
-        }
-        else
+            Timeout = TimeSpan.FromMinutes(5),
+            DefaultVersionPolicy = HttpVersionPolicy.RequestVersionOrHigher,
+            DefaultRequestVersion = HttpVersion.Version11,
+        };
+#else
+        _httpClient = new HttpClient
         {
-            _httpClient = new HttpClient()
-            {
-                Timeout = TimeSpan.FromMinutes(5),
-            };
-        }
+            Timeout = TimeSpan.FromMinutes(5),
+        };
+#endif
 
     }
 
     public async Task<GarminApiResponse> UploadAsync(BodyComposition bodyComposition, DateTime time, CredentialsData credencials)
     {
+        var guardedResult = await BeginMeasurementUploadAsync(bodyComposition);
+        if (guardedResult != null)
+        {
+            return guardedResult;
+        }
 
         if (DeviceInfo.Platform == DevicePlatform.Android) //Older android versions do not support TLS 1.3, so force to use external api for them
         {
@@ -67,13 +66,87 @@ public class GarminService : IGarminService
                 Preferences.Set(PreferencesKeys.UseExternalAPI, true);
             }
         }
-        if (Preferences.Get(PreferencesKeys.UseExternalAPI, false))
+        var result = Preferences.Get(PreferencesKeys.UseExternalAPI, false)
+            ? await UploadViaExternalAPIAsync(bodyComposition, time, credencials)
+            : await UploadViaDirectCallToGarminAsync(bodyComposition, time, credencials);
+        await CompleteMeasurementUploadAsync(bodyComposition, result);
+        return result;
+    }
+
+    private async Task<GarminApiResponse> BeginMeasurementUploadAsync(BodyComposition bodyComposition)
+    {
+        if (string.IsNullOrWhiteSpace(bodyComposition?.MeasurementId))
         {
-            return await UploadViaExternalAPIAsync(bodyComposition, time, credencials);
+            return null;
         }
-        else
+
+        try
         {
-            return await UploadViaDirectCallToGarminAsync(bodyComposition, time, credencials);
+            var beginResult = await _historyStore.TryBeginUploadAsync(bodyComposition.MeasurementId);
+            if (beginResult == UploadBeginResult.NotFound)
+            {
+                return new GarminApiResponse
+                {
+                    Message = "The S400 measurement was not saved locally, so it was not uploaded.",
+                };
+            }
+            if (beginResult == UploadBeginResult.AlreadySucceeded)
+            {
+                return new GarminApiResponse
+                {
+                    IsSuccess = true,
+                    Message = "This measurement was already uploaded to Garmin.",
+                };
+            }
+            if (beginResult == UploadBeginResult.AlreadyUploading)
+            {
+                return new GarminApiResponse
+                {
+                    Message = "The previous Garmin upload may have completed. Automatic retry was blocked to avoid a duplicate.",
+                };
+            }
+
+            return null;
+        }
+        catch (Exception exception)
+        {
+            _logService.LogError(exception.Message);
+            return new GarminApiResponse
+            {
+                Message = "Could not save the Garmin upload marker, so no upload was attempted.",
+            };
+        }
+    }
+
+    private async Task CompleteMeasurementUploadAsync(
+        BodyComposition bodyComposition,
+        GarminApiResponse result)
+    {
+        if (string.IsNullOrWhiteSpace(bodyComposition?.MeasurementId))
+        {
+            return;
+        }
+
+        var state = result?.MFARequested == true
+            ? MeasurementUploadState.Pending
+            : result?.IsSuccess == true
+                ? MeasurementUploadState.Succeeded
+                : MeasurementUploadState.Failed;
+        try
+        {
+            await _historyStore.MarkUploadAsync(
+                bodyComposition.MeasurementId,
+                state,
+                state == MeasurementUploadState.Failed ? "Garmin upload failed." : null);
+        }
+        catch (Exception exception)
+        {
+            _logService.LogError($"Garmin upload finished but its receipt could not be saved: {exception.Message}");
+            if (result != null)
+            {
+                result.LocalReceiptSaved = false;
+                result.Message = $"{result.Message} Garmin responded, but the local upload receipt could not be saved. Automatic retry is blocked to avoid a duplicate.".Trim();
+            }
         }
     }
 
@@ -82,38 +155,20 @@ public class GarminService : IGarminService
         var result = new GarminApiResponse();
         try
         {
-            var userProfileSettings = new UserProfileSettings
-            {
-                Age = Preferences.Get(PreferencesKeys.UserAge, 25),
-                Height = Preferences.Get(PreferencesKeys.UserHeight, 170),
-            };
-
-            var scaleDTO = new GarminWeightScaleDTO
-            {
-                TimeStamp = time,
-                Weight = Convert.ToSingle(bodyComposition.Weight),
-                PercentFat = Convert.ToSingle(bodyComposition.Fat),
-                PercentHydration = Convert.ToSingle(bodyComposition.WaterPercentage),
-                BoneMass = Convert.ToSingle(bodyComposition.BoneMass),
-                MuscleMass = Convert.ToSingle(bodyComposition.MuscleMass),
-                VisceralFatRating = Convert.ToByte(bodyComposition.VisceralFat),
-                VisceralFatMass = Convert.ToSingle(bodyComposition.VisceralFat),
-                PhysiqueRating = Convert.ToByte(bodyComposition.BodyType),
-                MetabolicAge = Convert.ToByte(bodyComposition.MetabolicAge),
-                BodyMassIndex = Convert.ToSingle(bodyComposition.BMI),
-            };
+            var payload = MapForGarmin(bodyComposition, time);
+            var userProfileSettings = CreateUserProfileSettings(payload);
+            var scaleDTO = CreateWeightScaleDto(payload);
 
             if (string.IsNullOrEmpty(bodyComposition.MFACode))
             {
                 var useChinaServer = Preferences.Get(PreferencesKeys.UseChinaServer, false);
-                var garminServer = useChinaServer 
-                    ? YetAnotherGarminConnectClient.Dto.GarminServer.CHINA 
+                var garminServer = useChinaServer
+                    ? YetAnotherGarminConnectClient.Dto.GarminServer.CHINA
                     : YetAnotherGarminConnectClient.Dto.GarminServer.GLOBAL;
                 _garminClient = await ClientFactory.Create(garminServer);
             }
 
             var garminApiReponse = await _garminClient.UploadWeight(scaleDTO, userProfileSettings, credencials, bodyComposition.MFACode);
-            var logs = LogService.GetLogs();
             var errorlogs = LogService.GetErrorLogs();
 
             result.IsSuccess = garminApiReponse.IsSuccess;
@@ -135,8 +190,6 @@ public class GarminService : IGarminService
         }
         catch (Exception ex)
         {
-            var logs = LogService.GetLogs();
-            var errorlogs = LogService.GetErrorLogs();
             _logService.LogError(ex?.Message);
             result.Message = ex.Message;
             result.AccessToken = string.Empty;
@@ -151,32 +204,13 @@ public class GarminService : IGarminService
         var result = new GarminFitFileCreationResult();
         try
         {
-            var userProfileSettings = new UserProfileSettings
-            {
-                Age = Preferences.Get(PreferencesKeys.UserAge, 25),
-                Height = Preferences.Get(PreferencesKeys.UserHeight, 170),
-            };
-
-            var scaleDTO = new GarminWeightScaleDTO
-            {
-                TimeStamp = time,
-                Weight = Convert.ToSingle(bodyComposition.Weight),
-                PercentFat = Convert.ToSingle(bodyComposition.Fat),
-                PercentHydration = Convert.ToSingle(bodyComposition.WaterPercentage),
-                BoneMass = Convert.ToSingle(bodyComposition.BoneMass),
-                MuscleMass = Convert.ToSingle(bodyComposition.MuscleMass),
-                VisceralFatRating = Convert.ToByte(bodyComposition.VisceralFat),
-                VisceralFatMass = Convert.ToSingle(bodyComposition.VisceralFat),
-                PhysiqueRating = Convert.ToByte(bodyComposition.BodyType),
-                MetabolicAge = Convert.ToByte(bodyComposition.MetabolicAge),
-                BodyMassIndex = Convert.ToSingle(bodyComposition.BMI),
-               
-            };
+            var payload = MapForGarmin(bodyComposition, time);
+            var userProfileSettings = CreateUserProfileSettings(payload);
+            var scaleDTO = CreateWeightScaleDto(payload);
 
             _garminClient = await ClientFactory.Create();
 
             var file = _garminClient.GenerateWeightFitFile(scaleDTO, userProfileSettings);
-            var logs = LogService.GetLogs();
             var errorlogs = LogService.GetErrorLogs();
 
             if(errorlogs.Count > 0)
@@ -189,8 +223,6 @@ public class GarminService : IGarminService
         }
         catch (Exception ex)
         {
-            var logs = LogService.GetLogs();
-            var errorlogs = LogService.GetErrorLogs();
             _logService.LogError(ex?.Message);
             result.Message = ex.Message;
             return result;
@@ -200,39 +232,107 @@ public class GarminService : IGarminService
 
     private async Task<GarminApiResponse> UploadViaExternalAPIAsync(BodyComposition bodyComposition, DateTime time, CredentialsData credencials)
     {
-        var unixTime = ((DateTimeOffset)time).ToUnixTimeSeconds();
-        var request = new GarminBodyCompositionRequest
+        try
         {
-            Email = credencials.Email,
-            Password = credencials.Password,
-            AccessToken = credencials.AccessToken,
-            TokenSecret = credencials.TokenSecret,
-            Weight = bodyComposition.Weight,
-            BoneMass = bodyComposition.BoneMass,
-            MuscleMass = bodyComposition.MuscleMass,
-            MetabolicAge = bodyComposition.MetabolicAge,
-            PercentFat = bodyComposition.Fat,
-            VisceralFatRating = bodyComposition.VisceralFat,
-            BodyMassIndex = bodyComposition.BMI,
-            PercentHydration = bodyComposition.WaterPercentage,
-            PhysiqueRating = bodyComposition.BodyType,
-            TimeStamp = unixTime,
+            var payload = MapForGarmin(bodyComposition, time);
+            var request = new GarminBodyCompositionRequest
+            {
+                Email = credencials.Email,
+                Password = credencials.Password,
+                AccessToken = credencials.AccessToken,
+                TokenSecret = credencials.TokenSecret,
+                Weight = payload.WeightKg,
+                BoneMass = payload.BoneMassKg,
+                MuscleMass = payload.LeanSoftMassKg,
+                MetabolicAge = payload.MetabolicAge,
+                PercentFat = payload.FatPercentage,
+                VisceralFatRating = payload.VisceralFatRating,
+                BodyMassIndex = payload.Bmi,
+                PercentHydration = payload.HydrationPercentage,
+                PhysiqueRating = payload.PhysiqueRating,
+                TimeStamp = payload.MeasuredAt.ToUnixTimeSeconds(),
+            };
+
+            if (!string.IsNullOrEmpty(bodyComposition.ExternalApiClientId))
+            {
+                request.MFACode = bodyComposition.MFACode;
+                request.ClientID = bodyComposition.ExternalApiClientId;
+            }
+            return await UploadToGarminCloud(request);
+        }
+        catch (GarminMappingException exception)
+        {
+            _logService.LogError(exception.Message);
+            return new GarminApiResponse { Message = exception.Message };
+        }
+    }
+
+    private static GarminCompositionPayload MapForGarmin(BodyComposition bodyComposition, DateTime time)
+    {
+        var sex = (Models.Sex)Preferences.Get(PreferencesKeys.UserSex, (byte)Models.Sex.Male);
+        var measuredAt = bodyComposition.MeasuredAt ?? time.Kind switch
+        {
+            DateTimeKind.Utc => new DateTimeOffset(time),
+            DateTimeKind.Local => new DateTimeOffset(time),
+            _ => new DateTimeOffset(DateTime.SpecifyKind(time, DateTimeKind.Local)),
+        };
+        var includeComposition = bodyComposition.MeasurementQuality is { } quality
+            ? S400MeasurementCompletionPolicy.CanUploadComposition(quality)
+            : bodyComposition.HasImpedance
+                || bodyComposition.Fat > 0
+                || bodyComposition.WaterPercentage > 0
+                || bodyComposition.MuscleMass > 0
+                || bodyComposition.BoneMass > 0;
+
+        return GarminCompositionMapper.Map(new GarminCompositionInput(
+            measuredAt,
+            bodyComposition.Weight,
+            bodyComposition.BMI,
+            includeComposition,
+            bodyComposition.Fat,
+            bodyComposition.WaterPercentage,
+            bodyComposition.MuscleMass,
+            bodyComposition.BoneMass,
+            bodyComposition.VisceralFat,
+            bodyComposition.BodyType,
+            bodyComposition.MetabolicAge,
+            sex == Models.Sex.Female ? BodySex.Female : BodySex.Male));
+    }
+
+    private static UserProfileSettings CreateUserProfileSettings(GarminCompositionPayload payload) =>
+        new()
+        {
+            Age = Preferences.Get(PreferencesKeys.UserAge, 25),
+            Height = Preferences.Get(PreferencesKeys.UserHeight, 170),
+            Gender = payload.Sex == BodySex.Female
+                ? Dynastream.Fit.Gender.Female
+                : Dynastream.Fit.Gender.Male,
         };
 
-        if (!string.IsNullOrEmpty(bodyComposition.ExternalApiClientId))
+    private static GarminWeightScaleDTO CreateWeightScaleDto(GarminCompositionPayload payload) =>
+        new()
         {
-            request.MFACode = bodyComposition.MFACode;
-            request.ClientID = bodyComposition.ExternalApiClientId;
-        }
-        return await UploadToGarminCloud(request);
-    }
+            TimeStamp = payload.MeasuredAt.UtcDateTime,
+            Weight = payload.WeightKg,
+            PercentFat = payload.FatPercentage,
+            PercentHydration = payload.HydrationPercentage,
+            BoneMass = payload.BoneMassKg,
+            MuscleMass = payload.LeanSoftMassKg,
+            VisceralFatRating = payload.VisceralFatRating,
+            VisceralFatMass = payload.VisceralFatMassKg,
+            PhysiqueRating = payload.PhysiqueRating,
+            MetabolicAge = payload.MetabolicAge,
+            BodyMassIndex = payload.Bmi,
+        };
 
     private async Task<GarminApiResponse> UploadToGarminCloud(GarminBodyCompositionRequest request)
     {
         var result = new GarminApiResponse();
         try
         {
-            var dataAsString = JsonConvert.SerializeObject(request);
+            var dataAsString = JsonConvert.SerializeObject(
+                request,
+                new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             var content = new StringContent(dataAsString, Encoding.UTF8, "application/json");
 
             var response = await PostAsync("/upload", content);

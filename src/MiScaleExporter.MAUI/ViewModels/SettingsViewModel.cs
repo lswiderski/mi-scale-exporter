@@ -1,9 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Maui.Graphics;
+using MiScaleExporter.Core.Calibration;
+using MiScaleExporter.Core.History;
 using MiScaleExporter.MAUI.Resources.Localization;
 using MiScaleExporter.MAUI.Utils;
 using MiScaleExporter.Models;
@@ -20,44 +23,26 @@ namespace MiScaleExporter.MAUI.ViewModels
         private static readonly Color NeutralColor = Color.FromArgb("#6B7280");
 
         private readonly IGarminAuthService _authService;
+        private readonly IMeasurementHistoryStore _historyStore;
 
-        public SettingsViewModel(IGarminAuthService authService)
+        public SettingsViewModel(
+            IGarminAuthService authService,
+            IMeasurementHistoryStore historyStore)
         {
             _authService = authService;
+            _historyStore = historyStore;
             this.Title = AppSnippets.Settings;
             // Initialize birthDate with a reasonable default to avoid binding issues
             this._birthDate = DateTime.Today.AddYears(-25);
-            ResetCommand = new Command(() =>
-                {
-                    Preferences.Remove(PreferencesKeys.ApiServerAddressOverride);
-                    this.ApiAddress = string.Empty;
-                    Preferences.Remove(PreferencesKeys.OneClickScanAndUpload);
-                    Preferences.Remove(PreferencesKeys.UseExternalAPI);
-                    Preferences.Remove(PreferencesKeys.ShowDebugInfo);
-                    Preferences.Remove(PreferencesKeys.HideAds);
-                    Preferences.Remove(PreferencesKeys.MuscleMassAsPercentage);
-                    Preferences.Remove(PreferencesKeys.DisplayWeightInLbs);
-                    Preferences.Remove(PreferencesKeys.UseChinaServer);
-                    Preferences.Remove(PreferencesKeys.UserAge);
-                    Preferences.Remove(PreferencesKeys.UserBirthDate);
-                    Preferences.Remove(PreferencesKeys.UseBirthDateMode);
-                    Preferences.Remove(PreferencesKeys.UseFatCalibration);
-                    Preferences.Remove(PreferencesKeys.FatCalibrationPoints);
-                    this.UseBirthDateMode = false;
-                    this.ManualAge = "25";
-                    this._useFatCalibration = false;
-                    OnPropertyChanged(nameof(UseFatCalibration));
-                    this.CalibrationPoints.Clear();
-                    OnPropertyChanged(nameof(CalibrationSummary));
-                }
-            );
+            ResetCommand = new Command(async () => await ResetAsync());
             GetBLEKeyCommand = new Command(async () => await Launcher.OpenAsync("https://lswiderski.github.io/mi-scale-exporter/#steps-to-connect-xiaomi-body-composition-scale-s400"));
             ResetTokensCommand = new Command(_clearTokens);
             ConnectGarminCommand = new Command(async () => await ConnectGarminAsync());
             VerifyMfaCommand = new Command(async () => await VerifyMfaAsync());
             AddCalibrationPointCommand = new Command(AddCalibrationPoint);
             RemoveCalibrationPointCommand = new Command<FatCalibrationPoint>(RemoveCalibrationPoint);
-            _newPointDate = DateTime.Today;
+            ClearMeasurementHistoryCommand = new Command(async () => await ClearMeasurementHistoryAsync());
+            ExportMeasurementHistoryCommand = new Command(async () => await ExportMeasurementHistoryAsync());
         }
 
         public ICommand ResetCommand { get; }
@@ -67,6 +52,110 @@ namespace MiScaleExporter.MAUI.ViewModels
         public ICommand VerifyMfaCommand { get; }
         public ICommand AddCalibrationPointCommand { get; }
         public ICommand RemoveCalibrationPointCommand { get; }
+        public ICommand ClearMeasurementHistoryCommand { get; }
+        public ICommand ExportMeasurementHistoryCommand { get; }
+
+        private async Task ResetAsync()
+        {
+            var page = Application.Current?.Windows.FirstOrDefault()?.Page;
+            if (page is null)
+            {
+                return;
+            }
+
+            var confirmed = await page.DisplayAlertAsync(
+                "Reset application",
+                "Reset all settings and delete locally saved S400 measurements, upload states, and calibration references?",
+                "Reset",
+                "Cancel");
+            if (!confirmed)
+            {
+                return;
+            }
+
+            Preferences.Remove(PreferencesKeys.ApiServerAddressOverride);
+            this.ApiAddress = string.Empty;
+            Preferences.Remove(PreferencesKeys.OneClickScanAndUpload);
+            Preferences.Remove(PreferencesKeys.UseExternalAPI);
+            Preferences.Remove(PreferencesKeys.ShowDebugInfo);
+            Preferences.Remove(PreferencesKeys.HideAds);
+            Preferences.Remove(PreferencesKeys.MuscleMassAsPercentage);
+            Preferences.Remove(PreferencesKeys.DisplayWeightInLbs);
+            Preferences.Remove(PreferencesKeys.UseChinaServer);
+            Preferences.Remove(PreferencesKeys.UserAge);
+            Preferences.Remove(PreferencesKeys.UserBirthDate);
+            Preferences.Remove(PreferencesKeys.UseBirthDateMode);
+            Preferences.Remove(PreferencesKeys.UseFatCalibration);
+            Preferences.Remove(PreferencesKeys.FatCalibrationPoints);
+            this.UseBirthDateMode = false;
+            this.ManualAge = "25";
+            await ClearMeasurementHistoryWithoutPromptAsync();
+        }
+
+        private async Task ClearMeasurementHistoryAsync()
+        {
+            var page = Application.Current?.Windows.FirstOrDefault()?.Page;
+            if (page is null)
+            {
+                return;
+            }
+
+            var confirmed = await page.DisplayAlertAsync(
+                "Clear S400 history",
+                "Delete all locally saved S400 measurements, upload states, and calibration references?",
+                "Clear",
+                "Cancel");
+            if (confirmed)
+            {
+                await ClearMeasurementHistoryWithoutPromptAsync();
+            }
+        }
+
+        private async Task ClearMeasurementHistoryWithoutPromptAsync()
+        {
+            try
+            {
+                await _historyStore.ClearAsync();
+                CalibrationPoints.Clear();
+                CalibrationMeasurements.Clear();
+                SelectedCalibrationMeasurement = null;
+                FatCalibration.SavePoints(Array.Empty<FatCalibrationPoint>());
+                UseFatCalibration = false;
+                OnPropertyChanged(nameof(CalibrationSummary));
+            }
+            catch
+            {
+                GarminStatusColor = ErrorColor;
+                GarminStatusText = "Could not clear saved S400 history.";
+            }
+        }
+
+        private async Task ExportMeasurementHistoryAsync()
+        {
+            try
+            {
+                var records = await _historyStore.GetAllAsync();
+                var path = Path.Combine(FileSystem.CacheDirectory, "mi-scale-s400-history.json");
+                var export = new
+                {
+                    ExportedAt = DateTimeOffset.UtcNow,
+                    Measurements = records,
+                    CalibrationReferences = _calibrationPoints.ToArray(),
+                };
+                var json = JsonSerializer.Serialize(export, new JsonSerializerOptions { WriteIndented = true });
+                await File.WriteAllTextAsync(path, json);
+                await Share.Default.RequestAsync(new ShareFileRequest
+                {
+                    Title = "Export S400 measurement history",
+                    File = new ShareFile(path),
+                });
+            }
+            catch
+            {
+                GarminStatusColor = ErrorColor;
+                GarminStatusText = "Could not export saved S400 history.";
+            }
+        }
 
         private string _garminStatusText;
         public string GarminStatusText
@@ -176,7 +265,7 @@ namespace MiScaleExporter.MAUI.ViewModels
 
                 // Load age or birthday mode
                 this._useBirthDateMode = Preferences.Get(PreferencesKeys.UseBirthDateMode, false);
-                
+
                 if (_useBirthDateMode)
                 {
                     // Load birthday
@@ -190,7 +279,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                     this._manualAge = Preferences.Get(PreferencesKeys.UserAge, 25);
                     this._birthDate = DateTime.Today.AddYears(-_manualAge); // For reference only
                 }
-                
+
                 this._height = Preferences.Get(PreferencesKeys.UserHeight, 170);
                 this._sex = (Sex)Preferences.Get(PreferencesKeys.UserSex, (byte)Sex.Male);
                 this._address = Preferences.Get(PreferencesKeys.MiScaleBluetoothAddress, string.Empty);
@@ -202,6 +291,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                 this._useFatCalibration = Preferences.Get(PreferencesKeys.UseFatCalibration, false);
                 this.CalibrationPoints = new ObservableCollection<FatCalibrationPoint>(
                     FatCalibration.LoadPoints().OrderBy(p => p.Date));
+                await LoadCalibrationMeasurementsAsync();
                 OnPropertyChanged(nameof(CalibrationSummary));
 
                 NotifyAllPropertiesChanged();
@@ -351,7 +441,7 @@ namespace MiScaleExporter.MAUI.ViewModels
         {
             this.ScaleType = ScaleType.S400;
         }
-        
+
 
         public void CheckPreferences()
         {
@@ -381,8 +471,6 @@ namespace MiScaleExporter.MAUI.ViewModels
                 Preferences.Set(PreferencesKeys.S400Bindkey, value);
             }
         }
-
-        private int _age;
 
         public int Age
         {
@@ -535,7 +623,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                     OnPropertyChanged(nameof(IsMiSmartScaleSelected));
                     OnPropertyChanged(nameof(IsS400Selected));
                 }
-              
+
             }
         }
 
@@ -551,7 +639,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                     Preferences.Set(PreferencesKeys.GarminUserEmail, value);
                     this._clearTokens();
                 }
-                
+
             }
         }
 
@@ -568,7 +656,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                     SecureStorage.SetAsync(PreferencesKeys.GarminUserPassword, value);
                     this._clearTokens();
                 }
-               
+
             }
         }
 
@@ -601,28 +689,39 @@ namespace MiScaleExporter.MAUI.ViewModels
             private set => SetProperty(ref _calibrationPoints, value);
         }
 
-        private DateTime _newPointDate;
-
-        public DateTime NewPointDate
-        {
-            get => _newPointDate;
-            set => SetProperty(ref _newPointDate, value);
-        }
-
-        private string _newPointScaleFat;
-
-        public string NewPointScaleFat
-        {
-            get => _newPointScaleFat;
-            set => SetProperty(ref _newPointScaleFat, value);
-        }
-
         private string _newPointTrueFat;
 
         public string NewPointTrueFat
         {
             get => _newPointTrueFat;
             set => SetProperty(ref _newPointTrueFat, value);
+        }
+
+        private ObservableCollection<CalibrationMeasurementOption> _calibrationMeasurements = new();
+
+        public ObservableCollection<CalibrationMeasurementOption> CalibrationMeasurements
+        {
+            get => _calibrationMeasurements;
+            private set => SetProperty(ref _calibrationMeasurements, value);
+        }
+
+        private CalibrationMeasurementOption _selectedCalibrationMeasurement;
+
+        public CalibrationMeasurementOption SelectedCalibrationMeasurement
+        {
+            get => _selectedCalibrationMeasurement;
+            set => SetProperty(ref _selectedCalibrationMeasurement, value);
+        }
+
+        public IReadOnlyList<CalibrationReferenceSource> CalibrationSources { get; } =
+            Enum.GetValues<CalibrationReferenceSource>();
+
+        private CalibrationReferenceSource _newPointSource = CalibrationReferenceSource.Other;
+
+        public CalibrationReferenceSource NewPointSource
+        {
+            get => _newPointSource;
+            set => SetProperty(ref _newPointSource, value);
         }
 
         /// <summary>Human-readable description of the current fit, shown under the table.</summary>
@@ -633,33 +732,44 @@ namespace MiScaleExporter.MAUI.ViewModels
                 var count = _calibrationPoints?.Count ?? 0;
                 if (count == 0)
                 {
-                    return "No calibration points yet. Add at least one to enable correction.";
+                    return "No reference points yet. Three matched references are required before correction is applied.";
                 }
 
-                var fit = FatCalibration.ComputeFit(_calibrationPoints.ToList());
-                var formula = $"corrected = {fit.A:0.###} × scale {(fit.B >= 0 ? "+" : "−")} {Math.Abs(fit.B):0.##}";
-                var quality = double.IsNaN(fit.R2)
-                    ? (count == 1 ? "single-point ratio" : "fit quality unavailable")
-                    : $"R² = {fit.R2:0.000}";
+                var fit = FatCalibration.ComputeCoreFit(_calibrationPoints.ToList());
+                if (!fit.IsActive)
+                {
+                    return $"{fit.PointCount}/3 matched references ({count} saved) · correction waiting for more data";
+                }
+
+                var formula = $"corrected = {fit.Slope:0.###} × scale {(fit.Intercept >= 0 ? "+" : "−")} {Math.Abs(fit.Intercept):0.##}";
+                var quality = double.IsNaN(fit.RSquared) ? fit.Mode.ToString() : $"R² = {fit.RSquared:0.000}";
                 var status = _useFatCalibration ? "active" : "disabled";
-                return $"{count} point{(count == 1 ? "" : "s")} · {formula} · {quality} · {status}";
+                return $"{count} references · {formula} · {quality} · {status}";
             }
         }
 
         private void AddCalibrationPoint()
         {
-            var scaleFat = DoubleValueParser.ParseValueFromUsersCulture(_newPointScaleFat);
             var trueFat = DoubleValueParser.ParseValueFromUsersCulture(_newPointTrueFat);
-            if (scaleFat is not > 0 || trueFat is not > 0)
+            var selected = _selectedCalibrationMeasurement;
+            if (selected?.Estimate is null || trueFat is not > 0)
             {
                 return;
             }
 
             _calibrationPoints.Add(new FatCalibrationPoint
             {
-                Date = _newPointDate == default ? DateTime.Today : _newPointDate,
-                ScaleFat = scaleFat.Value,
+                Date = selected.MeasuredAt.LocalDateTime,
+                ScaleFat = selected.Estimate.BaselineFatPercentage > 0
+                    ? selected.Estimate.BaselineFatPercentage
+                    : selected.Estimate.FatPercentage - selected.Estimate.AppliedFatCorrection,
                 TrueFat = trueFat.Value,
+                MeasurementId = selected.MeasurementId,
+                Source = _newPointSource,
+                WeightKg = selected.WeightKg,
+                Impedance50Khz = selected.Impedance50KhzOhm ?? 0,
+                Impedance250Khz = selected.Impedance250KhzOhm ?? 0,
+                AlgorithmVersion = selected.AlgorithmVersion,
             });
 
             CalibrationPoints = new ObservableCollection<FatCalibrationPoint>(
@@ -667,9 +777,37 @@ namespace MiScaleExporter.MAUI.ViewModels
 
             FatCalibration.SavePoints(_calibrationPoints);
 
-            NewPointScaleFat = string.Empty;
             NewPointTrueFat = string.Empty;
+            CalibrationMeasurements.Remove(selected);
+            SelectedCalibrationMeasurement = CalibrationMeasurements.FirstOrDefault();
             OnPropertyChanged(nameof(CalibrationSummary));
+        }
+
+        private async Task LoadCalibrationMeasurementsAsync()
+        {
+            var usedIds = _calibrationPoints
+                .Where(point => !string.IsNullOrWhiteSpace(point.MeasurementId))
+                .Select(point => point.MeasurementId)
+                .ToHashSet(StringComparer.Ordinal);
+            var records = await _historyStore.GetAllAsync();
+            CalibrationMeasurements = new ObservableCollection<CalibrationMeasurementOption>(
+                records
+                    .Where(record => record.Estimate != null
+                        && !usedIds.Contains(record.MeasurementId)
+                        && record.Impedance50KhzOhm.HasValue
+                        && record.Impedance250KhzOhm.HasValue)
+                    .OrderByDescending(record => record.MeasuredAt)
+                    .Select(record => new CalibrationMeasurementOption
+                    {
+                        MeasurementId = record.MeasurementId,
+                        MeasuredAt = record.MeasuredAt,
+                        WeightKg = record.WeightKg,
+                        Impedance50KhzOhm = record.Impedance50KhzOhm,
+                        Impedance250KhzOhm = record.Impedance250KhzOhm,
+                        AlgorithmVersion = record.AlgorithmVersion,
+                        Estimate = record.Estimate,
+                    }));
+            SelectedCalibrationMeasurement = CalibrationMeasurements.FirstOrDefault();
         }
 
         private void RemoveCalibrationPoint(FatCalibrationPoint point)
@@ -682,6 +820,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             _calibrationPoints.Remove(point);
             FatCalibration.SavePoints(_calibrationPoints);
             OnPropertyChanged(nameof(CalibrationSummary));
+            _ = LoadCalibrationMeasurementsAsync();
         }
 
     }

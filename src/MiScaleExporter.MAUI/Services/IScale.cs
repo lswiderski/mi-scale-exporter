@@ -1,4 +1,4 @@
-﻿using MiScaleExporter.Models;
+using MiScaleExporter.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,10 +9,13 @@ namespace MiScaleExporter.Services
     public interface IScale
     {
         BodyComposition BodyComposition { get; set; }
-        Task<BodyComposition> GetBodyCompositonAsync(string scaleAddress, User user);
+        Task<BodyComposition> GetBodyCompositonAsync(
+            string scaleAddress,
+            User user,
+            bool persistMeasurementHistory = true);
 
         Task CancelSearchAsync();
 
-        void StopSearch();
+        Task StopSearchAsync();
     }
 }

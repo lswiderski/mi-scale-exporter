@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MiScaleExporter.Core.Calibration;
 using MiScaleExporter.Models;
 using Newtonsoft.Json;
 
@@ -106,6 +107,32 @@ namespace MiScaleExporter.Services
             return new Fit(a, b, r2, n);
         }
 
+        public static FatCalibrationFit ComputeCoreFit(IList<FatCalibrationPoint> points)
+        {
+            var references = (points ?? Array.Empty<FatCalibrationPoint>())
+                .Where(point => point.ScaleFat > 0 && point.TrueFat > 0)
+                .Select((point, index) => new CalibrationReference(
+                    string.IsNullOrWhiteSpace(point.MeasurementId)
+                        ? $"legacy-{point.Date.Ticks}-{index}"
+                        : point.MeasurementId,
+                    new DateTimeOffset(DateTime.SpecifyKind(point.Date, DateTimeKind.Local)),
+                    point.Source,
+                    point.ScaleFat,
+                    point.TrueFat,
+                    point.WeightKg,
+                    point.Impedance50Khz,
+                    point.Impedance250Khz,
+                    string.IsNullOrWhiteSpace(point.AlgorithmVersion)
+                        ? "legacy-50khz-v1"
+                        : point.AlgorithmVersion));
+            return FatCalibrationModel.Fit(references);
+        }
+
+        public static FatCalibrationFit LoadCoreFit() =>
+            IsEnabled
+                ? ComputeCoreFit(LoadPoints())
+                : FatCalibrationModel.Fit(Array.Empty<CalibrationReference>());
+
         /// <summary>
         /// Apply a fitted correction in place. Adjusts fat % and recomputes the fat-derived
         /// fields as deltas off the library's values, so consistency is preserved and an
@@ -182,7 +209,17 @@ namespace MiScaleExporter.Services
                 return bc;
             }
 
-            return Apply(bc, ComputeFit(LoadPoints()));
+            var coreFit = ComputeCoreFit(LoadPoints());
+            if (!coreFit.IsActive)
+            {
+                return bc;
+            }
+
+            return Apply(bc, new Fit(
+                coreFit.Slope,
+                coreFit.Intercept,
+                coreFit.RSquared,
+                coreFit.PointCount));
         }
     }
 }

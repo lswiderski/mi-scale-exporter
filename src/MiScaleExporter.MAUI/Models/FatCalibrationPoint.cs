@@ -1,4 +1,5 @@
 using System;
+using MiScaleExporter.Core.Calibration;
 
 namespace MiScaleExporter.Models
 {
@@ -16,5 +17,17 @@ namespace MiScaleExporter.Models
 
         /// <summary>Reference (medical scan) body fat % for the same measurement.</summary>
         public double TrueFat { get; set; }
+
+        public string MeasurementId { get; set; }
+
+        public CalibrationReferenceSource Source { get; set; } = CalibrationReferenceSource.Other;
+
+        public double WeightKg { get; set; }
+
+        public double Impedance50Khz { get; set; }
+
+        public double Impedance250Khz { get; set; }
+
+        public string AlgorithmVersion { get; set; }
     }
 }

@@ -1,4 +1,7 @@
-﻿using MiScaleExporter.MAUI.Resources.Localization;
+using MiScaleExporter.MAUI.Resources.Localization;
+using MiScaleExporter.Core.Composition;
+using MiScaleExporter.Core.History;
+using MiScaleExporter.Core.S400;
 using MiScaleExporter.Models;
 using Microsoft.Maui.ApplicationModel;
 using Plugin.BLE;
@@ -12,6 +15,9 @@ namespace MiScaleExporter.Services
     {
         private ILogService _logService;
         private IDataInterpreter _dataInterpreter;
+        private readonly IMeasurementHistoryStore _historyStore;
+        private readonly SemaphoreSlim _advertisementGate = new(1, 1);
+        private readonly SemaphoreSlim _scanSessionGate = new(1, 1);
 
         private IAdapter _adapter;
         private TaskCompletionSource<BodyComposition> _completionSource;
@@ -23,8 +29,15 @@ namespace MiScaleExporter.Services
         private DateTime? _weightOnlyStabilizedAtUtc;
         private bool _scaleFoundReported;
         private bool _readingReported;
+        private bool _persistMeasurementHistory;
+        private int _scanGeneration;
+        private int _matchingAdvertisementCount;
+        private int _s400ServiceDataCount;
+        private int _s400DecodedPacketCount;
+        private int _s400DecodeErrorCount;
         private int _minWeight = 10; // in kilograms
         private const double KgToLbsConversion = 2.20462;
+        private static readonly TimeSpan ImpedanceGracePeriod = TimeSpan.FromSeconds(5);
 
         private User _user;
 
@@ -36,9 +49,13 @@ namespace MiScaleExporter.Services
             set { _receivedBodyComposition = value; }
         }
 
-        public Scale(ILogService logService, IDataInterpreter dataInterpreter)
+        public Scale(
+            ILogService logService,
+            IDataInterpreter dataInterpreter,
+            IMeasurementHistoryStore historyStore)
         {
             _logService = logService;
+            _historyStore = historyStore;
 
             _adapter = CrossBluetoothLE.Current.Adapter;
             _adapter.ScanTimeout = 50000;
@@ -51,43 +68,83 @@ namespace MiScaleExporter.Services
             get
             {
                 return _weightOnlyStabilizedAtUtc != null
-                    && (DateTime.UtcNow - _weightOnlyStabilizedAtUtc.Value) >= TimeSpan.FromSeconds(5);
+                    && (DateTime.UtcNow - _weightOnlyStabilizedAtUtc.Value) >= ImpedanceGracePeriod;
             }
         }
 
-        public async Task<BodyComposition> GetBodyCompositonAsync(string scaleAddress, User user)
+        public async Task<BodyComposition> GetBodyCompositonAsync(
+            string scaleAddress,
+            User user,
+            bool persistMeasurementHistory = true)
         {
-            this.BodyComposition = null;
-            _lastSuccessfulBodyComposition = null;
-            _receivedBodyComposition = null;
-            _weightOnlyStabilizedAtUtc = null;
-            _scaleFoundReported = false;
-            _readingReported = false;
-
-            _user = user;
-            _scaleBlutetoothAddress = scaleAddress;
-            _completionSource = new TaskCompletionSource<BodyComposition>();
-            _adapter.DeviceAdvertised += DeviceAdvertided;
-
-            MainThread.BeginInvokeOnMainThread(() =>
+            if (!await _scanSessionGate.WaitAsync(0))
             {
-                ScaleMeasurement.Instance.Weight = null;
-                ScaleMeasurement.Instance.FoundScale = null;
-                ScaleMeasurement.Instance.DebugData = null;
-                ScaleMeasurement.Instance.RawData = null;
-                ScaleMeasurement.Instance.Phase = ScanPhase.Idle;
-                ScaleMeasurement.Instance.PhaseLabel = string.Empty;
-                ScaleMeasurement.Instance.Progress = 0;
-            });
+                _logService.LogError("A scale scan is already running.");
+                return null;
+            }
 
-            ReportPhase(ScanPhase.Searching);
+            try
+            {
+                await _advertisementGate.WaitAsync();
+                try
+                {
+                    Interlocked.Increment(ref _scanGeneration);
+                    _dataInterpreter.ResetSession();
+                    this.BodyComposition = null;
+                    _lastSuccessfulBodyComposition = null;
+                    _receivedBodyComposition = null;
+                    _weightOnlyStabilizedAtUtc = null;
+                    _scaleFoundReported = false;
+                    _readingReported = false;
+                    _matchingAdvertisementCount = 0;
+                    _s400ServiceDataCount = 0;
+                    _s400DecodedPacketCount = 0;
+                    _s400DecodeErrorCount = 0;
 
-            await _adapter.StartScanningForDevicesAsync();
-            return await _completionSource.Task;
+                    _user = user;
+                    _persistMeasurementHistory = persistMeasurementHistory;
+                    _scaleBlutetoothAddress = scaleAddress;
+                    _adapter.ScanMode = user.ScaleType == ScaleType.S400
+                        ? ScanMode.LowLatency
+                        : ScanMode.LowPower;
+                    _adapter.ScanMatchMode = user.ScaleType == ScaleType.S400
+                        ? ScanMatchMode.AGRESSIVE
+                        : ScanMatchMode.STICKY;
+                    _completionSource = new TaskCompletionSource<BodyComposition>(
+                        TaskCreationOptions.RunContinuationsAsynchronously);
+                    _adapter.DeviceAdvertised -= DeviceAdvertided;
+                    _adapter.DeviceAdvertised += DeviceAdvertided;
+                }
+                finally
+                {
+                    _advertisementGate.Release();
+                }
+
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    ScaleMeasurement.Instance.Weight = null;
+                    ScaleMeasurement.Instance.FoundScale = null;
+                    ScaleMeasurement.Instance.DebugData = null;
+                    ScaleMeasurement.Instance.RawData = null;
+                    ScaleMeasurement.Instance.Phase = ScanPhase.Idle;
+                    ScaleMeasurement.Instance.PhaseLabel = string.Empty;
+                    ScaleMeasurement.Instance.Progress = 0;
+                });
+
+                ReportPhase(ScanPhase.Searching);
+                await _adapter.StartScanningForDevicesAsync();
+                return await _completionSource.Task;
+            }
+            finally
+            {
+                await StopAsync();
+                _scanSessionGate.Release();
+            }
         }
 
-        private void DeviceAdvertided(object s, DeviceEventArgs a)
+        private async void DeviceAdvertided(object s, DeviceEventArgs a)
         {
+            var generation = Volatile.Read(ref _scanGeneration);
             var obj = a.Device.NativeDevice;
             PropertyInfo propInfo = obj?.GetType().GetProperty("Address");
             if (propInfo == null)
@@ -102,60 +159,74 @@ namespace MiScaleExporter.Services
             }
             string address = (string)addressValue;
 
-            if (address.ToLowerInvariant() == _scaleBlutetoothAddress?.ToLowerInvariant())
+            if (!string.Equals(address, _scaleBlutetoothAddress, StringComparison.OrdinalIgnoreCase))
             {
+                return;
+            }
+
+            Interlocked.Increment(ref _matchingAdvertisementCount);
+            await _advertisementGate.WaitAsync();
+            try
+            {
+                if (generation != Volatile.Read(ref _scanGeneration)
+                    || _completionSource?.Task.IsCompleted != false)
+                {
+                    return;
+                }
+
                 if (!_scaleFoundReported)
                 {
                     _scaleFoundReported = true;
                     ReportPhase(ScanPhase.ScaleFound);
                 }
 
-                try
+                var device = a.Device;
+                var bodyCompositionCandidate = GetScanData(device);
+                if (bodyCompositionCandidate is not null && bodyCompositionCandidate.Weight > _minWeight)
                 {
-                    var device = a.Device;
-                    var bodyCompositionCandidate = GetScanData(device);
-                    if (bodyCompositionCandidate is not null && bodyCompositionCandidate.Weight > _minWeight)
+                    this.BodyComposition = bodyCompositionCandidate;
+                    if (!_readingReported)
                     {
-                        this.BodyComposition = bodyCompositionCandidate;
-                        if (!_readingReported)
-                        {
-                            _readingReported = true;
-                            ReportPhase(ScanPhase.Reading);
-                        }
+                        _readingReported = true;
+                        ReportPhase(ScanPhase.Reading);
                     }
+                }
 
-                    this.ProcessReceivedData();
-                    this.SetPreviews(bodyCompositionCandidate);
+                this.ProcessReceivedData();
+                this.SetPreviews(bodyCompositionCandidate);
 
-                    if (_weightOnlyStabilizedAtUtc != null
+                if (this.BodyComposition?.MeasurementQuality == S400MeasurementQuality.Incomplete
+                    || (_weightOnlyStabilizedAtUtc != null
                         && this.BodyComposition != null
                         && !this.BodyComposition.HasImpedance
-                        && !ImpedanceWaitElapsed)
-                    {
-                        ReportPhase(ScanPhase.Stabilizing);
-                    }
-                }
-                catch (Exception ex)
+                        && !ImpedanceWaitElapsed))
                 {
-                    _logService.LogError(ex.Message);
-
-                    if (_scannedData != null)
-                    {
-                        _logService.LogInfo(string.Join("; ", _scannedData));
-                    }
+                    ReportPhase(ScanPhase.Stabilizing);
                 }
-                finally
+
+                var completedResult = this.BodyComposition;
+                if (CanCompleteMeasurement(completedResult))
                 {
-
-                    if (this.BodyComposition != null && (this.BodyComposition.HasImpedance || ImpedanceWaitElapsed))
-                    {
-                        _lastSuccessfulMeasure = this.BodyComposition.Date;
-                        this.BodyComposition.IsValid = true;
-                        ReportPhase(ScanPhase.Success);
-                        _completionSource.TrySetResult(this.BodyComposition);
-                        _ = StopAsync();
-                    }
+                    await CompleteMeasurementAsync(completedResult, generation);
                 }
+            }
+            catch (Exception ex)
+            {
+                if (_user?.ScaleType == ScaleType.S400)
+                {
+                    Interlocked.Increment(ref _s400DecodeErrorCount);
+                    SetPreviews(null);
+                }
+                _logService.LogError(ex.Message);
+
+                if (_scannedData != null)
+                {
+                    _logService.LogInfo(string.Join("; ", _scannedData));
+                }
+            }
+            finally
+            {
+                _advertisementGate.Release();
             }
         }
 
@@ -166,26 +237,27 @@ namespace MiScaleExporter.Services
                 return;
             }
 
-            _lastSuccessfulBodyComposition = this.BodyComposition;
-
             if (!this.BodyComposition.IsStabilized)
             {
                 this.BodyComposition = null;
                 return;
             }
-            else
+
+            if (_lastSuccessfulMeasure != null && _lastSuccessfulMeasure >= this.BodyComposition.Date)
             {
+                this.BodyComposition = null;
+                return;
+            }
 
-                if (_lastSuccessfulMeasure != null && _lastSuccessfulMeasure >= this.BodyComposition.Date)
-                {
-                    this.BodyComposition = null;
+            _lastSuccessfulBodyComposition = this.BodyComposition;
+            if (_user?.ScaleType == ScaleType.S400)
+            {
+                return;
+            }
 
-                    return;
-                }
-                if (!this.BodyComposition.HasImpedance && _weightOnlyStabilizedAtUtc == null)
-                {
-                    _weightOnlyStabilizedAtUtc = DateTime.UtcNow;
-                }
+            if (!this.BodyComposition.HasImpedance && _weightOnlyStabilizedAtUtc == null)
+            {
+                _weightOnlyStabilizedAtUtc = DateTime.UtcNow;
             }
         }
 
@@ -203,10 +275,22 @@ namespace MiScaleExporter.Services
 
             if (showDebug)
             {
-                foundScaleText = bodyCompositionCandidate != null ? "Connected to scale: Yes" : "Connected to scale: No";
-                if (bodyCompositionCandidate != null)
+                foundScaleText = _matchingAdvertisementCount > 0
+                    ? "Connected to scale: Yes"
+                    : "Connected to scale: No";
+                if (_user?.ScaleType == ScaleType.S400)
+                {
+                    var quality = (bodyCompositionCandidate ?? this.BodyComposition)
+                        ?.MeasurementQuality?.ToString() ?? "Pending";
+                    debugDataText = $"Adverts: {_matchingAdvertisementCount}; FE95: {_s400ServiceDataCount}; decoded: {_s400DecodedPacketCount}; errors: {_s400DecodeErrorCount}; state: {quality}";
+                }
+                else if (bodyCompositionCandidate != null)
                 {
                     debugDataText = (bodyCompositionCandidate.IsStabilized ? "Stabilized: Yes" : "Stabilized: No") + " " + (bodyCompositionCandidate.HasImpedance ? "Impedance: Yes" : "Impedance: No");
+                }
+
+                if (bodyCompositionCandidate != null)
+                {
                     if (bodyCompositionCandidate.RawDataLog != null && bodyCompositionCandidate.RawDataLog.Count > 0)
                     {
                         rawDataText = string.Join("|", bodyCompositionCandidate.RawDataLog.Select(BytesToHex));
@@ -252,29 +336,71 @@ namespace MiScaleExporter.Services
 
         private BodyComposition GetScanData(IDevice device)
         {
-            if (device != null)
+            if (device == null)
             {
-                var data = device.AdvertisementRecords
-                    .Where(x => x.Type == Plugin.BLE.Abstractions.AdvertisementRecordType.ServiceData) //0x16
-                    .Select(x => x.Data)
-                    .FirstOrDefault();
-                _scannedData = data;
-
-                var bc = this._dataInterpreter.ComputeData(data, _user, _scaleBlutetoothAddress);
-                if (bc is not null)
-                {
-                    bc.ReceivedRawData = _scannedData;
-                    if (!bc.RawDataLog.Contains(_scannedData))
-                    {
-                        bc.RawDataLog.Add(_scannedData);
-                    }
-                }
-
-                return bc;
+                return null;
             }
 
-            return null;
+            var serviceData = device.AdvertisementRecords
+                .Where(record => record.Type == Plugin.BLE.Abstractions.AdvertisementRecordType.ServiceData)
+                .Select(record => record.Data)
+                .Where(data => data != null)
+                .ToArray();
+            if (_user.ScaleType != ScaleType.S400)
+            {
+                return AttachRawData(serviceData.FirstOrDefault());
+            }
+
+            BodyComposition bestCandidate = null;
+            var s400ServiceData = serviceData.Where(IsS400ServiceData).ToArray();
+            _s400ServiceDataCount += s400ServiceData.Length;
+            foreach (var data in s400ServiceData)
+            {
+                var candidate = AttachRawData(data);
+                if (candidate is null)
+                {
+                    continue;
+                }
+
+                bestCandidate = candidate;
+                if (candidate.IsStabilized
+                    && candidate.MeasurementQuality != S400MeasurementQuality.Incomplete)
+                {
+                    break;
+                }
+            }
+            return bestCandidate;
         }
+
+        private BodyComposition AttachRawData(byte[] data)
+        {
+            _scannedData = data;
+            var composition = _dataInterpreter.ComputeData(data, _user, _scaleBlutetoothAddress);
+            if (_user?.ScaleType == ScaleType.S400)
+            {
+                _s400DecodedPacketCount++;
+            }
+            if (composition is null)
+            {
+                return null;
+            }
+
+            composition.ReceivedRawData = data;
+            if (data != null
+                && !composition.RawDataLog.Any(existing => existing.AsSpan().SequenceEqual(data)))
+            {
+                composition.RawDataLog.Add(data.ToArray());
+            }
+            return composition;
+        }
+
+        private static bool IsS400ServiceData(byte[] data) =>
+            data?.Length == 24
+                && S400AdvertisementDecoder.IsSupportedProductId((ushort)(data[2] | data[3] << 8))
+            || data?.Length == 26
+                && data[0] == 0x95
+                && data[1] == 0xFE
+                && S400AdvertisementDecoder.IsSupportedProductId((ushort)(data[4] | data[5] << 8));
 
         private void CalculateBMIIfEmpty()
         {
@@ -285,14 +411,119 @@ namespace MiScaleExporter.Services
             }
         }
 
-        public async Task CancelSearchAsync()
+        private async Task<bool> PersistS400MeasurementAsync(BodyComposition composition)
         {
+            if (composition?.MeasurementQuality is not { } quality
+                || !S400MeasurementCompletionPolicy.CanPersistScan(
+                    quality,
+                    _persistMeasurementHistory)
+                || string.IsNullOrWhiteSpace(composition.MeasurementId))
+            {
+                return true;
+            }
+
             try
             {
+                BodyCompositionEstimate estimate = null;
+                if (composition.MeasurementQuality == S400MeasurementQuality.DualFrequencyComplete)
+                {
+                    estimate = new BodyCompositionEstimate(
+                        composition.AlgorithmVersion ?? string.Empty,
+                        composition.Weight,
+                        composition.BMI,
+                        composition.Fat,
+                        composition.WaterPercentage,
+                        composition.MuscleMass,
+                        composition.BoneMass,
+                        composition.ProteinPercentage,
+                        composition.VisceralFat,
+                        composition.BMR,
+                        composition.MetabolicAge,
+                        composition.IdealWeight,
+                        composition.BodyType,
+                        composition.IsCalibrated,
+                        composition.CalibrationVersion ?? "identity",
+                        composition.CalibrationPointCount,
+                        composition.CalibrationRSquared,
+                        composition.AppliedFatCorrection,
+                        composition.BaselineFatPercentage > 0
+                            ? composition.BaselineFatPercentage
+                            : composition.Fat - composition.AppliedFatCorrection);
+                }
+
+                var measuredAt = composition.MeasuredAt
+                    ?? (composition.Date.Kind == DateTimeKind.Utc
+                        ? new DateTimeOffset(composition.Date)
+                        : new DateTimeOffset(composition.Date.ToUniversalTime()));
+                var record = new MeasurementHistoryRecord(
+                    composition.MeasurementId,
+                    measuredAt,
+                    composition.MeasurementQuality.Value,
+                    composition.ScaleProfileId ?? 0,
+                    composition.Weight,
+                    composition.HeartRate,
+                    composition.Impedance50Khz,
+                    composition.Impedance250Khz,
+                    composition.RawDataLog.Select(BytesToHex).ToArray(),
+                    composition.AlgorithmVersion ?? string.Empty,
+                    composition.CalibrationVersion ?? "identity",
+                    estimate,
+                    MeasurementUploadState.Pending,
+                    null,
+                    null);
+                await _historyStore.UpsertAsync(record);
+                return true;
+            }
+            catch (Exception exception)
+            {
+                _logService.LogError($"Could not save S400 measurement history: {exception.Message}");
+                return false;
+            }
+        }
+
+        private async Task CompleteMeasurementAsync(BodyComposition result, int generation)
+        {
+            if (!CanPublishMeasurement(result, generation))
+            {
+                return;
+            }
+
+            result.IsValid = true;
+            var persisted = await PersistS400MeasurementAsync(result);
+            if (!CanPublishMeasurement(result, generation))
+            {
+                result.IsValid = false;
+                return;
+            }
+
+            if (!persisted)
+            {
+                _logService.LogError("S400 measurement completed but could not be saved locally.");
+            }
+
+            _lastSuccessfulMeasure = result.Date;
+            _lastSuccessfulBodyComposition = result;
+            this.BodyComposition = result;
+            ReportPhase(ScanPhase.Success);
+            _completionSource.TrySetResult(result);
+            _ = StopAsync();
+        }
+
+        public async Task CancelSearchAsync()
+        {
+            await _advertisementGate.WaitAsync();
+            try
+            {
+                if (_completionSource?.Task.IsCompleted != false)
+                {
+                    return;
+                }
+                Interlocked.Increment(ref _scanGeneration);
                 if (this.BodyComposition != null)
                 {
                     this.BodyComposition.IsValid = false;
                 }
+                _dataInterpreter.ResetSession();
                 if (!_completionSource.Task.IsCompleted)
                 {
                     ReportPhase(ScanPhase.Cancelled);
@@ -304,32 +535,95 @@ namespace MiScaleExporter.Services
             {
                 _logService.LogError(ex.Message);
             }
+            finally
+            {
+                _advertisementGate.Release();
+            }
 
             await StopAsync();
         }
 
-        public void StopSearch()
+        public async Task StopSearchAsync()
         {
-            StopAsync().Wait();
-
-            if (this.BodyComposition is not null)
+            await _advertisementGate.WaitAsync();
+            try
             {
-                this.BodyComposition.IsValid = true;
+                if (_completionSource?.Task.IsCompleted == false)
+                {
+                    Interlocked.Increment(ref _scanGeneration);
+                    var result = this.BodyComposition?.IsStabilized == true
+                        ? this.BodyComposition
+                        : _lastSuccessfulBodyComposition?.IsStabilized == true
+                            ? _lastSuccessfulBodyComposition
+                            : null;
+                    var canFinalize = _user?.ScaleType == ScaleType.S400
+                        ? CanCompleteMeasurement(result)
+                        : result is not null;
+                    if (canFinalize)
+                    {
+                        result.IsValid = true;
+                        _lastSuccessfulBodyComposition = result;
+                        this.BodyComposition = result;
+                        ReportPhase(ScanPhase.Success);
+                        _completionSource.TrySetResult(result);
+                    }
+                    else
+                    {
+                        if (this.BodyComposition != null)
+                        {
+                            this.BodyComposition.IsValid = false;
+                        }
+                        _completionSource.TrySetResult(null);
+                    }
+                    _dataInterpreter.ResetSession();
+                }
             }
-            else if (_lastSuccessfulBodyComposition is not null)
+            finally
+            {
+                _advertisementGate.Release();
+            }
+
+            await StopAsync();
+
+            if (this.BodyComposition is null && _lastSuccessfulBodyComposition?.IsValid == true)
             {
                 this.BodyComposition = _lastSuccessfulBodyComposition;
-                this.BodyComposition.IsValid = true;
             }
             CalculateBMIIfEmpty();
         }
 
-        private void TimeOuted(object s, EventArgs e)
+        private async void TimeOuted(object s, EventArgs e)
         {
-            var hasResult = this.BodyComposition != null || _lastSuccessfulBodyComposition != null;
-            ReportPhase(hasResult ? ScanPhase.Success : ScanPhase.Failed);
-            _completionSource.TrySetResult(this.BodyComposition);
-            _ = StopAsync();
+            var generation = Volatile.Read(ref _scanGeneration);
+            await _advertisementGate.WaitAsync();
+            try
+            {
+                if (generation != Volatile.Read(ref _scanGeneration)
+                    || _completionSource?.Task.IsCompleted != false)
+                {
+                    return;
+                }
+
+                var result = this.BodyComposition?.IsStabilized == true
+                    ? this.BodyComposition
+                    : _lastSuccessfulBodyComposition?.IsStabilized == true
+                        ? _lastSuccessfulBodyComposition
+                        : null;
+                if (CanCompleteMeasurement(result))
+                {
+                    await CompleteMeasurementAsync(result, generation);
+                }
+                else
+                {
+                    ReportPhase(ScanPhase.Failed);
+                    _completionSource.TrySetResult(null);
+                    _ = StopAsync();
+                }
+            }
+            finally
+            {
+                _advertisementGate.Release();
+            }
         }
 
         private async Task StopAsync()
@@ -343,6 +637,41 @@ namespace MiScaleExporter.Services
             {
                 _logService?.LogError("StopAsync: " + ex.Message);
             }
+        }
+
+        private bool CanCompleteMeasurement(BodyComposition composition)
+        {
+            if (composition is null)
+            {
+                return false;
+            }
+
+            if (_user?.ScaleType != ScaleType.S400)
+            {
+                return composition.HasImpedance || ImpedanceWaitElapsed;
+            }
+
+            return composition.MeasurementQuality is { } quality
+                && S400MeasurementCompletionPolicy.CanCompleteScan(quality);
+        }
+
+        private bool CanPublishMeasurement(BodyComposition composition, int generation)
+        {
+            var currentGeneration = Volatile.Read(ref _scanGeneration);
+            var completionPending = _completionSource?.Task.IsCompleted == false;
+            if (_user?.ScaleType != ScaleType.S400)
+            {
+                return generation == currentGeneration
+                    && completionPending
+                    && CanCompleteMeasurement(composition);
+            }
+
+            return composition?.MeasurementQuality is { } quality
+                && S400MeasurementCompletionPolicy.CanPublishScan(
+                    quality,
+                    generation,
+                    currentGeneration,
+                    completionPending);
         }
 
         private void ReportPhase(ScanPhase phase)

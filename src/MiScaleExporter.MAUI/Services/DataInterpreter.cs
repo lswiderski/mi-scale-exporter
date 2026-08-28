@@ -1,10 +1,15 @@
-﻿using MiScaleBodyComposition.Contracts;
+using MiScaleExporter.Core.Composition;
+using MiScaleExporter.Core.S400;
 using MiScaleExporter.Models;
 
 namespace MiScaleExporter.Services
 {
     public class DataInterpreter : IDataInterpreter
     {
+        private readonly S400MeasurementPipeline _s400Pipeline = new();
+
+        public void ResetSession() => _s400Pipeline.Reset();
+
         private void ValidateAesKey(string aesKey)
         {
             if (string.IsNullOrEmpty(aesKey) || aesKey.Length != 32)
@@ -104,44 +109,90 @@ namespace MiScaleExporter.Services
                         return null;
                     }
                 case ScaleType.S400:
-
-                    if(data.Length == 26)
+                    if (data.Length is 24 or 26)
                     {
                         this.ValidateAesKey(_user.BindKey);
                         this.ValidateBluetoothAddress(btAddress);
 
-                        var s400Scale = new MiScaleBodyComposition.S400Scale();
-                        var s400Result = s400Scale.GetBodyComposition(user, new S400InputData
-                        {
-                            Data = data,
-                            AesKey = _user.BindKey,
-                            MacOriginal = btAddress,
-                        });
-                        
-                        if (s400Result != null)
-                        {
-                            var bodyComposition = new BodyComposition
-                            {
-                                Weight = s400Result.Weight,
-                                BMI = s400Result.BMI,
-                                ProteinPercentage = s400Result.ProteinPercentage,
-                                IdealWeight = s400Result.IdealWeight,
-                                BMR = s400Result.BMR,
-                                BoneMass = s400Result.BoneMass,
-                                Fat = s400Result.Fat,
-                                MetabolicAge = s400Result.MetabolicAge,
-                                MuscleMass = s400Result.MuscleMass,
-                                VisceralFat = s400Result.VisceralFat,
-                                WaterPercentage = s400Result.Water,
-                                BodyType = s400Result.BodyType,
-                                HasImpedance = true,
-                                IsStabilized = true,
-                                Date = s400Result.Date,
+                        var profile = new BodyProfile(
+                            _user.Height,
+                            _user.Age,
+                            _user.Sex == Models.Sex.Female ? BodySex.Female : BodySex.Male);
+                        var pipelineResult = _s400Pipeline.Process(
+                            data,
+                            _user.BindKey,
+                            btAddress,
+                            profile,
+                            FatCalibration.LoadCoreFit());
 
-                            };
-                            return FatCalibration.ApplySaved(bodyComposition);
-
+                        var measurement = pipelineResult.Measurement
+                            ?? pipelineResult.PartialMeasurement;
+                        if (measurement is null)
+                        {
+                            return pipelineResult.PreviewWeightKg.HasValue
+                                ? new BodyComposition
+                                {
+                                    Weight = pipelineResult.PreviewWeightKg.Value,
+                                    HasImpedance = false,
+                                    IsStabilized = false,
+                                }
+                                : null;
                         }
+
+                        var measuredAt = measurement.MeasuredAt.LocalDateTime;
+                        if (pipelineResult.Estimate is null)
+                        {
+                            var heightMeters = _user.Height / 100.0;
+                            return new BodyComposition
+                            {
+                                Weight = measurement.WeightKg,
+                                BMI = Math.Round(measurement.WeightKg / (heightMeters * heightMeters), 1),
+                                HasImpedance = false,
+                                IsStabilized = true,
+                                Date = measuredAt,
+                                MeasuredAt = measurement.MeasuredAt,
+                                MeasurementId = measurement.MeasurementId,
+                                MeasurementQuality = measurement.Quality,
+                                HeartRate = measurement.HeartRateBpm,
+                                ScaleProfileId = measurement.ProfileId,
+                                RawDataLog = measurement.RawAdvertisements.Select(value => value.ToArray()).ToList(),
+                            };
+                        }
+
+                        var estimate = pipelineResult.Estimate;
+                        return new BodyComposition
+                        {
+                            Weight = estimate.WeightKg,
+                            BMI = estimate.Bmi,
+                            ProteinPercentage = estimate.ProteinPercentage,
+                            IdealWeight = estimate.IdealWeightKg,
+                            BMR = estimate.BasalMetabolicRateKcal,
+                            BoneMass = estimate.BoneMassKg,
+                            Fat = estimate.FatPercentage,
+                            MetabolicAge = estimate.MetabolicAge,
+                            MuscleMass = estimate.LeanSoftMassKg,
+                            VisceralFat = estimate.VisceralFatRating,
+                            WaterPercentage = estimate.WaterPercentage,
+                            BodyType = estimate.PhysiqueRating,
+                            HasImpedance = measurement.Quality == S400MeasurementQuality.DualFrequencyComplete,
+                            IsStabilized = true,
+                            Date = measuredAt,
+                            MeasuredAt = measurement.MeasuredAt,
+                            MeasurementId = measurement.MeasurementId,
+                            AlgorithmVersion = estimate.AlgorithmVersion,
+                            CalibrationVersion = estimate.CalibrationVersion,
+                            IsCalibrated = estimate.IsCalibrated,
+                            CalibrationPointCount = estimate.CalibrationPointCount,
+                            CalibrationRSquared = estimate.CalibrationRSquared,
+                            AppliedFatCorrection = estimate.AppliedFatCorrection,
+                            BaselineFatPercentage = estimate.BaselineFatPercentage,
+                            MeasurementQuality = measurement.Quality,
+                            Impedance50Khz = measurement.Impedance50KhzOhm,
+                            Impedance250Khz = measurement.Impedance250KhzOhm,
+                            HeartRate = measurement.HeartRateBpm,
+                            ScaleProfileId = measurement.ProfileId,
+                            RawDataLog = measurement.RawAdvertisements.Select(value => value.ToArray()).ToList(),
+                        };
                     }
                     var emptyBC = new BodyComposition
                     {

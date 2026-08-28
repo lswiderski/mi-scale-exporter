@@ -1,11 +1,11 @@
-﻿using Autofac;
+using Autofac;
 using Autofac.Extras.CommonServiceLocator;
 using CommonServiceLocator;
+using MiScaleExporter.Core.History;
 using MiScaleExporter.Models;
 using MiScaleExporter.Services;
 using MiScaleExporter.MAUI.ViewModels;
 using IContainer = Autofac.IContainer;
-using MiScaleExporter.Droid;
 using System.Globalization;
 using CommunityToolkit.Maui.Storage;
 
@@ -68,6 +68,10 @@ namespace MiScaleExporter.MAUI
             var builder = new ContainerBuilder();
 
             // Register services
+            builder.RegisterInstance<IMeasurementHistoryStore>(
+                    new JsonMeasurementHistoryStore(
+                        Path.Combine(FileSystem.AppDataDirectory, "s400-measurements.json")))
+                .SingleInstance();
             builder.RegisterType<Scale>().As<IScale>().InstancePerLifetimeScope();
             builder.RegisterType<DataInterpreter>().As<IDataInterpreter>().InstancePerLifetimeScope();
             builder.RegisterType<GarminService>().As<IGarminService>().InstancePerLifetimeScope();
