@@ -55,7 +55,11 @@
             IsVisible="{Binding IsBusy}">
             <Frame BackgroundColor="White" CornerRadius="8" Padding="12" HasShadow="True">
                 <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
-                    <ActivityIndicator IsRunning="{Binding IsBusy}" WidthRequest="48" HeightRequest="48" />
+                    <ActivityIndicator
+                        IsRunning="{Binding IsBusy}"
+                        WidthRequest="48"
+                        HeightRequest="48"
+                        Color="{StaticResource Primary}" />
                     <Label Text="Loading..." HorizontalOptions="Center" />
                 </VerticalStackLayout>
             </Frame>
