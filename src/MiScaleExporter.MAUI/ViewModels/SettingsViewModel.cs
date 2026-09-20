@@ -73,6 +73,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             new PickerOption("yunmai.scales.ms103", "S400 - yunmai.scales.ms103"),
             new PickerOption("yunmai.scales.ms107", "S400 - yunmai.scales.ms107"),
             new PickerOption("yunmai.scales.ms106", "S200 - yunmai.scales.ms106"),
+            new PickerOption("yunmai.scales.ms113", "S200 - yunmai.scales.ms113"),
             new PickerOption("yunmai.scales.ms116", "S800 - yunmai.scales.ms116")
         };
 
