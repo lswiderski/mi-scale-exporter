@@ -1,22 +1,156 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using AndroidX.ConstraintLayout.Core;
 using Microsoft.Maui.Storage;
 using MiScaleExporter.Models;
 using MiScaleExporter.Services;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using YetAnotherXiaomiCloudClient;
 
 namespace MiScaleExporter.Services
 {
     public class XiaomiService
     {
+
+
+
         private readonly ILogService _logService;
+        private XiaomiClientAuthorization _authorization;
 
         public XiaomiService(ILogService logService)
         {
             _logService = logService;
+        }
+
+        public record XiaomiLoginRequestResult(
+            string LoginUrl,
+            byte[]? QrCodeBytes
+        );
+
+        public record XiaomiLoginStatusResponse(
+       string Status,
+       long? UserId = null,
+       string? PassToken = null,
+       string? CUserId = null,
+       string? ServiceToken = null
+   );
+
+        /// <summary>
+        /// Authenticates with Xiaomi cloud using email and password, retrieves and stores the pass token.
+        /// </summary>
+        public async Task<XiaomiLoginRequestResult> LoginAsync()
+        {
+            try
+            {
+
+                var authorization = new XiaomiClientAuthorization();
+                _authorization = authorization;
+
+                // Execute steps 1-2: Get QR code
+                if (!await authorization.LoginStep1Async())
+                {
+                    throw new InvalidOperationException("Unable to initiate QR code login");
+                }
+
+                var qrCodeBytes = await authorization.LoginStep2Async();
+                if (qrCodeBytes == null || qrCodeBytes.Length == 0)
+                {
+                    throw new InvalidOperationException("Unable to fetch QR code");
+                }
+
+                var result = new XiaomiLoginRequestResult(
+                   LoginUrl: authorization.LoginUrl,
+                   QrCodeBytes: qrCodeBytes
+               );
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logService?.LogError($"Error while logging in to Xiaomi: {ex.Message}");
+                throw;
+            }
+        }
+
+        private async Task SavePassTokens(XiaomiLoginStatusResponse response)
+        {
+            if (response != null)
+            {
+                Preferences.Set(PreferencesKeys.XiaomiPassToken, response.PassToken);
+                Preferences.Set(PreferencesKeys.XiaomiUserId, response.UserId.ToString());
+            }
+        }
+
+        public async Task<XiaomiLoginStatusResponse> CheckLoginStatusAsync()
+        {
+            try
+            {
+                // A restart replaces the authorization object. Never let a stale
+                // polling callback dereference the old/null authorization state.
+                var authorization = _authorization;
+                if (authorization == null)
+                {
+                    return new XiaomiLoginStatusResponse(Status: "pending");
+                }
+
+                // Check if already logged in
+                if (authorization.PassToken != null && authorization.UserId > 0)
+                {
+                    var completedResponse = new XiaomiLoginStatusResponse(
+                        Status: "completed",
+                        UserId: authorization.UserId,
+                        PassToken: authorization.PassToken,
+                        CUserId: authorization.CUserId,
+                        ServiceToken: authorization.ServiceToken
+                    );
+                    await SavePassTokens(completedResponse);
+
+                    return completedResponse;
+                }
+
+                // Execute steps 3-4: Poll for result and get service token
+                var step3Result = await authorization.LoginStep3Async();
+
+                if (step3Result)
+                {
+                    var step4Result = await authorization.LoginStep4Async();
+
+                    if (step4Result)
+                    {
+                        var completedResponse = new XiaomiLoginStatusResponse(
+                            Status: "completed",
+                            UserId: authorization.UserId,
+                            PassToken: authorization.PassToken,
+                            CUserId: authorization.CUserId,
+                            ServiceToken: authorization.ServiceToken
+                        );
+
+                        await SavePassTokens(completedResponse);
+                        
+                        return completedResponse;
+                    }
+                }
+
+                // Still pending
+                var pendingResponse = new XiaomiLoginStatusResponse(Status: "pending");
+                return pendingResponse;
+
+            }
+            catch (InvalidOperationException ex)
+            {
+                // QR code not scanned yet or timeout
+                var pendingResponse = new XiaomiLoginStatusResponse(Status: "pending");
+                return pendingResponse;
+            }
+            catch (Exception ex)
+            {
+                _logService?.LogError($"Error while checking Xiaomi login status: {ex.Message}");
+                var pendingResponse = new XiaomiLoginStatusResponse(Status: "error");
+                return pendingResponse;
+            }
         }
 
         /// <summary>

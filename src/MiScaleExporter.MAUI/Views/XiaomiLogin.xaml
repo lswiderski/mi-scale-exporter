@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="MiScaleExporter.MAUI.Views.XiaomiLogin"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Xiaomi Login">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <Label
+                Text="Click Get Pass Token first. Then scan the QR code with the Xiaomi Home app, or open the link below in your default browser to sign in to Xiaomi Home."
+                FontSize="16"
+                HorizontalTextAlignment="Center" />
+
+            <Button
+                Text="Get Pass Token"
+                Command="{Binding GetPassTokenCommand}"
+                IsEnabled="{Binding IsPolling, Converter={StaticResource InvertedBoolConverter}}"
+                HorizontalOptions="Fill" />
+
+            <Button
+                Text="Restart Login"
+                Command="{Binding RestartLoginCommand}"
+                IsVisible="{Binding IsPolling}"
+                HorizontalOptions="Fill" />
+
+            <!-- Status Message -->
+            <Label
+                Text="{Binding LoginStatus}"
+                FontSize="14"
+                TextColor="Gray"
+                HorizontalTextAlignment="Center" />
+
+            <!-- QR Code Display -->
+            <Frame
+                BorderColor="LightGray"
+                CornerRadius="10"
+                Padding="5"
+                HasShadow="True"
+                IsVisible="{Binding QrCodeBytes, Converter={StaticResource ByteArrayToVisibilityConverter}}">
+                <Image
+                    x:Name="QrCodeImage"
+                    Aspect="AspectFit"
+                    WidthRequest="300"
+                    HeightRequest="300"
+                    HorizontalOptions="Center" />
+            </Frame>
+
+            <!-- Login URL Link -->
+            <Frame
+                BorderColor="LightGray"
+                CornerRadius="10"
+                Padding="10"
+                HasShadow="True"
+                IsVisible="{Binding LoginUrl, Converter={StaticResource StringToVisibilityConverter}}">
+                <VerticalStackLayout Spacing="5">
+                    <Label
+                        Text="Or open this link in your browser:"
+                        FontSize="12"
+                        TextColor="Gray" />
+                    <Label
+                        Text="{Binding LoginUrl}"
+                        FontSize="14"
+                        TextColor="Blue"
+                        TextDecorations="Underline"
+                        HorizontalOptions="Center">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Command="{Binding OpenLoginUrlCommand}" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Loading Indicator during polling -->
+            <ActivityIndicator
+                IsRunning="{Binding IsPolling}"
+                IsVisible="{Binding IsPolling}"
+                Color="Blue"
+                HorizontalOptions="Center" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

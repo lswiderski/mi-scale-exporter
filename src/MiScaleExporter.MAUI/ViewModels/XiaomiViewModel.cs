@@ -15,7 +15,7 @@ namespace MiScaleExporter.MAUI.ViewModels
     {
         public DateTime Date { get; set; }
         public double Weight { get; set; }
-        public string WeightDisplay => Weight.ToString("0.##");
+        public string WeightDisplay => $"{Weight.ToString("0.##")} kg";
         public Weight WeightDto { get; set; }
     }
 

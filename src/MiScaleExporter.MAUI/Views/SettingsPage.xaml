@@ -186,8 +186,17 @@ Color="Gray" />
                                 IsVisible="{Binding IsXiaomiHomeSelected}"
                                 Orientation="Vertical"
 >
-                                
-                                <Label FontSize="Small" Text="User ID" />
+
+                                <StackLayout Orientation="Horizontal" Spacing="10">
+                                    <Label FontSize="Small" Text="User ID" />
+                                    <Label FontSize="Small" Text="(Get Token)"  TextDecorations="Underline" TextColor="#007CC3">
+
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding GetXiaomiTokensCommand}" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                </StackLayout>
+                               
                                 <Entry
     FontSize="Medium"
     Text="{Binding XiaomiUserId, Mode=TwoWay}"

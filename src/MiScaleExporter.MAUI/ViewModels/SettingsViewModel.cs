@@ -51,6 +51,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                 }
             );
             GetBLEKeyCommand = new Command(async () => await Launcher.OpenAsync("https://lswiderski.github.io/mi-scale-exporter/#steps-to-connect-xiaomi-body-composition-scale-s400"));
+            GetXiaomiTokensCommand = new Command(async () => await Shell.Current.GoToAsync("//XiaomiLogin"));
             ResetTokensCommand = new Command(_clearTokens);
             AddCalibrationPointCommand = new Command(AddCalibrationPoint);
             RemoveCalibrationPointCommand = new Command<FatCalibrationPoint>(RemoveCalibrationPoint);
@@ -59,6 +60,7 @@ namespace MiScaleExporter.MAUI.ViewModels
 
         public ICommand ResetCommand { get; }
         public ICommand GetBLEKeyCommand { get; }
+        public ICommand GetXiaomiTokensCommand { get; }
         public ICommand ResetTokensCommand { get; }
         public ICommand AddCalibrationPointCommand { get; }
         public ICommand RemoveCalibrationPointCommand { get; }

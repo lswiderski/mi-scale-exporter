@@ -112,29 +112,41 @@
         <ShellContent ContentTemplate="{DataTemplate local:ScalePage}" Route="ScalePage" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Xiaomi">
+    <FlyoutItem Title="Xiaomi cloud">
         <FlyoutItem.Icon>
             <FontImageSource
                 FontFamily="FontAwesome6Solid"
-                Glyph="&#xf496;"
+                Glyph="&#xf0ed;"
                 Size="16"
                 Color="{AppThemeBinding Light={StaticResource Black},
                                         Dark={StaticResource White}}" />
         </FlyoutItem.Icon>
         <ShellContent ContentTemplate="{DataTemplate local:XiaomiPage}" Route="XiaomiPage" />
     </FlyoutItem>
-
     <FlyoutItem Title="{x:Static localization:AppSnippets.GarminForm}">
         <FlyoutItem.Icon>
             <FontImageSource
-                FontFamily="FontAwesome6Solid"
-                Glyph="&#xf0ee;"
-                Size="16"
-                Color="{AppThemeBinding Light={StaticResource Black},
-                                        Dark={StaticResource White}}" />
+             FontFamily="FontAwesome6Solid"
+             Glyph="&#xf0ee;"
+             Size="16"
+             Color="{AppThemeBinding Light={StaticResource Black},
+                                     Dark={StaticResource White}}" />
         </FlyoutItem.Icon>
         <ShellContent ContentTemplate="{DataTemplate local:FormPage}" Route="FormPage" />
     </FlyoutItem>
+    <FlyoutItem Title="Xiaomi Token">
+        <FlyoutItem.Icon>
+            <FontImageSource
+          FontFamily="FontAwesome6Solid"
+          Glyph="&#xf084;"
+          Size="16"
+          Color="{AppThemeBinding Light={StaticResource Black},
+                                  Dark={StaticResource White}}" />
+        </FlyoutItem.Icon>
+        <ShellContent ContentTemplate="{DataTemplate local:XiaomiLogin}" Route="XiaomiLogin" />
+    </FlyoutItem>
+
+   
 
     <FlyoutItem Title="{x:Static localization:AppSnippets.Settings}">
         <FlyoutItem.Icon>

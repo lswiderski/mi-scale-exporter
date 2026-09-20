@@ -59,6 +59,7 @@ namespace MiScaleExporter.MAUI
             // Xiaomi service and viewmodel
             builder.RegisterType<XiaomiService>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<XiaomiViewModel>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<XiaomiLoginViewModel>().AsSelf().InstancePerLifetimeScope();
 
             App.Container = builder.Build();
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocator(Container));
