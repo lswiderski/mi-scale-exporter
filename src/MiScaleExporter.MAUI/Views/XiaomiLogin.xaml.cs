@@ -1,6 +1,7 @@
-using System;
 using Autofac;
 using MiScaleExporter.MAUI.ViewModels;
+using MiScaleExporter.Models;
+using System;
 
 namespace MiScaleExporter.MAUI.Views;
 
@@ -43,5 +44,11 @@ public partial class XiaomiLogin : ContentPage
 
         // Cancel polling when navigating away
         _viewModel?.CancelPolling();
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        this.adMobBanner.IsVisible = !Preferences.Get(PreferencesKeys.HideAds, false);
     }
 }

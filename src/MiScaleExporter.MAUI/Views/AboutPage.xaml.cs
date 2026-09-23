@@ -24,7 +24,10 @@ namespace MiScaleExporter.MAUI.Views
 
         protected override void OnAppearing()
         {
+            base.OnAppearing();
             this.adMobBanner.IsVisible = !Preferences.Get(PreferencesKeys.HideAds, false);
         }
+
+
     }
 }

@@ -142,6 +142,15 @@ namespace MiScaleExporter.MAUI.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bluetooth is disabled. Please enable Bluetooth to scan for your Mi Scale..
+        /// </summary>
+        internal static string BluetoothDisabled {
+            get {
+                return ResourceManager.GetString("BluetoothDisabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to BMI.
         /// </summary>
         internal static string BMI {
@@ -223,7 +232,7 @@ namespace MiScaleExporter.MAUI.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Created by Lukasz Swiderski 2023.
+        ///   Looks up a localized string similar to Created by Lukasz Swiderski 2026.
         /// </summary>
         internal static string CreatedBy {
             get {
@@ -653,16 +662,7 @@ namespace MiScaleExporter.MAUI.Resources.Localization {
                 return ResourceManager.GetString("PermissionBluetoothRequired", resourceCulture);
             }
         }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Bluetooth is turned off. Please enable Bluetooth and try again..
-        /// </summary>
-        internal static string BluetoothDisabled {
-            get {
-                return ResourceManager.GetString("BluetoothDisabled", resourceCulture);
-            }
-        }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Permission to use Location (Bluetooth) is required to scan..
         /// </summary>

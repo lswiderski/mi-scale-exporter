@@ -26,7 +26,7 @@
             <admob:BannerAd
 x:Name="adMobBanner" Grid.Row="0"
 AdUnitId="ca-app-pub-1938975042085430/4160336701"
-AdSize="SmartBanner"
+ AdSize="Banner"
  />
             <StackLayout
                 Grid.Row="1"
@@ -74,7 +74,10 @@ AdSize="SmartBanner"
             AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
             AbsoluteLayout.LayoutFlags="PositionProportional"
             IsVisible="{Binding IsBusyForm}">
-            <Frame>
+            <Border>
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                </Border.StrokeShape>
                 <StackLayout>
                     <ActivityIndicator
                         BackgroundColor="White"
@@ -87,7 +90,7 @@ AdSize="SmartBanner"
                         TextColor="Black" />
                 </StackLayout>
 
-            </Frame>
+            </Border>
 
 
         </StackLayout>

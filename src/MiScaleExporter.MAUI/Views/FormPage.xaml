@@ -26,8 +26,8 @@
             <StackLayout  Orientation="Vertical"  HorizontalOptions="FillAndExpand">
                 <admob:BannerAd
 x:Name="adMobBanner"
-AdUnitId="ca-app-pub-1938975042085430/4160336701"
-AdSize="SmartBanner"
+AdUnitId="ca-app-pub-1938975042085430/4160336701" 
+AdSize="Banner"
  />
                 <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
                     <Grid  
@@ -305,7 +305,10 @@ Padding="12"
 AbsoluteLayout.LayoutBounds="0.5,0.4,-1,-1"
 AbsoluteLayout.LayoutFlags="PositionProportional"
 IsVisible="{Binding IsBusyForm}">
-            <Frame>
+            <Border>
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                </Border.StrokeShape>
                 <StackLayout>
                     <ActivityIndicator
 BackgroundColor="White"
@@ -318,7 +321,7 @@ Text="{x:Static localization:AppSnippets.Uploading}"
 TextColor="Black" />
                 </StackLayout>
 
-            </Frame>
+            </Border>
 
         </StackLayout>
     </AbsoluteLayout>

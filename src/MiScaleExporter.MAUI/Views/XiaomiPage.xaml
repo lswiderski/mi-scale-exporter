@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:localization="clr-namespace:MiScaleExporter.MAUI.Resources.Localization"
+        xmlns:admob="clr-namespace:Plugin.AdMob;assembly=Plugin.AdMob"
     xmlns:vm="clr-namespace:MiScaleExporter.MAUI.ViewModels"
     Title="{Binding Title}">
 
@@ -11,6 +12,11 @@
     <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
         <ScrollView AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
             <StackLayout Padding="15,24,15,24" Spacing="12">
+                <admob:BannerAd
+x:Name="adMobBanner"
+AdUnitId="ca-app-pub-1938975042085430/4160336701" 
+AdSize="Banner"
+ />
                 <Button
                     Text="Download weights from Xiaomi Cloud"
                     BackgroundColor="{StaticResource Primary}"
@@ -53,7 +59,10 @@
             AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
             AbsoluteLayout.LayoutFlags="PositionProportional"
             IsVisible="{Binding IsBusy}">
-            <Frame BackgroundColor="White" CornerRadius="8" Padding="12" HasShadow="True">
+            <Border BackgroundColor="White" Padding="12">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                </Border.StrokeShape>
                 <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
                     <ActivityIndicator
                         IsRunning="{Binding IsBusy}"
@@ -62,7 +71,7 @@
                         Color="{StaticResource Primary}" />
                     <Label Text="Loading..." HorizontalOptions="Center" />
                 </VerticalStackLayout>
-            </Frame>
+            </Border>
         </StackLayout>
     </AbsoluteLayout>
 </ContentPage>

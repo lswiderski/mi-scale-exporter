@@ -3,10 +3,15 @@
     x:Class="MiScaleExporter.MAUI.Views.XiaomiLogin"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+        xmlns:admob="clr-namespace:Plugin.AdMob;assembly=Plugin.AdMob"
     Title="Xiaomi Login">
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="15">
-
+            <admob:BannerAd
+x:Name="adMobBanner"
+AdUnitId="ca-app-pub-1938975042085430/4160336701" 
+AdSize="Banner"
+ />
             <Label
                 Text="Click Get Pass Token first. Then scan the QR code with the Xiaomi Home app, or open the link below in your default browser to sign in to Xiaomi Home."
                 FontSize="16"
@@ -32,27 +37,29 @@
                 HorizontalTextAlignment="Center" />
 
             <!-- QR Code Display -->
-            <Frame
-                BorderColor="LightGray"
-                CornerRadius="10"
+            <Border
+                Stroke="LightGray"
                 Padding="5"
-                HasShadow="True"
                 IsVisible="{Binding QrCodeBytes, Converter={StaticResource ByteArrayToVisibilityConverter}}">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10" />
+                </Border.StrokeShape>
                 <Image
                     x:Name="QrCodeImage"
                     Aspect="AspectFit"
                     WidthRequest="300"
                     HeightRequest="300"
                     HorizontalOptions="Center" />
-            </Frame>
+            </Border>
 
             <!-- Login URL Link -->
-            <Frame
-                BorderColor="LightGray"
-                CornerRadius="10"
+            <Border
+                Stroke="LightGray"
                 Padding="10"
-                HasShadow="True"
                 IsVisible="{Binding LoginUrl, Converter={StaticResource StringToVisibilityConverter}}">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10" />
+                </Border.StrokeShape>
                 <VerticalStackLayout Spacing="5">
                     <Label
                         Text="Or open this link in your browser:"
@@ -70,7 +77,7 @@
                         </Label.GestureRecognizers>
                     </Label>
                 </VerticalStackLayout>
-            </Frame>
+            </Border>
 
             <!-- Loading Indicator during polling -->
             <ActivityIndicator

@@ -18,7 +18,7 @@
         </Grid.RowDefinitions>
         <admob:BannerAd Grid.Row="0"
 x:Name="adMobBanner"
-AdUnitId="ca-app-pub-1938975042085430/4160336701"
+AdUnitId="ca-app-pub-1938975042085430/4160336701" 
 AdSize="Banner"
  />
         <ScrollView Grid.Row="1">
