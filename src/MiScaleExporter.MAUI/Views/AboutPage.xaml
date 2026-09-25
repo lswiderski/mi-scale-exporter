@@ -32,7 +32,8 @@ AdSize="Banner"
                     <Label FontSize="Small" Text="{x:Static localization:AppSnippets.AboutMeasureInstruction}" />
                     <Label FontSize="Small" Text="{x:Static localization:AppSnippets.AboutUpload}" />
                     <Label FontSize="Small" Text="{x:Static localization:AppSnippets.AboutMFAAndStoringData}" />
-                </StackLayout>
+                <Label FontSize="Small" Text="The latest version of the app includes the option to connect to the Xiaomi cloud and download data from scales such as the S200, S400, and S800. For more information, see the Help section." />
+            </StackLayout>
         </ScrollView>
         <ScrollView Grid.Row="2">
             <StackLayout

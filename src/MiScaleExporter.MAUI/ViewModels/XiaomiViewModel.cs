@@ -29,7 +29,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             Title = "Xiaomi";
             Measurements = new ObservableCollection<XiaomiMeasurementItem>();
             DownloadCommand = new Command(async () => await DownloadAsync());
-            OpenSettingsCommand = new Command(() => Shell.Current.GoToAsync("Settings"));
+            OpenSettingsCommand = new Command(() => Shell.Current.GoToAsync("//Settings"));
             ShowDetailsCommand = new Command<XiaomiMeasurementItem>(async item => await ShowDetails(item));
             SelectCommand = new Command<XiaomiMeasurementItem>(async item => await SelectMeasurement(item));
         }
@@ -41,11 +41,24 @@ namespace MiScaleExporter.MAUI.ViewModels
         public ICommand ShowDetailsCommand { get; }
         public ICommand SelectCommand { get; }
 
-        public bool HasPreferencesSet =>
-            !string.IsNullOrWhiteSpace(Preferences.Get(PreferencesKeys.XiaomiUserId, string.Empty))
+        public void RefreshPreferences()
+        {
+            this.HasPreferencesSet = !string.IsNullOrWhiteSpace(Preferences.Get(PreferencesKeys.XiaomiUserId, string.Empty))
             && !string.IsNullOrWhiteSpace(Preferences.Get(PreferencesKeys.XiaomiPassToken, string.Empty))
             && !string.IsNullOrWhiteSpace(Preferences.Get(PreferencesKeys.XiaomiAccountRegion, string.Empty))
             && !string.IsNullOrWhiteSpace(Preferences.Get(PreferencesKeys.XiaomiScaleModel, string.Empty));
+        }
+
+        private bool _hasPreferencesSet;
+
+        public bool HasPreferencesSet
+        {
+            get => _hasPreferencesSet;
+            set
+            {
+                SetProperty(ref _hasPreferencesSet, value);
+            }
+        }
 
         private async Task DownloadAsync()
         {
@@ -103,13 +116,13 @@ namespace MiScaleExporter.MAUI.ViewModels
 
             var bc = new BodyComposition
             {
-                Weight = w.WeightKg,
-                Fat = w.BodyFat,
-                MuscleMass = w.MuscleMass,
-                BoneMass = w.BoneMass,
-                WaterPercentage = w.BodyWater,
+                Weight = Math.Round(w.WeightKg, 2),
+                Fat = Math.Round(w.BodyFat, 2),
+                MuscleMass = Math.Round(w.MuscleMass, 2),
+                BoneMass = Math.Round(w.BoneMass, 2),
+                WaterPercentage = Math.Round(w.BodyWater, 2),
                 VisceralFat = w.VisceralFat,
-                BMI = w.BMI,
+                BMI = Math.Round(w.BMI, 2),
                 MetabolicAge = w.MetabolicAge
             };
 

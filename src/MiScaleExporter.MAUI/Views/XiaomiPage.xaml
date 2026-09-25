@@ -21,9 +21,10 @@ AdSize="Banner"
                     Text="Download weights from Xiaomi Cloud"
                     BackgroundColor="{StaticResource Primary}"
                     TextColor="White"
-                    Command="{Binding DownloadCommand}" />
+                    Command="{Binding DownloadCommand}"
+                    IsVisible="{Binding HasPreferencesSet}" />
 
-                <Label Text="If preferences are not set, go to Settings:" IsVisible="{Binding HasPreferencesSet, Converter={StaticResource InvertedBoolConverter}}" />
+                <Label Text="Before downloading, Xiaomi login data are missing. Please configure the Xiaomi settings first." IsVisible="{Binding HasPreferencesSet, Converter={StaticResource InvertedBoolConverter}}" />
                 <Button Text="Open Settings" Command="{Binding OpenSettingsCommand}" IsVisible="{Binding HasPreferencesSet, Converter={StaticResource InvertedBoolConverter}}" />
 
                 <CollectionView ItemsSource="{Binding Measurements}" SelectionMode="None" IsVisible="{Binding Measurements.Count, Converter={StaticResource IntGreaterThanZeroConverter}}">
