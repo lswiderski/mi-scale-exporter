@@ -17,17 +17,35 @@ AdSize="Banner"
                 FontSize="16"
                 HorizontalTextAlignment="Center" />
 
+            <VerticalStackLayout IsVisible="{Binding IsPolling, Converter={StaticResource InvertedBoolConverter}}">
+                <Label FontSize="Small" Text="User ID" />
+                <Entry
+                    FontSize="Medium"
+                    Text="{Binding XiaomiUserId, Mode=TwoWay}"
+                    Placeholder="Enter User ID" />
+                <Label FontSize="Small" Text="Pass Token" />
+                <Editor
+                    FontSize="Medium"
+                    Text="{Binding XiaomiPassToken, Mode=TwoWay}"
+                    Placeholder="Enter Pass Token"
+                    HeightRequest="100" />
+            </VerticalStackLayout>
+
             <Button
                 Text="Get Pass Token"
                 Command="{Binding GetPassTokenCommand}"
                 IsEnabled="{Binding IsPolling, Converter={StaticResource InvertedBoolConverter}}"
-                HorizontalOptions="Fill" />
+                HorizontalOptions="Fill"
+                BackgroundColor="{StaticResource Primary}"
+                TextColor="White"/>
 
             <Button
                 Text="Restart Login"
                 Command="{Binding RestartLoginCommand}"
                 IsVisible="{Binding IsPolling}"
-                HorizontalOptions="Fill" />
+                HorizontalOptions="Fill" 
+                BackgroundColor="{StaticResource Primary}"
+                TextColor="White"/>
 
             <!-- Status Message -->
             <Label

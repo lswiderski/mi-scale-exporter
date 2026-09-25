@@ -2,8 +2,10 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using MiScaleExporter.Models;
 using MiScaleExporter.Services;
 using Microsoft.Maui.Controls;
+using Microsoft.Maui.Storage;
 
 namespace MiScaleExporter.MAUI.ViewModels
 {
@@ -43,6 +45,32 @@ namespace MiScaleExporter.MAUI.ViewModels
             set { SetProperty(ref _isPolling, value); }
         }
 
+        private string _xiaomiUserId;
+        public string XiaomiUserId
+        {
+            get { return _xiaomiUserId; }
+            set
+            {
+                if (SetProperty(ref _xiaomiUserId, value))
+                {
+                    Preferences.Set(PreferencesKeys.XiaomiUserId, value ?? string.Empty);
+                }
+            }
+        }
+
+        private string _xiaomiPassToken;
+        public string XiaomiPassToken
+        {
+            get { return _xiaomiPassToken; }
+            set
+            {
+                if (SetProperty(ref _xiaomiPassToken, value))
+                {
+                    Preferences.Set(PreferencesKeys.XiaomiPassToken, value ?? string.Empty);
+                }
+            }
+        }
+
         public ICommand GetPassTokenCommand { get; }
         public ICommand RestartLoginCommand { get; }
         public ICommand OpenLoginUrlCommand { get; }
@@ -51,6 +79,8 @@ namespace MiScaleExporter.MAUI.ViewModels
         {
             _xiaomiService = xiaomiService ?? throw new ArgumentNullException(nameof(xiaomiService));
             Title = "Xiaomi Login";
+            _xiaomiUserId = Preferences.Get(PreferencesKeys.XiaomiUserId, string.Empty);
+            _xiaomiPassToken = Preferences.Get(PreferencesKeys.XiaomiPassToken, string.Empty);
 
             GetPassTokenCommand = new Command(async () => await StartLoginAsync());
             RestartLoginCommand = new Command(async () => await RestartLoginAsync());
@@ -167,7 +197,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                                 "OK");
 
                             // Navigate back
-                            await Shell.Current.GoToAsync("Settings");
+                            await Shell.Current.GoToAsync("//Settings");
                             break;
                         }
                         else
