@@ -150,6 +150,26 @@
                         </StackLayout>
 
                     </Border>
+                    <Border IsVisible="{Binding IsMiBodyCompositionScaleOrSmartScaleSelected}">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20" />
+                        </Border.StrokeShape>
+                        <StackLayout
+                            Padding="15,24,15,24"
+Orientation="Vertical"
+Spacing="10">
+                            <Label
+FontAttributes="Bold"
+FontSize="Small"
+Text="Xiaomi Settings" />
+                            <BoxView
+HeightRequest="2"
+HorizontalOptions="Fill"
+Color="Gray" />
+                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.BluetoothAddress}" />
+                            <Entry FontSize="Medium" Text="{Binding Address, Mode=TwoWay}" />
+                        </StackLayout>
+                    </Border>
                     <Border  IsVisible="{Binding IsS400OrXiaomiHomeSelected}" >
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="20" />

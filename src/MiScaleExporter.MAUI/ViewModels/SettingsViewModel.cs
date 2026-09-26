@@ -493,6 +493,10 @@ namespace MiScaleExporter.MAUI.ViewModels
         }
 
 
+        public bool IsMiBodyCompositionScaleOrSmartScaleSelected
+        {
+            get => _scaleType == ScaleType.MiBodyCompositionScale || _scaleType == ScaleType.MiSmartScale;
+        }
 
         public bool IsMiBodyCompositionScaleSelected
         {
@@ -531,6 +535,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                     SetProperty(ref _scaleType, value);
                     Preferences.Set(PreferencesKeys.ScaleType, (byte)value);
                     // Notify dependent properties
+                    OnPropertyChanged(nameof(IsMiBodyCompositionScaleOrSmartScaleSelected));
                     OnPropertyChanged(nameof(IsMiBodyCompositionScaleSelected));
                     OnPropertyChanged(nameof(IsMiSmartScaleSelected));
                     OnPropertyChanged(nameof(IsS400Selected));
