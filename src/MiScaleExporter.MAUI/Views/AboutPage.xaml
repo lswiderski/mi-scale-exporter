@@ -46,7 +46,15 @@ AdSize="Banner"
                     BackgroundColor="{StaticResource Primary}"
                     Command="{Binding GoToScanCommand}"
                     Text="{x:Static localization:AppSnippets.GoToScan}"
-                    TextColor="White" />
+                    TextColor="White"
+                    IsVisible="{Binding IsXiaomiHomeNotSelected}"/>
+                <Button
+                    Margin="0,10,0,0"
+                    BackgroundColor="{StaticResource Primary}"
+                    Command="{Binding GoToXiaomiCloudCommand}"
+                    Text="Go to weights"
+                    TextColor="White"
+                    IsVisible="{Binding IsXiaomiHomeSelected}"/>
                 <Button
                     Margin="0,10,0,0"
                     BackgroundColor="{StaticResource Primary}"
