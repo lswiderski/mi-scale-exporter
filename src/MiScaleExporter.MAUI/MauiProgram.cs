@@ -18,7 +18,7 @@ namespace MiScaleExporter.MAUI
             }).UseMauiCommunityToolkit();
             builder.UseAdMob(); //.UseConsentDebugSettings(new ConsentDebugSettings { Reset = true });
 #if DEBUG
-            AdConfig.UseTestAdUnitIds = true;
+            //AdConfig.UseTestAdUnitIds = true;
 
 #endif
             // AdConfig.DisableConsentCheck = true;
