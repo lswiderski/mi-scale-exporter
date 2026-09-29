@@ -6,7 +6,8 @@ Mobile App to export data from Xiaomi Scales:
 
 - Mi Smart Scale
 - [Mi Body Composition Scale 1 and 2](#steps-to-connect-mi-body-compostion-scale-1-and-2)
-- [Mi Body Composition Scale S400](#steps-to-connect-xiaomi-body-composition-scale-s400) (only Android)
+- [Mi Body Composition Scale S400 (Direct connect legacy)](#steps-to-connect-xiaomi-body-composition-scale-s400) (only Android)
+- [Xiaomi S200 S400 S800 scales (Xiaomi Home)](#steps-to-connect-xiaomi-home) 
 
 and upload it to [Garmin Connect Cloud.](#garmin-connect-upload)
 
@@ -69,6 +70,24 @@ It also allows you to upload manually entered body composition data to the Garmi
 6. These types of scales do not measure body composition. They measure weight and impedance and estimate the result based on those measurements. The scale sends 3 values: Weight, impedance and Heart rate. To receive body composition data, impedance is processed by an algorithm known to be similar to that used by the Mi Body Composition Scale 2 (different from that used by the S400). Because of this, the result may differ from that of the Xiaomi Home app. For this calculation proper age, height and sex is needed.
 
 7. Bear in mind that it is an experimental solution and errors may occur. If you encounter them, please contact me.
+
+## Steps to connect Xiaomi Home
+
+Work in progress
+1. In the new Xiaomi Settings you have to provide your User ID and Pass Token. You can get them by 2 methods.
+   
+   1.1. First one, built in, look for Xiaomi token page in the app, and click on Get Pass Token button. A QR code will appear that you can scan, or there will be a link below it that you should click. You will be redirected to the Xiaomi website, where you’ll need to confirm the login on your new device. After that, the necessary information should appear in the app.
+
+   <a target="_blank" rel="noopener noreferrer" href="https://github.com/lswiderski/mi-scale-exporter/blob/main/resources/img/screenshots/get_xiaomi_token.jpg"><img src="https://github.com/lswiderski/mi-scale-exporter/raw/main/resources/img/screenshots/get_xiaomi_token.jpg" alt="Xiaomi Cloud Tokens Extractor" style="width: 836px; margin: auto; display: block;"></a>
+   
+   1.2. Alternatively, you can use the  <a target="_blank" rel="noopener noreferrer" href="https://github.com/PiotrMachowski/Xiaomi-cloud-tokens-extractor">https://github.com/PiotrMachowski/Xiaomi-cloud-tokens-extractor</a> by running it in debug mode (py token_extractor.py --log_level DEBUG), and after exporting the data, you'll see the information you need in the console.
+
+    <a target="_blank" rel="noopener noreferrer" href="https://github.com/lswiderski/mi-scale-exporter/blob/main/resources/img/screenshots/token_extractor_pass_token.png"><img src="https://github.com/lswiderski/mi-scale-exporter/raw/main/resources/img/screenshots/token_extractor_pass_token.png" alt="Xiaomi Cloud Tokens Extractor" style="width: 836px; margin: auto; display: block;"></a>
+
+2. Next you need to know your region and scale device model. You can find it in Xiaomi Home app in the device, under options > About device. If in this app your scale is missing, contact me and I will try to add it.
+  <a target="_blank" rel="noopener noreferrer" href="https://github.com/lswiderski/mi-scale-exporter/blob/main/resources/img/screenshots/scale_model.jpg"><img src="https://github.com/lswiderski/mi-scale-exporter/raw/main/resources/img/screenshots/scale_model.jpg" alt="Xiaomi Cloud Tokens Extractor" style="width: 836px; margin: auto; display: block;"></a>
+
+3. Finally, you can go to Xiaomi cloud view in the App and then download last measurements and send them to the Garmin Connect.
 
 ## Garmin Connect Upload
 
