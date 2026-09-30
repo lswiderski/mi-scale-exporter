@@ -74,7 +74,7 @@ AdUnitId="ca-app-pub-1938975042085430/4160336701"
             AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
             AbsoluteLayout.LayoutFlags="PositionProportional"
             IsVisible="{Binding IsBusyForm}">
-            <Border>
+            <Border BackgroundColor="White">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="8" />
                 </Border.StrokeShape>
@@ -87,7 +87,8 @@ AdUnitId="ca-app-pub-1938975042085430/4160336701"
                     <Label
                         HorizontalOptions="Center"
                         Text="{x:Static localization:AppSnippets.Scanning}"
-                        TextColor="Black" />
+                        TextColor="Black"
+                        BackgroundColor="White"/>
                 </StackLayout>
 
             </Border>

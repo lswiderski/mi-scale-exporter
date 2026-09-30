@@ -305,7 +305,7 @@ Padding="12"
 AbsoluteLayout.LayoutBounds="0.5,0.4,-1,-1"
 AbsoluteLayout.LayoutFlags="PositionProportional"
 IsVisible="{Binding IsBusyForm}">
-            <Border>
+            <Border BackgroundColor="White">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="8" />
                 </Border.StrokeShape>
@@ -318,7 +318,8 @@ Color="#80000000" />
                     <Label
 HorizontalOptions="Center"
 Text="{x:Static localization:AppSnippets.Uploading}"
-TextColor="Black" />
+TextColor="Black" 
+BackgroundColor="White" />
                 </StackLayout>
 
             </Border>
