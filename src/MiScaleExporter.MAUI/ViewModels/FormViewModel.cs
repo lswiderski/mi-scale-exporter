@@ -61,7 +61,8 @@ namespace MiScaleExporter.MAUI.ViewModels
         private bool ValidateSave()
         {
             return !String.IsNullOrWhiteSpace(_email)
-                   && !String.IsNullOrWhiteSpace(_password);
+                   && !String.IsNullOrWhiteSpace(_password)
+                   && !IsBusyForm;
         }
 
         public void AutoUpload()
@@ -75,47 +76,69 @@ namespace MiScaleExporter.MAUI.ViewModels
 
         private async void OnUpload()
         {
+            if (IsBusyForm)
+            {
+                return;
+            }
+
             this.IsBusyForm = true;
-            var credencials = new CredentialsData
+            try
             {
-                Email = _email,
-                Password = _password,
-                AccessToken = this._accessToken,
-                TokenSecret = this._tokenSecret,
-            };
-            var response = await this._garminService.UploadAsync(this.PrepareRequest(), Date.Date.Add(Time), credencials);
-            var message = (response?.IsSuccess ?? false) ? AppSnippets.Uploaded : response?.Message; 
-            await Application.Current.MainPage.DisplayAlert(AppSnippets.Response, message, AppSnippets.OK);
-            this.IsBusyForm = false;
-            if (this._saveTokens)
-            {
-                this._accessToken = response?.AccessToken ?? string.Empty;
-                this._tokenSecret = response?.TokenSecret ?? string.Empty;
+                var credencials = new CredentialsData
+                {
+                    Email = _email,
+                    Password = _password,
+                    AccessToken = this._accessToken,
+                    TokenSecret = this._tokenSecret,
+                };
+                var request = this.PrepareRequest();
+                var uploadTime = Date.Date.Add(Time);
+
+                // The Garmin client may perform synchronous work despite returning a Task.
+                // Run the complete service call away from Android's main thread.
+                var response = await Task.Run(() => this._garminService.UploadAsync(request, uploadTime, credencials));
+                var message = (response?.IsSuccess ?? false) ? AppSnippets.Uploaded : response?.Message;
+                await Application.Current.MainPage.DisplayAlert(AppSnippets.Response, message, AppSnippets.OK);
+
+                if (this._saveTokens)
+                {
+                    this._accessToken = response?.AccessToken ?? string.Empty;
+                    this._tokenSecret = response?.TokenSecret ?? string.Empty;
+                }
+                else
+                {
+                    this._accessToken = string.Empty;
+                    this._tokenSecret = string.Empty;
+                }
+                await SecureStorage.SetAsync(PreferencesKeys.GarminUserAccessToken, this._accessToken);
+                await SecureStorage.SetAsync(PreferencesKeys.GarminUserTokenSecret, this._tokenSecret);
+                if (response?.MFARequested ?? false)
+                {
+                    this.ShowMFACode = true;
+                    this.ShowEmail = false;
+                    this.ShowPassword = false;
+                    this.ExternalApiClientId = response?.ExternalApiClientId;
+                }
+                else
+                {
+                    this.ShowMFACode = false;
+                    this.MFACode = null;
+                    this.ExternalApiClientId = null;
+                    this.ShowEmail = string.IsNullOrWhiteSpace(Preferences.Get(PreferencesKeys.GarminUserEmail, string.Empty));
+                    this.ShowPassword = string.IsNullOrWhiteSpace(await SecureStorage.GetAsync(PreferencesKeys.GarminUserPassword));
+                }
+
+                // This will pop the current page off the navigation stack
+                await Shell.Current.GoToAsync("..?autoUpload=false");
             }
-            else
+            catch (Exception ex)
             {
-                this._accessToken = string.Empty;
-                this._tokenSecret = string.Empty;
+                await Application.Current.MainPage.DisplayAlert(AppSnippets.Response, ex.Message, AppSnippets.OK);
             }
-            await SecureStorage.SetAsync(PreferencesKeys.GarminUserAccessToken, this._accessToken);
-            await SecureStorage.SetAsync(PreferencesKeys.GarminUserTokenSecret, this._tokenSecret);
-            if (response?.MFARequested ?? false)    
+            finally
             {
-                this.ShowMFACode = true;
-                this.ShowEmail = false;
-                this.ShowPassword = false;
-                this.ExternalApiClientId = response?.ExternalApiClientId;
+                this.IsBusyForm = false;
             }
-            else
-            {
-                this.ShowMFACode = false;
-                this.MFACode = null;
-                this.ExternalApiClientId = null;
-                this.ShowEmail = string.IsNullOrWhiteSpace(Preferences.Get(PreferencesKeys.GarminUserEmail, string.Empty));
-                this.ShowPassword = string.IsNullOrWhiteSpace(await SecureStorage.GetAsync(PreferencesKeys.GarminUserPassword));
-            }
-            // This will pop the current page off the navigation stack
-            await Shell.Current.GoToAsync("..?autoUpload=false");
         }
 
         private async void OnGenerateFitFileAsync()
