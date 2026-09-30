@@ -73,6 +73,10 @@
 	  <ApplicationId>com.lukaszswiderski.miscaleexporter</ApplicationId>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-android36.0|AnyCPU'">
+	  <AndroidLinkTool>r8</AndroidLinkTool>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\launcher_foreground.png" Color="#FFFFFF" />
@@ -93,8 +97,8 @@
 	
 	<ItemGroup>
           <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.81" />
-          <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.81" />
-		<PackageReference Include="Microsoft.Maui.Essentials" Version="9.0.81" />
+          <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.120" />
+		<PackageReference Include="Microsoft.Maui.Essentials" Version="9.0.120" />
 	</ItemGroup>
 	<ItemGroup>
 	  <PackageReference Include="Autofac" Version="8.3.0" />
@@ -107,7 +111,7 @@
 	        <PackageReference Include="Plugin.AdMob" Version="2.3.2-beta.7" />
 	  <PackageReference Include="Plugin.BLE" Version="3.2.0-beta.1" />
 	  <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
-	  <PackageReference Include="YetAnotherGarminConnectClient" Version="0.0.20.1" />
+	  <PackageReference Include="YetAnotherGarminConnectClient" Version="0.0.20.2" />
 	  <PackageReference Include="YetAnotherXiaomiCloudClient" Version="1.0.3" />
 	</ItemGroup>
 
