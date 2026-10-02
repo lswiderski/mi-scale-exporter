@@ -15,9 +15,22 @@ public partial class HelpPage : ContentPage
         this.BindingContext = this;
         OpenGithubCommand = new Command(async () =>
          await Browser.OpenAsync("https://github.com/lswiderski/mi-scale-exporter"));
-        OpenCoffeeCommand = new Command(async () =>
-            await Browser.OpenAsync("https://www.buymeacoffee.com/lukaszswiderski"));
+        OpenCoffeeCommand = new Command(async () => await OpenProjectUrl());
 
         InitializeComponent();
+    }
+
+    private async Task OpenProjectUrl()
+    {
+
+        try
+        {
+            // Open the URL in the default browser
+            await Launcher.OpenAsync(new Uri("https://lswiderski.github.io/mi-scale-exporter/"));
+        }
+        catch (Exception ex)
+        {
+            await Application.Current.MainPage.DisplayAlert("Error", $"Failed to open URL: {ex.Message}", "OK");
+        }
     }
 }

@@ -62,12 +62,12 @@ AdSize="Banner"
                     Text="{x:Static localization:AppSnippets.OpenHelp}"
                     TextColor="White" />
                 <Label FontSize="Small" Text="{x:Static localization:AppSnippets.DoYouLikeAndWouldYouLikeToSupport}" />
-                <ImageButton
+                <Button
                     Margin="0,10,0,0"
+                    BackgroundColor="{StaticResource Primary}"
                     Command="{Binding OpenCoffeeCommand}"
-                    Source="Images/buymeacoffe.png"
-                    HeightRequest="50"
-                    />
+                    Text="Visit the project website"
+                    TextColor="White" />
                 <Button
                     Margin="0,10,0,0"
                     BackgroundColor="{StaticResource Primary}"
