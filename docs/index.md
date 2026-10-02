@@ -2,12 +2,17 @@
 layout: default
 ---
 
+## If you like my work, you can buy me a coffee
+
+<a href="https://www.buymeacoffee.com/lukaszswiderski" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174" style="margin: auto;
+   display: block;"></a>
+
 Mobile App to export data from Xiaomi Scales:
 
 - Mi Smart Scale
 - [Mi Body Composition Scale 1 and 2](#steps-to-connect-mi-body-compostion-scale-1-and-2)
 - [Mi Body Composition Scale S400 (Direct connect legacy)](#steps-to-connect-xiaomi-body-composition-scale-s400) (only Android)
-- [Xiaomi S200 S400 S800 scales (Xiaomi Home)](#steps-to-connect-xiaomi-home) 
+- [Xiaomi S200 S400 S800 scales (Xiaomi Home)](#steps-to-connect-xiaomi-home)
 
 and upload it to [Garmin Connect Cloud.](#garmin-connect-upload)
 
@@ -16,24 +21,20 @@ It also allows you to upload manually entered body composition data to the Garmi
 > [!CAUTION]  
 > This application is not supported or endorsed by Xiaomi or Garmin. So it could stop working at any moment. It is intended for personal use only and is not to be used for financial gain. The creator takes no responsibility for any consequences that may arise from its use.
 
-## If you like my work, you can buy me a coffee
-
-<a href="https://www.buymeacoffee.com/lukaszswiderski" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
-
 ## Steps to Connect Mi Body Compostion Scale 1 and 2:
 
 1. Add Scale to Zepp Life app.
 
 2. You will need the Bluetooth address of the scale. Go to Zepp Life > Profile > My devices > Mi Body Composition Scale > Bluetooth address (hold to copy)
 
-    <a target="_blank" rel="noopener noreferrer" href="https://github.com/lswiderski/mi-scale-exporter/blob/main/resources/img/screenshots/xiaomi.jpg"><img src="https://github.com/lswiderski/mi-scale-exporter/raw/main/resources/img/screenshots/xiaomi.jpg" alt="Xiaomi settings" style="width: 400px; margin: auto;
-    display: block;"></a>
+   <a target="_blank" rel="noopener noreferrer" href="https://github.com/lswiderski/mi-scale-exporter/blob/main/resources/img/screenshots/xiaomi.jpg"><img src="https://github.com/lswiderski/mi-scale-exporter/raw/main/resources/img/screenshots/xiaomi.jpg" alt="Xiaomi settings" style="width: 400px; margin: auto;
+   display: block;"></a>
 
 3. If your scale supports "Weigh small object" - turn it off
 
 4. Open Settings in MiSCale Exporter. Select Scale Model to Mi Body Compositon Scale 1 / 2 and paste Bluetooth address.
 
-      <a target="_blank" rel="noopener noreferrer" href="https://github.com/lswiderski/mi-scale-exporter/blob/main/resources/img/screenshots/userdata.jpg"><img src="https://github.com/lswiderski/mi-scale-exporter/raw/main/resources/img/screenshots/userdata.jpg" alt="MiScale Exporter settings" style="width: 400px; margin: auto; display: block;"></a>
+   <a target="_blank" rel="noopener noreferrer" href="https://github.com/lswiderski/mi-scale-exporter/blob/main/resources/img/screenshots/userdata.jpg"><img src="https://github.com/lswiderski/mi-scale-exporter/raw/main/resources/img/screenshots/userdata.jpg" alt="MiScale Exporter settings" style="width: 400px; margin: auto; display: block;"></a>
 
 5. Now it's time for measurement. Stand on your scale. Measure yourself and get data from the scale. Mi Body Composition Scale is active up to 15 min after the measurement.
 
@@ -47,24 +48,24 @@ It also allows you to upload manually entered body composition data to the Garmi
 1. Add Scale to Xiaomi Home App and do first measurement. You can disable Heart rate measurement to fast up whole process.
 
 2. You will need scale MAC address and BLE Key from Xiaomi Cloud. You can get it on many ways but I recommend 'Xiaomi Cloud Tokens Extractor'
-   Go to  <a target="_blank" rel="noopener noreferrer" href="https://github.com/PiotrMachowski/Xiaomi-cloud-tokens-extractor">https://github.com/PiotrMachowski/Xiaomi-cloud-tokens-extractor</a> and use your preferred way.
-   
+   Go to <a target="_blank" rel="noopener noreferrer" href="https://github.com/PiotrMachowski/Xiaomi-cloud-tokens-extractor">https://github.com/PiotrMachowski/Xiaomi-cloud-tokens-extractor</a> and use your preferred way.
+
    Find Xiaomi Body Composition Scale S400 on the list of your devices and copy BLE KEY and MAC and save it for later.
 
    <a target="_blank" rel="noopener noreferrer" href="https://github.com/lswiderski/mi-scale-exporter/blob/main/resources/img/screenshots/token_extractor.png"><img src="https://github.com/lswiderski/mi-scale-exporter/raw/main/resources/img/screenshots/token_extractor.png" alt="Xiaomi Cloud Tokens Extractor" style="width: 836px; margin: auto; display: block;"></a>
 
-3. Now you need to completely kill the app (so that it doesn't run in the background either). Or remove the scale from the list of devices - if you use other devices with Xiaomi Home. The scale will only send the needed data when it is not able to connect to the Xiaomi Home app! Every time when you add Scale as new device to Xiaomi Home new BLE key will be generated. 
+3. Now you need to completely kill the app (so that it doesn't run in the background either). Or remove the scale from the list of devices - if you use other devices with Xiaomi Home. The scale will only send the needed data when it is not able to connect to the Xiaomi Home app! Every time when you add Scale as new device to Xiaomi Home new BLE key will be generated.
 
    <a target="_blank" rel="noopener noreferrer" href="https://github.com/lswiderski/mi-scale-exporter/blob/main/resources/img/screenshots/xiaomi_home.png"><img src="https://github.com/lswiderski/mi-scale-exporter/raw/main/resources/img/screenshots/xiaomi_home.png" alt="Xiaomi Homer" style="width: 400px; margin: auto;
     display: block;"></a>
 
 4. Now got MiScale Exporter settings, select S400 scale and paste MAC address and BLE Key.
-   
+
    <a target="_blank" rel="noopener noreferrer" href="https://github.com/lswiderski/mi-scale-exporter/blob/main/resources/img/screenshots/s400_settings.png"><img src="https://github.com/lswiderski/mi-scale-exporter/raw/main/resources/img/screenshots/s400_settings.png" alt="S400 settings" style="width: 400px; margin: auto;
     display: block;"></a>
 
 5. The scale only sends data in a short time window at the end of weighing, so it's important to start the measurement before stepping on the scale. The Bluetooth icon should blink. (Watch the video below)
-   
+
    [![Watch the video](https://img.youtube.com/vi/HtOZZwnkZHw/0.jpg)](https://www.youtube.com/shorts/HtOZZwnkZHw)
 
 6. These types of scales do not measure body composition. They measure weight and impedance and estimate the result based on those measurements. The scale sends 3 values: Weight, impedance and Heart rate. To receive body composition data, impedance is processed by an algorithm known to be similar to that used by the Mi Body Composition Scale 2 (different from that used by the S400). Because of this, the result may differ from that of the Xiaomi Home app. For this calculation proper age, height and sex is needed.
@@ -74,18 +75,19 @@ It also allows you to upload manually entered body composition data to the Garmi
 ## Steps to connect Xiaomi Home
 
 Work in progress
+
 1. In the new Xiaomi Settings you have to provide your User ID and Pass Token. You can get them by 2 methods.
-   
+
    1.1. First one, built in, look for Xiaomi token page in the app, and click on Get Pass Token button. A QR code will appear that you can scan, or there will be a link below it that you should click. You will be redirected to the Xiaomi website, where you’ll need to confirm the login on your new device. After that, the necessary information should appear in the app.
 
    <a target="_blank" rel="noopener noreferrer" href="https://github.com/lswiderski/mi-scale-exporter/blob/main/resources/img/screenshots/get_xiaomi_token.jpg"><img src="https://github.com/lswiderski/mi-scale-exporter/raw/main/resources/img/screenshots/get_xiaomi_token.jpg" alt="Xiaomi Cloud Tokens Extractor" style="width: 836px; margin: auto; display: block;"></a>
-   
-   1.2. Alternatively, you can use the  <a target="_blank" rel="noopener noreferrer" href="https://github.com/PiotrMachowski/Xiaomi-cloud-tokens-extractor">https://github.com/PiotrMachowski/Xiaomi-cloud-tokens-extractor</a> by running it in debug mode (py token_extractor.py --log_level DEBUG), and after exporting the data, you'll see the information you need in the console.
 
-    <a target="_blank" rel="noopener noreferrer" href="https://github.com/lswiderski/mi-scale-exporter/blob/main/resources/img/screenshots/token_extractor_pass_token.png"><img src="https://github.com/lswiderski/mi-scale-exporter/raw/main/resources/img/screenshots/token_extractor_pass_token.png" alt="Xiaomi Cloud Tokens Extractor" style="width: 836px; margin: auto; display: block;"></a>
+   1.2. Alternatively, you can use the <a target="_blank" rel="noopener noreferrer" href="https://github.com/PiotrMachowski/Xiaomi-cloud-tokens-extractor">https://github.com/PiotrMachowski/Xiaomi-cloud-tokens-extractor</a> by running it in debug mode (py token_extractor.py --log_level DEBUG), and after exporting the data, you'll see the information you need in the console.
+
+   <a target="_blank" rel="noopener noreferrer" href="https://github.com/lswiderski/mi-scale-exporter/blob/main/resources/img/screenshots/token_extractor_pass_token.png"><img src="https://github.com/lswiderski/mi-scale-exporter/raw/main/resources/img/screenshots/token_extractor_pass_token.png" alt="Xiaomi Cloud Tokens Extractor" style="width: 836px; margin: auto; display: block;"></a>
 
 2. Next you need to know your region and scale device model. You can find it in Xiaomi Home app in the device, under options > About device. If in this app your scale is missing, contact me and I will try to add it.
-  <a target="_blank" rel="noopener noreferrer" href="https://github.com/lswiderski/mi-scale-exporter/blob/main/resources/img/screenshots/scale_model.jpg"><img src="https://github.com/lswiderski/mi-scale-exporter/raw/main/resources/img/screenshots/scale_model.jpg" alt="Xiaomi Cloud Tokens Extractor" style="width: 836px; margin: auto; display: block;"></a>
+   <a target="_blank" rel="noopener noreferrer" href="https://github.com/lswiderski/mi-scale-exporter/blob/main/resources/img/screenshots/scale_model.jpg"><img src="https://github.com/lswiderski/mi-scale-exporter/raw/main/resources/img/screenshots/scale_model.jpg" alt="Xiaomi Cloud Tokens Extractor" style="width: 836px; margin: auto; display: block;"></a>
 
 3. Finally, you can go to Xiaomi cloud view in the App and then download last measurements and send them to the Garmin Connect.
 
@@ -94,7 +96,7 @@ Work in progress
 1. After successfully retrieving data from the scale, you will be redirected to the Garmin data form.
 
 2. Here you can see the result of your measurement and send it to the Garmin Connect cloud.
-   
+
    <a target="_blank" rel="noopener noreferrer" href="https://github.com/lswiderski/mi-scale-exporter/blob/main/resources/img/screenshots/bodycomposition.jpg"><img src="https://github.com/lswiderski/mi-scale-exporter/raw/main/resources/img/screenshots/bodycomposition.jpg" alt="calculated body composition" style="width: 400px; margin: auto;
     display: block;"></a>
 
