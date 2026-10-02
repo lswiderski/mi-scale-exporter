@@ -61,7 +61,6 @@ AdSize="Banner"
                     Command="{Binding OpenHelpCommand}"
                     Text="{x:Static localization:AppSnippets.OpenHelp}"
                     TextColor="White" />
-                <Label FontSize="Small" Text="{x:Static localization:AppSnippets.DoYouLikeAndWouldYouLikeToSupport}" />
                 <Button
                     Margin="0,10,0,0"
                     BackgroundColor="{StaticResource Primary}"

@@ -2,11 +2,6 @@
 layout: default
 ---
 
-## If you like my work, you can buy me a coffee
-
-<a href="https://www.buymeacoffee.com/lukaszswiderski" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174" style="margin: auto;
-   display: block;"></a>
-
 Mobile App to export data from Xiaomi Scales:
 
 - Mi Smart Scale
@@ -108,3 +103,8 @@ Work in progress
 
 <a target="_blank" rel="noopener noreferrer" href="https://github.com/lswiderski/mi-scale-exporter/blob/main/resources/img/screenshots/garmin.png"><img src="https://github.com/lswiderski/mi-scale-exporter/raw/main/resources/img/screenshots/garmin.png" alt="Garmin results" style="width: 722px; margin: auto;
     display: block;"></a>
+
+## If you like my work, you can buy me a coffee
+
+<a href="https://www.buymeacoffee.com/lukaszswiderski" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174" style="margin: auto;
+   display: block;"></a>

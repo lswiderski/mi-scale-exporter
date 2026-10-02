@@ -88,20 +88,11 @@
                 Command="{Binding OpenGithubCommand}"
                 Text="{x:Static localization:AppSnippets.VisitProjectRepository}"
                 TextColor="White" />
-            <Label
-                FontAttributes="Bold"
-                FontSize="Small"
-                Text="{x:Static localization:AppSnippets.HelpCoffee}" />
-            <Label
-                Padding="15,0,0,0"
-                FontSize="Small"
-                Text="{x:Static localization:AppSnippets.HelpCoffeeDescription}" />
-
             <Button
                 Margin="0,10,0,0"
                 BackgroundColor="{StaticResource Primary}"
                 Command="{Binding OpenCoffeeCommand}"
-                Text="{x:Static localization:AppSnippets.BuyMeACoffee}"
+                Text="Visit the project website"
                 TextColor="White" />
 
             <Label
