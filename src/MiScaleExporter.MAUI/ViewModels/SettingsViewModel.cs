@@ -18,6 +18,8 @@ namespace MiScaleExporter.MAUI.ViewModels
             this.Title = AppSnippets.Settings;
             // Initialize birthDate with a reasonable default to avoid binding issues
             this._birthDate = DateTime.Today.AddYears(-25);
+            // Initialize picker-backed values before the page creates its bindings.
+            this._xiaomiScaleModel = Preferences.Get(PreferencesKeys.XiaomiScaleModel, string.Empty);
             ResetCommand = new Command(() =>
                 {
                     Preferences.Remove(PreferencesKeys.ApiServerAddressOverride);
