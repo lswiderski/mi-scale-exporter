@@ -123,7 +123,8 @@ namespace MiScaleExporter.MAUI.ViewModels
                 WaterPercentage = Math.Round(w.BodyWater, 2),
                 VisceralFat = w.VisceralFat,
                 BMI = Math.Round(w.BMI, 2),
-                MetabolicAge = w.MetabolicAge
+                MetabolicAge = w.MetabolicAge,
+                 Date = w.Date.ToLocalTime(),
             };
 
             App.BodyComposition = bc;

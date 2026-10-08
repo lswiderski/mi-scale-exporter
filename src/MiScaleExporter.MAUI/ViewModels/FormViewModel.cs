@@ -91,12 +91,13 @@ namespace MiScaleExporter.MAUI.ViewModels
                     AccessToken = this._accessToken,
                     TokenSecret = this._tokenSecret,
                 };
-                var request = this.PrepareRequest();
                 var uploadTime = Date.Date.Add(Time);
+                var request = this.PrepareRequest(uploadTime);
+               
 
                 // The Garmin client may perform synchronous work despite returning a Task.
                 // Run the complete service call away from Android's main thread.
-                var response = await Task.Run(() => this._garminService.UploadAsync(request, uploadTime, credencials));
+                var response = await Task.Run(() => this._garminService.UploadAsync(request, credencials));
                 var message = (response?.IsSuccess ?? false) ? AppSnippets.Uploaded : response?.Message;
                 await Application.Current.MainPage.DisplayAlert(AppSnippets.Response, message, AppSnippets.OK);
 
@@ -145,7 +146,7 @@ namespace MiScaleExporter.MAUI.ViewModels
         {
             this.IsBusyForm = true;
 
-            var response = await this._garminService.GenerateFitFileAsync(this.PrepareRequest(), Date.Date.Add(Time));
+            var response = await this._garminService.GenerateFitFileAsync(this.PrepareRequest(Date.Date.Add(Time)) );
 
             if (!response.IsSuccess && response.file != null)
             {
@@ -180,7 +181,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             this.ShowPassword = string.IsNullOrWhiteSpace(await SecureStorage.GetAsync(PreferencesKeys.GarminUserPassword));
         }
 
-        private BodyComposition PrepareRequest()
+        private BodyComposition PrepareRequest(DateTime uploadTime)
         {
             var bc = new BodyComposition
             {
@@ -196,7 +197,8 @@ namespace MiScaleExporter.MAUI.ViewModels
                 BMR = DoubleValueParser.ParseValueFromUsersCulture(_bmr) ?? 0,
                 WaterPercentage = DoubleValueParser.ParseValueFromUsersCulture(_waterPercentage) ?? 0,
                 MFACode = _mfaCode,
-                ExternalApiClientId = _externalApiClientId
+                ExternalApiClientId = _externalApiClientId,
+                Date = uploadTime,
             };
 
             if (Preferences.Get(PreferencesKeys.MuscleMassAsPercentage, false) 
@@ -225,6 +227,8 @@ namespace MiScaleExporter.MAUI.ViewModels
             WaterPercentage = App.BodyComposition.WaterPercentage.ToString();
             BodyType = App.BodyComposition.BodyType;
             IsAutomaticCalculation = true;
+            Date = App.BodyComposition.Date.Date;
+            Time = App.BodyComposition.Date.TimeOfDay;
         }
 
         public Command UploadCommand { get; }

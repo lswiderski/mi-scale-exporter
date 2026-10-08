@@ -57,7 +57,7 @@ public class GarminService : IGarminService
 
     }
 
-    public async Task<GarminApiResponse> UploadAsync(BodyComposition bodyComposition, DateTime time, CredentialsData credencials)
+    public async Task<GarminApiResponse> UploadAsync(BodyComposition bodyComposition, CredentialsData credencials)
     {
 
         if (DeviceInfo.Platform == DevicePlatform.Android) //Older android versions do not support TLS 1.3, so force to use external api for them
@@ -69,15 +69,15 @@ public class GarminService : IGarminService
         }
         if (Preferences.Get(PreferencesKeys.UseExternalAPI, false))
         {
-            return await UploadViaExternalAPIAsync(bodyComposition, time, credencials);
+            return await UploadViaExternalAPIAsync(bodyComposition, credencials);
         }
         else
         {
-            return await UploadViaDirectCallToGarminAsync(bodyComposition, time, credencials);
+            return await UploadViaDirectCallToGarminAsync(bodyComposition,credencials);
         }
     }
 
-    private async Task<GarminApiResponse> UploadViaDirectCallToGarminAsync(BodyComposition bodyComposition, DateTime time, CredentialsData credencials)
+    private async Task<GarminApiResponse> UploadViaDirectCallToGarminAsync(BodyComposition bodyComposition, CredentialsData credencials)
     {
         var result = new GarminApiResponse();
         try
@@ -90,7 +90,7 @@ public class GarminService : IGarminService
 
             var scaleDTO = new GarminWeightScaleDTO
             {
-                TimeStamp = time,
+                TimeStamp = bodyComposition.Date,
                 Weight = Convert.ToSingle(bodyComposition.Weight),
                 PercentFat = Convert.ToSingle(bodyComposition.Fat),
                 PercentHydration = Convert.ToSingle(bodyComposition.WaterPercentage),
@@ -146,7 +146,7 @@ public class GarminService : IGarminService
 
     }
 
-    public async Task<GarminFitFileCreationResult> GenerateFitFileAsync(BodyComposition bodyComposition, DateTime time)
+    public async Task<GarminFitFileCreationResult> GenerateFitFileAsync(BodyComposition bodyComposition)
     {
         var result = new GarminFitFileCreationResult();
         try
@@ -159,7 +159,7 @@ public class GarminService : IGarminService
 
             var scaleDTO = new GarminWeightScaleDTO
             {
-                TimeStamp = time,
+                TimeStamp = bodyComposition.Date,
                 Weight = Convert.ToSingle(bodyComposition.Weight),
                 PercentFat = Convert.ToSingle(bodyComposition.Fat),
                 PercentHydration = Convert.ToSingle(bodyComposition.WaterPercentage),
@@ -198,9 +198,9 @@ public class GarminService : IGarminService
 
     }
 
-    private async Task<GarminApiResponse> UploadViaExternalAPIAsync(BodyComposition bodyComposition, DateTime time, CredentialsData credencials)
+    private async Task<GarminApiResponse> UploadViaExternalAPIAsync(BodyComposition bodyComposition, CredentialsData credencials)
     {
-        var unixTime = ((DateTimeOffset)time).ToUnixTimeSeconds();
+        var unixTime = ((DateTimeOffset)bodyComposition.Date).ToUnixTimeSeconds();
         var request = new GarminBodyCompositionRequest
         {
             Email = credencials.Email,
