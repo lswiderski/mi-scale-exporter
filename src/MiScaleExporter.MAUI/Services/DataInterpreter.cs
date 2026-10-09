@@ -57,7 +57,7 @@ namespace MiScaleExporter.Services
                             BodyType = bc.BodyType,
                             HasImpedance = hasImpedance,
                             IsStabilized = isStabilized,
-                            Date = bc.Date,
+                            Date = DateTime.Now,
 
                         };
                         return FatCalibration.ApplySaved(bodyComposition);
