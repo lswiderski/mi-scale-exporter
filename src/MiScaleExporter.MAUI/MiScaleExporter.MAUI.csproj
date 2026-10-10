@@ -31,8 +31,8 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|AnyCPU'">
-	  <ApplicationDisplayVersion>2.6.8</ApplicationDisplayVersion>
-	  <ApplicationVersion>47</ApplicationVersion>
+	  <ApplicationDisplayVersion>2.6.9</ApplicationDisplayVersion>
+	  <ApplicationVersion>48</ApplicationVersion>
 	  <AndroidUseAapt2>True</AndroidUseAapt2>
 	  <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
 	  <AndroidPackageFormat>apk</AndroidPackageFormat>
@@ -41,8 +41,8 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
-	  <ApplicationDisplayVersion>2.6.8</ApplicationDisplayVersion>
-	  <ApplicationVersion>47</ApplicationVersion>
+	  <ApplicationDisplayVersion>2.6.9</ApplicationDisplayVersion>
+	  <ApplicationVersion>48</ApplicationVersion>
 	  <AndroidPackageFormat>apk</AndroidPackageFormat>
 	  <AndroidUseAapt2>True</AndroidUseAapt2>
 	  <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
@@ -112,7 +112,7 @@
 	  <PackageReference Include="Plugin.BLE" Version="3.2.0-beta.1" />
 	  <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
 	  <PackageReference Include="YetAnotherGarminConnectClient" Version="0.0.20.2" />
-	  <PackageReference Include="YetAnotherXiaomiCloudClient" Version="1.0.3" />
+	  <PackageReference Include="YetAnotherXiaomiCloudClient" Version="1.0.5" />
 	</ItemGroup>
 
 	<ItemGroup>
