@@ -83,7 +83,7 @@ namespace MiScaleExporter.Services
                         {
                             Weight = legacyResult.Weight,
                             BMI = legacyResult.BMI,
-                            Date = legacyResult.Date,
+                            Date = DateTime.Now,
                             IsStabilized = true
                         };
 
