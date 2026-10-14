@@ -50,8 +50,10 @@ namespace MiScaleExporter.MAUI
             builder.RegisterType<Scale>().As<IScale>().InstancePerLifetimeScope();
             builder.RegisterType<DataInterpreter>().As<IDataInterpreter>().InstancePerLifetimeScope();
             builder.RegisterType<GarminService>().As<IGarminService>().InstancePerLifetimeScope();
+            builder.RegisterType<IntervalsService>().As<IIntervalsService>().InstancePerLifetimeScope();
             builder.RegisterType<ScaleViewModel>().As<IScaleViewModel>().InstancePerLifetimeScope();
             builder.RegisterType<FormViewModel>().As<IFormViewModel>().InstancePerLifetimeScope();
+            builder.RegisterType<IntervalsFormViewModel>().As<IIntervalsFormViewModel>().InstancePerLifetimeScope();
             builder.RegisterType<LogService>().As<ILogService>().SingleInstance();
             builder.RegisterType<SettingsViewModel>().As<ISettingsViewModel>().InstancePerLifetimeScope();
             builder.RegisterType<AboutViewModel>().AsSelf();

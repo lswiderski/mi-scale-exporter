@@ -29,4 +29,5 @@ public static class PreferencesKeys
     public static string XiaomiPassToken = "XiaomiPassToken";
     public static string XiaomiAccountRegion = "XiaomiAccountRegion";
     public static string XiaomiScaleModel = "XiaomiScaleModel";
+    public static string IntervalsApiKey = "IntervalsApiKey";
 }
