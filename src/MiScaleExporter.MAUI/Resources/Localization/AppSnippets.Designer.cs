@@ -718,6 +718,42 @@ namespace MiScaleExporter.MAUI.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Off.
+        /// </summary>
+        internal static string OneClickUploadOff {
+            get {
+                return ResourceManager.GetString("OneClickUploadOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Garmin.
+        /// </summary>
+        internal static string OneClickUploadGarmin {
+            get {
+                return ResourceManager.GetString("OneClickUploadGarmin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Intervals.icu.
+        /// </summary>
+        internal static string OneClickUploadIntervals {
+            get {
+                return ResourceManager.GetString("OneClickUploadIntervals", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Garmin + Intervals.icu.
+        /// </summary>
+        internal static string OneClickUploadBoth {
+            get {
+                return ResourceManager.GetString("OneClickUploadBoth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open Help.
         /// </summary>
         internal static string OpenHelp {

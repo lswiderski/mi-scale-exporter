@@ -30,6 +30,11 @@ namespace MiScaleExporter.MAUI.ViewModels
                     Preferences.Remove(PreferencesKeys.ApiServerAddressOverride);
                     this.ApiAddress = string.Empty;
                     Preferences.Remove(PreferencesKeys.OneClickScanAndUpload);
+                    Preferences.Remove(PreferencesKeys.OneClickScanAndUploadTarget);
+                    this._oneClickScanAndUpload = false;
+                    OnPropertyChanged(nameof(OneClickScanAndUpload));
+                    this._oneClickTarget = OneClickUploadTarget.None;
+                    OnPropertyChanged(nameof(SelectedOneClickUploadTarget));
                     Preferences.Remove(PreferencesKeys.UseExternalAPI);
                     Preferences.Remove(PreferencesKeys.ShowDebugInfo);
                     Preferences.Remove(PreferencesKeys.HideAds);
@@ -92,6 +97,26 @@ namespace MiScaleExporter.MAUI.ViewModels
             new PickerOption("xiaomi.scales.ms116", "S800 - xiaomi.scales.ms116")
         };
 
+        public List<PickerOption> OneClickUploadTargetOptions { get; } = new()
+        {
+            new PickerOption(((byte)OneClickUploadTarget.Garmin).ToString(), AppSnippets.OneClickUploadGarmin),
+            new PickerOption(((byte)OneClickUploadTarget.Intervals).ToString(), AppSnippets.OneClickUploadIntervals),
+            new PickerOption(((byte)OneClickUploadTarget.Both).ToString(), AppSnippets.OneClickUploadBoth),
+        };
+
+        public PickerOption SelectedOneClickUploadTarget
+        {
+            get => OneClickUploadTargetOptions.FirstOrDefault(o => o.Value == ((byte)_oneClickTarget).ToString())
+                   ?? OneClickUploadTargetOptions.First();
+            set
+            {
+                if (value != null && value.Value != ((byte)_oneClickTarget).ToString())
+                {
+                    OneClickTarget = (OneClickUploadTarget)byte.Parse(value.Value);
+                }
+            }
+        }
+
 
         public async Task LoadPreferencesAsync()
         {
@@ -100,6 +125,13 @@ namespace MiScaleExporter.MAUI.ViewModels
             {
                 this._apiAddress = Preferences.Get(PreferencesKeys.ApiServerAddressOverride, string.Empty);
                 this._oneClickScanAndUpload = Preferences.Get(PreferencesKeys.OneClickScanAndUpload, false);
+                this._oneClickTarget = (OneClickUploadTarget)Preferences.Get(PreferencesKeys.OneClickScanAndUploadTarget, (byte)OneClickUploadTarget.None);
+                if (_oneClickTarget == OneClickUploadTarget.None && _oneClickScanAndUpload)
+                {
+                    // migrate from the old boolean preference
+                    _oneClickTarget = OneClickUploadTarget.Garmin;
+                    Preferences.Set(PreferencesKeys.OneClickScanAndUploadTarget, (byte)OneClickUploadTarget.Garmin);
+                }
                 this._useExternalAPI = Preferences.Get(PreferencesKeys.UseExternalAPI, false);
                 this._showDebugInfo = Preferences.Get(PreferencesKeys.ShowDebugInfo, false);
                 this._hideAds = Preferences.Get(PreferencesKeys.HideAds, false);
@@ -192,8 +224,37 @@ namespace MiScaleExporter.MAUI.ViewModels
             get => _oneClickScanAndUpload;
             set
             {
+                if (_oneClickScanAndUpload == value)
+                {
+                    return;
+                }
+
                 Preferences.Set(PreferencesKeys.OneClickScanAndUpload, value);
                 SetProperty(ref _oneClickScanAndUpload, value);
+
+                if (value && _oneClickTarget == OneClickUploadTarget.None)
+                {
+                    OneClickTarget = OneClickUploadTarget.Garmin;
+                }
+            }
+        }
+
+        private OneClickUploadTarget _oneClickTarget;
+
+        public OneClickUploadTarget OneClickTarget
+        {
+            get => _oneClickTarget;
+            set
+            {
+                if (_oneClickTarget == value)
+                {
+                    return;
+                }
+
+                _oneClickTarget = value;
+                Preferences.Set(PreferencesKeys.OneClickScanAndUploadTarget, (byte)value);
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(SelectedOneClickUploadTarget));
             }
         }
 

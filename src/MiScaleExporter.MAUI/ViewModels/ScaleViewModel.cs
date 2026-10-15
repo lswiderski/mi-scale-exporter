@@ -142,7 +142,27 @@ namespace MiScaleExporter.MAUI.ViewModels
             else
             {
                 App.BodyComposition = this._scale.BodyComposition;
-                await Shell.Current.GoToAsync($"//FormPage?autoUpload={Preferences.Get(PreferencesKeys.OneClickScanAndUpload, false)}");
+                var oneClickEnabled = Preferences.Get(PreferencesKeys.OneClickScanAndUpload, false);
+                if (!oneClickEnabled)
+                {
+                    await Shell.Current.GoToAsync("//FormPage?autoUpload=false");
+                    return;
+                }
+
+                var target = (OneClickUploadTarget)Preferences.Get(PreferencesKeys.OneClickScanAndUploadTarget, (byte)OneClickUploadTarget.Garmin);
+                switch (target)
+                {
+                    case OneClickUploadTarget.Intervals:
+                        await Shell.Current.GoToAsync("//IntervalsFormPage?autoUpload=true");
+                        break;
+                    case OneClickUploadTarget.Both:
+                        await Shell.Current.GoToAsync("//IntervalsFormPage?autoUpload=true&continueTo=garmin");
+                        break;
+                    case OneClickUploadTarget.Garmin:
+                    default:
+                        await Shell.Current.GoToAsync("//FormPage?autoUpload=true");
+                        break;
+                }
             }
         }
 

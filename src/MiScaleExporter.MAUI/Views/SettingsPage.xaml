@@ -363,17 +363,26 @@ Color="Gray" />
                                     FontSize="Small"
                                     Text="{x:Static localization:AppSnippets.UseExternalAPI}"
                                     VerticalOptions="Center" />
-                                <CheckBox
+                                <VerticalStackLayout
                                     Grid.Row="1"
                                     Grid.Column="0"
-                                    IsChecked="{Binding OneClickScanAndUpload, Mode=TwoWay}"
-                                    VerticalOptions="Center" />
-                                <Label
-                                    Grid.Row="1"
-                                    Grid.Column="1"
-                                    FontSize="Small"
-                                    Text="{x:Static localization:AppSnippets.OneClickScanUpload}"
-                                    VerticalOptions="Center" />
+                                    Grid.ColumnSpan="2"
+                                    Spacing="4">
+                                    <HorizontalStackLayout Spacing="8">
+                                        <CheckBox
+                                            IsChecked="{Binding OneClickScanAndUpload, Mode=TwoWay}"
+                                            VerticalOptions="Center" />
+                                        <Label
+                                            FontSize="Small"
+                                            Text="{x:Static localization:AppSnippets.OneClickScanUpload}"
+                                            VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                    <Picker
+                                        IsVisible="{Binding OneClickScanAndUpload}"
+                                        ItemsSource="{Binding OneClickUploadTargetOptions}"
+                                        ItemDisplayBinding="{Binding Text}"
+                                        SelectedItem="{Binding SelectedOneClickUploadTarget}" />
+                                </VerticalStackLayout>
                                 <CheckBox
                                     Grid.Row="2"
                                     Grid.Column="0"

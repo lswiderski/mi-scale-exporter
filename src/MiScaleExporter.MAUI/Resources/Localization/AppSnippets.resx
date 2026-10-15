@@ -321,6 +321,18 @@
   <data name="OneClickScanUpload" xml:space="preserve">
     <value>One click - Scan &amp; Upload</value>
   </data>
+  <data name="OneClickUploadOff" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="OneClickUploadGarmin" xml:space="preserve">
+    <value>Garmin</value>
+  </data>
+  <data name="OneClickUploadIntervals" xml:space="preserve">
+    <value>Intervals.icu</value>
+  </data>
+  <data name="OneClickUploadBoth" xml:space="preserve">
+    <value>Garmin + Intervals.icu</value>
+  </data>
   <data name="OpenHelp" xml:space="preserve">
     <value>Open Help</value>
   </data>

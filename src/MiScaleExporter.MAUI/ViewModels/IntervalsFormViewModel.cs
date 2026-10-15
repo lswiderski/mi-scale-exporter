@@ -69,6 +69,36 @@ namespace MiScaleExporter.MAUI.ViewModels
             }
         }
 
+        public async Task AutoUploadAsync()
+        {
+            if (IsBusyForm)
+            {
+                return;
+            }
+
+            this.IsBusyForm = true;
+            try
+            {
+                var weight = DoubleValueParser.ParseValueFromUsersCulture(_weight) ?? 0;
+                var fat = DoubleValueParser.ParseValueFromUsersCulture(_fat) ?? 0;
+
+                var response = await Task.Run(() =>
+                    this._intervalsService.UploadAsync(Date.Date, ConvertToKg(weight), fat));
+
+                var message = (response?.IsSuccess ?? false) ? AppSnippets.Uploaded : response?.Message;
+                await Application.Current.MainPage.DisplayAlert(AppSnippets.Response, message, AppSnippets.OK);
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert(AppSnippets.Response, ex.Message, AppSnippets.OK);
+            }
+            finally
+            {
+                this.IsBusyForm = false;
+                await Shell.Current.GoToAsync("..?autoUpload=false");
+            }
+        }
+
         private double ConvertFromKg(double valueInKg)
         {
             return _displayWeightInLbs ? valueInKg * KgToLbsConversion : valueInKg;

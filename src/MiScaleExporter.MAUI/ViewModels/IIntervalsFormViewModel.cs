@@ -4,5 +4,6 @@ namespace MiScaleExporter.MAUI.ViewModels
     {
         void LoadBodyComposition();
         Task LoadPreferencesAsync();
+        Task AutoUploadAsync();
     }
 }
