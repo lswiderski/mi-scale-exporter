@@ -1,0 +1,82 @@
+name: Build & Release
+
+on:
+  push:
+    branches: ['**']
+    tags: ['**']
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build APK
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: 'platform-tools platforms;android-36 build-tools;36.0.0'
+
+      - name: Restore workloads
+        run: dotnet workload restore src/MiScaleExporter.MAUI/MiScaleExporter.MAUI.csproj
+
+      - name: Compute version from tag
+        id: version
+        shell: bash
+        run: |
+          if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
+            VERSION="${GITHUB_REF_NAME#v}"
+            IFS='.' read -r MAJOR MINOR PATCH <<< "${VERSION%%-*}"
+            MAJOR=${MAJOR:-0}; MINOR=${MINOR:-0}; PATCH=${PATCH:-0}
+            echo "display=${VERSION}" >> "$GITHUB_OUTPUT"
+            echo "code=$(( MAJOR * 10000 + MINOR * 100 + PATCH ))" >> "$GITHUB_OUTPUT"
+            echo "override=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "override=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publish APK
+        shell: bash
+        run: |
+          ARGS=(-f net9.0-android36.0 -c Release
+                -p:AndroidPackageFormat=apk
+                -p:AndroidCreatePackagePerAbi=false)
+          if [[ "${{ steps.version.outputs.override }}" == "true" ]]; then
+            ARGS+=(-p:ApplicationDisplayVersion=${{ steps.version.outputs.display }})
+            ARGS+=(-p:ApplicationVersion=${{ steps.version.outputs.code }})
+          fi
+          dotnet publish src/MiScaleExporter.MAUI/MiScaleExporter.MAUI.csproj "${ARGS[@]}"
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: apk
+          path: src/MiScaleExporter.MAUI/bin/Release/net9.0-android36.0/**/*.apk
+          if-no-files-found: error
+
+  release:
+    name: Release
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: apk
+          path: apk
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: apk/**/*.apk
+          generate_release_notes: true
