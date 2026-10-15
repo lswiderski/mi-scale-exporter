@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using MiScaleExporter.MAUI.Resources.Localization;
 using MiScaleExporter.Models;
 using Newtonsoft.Json;
 
@@ -65,6 +66,7 @@ public class IntervalsService : IIntervalsService
 
             var requestUri = $"{BaseAddress}/api/v1/athlete/{AthleteId}/wellness/{date:yyyy-MM-dd}";
             using var request = new HttpRequestMessage(HttpMethod.Put, requestUri) { Content = content };
+            request.Headers.UserAgent.ParseAdd("MiScaleExporter");
             request.Headers.Authorization = new AuthenticationHeaderValue(
                 "Basic",
                 Convert.ToBase64String(Encoding.UTF8.GetBytes($"API_KEY:{apiKey}")));
@@ -78,6 +80,50 @@ public class IntervalsService : IIntervalsService
                 ? "Uploaded"
                 : string.IsNullOrWhiteSpace(message) ? response.ReasonPhrase : message;
 
+            return result;
+        }
+        catch (Exception ex)
+        {
+            _logService.LogError(ex.Message);
+            result.IsSuccess = false;
+            result.Message = ex.Message;
+            return result;
+        }
+    }
+
+    public async Task<IntervalsAthleteResult> GetAthleteAsync()
+    {
+        var result = new IntervalsAthleteResult();
+
+        try
+        {
+            var apiKey = await SecureStorage.GetAsync(PreferencesKeys.IntervalsApiKey);
+            if (string.IsNullOrWhiteSpace(apiKey))
+            {
+                result.IsSuccess = false;
+                result.Message = AppSnippets.IntervalsApiKeyNotSet;
+                return result;
+            }
+
+            var requestUri = $"{BaseAddress}/api/v1/athlete/{AthleteId}";
+            using var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
+            request.Headers.UserAgent.ParseAdd("MiScaleExporter");
+            request.Headers.Authorization = new AuthenticationHeaderValue(
+                "Basic",
+                Convert.ToBase64String(Encoding.UTF8.GetBytes($"API_KEY:{apiKey}")));
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            using var response = await _httpClient.SendAsync(request);
+            var message = await response.Content.ReadAsStringAsync();
+
+            result.IsSuccess = response.IsSuccessStatusCode;
+            if (response.IsSuccessStatusCode)
+            {
+                result.Athlete = JsonConvert.DeserializeObject<IntervalsAthlete>(message);
+                return result;
+            }
+
+            result.Message = string.IsNullOrWhiteSpace(message) ? response.ReasonPhrase : message;
             return result;
         }
         catch (Exception ex)

@@ -414,4 +414,16 @@
   <data name="WeightLbs" xml:space="preserve">
     <value>Weight (Lbs)</value>
   </data>
+  <data name="IntervalsApiKeyNotSet" xml:space="preserve">
+    <value>Set your Intervals.icu API key first.</value>
+  </data>
+  <data name="IntervalsFillFromProfile" xml:space="preserve">
+    <value>Fill from Intervals.icu</value>
+  </data>
+  <data name="IntervalsProfileFilled" xml:space="preserve">
+    <value>Filled from Intervals.icu: {0}</value>
+  </data>
+  <data name="IntervalsProfileUnavailable" xml:space="preserve">
+    <value>Not available in your Intervals.icu profile: {0}</value>
+  </data>
 </root>

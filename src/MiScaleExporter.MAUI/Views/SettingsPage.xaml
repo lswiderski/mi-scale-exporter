@@ -43,6 +43,13 @@
                                 HeightRequest="2"
                                 HorizontalOptions="Fill"
                                 Color="Gray" />
+                            <Button
+                                IsVisible="{Binding HasIntervalsApiKey}"
+                                IsEnabled="{Binding IsFillingProfile, Converter={StaticResource InvertedBoolConverter}}"
+                                Command="{Binding FillFromIntervalsCommand}"
+                                BackgroundColor="{StaticResource Primary}"
+                                Text="{x:Static localization:AppSnippets.IntervalsFillFromProfile}"
+                                TextColor="White" />
                             <Label FontSize="Small" Text="{x:Static localization:AppSnippets.Age}" />
                             <HorizontalStackLayout Spacing="20">
                                 <StackLayout Orientation="Horizontal" Spacing="10" HorizontalOptions="FillAndExpand">

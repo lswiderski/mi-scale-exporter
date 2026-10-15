@@ -7,4 +7,6 @@ namespace MiScaleExporter.Services;
 public interface IIntervalsService
 {
     Task<IntervalsUploadResult> UploadAsync(DateTime date, double weightKg, double bodyFat);
+
+    Task<IntervalsAthleteResult> GetAthleteAsync();
 }

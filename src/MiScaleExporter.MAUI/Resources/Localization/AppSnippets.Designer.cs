@@ -547,6 +547,42 @@ namespace MiScaleExporter.MAUI.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Set your Intervals.icu API key first..
+        /// </summary>
+        internal static string IntervalsApiKeyNotSet {
+            get {
+                return ResourceManager.GetString("IntervalsApiKeyNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fill from Intervals.icu.
+        /// </summary>
+        internal static string IntervalsFillFromProfile {
+            get {
+                return ResourceManager.GetString("IntervalsFillFromProfile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filled from Intervals.icu: {0}.
+        /// </summary>
+        internal static string IntervalsProfileFilled {
+            get {
+                return ResourceManager.GetString("IntervalsProfileFilled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not available in your Intervals.icu profile: {0}.
+        /// </summary>
+        internal static string IntervalsProfileUnavailable {
+            get {
+                return ResourceManager.GetString("IntervalsProfileUnavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Intervals.icu.
         /// </summary>
         internal static string IntervalsSettings {

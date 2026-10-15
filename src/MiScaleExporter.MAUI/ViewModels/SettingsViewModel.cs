@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Windows.Input;
 using MiScaleExporter.MAUI.Resources.Localization;
@@ -13,8 +15,11 @@ namespace MiScaleExporter.MAUI.ViewModels
 {
     public class SettingsViewModel : BaseViewModel, ISettingsViewModel
     {
-        public SettingsViewModel()
+        private readonly IIntervalsService _intervalsService;
+
+        public SettingsViewModel(IIntervalsService intervalsService)
         {
+            _intervalsService = intervalsService;
             this.Title = AppSnippets.Settings;
             // Initialize birthDate with a reasonable default to avoid binding issues
             this._birthDate = DateTime.Today.AddYears(-25);
@@ -43,6 +48,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                     SecureStorage.Remove(PreferencesKeys.IntervalsApiKey);
                     this._intervalsApiKey = string.Empty;
                     OnPropertyChanged(nameof(IntervalsApiKey));
+                    OnPropertyChanged(nameof(HasIntervalsApiKey));
                     this.UseBirthDateMode = false;
                     this.ManualAge = "25";
                     this._useFatCalibration = false;
@@ -58,6 +64,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             GetBLEKeyCommand = new Command(async () => await Launcher.OpenAsync("https://lswiderski.github.io/mi-scale-exporter/#steps-to-connect-xiaomi-body-composition-scale-s400"));
             GetXiaomiTokensCommand = new Command(async () => await Shell.Current.GoToAsync("//XiaomiLogin"));
             OpenIntervalsSettingsCommand = new Command(async () => await Launcher.OpenAsync("https://intervals.icu/settings"));
+            FillFromIntervalsCommand = new Command(async () => await FillFromIntervalsAsync());
             ResetTokensCommand = new Command(_clearTokens);
             AddCalibrationPointCommand = new Command(AddCalibrationPoint);
             RemoveCalibrationPointCommand = new Command<FatCalibrationPoint>(RemoveCalibrationPoint);
@@ -68,6 +75,7 @@ namespace MiScaleExporter.MAUI.ViewModels
         public ICommand GetBLEKeyCommand { get; }
         public ICommand GetXiaomiTokensCommand { get; }
         public ICommand OpenIntervalsSettingsCommand { get; }
+        public ICommand FillFromIntervalsCommand { get; }
         public ICommand ResetTokensCommand { get; }
         public ICommand AddCalibrationPointCommand { get; }
         public ICommand RemoveCalibrationPointCommand { get; }
@@ -131,6 +139,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                 this._xiaomiScaleModel = Preferences.Get(PreferencesKeys.XiaomiScaleModel, string.Empty);
 
                 this._intervalsApiKey = await SecureStorage.GetAsync(PreferencesKeys.IntervalsApiKey);
+                OnPropertyChanged(nameof(HasIntervalsApiKey));
 
                 this._useFatCalibration = Preferences.Get(PreferencesKeys.UseFatCalibration, false);
                 this.CalibrationPoints = new ObservableCollection<FatCalibrationPoint>(
@@ -395,6 +404,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                 if (_intervalsApiKey != value)
                 {
                     SetProperty(ref _intervalsApiKey, value);
+                    OnPropertyChanged(nameof(HasIntervalsApiKey));
                     if (string.IsNullOrEmpty(value))
                     {
                         SecureStorage.Remove(PreferencesKeys.IntervalsApiKey);
@@ -404,6 +414,112 @@ namespace MiScaleExporter.MAUI.ViewModels
                         SecureStorage.SetAsync(PreferencesKeys.IntervalsApiKey, value);
                     }
                 }
+            }
+        }
+
+        public bool HasIntervalsApiKey => !string.IsNullOrWhiteSpace(_intervalsApiKey);
+
+        private bool _isFillingProfile;
+
+        public bool IsFillingProfile
+        {
+            get => _isFillingProfile;
+            set => SetProperty(ref _isFillingProfile, value);
+        }
+
+        private async Task FillFromIntervalsAsync()
+        {
+            if (IsFillingProfile)
+            {
+                return;
+            }
+
+            if (!HasIntervalsApiKey)
+            {
+                await Application.Current.MainPage.DisplayAlert(AppSnippets.Response, AppSnippets.IntervalsApiKeyNotSet, AppSnippets.OK);
+                return;
+            }
+
+            IsFillingProfile = true;
+            try
+            {
+                var response = await Task.Run(() => _intervalsService.GetAthleteAsync());
+                if (!(response?.IsSuccess ?? false) || response.Athlete is null)
+                {
+                    var error = string.IsNullOrWhiteSpace(response?.Message) ? "Unknown error" : response.Message;
+                    await Application.Current.MainPage.DisplayAlert(AppSnippets.Response, error, AppSnippets.OK);
+                    return;
+                }
+
+                var athlete = response.Athlete;
+                var filled = new List<string>();
+                var unavailable = new List<string>();
+
+                if (athlete.Height is > 0)
+                {
+                    var heightCm = athlete.Height.Value > 3
+                        ? athlete.Height.Value
+                        : athlete.Height.Value * 100;
+                    var rounded = (int)Math.Round(heightCm);
+                    if (rounded is > 0 and < 250)
+                    {
+                        Height = rounded.ToString(CultureInfo.InvariantCulture);
+                        filled.Add(AppSnippets.Height);
+                    }
+                    else
+                    {
+                        unavailable.Add(AppSnippets.Height);
+                    }
+                }
+                else
+                {
+                    unavailable.Add(AppSnippets.Height);
+                }
+
+                if (string.Equals(athlete.Sex, "M", StringComparison.OrdinalIgnoreCase))
+                {
+                    Sex = Sex.Male;
+                    filled.Add(AppSnippets.Sex);
+                }
+                else if (string.Equals(athlete.Sex, "F", StringComparison.OrdinalIgnoreCase))
+                {
+                    Sex = Sex.Female;
+                    filled.Add(AppSnippets.Sex);
+                }
+                else
+                {
+                    unavailable.Add(AppSnippets.Sex);
+                }
+
+                if (!string.IsNullOrWhiteSpace(athlete.DateOfBirth)
+                    && DateTime.TryParse(athlete.DateOfBirth, CultureInfo.InvariantCulture, DateTimeStyles.None, out var dob))
+                {
+                    BirthDate = dob;
+                    UseBirthDateMode = true;
+                    filled.Add(AppSnippets.Age);
+                }
+                else
+                {
+                    unavailable.Add(AppSnippets.Age);
+                }
+
+                var message = filled.Count > 0
+                    ? string.Format(AppSnippets.IntervalsProfileFilled, string.Join(", ", filled))
+                    : AppSnippets.IntervalsProfileUnavailable;
+                if (filled.Count > 0 && unavailable.Count > 0)
+                {
+                    message += Environment.NewLine + string.Format(AppSnippets.IntervalsProfileUnavailable, string.Join(", ", unavailable));
+                }
+
+                await Application.Current.MainPage.DisplayAlert(AppSnippets.Response, message, AppSnippets.OK);
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert(AppSnippets.Response, ex.Message, AppSnippets.OK);
+            }
+            finally
+            {
+                IsFillingProfile = false;
             }
         }
 
@@ -522,6 +638,8 @@ namespace MiScaleExporter.MAUI.ViewModels
                 if (_sex == value) return;
                 SetProperty(ref _sex, value);
                 Preferences.Set(PreferencesKeys.UserSex, (byte)value);
+                OnPropertyChanged(nameof(IsMaleSelected));
+                OnPropertyChanged(nameof(IsFemaleSelected));
             }
         }
 
