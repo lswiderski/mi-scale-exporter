@@ -40,6 +40,9 @@ namespace MiScaleExporter.MAUI.ViewModels
                     Preferences.Remove(PreferencesKeys.XiaomiPassToken);
                     Preferences.Remove(PreferencesKeys.XiaomiAccountRegion);
                     Preferences.Remove(PreferencesKeys.XiaomiScaleModel);
+                    SecureStorage.Remove(PreferencesKeys.IntervalsApiKey);
+                    this._intervalsApiKey = string.Empty;
+                    OnPropertyChanged(nameof(IntervalsApiKey));
                     this.UseBirthDateMode = false;
                     this.ManualAge = "25";
                     this._useFatCalibration = false;
@@ -54,6 +57,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             );
             GetBLEKeyCommand = new Command(async () => await Launcher.OpenAsync("https://lswiderski.github.io/mi-scale-exporter/#steps-to-connect-xiaomi-body-composition-scale-s400"));
             GetXiaomiTokensCommand = new Command(async () => await Shell.Current.GoToAsync("//XiaomiLogin"));
+            OpenIntervalsSettingsCommand = new Command(async () => await Launcher.OpenAsync("https://intervals.icu/settings"));
             ResetTokensCommand = new Command(_clearTokens);
             AddCalibrationPointCommand = new Command(AddCalibrationPoint);
             RemoveCalibrationPointCommand = new Command<FatCalibrationPoint>(RemoveCalibrationPoint);
@@ -63,6 +67,7 @@ namespace MiScaleExporter.MAUI.ViewModels
         public ICommand ResetCommand { get; }
         public ICommand GetBLEKeyCommand { get; }
         public ICommand GetXiaomiTokensCommand { get; }
+        public ICommand OpenIntervalsSettingsCommand { get; }
         public ICommand ResetTokensCommand { get; }
         public ICommand AddCalibrationPointCommand { get; }
         public ICommand RemoveCalibrationPointCommand { get; }
@@ -124,6 +129,8 @@ namespace MiScaleExporter.MAUI.ViewModels
                 this._xiaomiPassToken = Preferences.Get(PreferencesKeys.XiaomiPassToken, string.Empty);
                 this._xiaomiAccountRegion = Preferences.Get(PreferencesKeys.XiaomiAccountRegion, string.Empty);
                 this._xiaomiScaleModel = Preferences.Get(PreferencesKeys.XiaomiScaleModel, string.Empty);
+
+                this._intervalsApiKey = await SecureStorage.GetAsync(PreferencesKeys.IntervalsApiKey);
 
                 this._useFatCalibration = Preferences.Get(PreferencesKeys.UseFatCalibration, false);
                 this.CalibrationPoints = new ObservableCollection<FatCalibrationPoint>(
@@ -372,6 +379,30 @@ namespace MiScaleExporter.MAUI.ViewModels
                 if (value != null && _xiaomiScaleModel != value.Value)
                 {
                     XiaomiScaleModel = value.Value;
+                }
+            }
+        }
+
+        // ---- Intervals.icu Settings -----------------------------------------------------
+
+        private string _intervalsApiKey;
+
+        public string IntervalsApiKey
+        {
+            get => _intervalsApiKey;
+            set
+            {
+                if (_intervalsApiKey != value)
+                {
+                    SetProperty(ref _intervalsApiKey, value);
+                    if (string.IsNullOrEmpty(value))
+                    {
+                        SecureStorage.Remove(PreferencesKeys.IntervalsApiKey);
+                    }
+                    else
+                    {
+                        SecureStorage.SetAsync(PreferencesKeys.IntervalsApiKey, value);
+                    }
                 }
             }
         }

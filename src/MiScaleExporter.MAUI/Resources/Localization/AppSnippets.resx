@@ -264,6 +264,21 @@
   <data name="IdealWeightLbs" xml:space="preserve">
     <value>Ideal Weight (Lbs):</value>
   </data>
+  <data name="IntervalsApiKey" xml:space="preserve">
+    <value>API key</value>
+  </data>
+  <data name="IntervalsApiKeyDescription" xml:space="preserve">
+    <value>Create an API key in intervals.icu Settings &gt; Developer Settings. Only weight and body fat % are uploaded.</value>
+  </data>
+  <data name="IntervalsBodyCompositionForm" xml:space="preserve">
+    <value>Intervals.icu Body Composition Form</value>
+  </data>
+  <data name="IntervalsForm" xml:space="preserve">
+    <value>Intervals.icu Form</value>
+  </data>
+  <data name="IntervalsSettings" xml:space="preserve">
+    <value>Intervals.icu</value>
+  </data>
   <data name="Male" xml:space="preserve">
     <value>Male</value>
   </data>
@@ -374,6 +389,9 @@
   </data>
   <data name="UploadToGarminCloud" xml:space="preserve">
     <value>Upload to Garmin Cloud</value>
+  </data>
+  <data name="UploadToIntervalsIcu" xml:space="preserve">
+    <value>Upload to Intervals.icu</value>
   </data>
   <data name="UseExternalAPI" xml:space="preserve">
     <value>Use External API</value>

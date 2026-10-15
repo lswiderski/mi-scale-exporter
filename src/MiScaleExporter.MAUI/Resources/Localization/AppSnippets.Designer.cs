@@ -511,6 +511,51 @@ namespace MiScaleExporter.MAUI.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to API key.
+        /// </summary>
+        internal static string IntervalsApiKey {
+            get {
+                return ResourceManager.GetString("IntervalsApiKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create an API key in intervals.icu Settings &gt; Developer Settings..
+        /// </summary>
+        internal static string IntervalsApiKeyDescription {
+            get {
+                return ResourceManager.GetString("IntervalsApiKeyDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Intervals.icu Body Composition Form.
+        /// </summary>
+        internal static string IntervalsBodyCompositionForm {
+            get {
+                return ResourceManager.GetString("IntervalsBodyCompositionForm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Intervals.icu Form.
+        /// </summary>
+        internal static string IntervalsForm {
+            get {
+                return ResourceManager.GetString("IntervalsForm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Intervals.icu.
+        /// </summary>
+        internal static string IntervalsSettings {
+            get {
+                return ResourceManager.GetString("IntervalsSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Male.
         /// </summary>
         internal static string Male {
@@ -822,6 +867,15 @@ namespace MiScaleExporter.MAUI.Resources.Localization {
         internal static string UploadToGarminCloud {
             get {
                 return ResourceManager.GetString("UploadToGarminCloud", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload to Intervals.icu.
+        /// </summary>
+        internal static string UploadToIntervalsIcu {
+            get {
+                return ResourceManager.GetString("UploadToIntervalsIcu", resourceCulture);
             }
         }
         

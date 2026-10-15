@@ -134,6 +134,17 @@
         </FlyoutItem.Icon>
         <ShellContent ContentTemplate="{DataTemplate local:FormPage}" Route="FormPage" />
     </FlyoutItem>
+    <FlyoutItem Title="{x:Static localization:AppSnippets.IntervalsForm}">
+        <FlyoutItem.Icon>
+            <FontImageSource
+                FontFamily="FontAwesome6Solid"
+                Glyph="&#xf201;"
+                Size="16"
+                Color="{AppThemeBinding Light={StaticResource Black},
+                                        Dark={StaticResource White}}" />
+        </FlyoutItem.Icon>
+        <ShellContent ContentTemplate="{DataTemplate local:IntervalsFormPage}" Route="IntervalsFormPage" />
+    </FlyoutItem>
     <FlyoutItem Title="Xiaomi Token">
         <FlyoutItem.Icon>
             <FontImageSource
