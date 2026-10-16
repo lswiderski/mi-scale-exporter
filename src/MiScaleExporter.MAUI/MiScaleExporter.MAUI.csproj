@@ -78,6 +78,8 @@
 	  <PackageReference Include="NLog.Extensions.Logging" Version="5.3.9" />
 	  <PackageReference Include="Plugin.BLE" Version="3.3.0-beta.2" />
 	  <PackageReference Include="Plugin.Maui.Health" Version="1.5.0" />
+	  <!-- Used directly to request Write-only Health Connect permissions (see HealthConnectService). -->
+	  <PackageReference Include="Xamarin.AndroidX.Health.Connect.ConnectClient" Version="1.1.0.4" />
 	  <!-- Resolves the AndroidX Lifecycle graph conflict between Health Connect and MAUI (NU1107). -->
 	  <PackageReference Include="Xamarin.AndroidX.Lifecycle.LiveData.Core" Version="2.11.0.1" />
 	  <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />

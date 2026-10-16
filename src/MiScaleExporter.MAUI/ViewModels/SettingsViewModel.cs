@@ -350,6 +350,8 @@ namespace MiScaleExporter.MAUI.ViewModels
             var granted = await _healthConnectService.EnsurePermissionsAsync();
             if (!granted)
             {
+                // None of the requested permissions were granted - reflect that by turning the option off.
+                ExportToHealthConnect = false;
                 await Dialog.AlertAsync(AppSnippets.Response, AppSnippets.HealthConnectPermissionDenied, AppSnippets.OK);
             }
         }
