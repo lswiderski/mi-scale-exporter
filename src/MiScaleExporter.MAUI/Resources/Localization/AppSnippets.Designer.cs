@@ -1004,5 +1004,59 @@ namespace MiScaleExporter.MAUI.Resources.Localization {
                 return ResourceManager.GetString("WeightLbs", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export scans to Health Connect.
+        /// </summary>
+        internal static string ExportToHealthConnect {
+            get {
+                return ResourceManager.GetString("ExportToHealthConnect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Each scan is also written to Google Health Connect: weight, body fat, bone mass, body water, lean body mass and BMR..
+        /// </summary>
+        internal static string HealthConnectDescription {
+            get {
+                return ResourceManager.GetString("HealthConnectDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Health Connect is not available on this device..
+        /// </summary>
+        internal static string HealthConnectNotAvailableHint {
+            get {
+                return ResourceManager.GetString("HealthConnectNotAvailableHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Health Connect permissions were not granted, so scans will not be exported. You can grant them in Health Connect..
+        /// </summary>
+        internal static string HealthConnectPermissionDenied {
+            get {
+                return ResourceManager.GetString("HealthConnectPermissionDenied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Health Connect.
+        /// </summary>
+        internal static string HealthConnectSettings {
+            get {
+                return ResourceManager.GetString("HealthConnectSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Health Connect is not available on this device. Install or update Health Connect to use this feature..
+        /// </summary>
+        internal static string HealthConnectUnavailable {
+            get {
+                return ResourceManager.GetString("HealthConnectUnavailable", resourceCulture);
+            }
+        }
     }
 }

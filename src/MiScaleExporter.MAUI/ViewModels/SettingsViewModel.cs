@@ -16,10 +16,12 @@ namespace MiScaleExporter.MAUI.ViewModels
     public class SettingsViewModel : BaseViewModel, ISettingsViewModel
     {
         private readonly IIntervalsService _intervalsService;
+        private readonly IHealthConnectService _healthConnectService;
 
-        public SettingsViewModel(IIntervalsService intervalsService)
+        public SettingsViewModel(IIntervalsService intervalsService, IHealthConnectService healthConnectService)
         {
             _intervalsService = intervalsService;
+            _healthConnectService = healthConnectService;
             this.Title = AppSnippets.Settings;
             // Initialize birthDate with a reasonable default to avoid binding issues
             this._birthDate = DateTime.Today.AddYears(-25);
@@ -41,6 +43,9 @@ namespace MiScaleExporter.MAUI.ViewModels
                     Preferences.Remove(PreferencesKeys.MuscleMassAsPercentage);
                     Preferences.Remove(PreferencesKeys.DisplayWeightInLbs);
                     Preferences.Remove(PreferencesKeys.UseChinaServer);
+                    Preferences.Remove(PreferencesKeys.ExportToHealthConnect);
+                    this._exportToHealthConnect = false;
+                    OnPropertyChanged(nameof(ExportToHealthConnect));
                     Preferences.Remove(PreferencesKeys.UserAge);
                     Preferences.Remove(PreferencesKeys.UserBirthDate);
                     Preferences.Remove(PreferencesKeys.UseBirthDateMode);
@@ -137,6 +142,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                 this._muscleMassAsPercentage = Preferences.Get(PreferencesKeys.MuscleMassAsPercentage, false);
                 this._displayWeightInLbs = Preferences.Get(PreferencesKeys.DisplayWeightInLbs, false);
                 this._useChinaServer = Preferences.Get(PreferencesKeys.UseChinaServer, false);
+                this._exportToHealthConnect = Preferences.Get(PreferencesKeys.ExportToHealthConnect, false);
 
                 // Load age or birthday mode
                 this._useBirthDateMode = Preferences.Get(PreferencesKeys.UseBirthDateMode, false);
@@ -302,6 +308,49 @@ namespace MiScaleExporter.MAUI.ViewModels
             {
                 Preferences.Set(PreferencesKeys.UseChinaServer, value);
                 SetProperty(ref _useChinaServer, value);
+            }
+        }
+
+        private bool _exportToHealthConnect;
+
+        public bool ExportToHealthConnect
+        {
+            get => _exportToHealthConnect;
+            set
+            {
+                if (_exportToHealthConnect == value)
+                {
+                    return;
+                }
+
+                if (value && !_healthConnectService.IsSupported)
+                {
+                    OnPropertyChanged();
+                    _ = Dialog.AlertAsync(AppSnippets.Response, AppSnippets.HealthConnectUnavailable, AppSnippets.OK);
+                    return;
+                }
+
+                _exportToHealthConnect = value;
+                Preferences.Set(PreferencesKeys.ExportToHealthConnect, value);
+                OnPropertyChanged();
+
+                if (value)
+                {
+                    _ = EnsureHealthConnectPermissionsAsync();
+                }
+            }
+        }
+
+        public bool HealthConnectSupported => _healthConnectService.IsSupported;
+
+        public bool HealthConnectUnsupported => !_healthConnectService.IsSupported;
+
+        private async Task EnsureHealthConnectPermissionsAsync()
+        {
+            var granted = await _healthConnectService.EnsurePermissionsAsync();
+            if (!granted)
+            {
+                await Dialog.AlertAsync(AppSnippets.Response, AppSnippets.HealthConnectPermissionDenied, AppSnippets.OK);
             }
         }
 

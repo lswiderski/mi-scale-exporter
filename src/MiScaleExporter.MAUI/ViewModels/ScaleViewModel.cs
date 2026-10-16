@@ -12,6 +12,7 @@ namespace MiScaleExporter.MAUI.ViewModels
     {
         private readonly IScale _scale;
         private readonly ILogService _logService;
+        private readonly IHealthConnectService _healthConnectService;
 
         private string _address;
         private int _age;
@@ -21,10 +22,11 @@ namespace MiScaleExporter.MAUI.ViewModels
 
         private string _bindkey;
 
-        public ScaleViewModel(IScale scale, ILogService logService)
+        public ScaleViewModel(IScale scale, ILogService logService, IHealthConnectService healthConnectService)
         {
             _scale = scale;
             _logService = logService;
+            _healthConnectService = healthConnectService;
 
             Title = AppSnippets.MiScaleData;
             CancelCommand = new Command(OnCancel);
@@ -141,6 +143,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             else
             {
                 App.BodyComposition = this._scale.BodyComposition;
+                _ = ExportToHealthConnectAsync();
                 var oneClickEnabled = Preferences.Get(PreferencesKeys.OneClickScanAndUpload, false);
                 if (!oneClickEnabled)
                 {
@@ -162,6 +165,38 @@ namespace MiScaleExporter.MAUI.ViewModels
                         await Shell.Current.GoToAsync("//FormPage?autoUpload=true");
                         break;
                 }
+            }
+        }
+
+        private async Task ExportToHealthConnectAsync()
+        {
+            try
+            {
+                if (!Preferences.Get(PreferencesKeys.ExportToHealthConnect, false))
+                {
+                    return;
+                }
+
+                var bodyComposition = App.BodyComposition;
+                if (bodyComposition is null || !bodyComposition.IsValid)
+                {
+                    return;
+                }
+
+                if (!_healthConnectService.IsSupported)
+                {
+                    return;
+                }
+
+                var result = await _healthConnectService.WriteAsync(bodyComposition);
+                if (!result.IsSuccess && !result.IsUnavailable)
+                {
+                    _logService.LogError($"Health Connect export failed: {result.Message}");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logService.LogError($"Health Connect export failed: {ex.Message}");
             }
         }
 

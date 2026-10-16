@@ -435,4 +435,22 @@
   <data name="IntervalsProfileUnavailable" xml:space="preserve">
     <value>Not available in your Intervals.icu profile: {0}</value>
   </data>
+  <data name="HealthConnectSettings" xml:space="preserve">
+    <value>Health Connect</value>
+  </data>
+  <data name="ExportToHealthConnect" xml:space="preserve">
+    <value>Export scans to Health Connect</value>
+  </data>
+  <data name="HealthConnectDescription" xml:space="preserve">
+    <value>Each scan is also written to Google Health Connect: weight, body fat, bone mass, body water, lean body mass and BMR.</value>
+  </data>
+  <data name="HealthConnectUnavailable" xml:space="preserve">
+    <value>Health Connect is not available on this device. Install or update Health Connect to use this feature.</value>
+  </data>
+  <data name="HealthConnectPermissionDenied" xml:space="preserve">
+    <value>Health Connect permissions were not granted, so scans will not be exported. You can grant them in Health Connect.</value>
+  </data>
+  <data name="HealthConnectNotAvailableHint" xml:space="preserve">
+    <value>Health Connect is not available on this device.</value>
+  </data>
 </root>

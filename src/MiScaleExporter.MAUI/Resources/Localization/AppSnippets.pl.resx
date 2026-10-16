@@ -432,4 +432,22 @@
   <data name="IntervalsProfileUnavailable" xml:space="preserve">
     <value>Niedostępne w profilu Intervals.icu: {0}</value>
   </data>
+  <data name="HealthConnectSettings" xml:space="preserve">
+    <value>Health Connect</value>
+  </data>
+  <data name="ExportToHealthConnect" xml:space="preserve">
+    <value>Eksportuj pomiary do Health Connect</value>
+  </data>
+  <data name="HealthConnectDescription" xml:space="preserve">
+    <value>Każdy pomiar jest dodatkowo zapisywany w Google Health Connect: waga, tłuszcz, masa kostna, woda w organizmie, beztłuszczowa masa ciała i BMR.</value>
+  </data>
+  <data name="HealthConnectUnavailable" xml:space="preserve">
+    <value>Health Connect nie jest dostępny na tym urządzeniu. Zainstaluj lub zaktualizuj Health Connect, aby korzystać z tej funkcji.</value>
+  </data>
+  <data name="HealthConnectPermissionDenied" xml:space="preserve">
+    <value>Nie przyznano uprawnień Health Connect, więc pomiary nie będą eksportowane. Możesz je przyznać w Health Connect.</value>
+  </data>
+  <data name="HealthConnectNotAvailableHint" xml:space="preserve">
+    <value>Health Connect nie jest dostępny na tym urządzeniu.</value>
+  </data>
 </root>

@@ -456,6 +456,44 @@ Color="Gray" />
                             <Label
                                 FontAttributes="Bold"
                                 FontSize="Small"
+                                Text="{x:Static localization:AppSnippets.HealthConnectSettings}" />
+                            <BoxView
+                                HeightRequest="2"
+                                HorizontalOptions="Fill"
+                                Color="Gray" />
+                            <HorizontalStackLayout Spacing="8">
+                                <CheckBox
+                                    IsChecked="{Binding ExportToHealthConnect, Mode=TwoWay}"
+                                    IsEnabled="{Binding HealthConnectSupported}"
+                                    VerticalOptions="Center" />
+                                <Label
+                                    FontSize="Small"
+                                    Text="{x:Static localization:AppSnippets.ExportToHealthConnect}"
+                                    VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                            <Label
+                                FontSize="Micro"
+                                TextColor="Gray"
+                                Text="{x:Static localization:AppSnippets.HealthConnectDescription}" />
+                            <Label
+                                FontSize="Micro"
+                                IsVisible="{Binding HealthConnectUnsupported}"
+                                TextColor="Red"
+                                Text="{x:Static localization:AppSnippets.HealthConnectNotAvailableHint}" />
+                        </StackLayout>
+                    </Border>
+
+                    <Border>
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20" />
+                        </Border.StrokeShape>
+                        <StackLayout
+                            Padding="15,24,15,24"
+                            Orientation="Vertical"
+                            Spacing="10">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="Small"
                                 Text="Body Fat Calibration" />
                             <BoxView
                                 HeightRequest="2"

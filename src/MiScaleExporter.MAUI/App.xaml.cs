@@ -8,6 +8,7 @@ using IContainer = Autofac.IContainer;
 using MiScaleExporter.Droid;
 using System.Globalization;
 using CommunityToolkit.Maui.Storage;
+using Plugin.Maui.Health;
 
 namespace MiScaleExporter.MAUI
 {
@@ -38,6 +39,8 @@ namespace MiScaleExporter.MAUI
             builder.RegisterType<DataInterpreter>().As<IDataInterpreter>().InstancePerLifetimeScope();
             builder.RegisterType<GarminService>().As<IGarminService>().InstancePerLifetimeScope();
             builder.RegisterType<IntervalsService>().As<IIntervalsService>().InstancePerLifetimeScope();
+            builder.RegisterType<HealthConnectService>().As<IHealthConnectService>().InstancePerLifetimeScope();
+            builder.RegisterInstance(HealthDataProvider.Default).As<IHealth>().SingleInstance();
             builder.RegisterType<ScaleViewModel>().As<IScaleViewModel>().InstancePerLifetimeScope();
             builder.RegisterType<FormViewModel>().As<IFormViewModel>().InstancePerLifetimeScope();
             builder.RegisterType<IntervalsFormViewModel>().As<IIntervalsFormViewModel>().InstancePerLifetimeScope();
