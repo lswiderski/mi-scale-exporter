@@ -57,11 +57,11 @@ namespace MiScaleExporter.MAUI.ViewModels
                     this._intervalsService.UploadAsync(Date.Date, ConvertToKg(weight), fat));
 
                 var message = (response?.IsSuccess ?? false) ? AppSnippets.Uploaded : response?.Message;
-                await Application.Current.MainPage.DisplayAlert(AppSnippets.Response, message, AppSnippets.OK);
+                await Dialog.AlertAsync(AppSnippets.Response, message, AppSnippets.OK);
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert(AppSnippets.Response, ex.Message, AppSnippets.OK);
+                await Dialog.AlertAsync(AppSnippets.Response, ex.Message, AppSnippets.OK);
             }
             finally
             {
@@ -86,11 +86,11 @@ namespace MiScaleExporter.MAUI.ViewModels
                     this._intervalsService.UploadAsync(Date.Date, ConvertToKg(weight), fat));
 
                 var message = (response?.IsSuccess ?? false) ? AppSnippets.Uploaded : response?.Message;
-                await Application.Current.MainPage.DisplayAlert(AppSnippets.Response, message, AppSnippets.OK);
+                await Dialog.AlertAsync(AppSnippets.Response, message, AppSnippets.OK);
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert(AppSnippets.Response, ex.Message, AppSnippets.OK);
+                await Dialog.AlertAsync(AppSnippets.Response, ex.Message, AppSnippets.OK);
             }
             finally
             {

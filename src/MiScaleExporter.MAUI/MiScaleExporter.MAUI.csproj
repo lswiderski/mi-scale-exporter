@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		        <TargetFrameworks>net9.0-android36.0</TargetFrameworks>
+		        <TargetFrameworks>net10.0-android36.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net6.0-tizen</TargetFrameworks> -->
 		<OutputType>Exe</OutputType>
@@ -14,8 +14,8 @@
 		<!-- Display name -->
 		<ApplicationTitle>MiScaleExporter.MAUI</ApplicationTitle>
 
-		<!-- App Identifier -->
-		<ApplicationId>com.lukaszswiderski.miscaleexporter.maui</ApplicationId>
+		<!-- App Identifier (must match the package id in AndroidManifest.xml / Play Store) -->
+		<ApplicationId>com.lukaszswiderski.MiScaleExporter</ApplicationId>
 		<ApplicationIdGuid>f67014c4-0bdb-47bd-b669-da42bf0d67c4</ApplicationIdGuid>
 
 		<!-- Versions -->
@@ -30,50 +30,20 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|AnyCPU'">
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-android36.0|AnyCPU'">
 	  <ApplicationDisplayVersion>2.6.12</ApplicationDisplayVersion>
 	  <ApplicationVersion>50</ApplicationVersion>
 	  <AndroidUseAapt2>True</AndroidUseAapt2>
 	  <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
 	  <AndroidPackageFormat>apk</AndroidPackageFormat>
-	   <UseNativeHttpHandler Condition="'$(UseNativeHttpHandler)' == ''">true</UseNativeHttpHandler>
-	  
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0-android36.0|AnyCPU'">
 	  <ApplicationDisplayVersion>2.6.12</ApplicationDisplayVersion>
 	  <ApplicationVersion>50</ApplicationVersion>
+	  <AndroidUseAapt2>True</AndroidUseAapt2>
+	  <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
 	  <AndroidPackageFormat>apk</AndroidPackageFormat>
-	  <AndroidUseAapt2>True</AndroidUseAapt2>
-	  <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
-	   <UseNativeHttpHandler Condition="'$(UseNativeHttpHandler)' == ''">true</UseNativeHttpHandler>
-	 
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-android|AnyCPU'">
-	  <AndroidPackageFormat>aab</AndroidPackageFormat>
-	  <AndroidUseAapt2>True</AndroidUseAapt2>
-	  <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-android|AnyCPU'">
-	  <AndroidUseAapt2>True</AndroidUseAapt2>
-	  <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
-	  <AndroidPackageFormat>aab</AndroidPackageFormat>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-android|AnyCPU'">
-	  <AndroidUseAapt2>True</AndroidUseAapt2>
-	  <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
-	  <AndroidPackageFormat>aab</AndroidPackageFormat>
-	  <ApplicationId>com.lukaszswiderski.miscaleexporter</ApplicationId>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0-android|AnyCPU'">
-	  <ApplicationId>com.lukaszswiderski.miscaleexporter</ApplicationId>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-android36.0|AnyCPU'">
 	  <AndroidLinkTool>r8</AndroidLinkTool>
 	</PropertyGroup>
 
@@ -96,20 +66,17 @@
 
 	
 	<ItemGroup>
-          <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.81" />
-          <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.120" />
-		<PackageReference Include="Microsoft.Maui.Essentials" Version="9.0.120" />
+          <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.110" />
 	</ItemGroup>
 	<ItemGroup>
 	  <PackageReference Include="Autofac" Version="8.3.0" />
 	  <PackageReference Include="Autofac.Extras.CommonServiceLocator" Version="6.1.0" />
-	        <PackageReference Include="CommunityToolkit.Maui" Version="12.1.0" />
+	        <PackageReference Include="CommunityToolkit.Maui" Version="15.0.1" />
 	  <PackageReference Include="MiScaleBodyComposition" Version="1.0.12" />
 	  <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 	  <PackageReference Include="NLog" Version="5.3.1" />
 	  <PackageReference Include="NLog.Extensions.Logging" Version="5.3.9" />
-	        <PackageReference Include="Plugin.AdMob" Version="2.3.2-beta.7" />
-	  <PackageReference Include="Plugin.BLE" Version="3.2.0-beta.1" />
+	  <PackageReference Include="Plugin.BLE" Version="3.3.0-beta.2" />
 	  <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
 	  <PackageReference Include="YetAnotherGarminConnectClient" Version="0.0.20.2" />
 	  <PackageReference Include="YetAnotherXiaomiCloudClient" Version="1.0.5" />

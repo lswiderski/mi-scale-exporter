@@ -24,21 +24,8 @@ namespace MiScaleExporter.MAUI
 
         protected override Window CreateWindow(IActivationState activationState)
         {
-            // Workaround for: 'Either set MainPage or override CreateWindow.'??
-            if (this.MainPage == null)
-            {
-                AutofacInit();
-                this.MainPage = new AppShell();
-            }
-
-            return base.CreateWindow(activationState);
-        }
-
-        protected override void OnStart()
-        {
-            base.OnStart();
             AutofacInit();
-            MainPage = new AppShell();
+            return new Window(new AppShell());
         }
 
         protected void AutofacInit()

@@ -19,7 +19,6 @@ public static class PreferencesKeys
     public static string OneClickScanAndUploadTarget = "OneClickScanAndUploadTarget";
     public static string UseExternalAPI = "UseExternalAPI";
     public static string ShowDebugInfo = "ShowDebugInfo";
-    public static string HideAds = "HideAds";
     public static string MuscleMassAsPercentage = "MuscleMassAsPercentage";
     public static string S400Bindkey = "S400Bindkey";
     public static string DisplayWeightInLbs = "DisplayWeightInLbs";

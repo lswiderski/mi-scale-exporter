@@ -189,7 +189,7 @@ namespace MiScaleExporter.Services
             if (device != null)
             {
                 var data = device.AdvertisementRecords
-                    .Where(x => x.Type == Plugin.BLE.Abstractions.AdvertisementRecordType.ServiceData) //0x16
+                    .Where(x => x.Type == Plugin.BLE.Abstractions.AdvertisementRecordType.ServiceDataUuid16Bit) //0x16
                     .Select(x => x.Data)
                     .FirstOrDefault();
                 _scannedData = data;

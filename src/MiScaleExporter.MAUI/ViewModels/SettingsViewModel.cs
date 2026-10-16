@@ -38,7 +38,6 @@ namespace MiScaleExporter.MAUI.ViewModels
                     OnPropertyChanged(nameof(SelectedOneClickUploadTarget));
                     Preferences.Remove(PreferencesKeys.UseExternalAPI);
                     Preferences.Remove(PreferencesKeys.ShowDebugInfo);
-                    Preferences.Remove(PreferencesKeys.HideAds);
                     Preferences.Remove(PreferencesKeys.MuscleMassAsPercentage);
                     Preferences.Remove(PreferencesKeys.DisplayWeightInLbs);
                     Preferences.Remove(PreferencesKeys.UseChinaServer);
@@ -135,7 +134,6 @@ namespace MiScaleExporter.MAUI.ViewModels
                 }
                 this._useExternalAPI = Preferences.Get(PreferencesKeys.UseExternalAPI, false);
                 this._showDebugInfo = Preferences.Get(PreferencesKeys.ShowDebugInfo, false);
-                this._hideAds = Preferences.Get(PreferencesKeys.HideAds, false);
                 this._muscleMassAsPercentage = Preferences.Get(PreferencesKeys.MuscleMassAsPercentage, false);
                 this._displayWeightInLbs = Preferences.Get(PreferencesKeys.DisplayWeightInLbs, false);
                 this._useChinaServer = Preferences.Get(PreferencesKeys.UseChinaServer, false);
@@ -319,18 +317,6 @@ namespace MiScaleExporter.MAUI.ViewModels
             }
         }
 
-        private bool _hideAds;
-
-        public bool HideAds
-        {
-            get => _hideAds;
-            set
-            {
-                Preferences.Set(PreferencesKeys.HideAds, value);
-                SetProperty(ref _hideAds, value);
-            }
-        }
-
         public void SexRadioSetToMale()
         {
             this.Sex = Sex.Male;
@@ -498,7 +484,7 @@ namespace MiScaleExporter.MAUI.ViewModels
 
             if (!HasIntervalsApiKey)
             {
-                await Application.Current.MainPage.DisplayAlert(AppSnippets.Response, AppSnippets.IntervalsApiKeyNotSet, AppSnippets.OK);
+                await Dialog.AlertAsync(AppSnippets.Response, AppSnippets.IntervalsApiKeyNotSet, AppSnippets.OK);
                 return;
             }
 
@@ -509,7 +495,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                 if (!(response?.IsSuccess ?? false) || response.Athlete is null)
                 {
                     var error = string.IsNullOrWhiteSpace(response?.Message) ? "Unknown error" : response.Message;
-                    await Application.Current.MainPage.DisplayAlert(AppSnippets.Response, error, AppSnippets.OK);
+                    await Dialog.AlertAsync(AppSnippets.Response, error, AppSnippets.OK);
                     return;
                 }
 
@@ -573,11 +559,11 @@ namespace MiScaleExporter.MAUI.ViewModels
                     message += Environment.NewLine + string.Format(AppSnippets.IntervalsProfileUnavailable, string.Join(", ", unavailable));
                 }
 
-                await Application.Current.MainPage.DisplayAlert(AppSnippets.Response, message, AppSnippets.OK);
+                await Dialog.AlertAsync(AppSnippets.Response, message, AppSnippets.OK);
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert(AppSnippets.Response, ex.Message, AppSnippets.OK);
+                await Dialog.AlertAsync(AppSnippets.Response, ex.Message, AppSnippets.OK);
             }
             finally
             {

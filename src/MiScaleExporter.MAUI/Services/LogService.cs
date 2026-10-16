@@ -66,8 +66,8 @@ public class LogService : ILogService
     {
         try
         {
-            var page = Application.Current?.MainPage;
-            page?.DisplayAlert(title, message, "OK");
+            var page = Application.Current?.Windows.FirstOrDefault()?.Page;
+            _ = page?.DisplayAlertAsync(title, message, "OK");
         }
         catch
         {

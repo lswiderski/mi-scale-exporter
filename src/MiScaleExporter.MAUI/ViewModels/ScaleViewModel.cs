@@ -46,7 +46,6 @@ namespace MiScaleExporter.MAUI.ViewModels
                 }
                 else
                 {
-                   // await App.Current.MainPage.Navigation.PopAsync();
                     await Shell.Current.GoToAsync($"//Settings");
                 }
             }
@@ -76,14 +75,14 @@ namespace MiScaleExporter.MAUI.ViewModels
                 {
                     if (await GetBluetoothPermissionStatusAsync() != PermissionStatus.Granted)
                     {
-                        await Application.Current.MainPage.DisplayAlert(AppSnippets.Problem, AppSnippets.PermissionBluetoothRequired,
+                        await Dialog.AlertAsync(AppSnippets.Problem, AppSnippets.PermissionBluetoothRequired,
                            AppSnippets.OK);
                         return false;
                     }
 
                     if (await GetLocationWhenInUsePermissionStatusAsync() != PermissionStatus.Granted)
                     {
-                        await Application.Current.MainPage.DisplayAlert(AppSnippets.Problem, AppSnippets.PermissionLocationRequired,
+                        await Dialog.AlertAsync(AppSnippets.Problem, AppSnippets.PermissionLocationRequired,
                              AppSnippets.OK);
                         return false;
                     }
@@ -94,7 +93,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                     {
                         if(await GetLocationAlwaysPermissionStatusAsync() != PermissionStatus.Granted)
                         {
-                            await Application.Current.MainPage.DisplayAlert(AppSnippets.Problem, AppSnippets.PermissionLocationRequired,
+                            await Dialog.AlertAsync(AppSnippets.Problem, AppSnippets.PermissionLocationRequired,
                             AppSnippets.OK);
                             return false;
                         }
@@ -106,7 +105,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             // Check if Bluetooth is enabled
             if (CrossBluetoothLE.Current.State != BluetoothState.On)
             {
-                await Application.Current.MainPage.DisplayAlert(
+                await Dialog.AlertAsync(
                     AppSnippets.Problem,
                     AppSnippets.BluetoothDisabled,
                     AppSnippets.OK);
@@ -134,7 +133,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             if (this._scale.BodyComposition is null || !this._scale.BodyComposition.IsValid)
             {
                 var msg = AppSnippets.DataCouldNotBeObtained;
-                await Application.Current.MainPage.DisplayAlert(AppSnippets.Problem, msg,
+                await Dialog.AlertAsync(AppSnippets.Problem, msg,
                     AppSnippets.OK);
                 _logService.LogError(msg);
                 ScanningLabel = AppSnippets.NotFound;

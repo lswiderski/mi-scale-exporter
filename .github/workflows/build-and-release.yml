@@ -17,12 +17,12 @@ jobs:
 
       - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: '10.0.x'
 
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: '21'
 
       - uses: android-actions/setup-android@v3
         with:
@@ -49,7 +49,7 @@ jobs:
       - name: Publish APK
         shell: bash
         run: |
-          ARGS=(-f net9.0-android36.0 -c Release
+          ARGS=(-f net10.0-android36.0 -c Release
                 -p:AndroidPackageFormat=apk
                 -p:AndroidCreatePackagePerAbi=false)
           if [[ "${{ steps.version.outputs.override }}" == "true" ]]; then
@@ -62,7 +62,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: apk
-          path: src/MiScaleExporter.MAUI/bin/Release/net9.0-android36.0/**/*.apk
+          path: src/MiScaleExporter.MAUI/bin/Release/net10.0-android36.0/**/*.apk
           if-no-files-found: error
 
   release:
