@@ -511,6 +511,87 @@ namespace MiScaleExporter.MAUI.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to API key.
+        /// </summary>
+        internal static string IntervalsApiKey {
+            get {
+                return ResourceManager.GetString("IntervalsApiKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create an API key in intervals.icu Settings &gt; Developer Settings..
+        /// </summary>
+        internal static string IntervalsApiKeyDescription {
+            get {
+                return ResourceManager.GetString("IntervalsApiKeyDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Intervals.icu Body Composition Form.
+        /// </summary>
+        internal static string IntervalsBodyCompositionForm {
+            get {
+                return ResourceManager.GetString("IntervalsBodyCompositionForm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Intervals.icu Form.
+        /// </summary>
+        internal static string IntervalsForm {
+            get {
+                return ResourceManager.GetString("IntervalsForm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set your Intervals.icu API key first..
+        /// </summary>
+        internal static string IntervalsApiKeyNotSet {
+            get {
+                return ResourceManager.GetString("IntervalsApiKeyNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fill from Intervals.icu.
+        /// </summary>
+        internal static string IntervalsFillFromProfile {
+            get {
+                return ResourceManager.GetString("IntervalsFillFromProfile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filled from Intervals.icu: {0}.
+        /// </summary>
+        internal static string IntervalsProfileFilled {
+            get {
+                return ResourceManager.GetString("IntervalsProfileFilled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not available in your Intervals.icu profile: {0}.
+        /// </summary>
+        internal static string IntervalsProfileUnavailable {
+            get {
+                return ResourceManager.GetString("IntervalsProfileUnavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Intervals.icu.
+        /// </summary>
+        internal static string IntervalsSettings {
+            get {
+                return ResourceManager.GetString("IntervalsSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Male.
         /// </summary>
         internal static string Male {
@@ -637,6 +718,42 @@ namespace MiScaleExporter.MAUI.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Off.
+        /// </summary>
+        internal static string OneClickUploadOff {
+            get {
+                return ResourceManager.GetString("OneClickUploadOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Garmin.
+        /// </summary>
+        internal static string OneClickUploadGarmin {
+            get {
+                return ResourceManager.GetString("OneClickUploadGarmin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Intervals.icu.
+        /// </summary>
+        internal static string OneClickUploadIntervals {
+            get {
+                return ResourceManager.GetString("OneClickUploadIntervals", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Garmin + Intervals.icu.
+        /// </summary>
+        internal static string OneClickUploadBoth {
+            get {
+                return ResourceManager.GetString("OneClickUploadBoth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open Help.
         /// </summary>
         internal static string OpenHelp {
@@ -745,15 +862,6 @@ namespace MiScaleExporter.MAUI.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hide Ads Banner.
-        /// </summary>
-        internal static string SettingsHideAds {
-            get {
-                return ResourceManager.GetString("SettingsHideAds", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Sex.
         /// </summary>
         internal static string Sex {
@@ -826,6 +934,15 @@ namespace MiScaleExporter.MAUI.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Upload to Intervals.icu.
+        /// </summary>
+        internal static string UploadToIntervalsIcu {
+            get {
+                return ResourceManager.GetString("UploadToIntervalsIcu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use External API.
         /// </summary>
         internal static string UseExternalAPI {
@@ -885,6 +1002,60 @@ namespace MiScaleExporter.MAUI.Resources.Localization {
         internal static string WeightLbs {
             get {
                 return ResourceManager.GetString("WeightLbs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export scans to Health Connect.
+        /// </summary>
+        internal static string ExportToHealthConnect {
+            get {
+                return ResourceManager.GetString("ExportToHealthConnect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Each scan is also written to Google Health Connect: weight, body fat, bone mass, body water, lean body mass and BMR..
+        /// </summary>
+        internal static string HealthConnectDescription {
+            get {
+                return ResourceManager.GetString("HealthConnectDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Health Connect is not available on this device..
+        /// </summary>
+        internal static string HealthConnectNotAvailableHint {
+            get {
+                return ResourceManager.GetString("HealthConnectNotAvailableHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Health Connect permissions were not granted, so scans will not be exported. You can grant them in Health Connect..
+        /// </summary>
+        internal static string HealthConnectPermissionDenied {
+            get {
+                return ResourceManager.GetString("HealthConnectPermissionDenied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Health Connect.
+        /// </summary>
+        internal static string HealthConnectSettings {
+            get {
+                return ResourceManager.GetString("HealthConnectSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Health Connect is not available on this device. Install or update Health Connect to use this feature..
+        /// </summary>
+        internal static string HealthConnectUnavailable {
+            get {
+                return ResourceManager.GetString("HealthConnectUnavailable", resourceCulture);
             }
         }
     }

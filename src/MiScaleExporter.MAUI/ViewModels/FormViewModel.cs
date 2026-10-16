@@ -99,7 +99,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                 // Run the complete service call away from Android's main thread.
                 var response = await Task.Run(() => this._garminService.UploadAsync(request, credencials));
                 var message = (response?.IsSuccess ?? false) ? AppSnippets.Uploaded : response?.Message;
-                await Application.Current.MainPage.DisplayAlert(AppSnippets.Response, message, AppSnippets.OK);
+                await Dialog.AlertAsync(AppSnippets.Response, message, AppSnippets.OK);
 
                 if (this._saveTokens)
                 {
@@ -134,7 +134,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert(AppSnippets.Response, ex.Message, AppSnippets.OK);
+                await Dialog.AlertAsync(AppSnippets.Response, ex.Message, AppSnippets.OK);
             }
             finally
             {
@@ -150,10 +150,19 @@ namespace MiScaleExporter.MAUI.ViewModels
 
             if (!response.IsSuccess && response.file != null)
             {
-                await Application.Current.MainPage.DisplayAlert(AppSnippets.Response, response?.Message, AppSnippets.OK);
+                await Dialog.AlertAsync(AppSnippets.Response, response?.Message, AppSnippets.OK);
             }
             else
             {
+                var readStatus = await Permissions.RequestAsync<Permissions.StorageRead>();
+                var writeStatus = await Permissions.RequestAsync<Permissions.StorageWrite>();
+                if (readStatus != PermissionStatus.Granted || writeStatus != PermissionStatus.Granted)
+                {
+                    await Dialog.AlertAsync(AppSnippets.Problem, "Storage permissions are required to save files.", AppSnippets.OK);
+                    this.IsBusyForm = false;
+                    return;
+                }
+
                 using var stream = new MemoryStream(response.file);
                 var fileSaverResult = await _fileSaver.SaveAsync($"activity_{Date.Date.Add(Time).ToShortDateString()}.fit", stream);
                 if (fileSaverResult.IsSuccessful)

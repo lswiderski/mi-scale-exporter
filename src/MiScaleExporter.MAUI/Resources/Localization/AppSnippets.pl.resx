@@ -264,6 +264,21 @@
   <data name="IdealWeightLbs" xml:space="preserve">
     <value>Idealna masa ciała (Lbs):</value>
   </data>
+  <data name="IntervalsApiKey" xml:space="preserve">
+    <value>Klucz API</value>
+  </data>
+  <data name="IntervalsApiKeyDescription" xml:space="preserve">
+    <value>Utwórz klucz API w intervals.icu Ustawienia &gt; Developer Settings. Wysyłane są tylko waga i procent tkanki tłuszczowej.</value>
+  </data>
+  <data name="IntervalsBodyCompositionForm" xml:space="preserve">
+    <value>Formularz składu ciała Intervals.icu</value>
+  </data>
+  <data name="IntervalsForm" xml:space="preserve">
+    <value>Formularz Intervals.icu</value>
+  </data>
+  <data name="IntervalsSettings" xml:space="preserve">
+    <value>Intervals.icu</value>
+  </data>
   <data name="Male" xml:space="preserve">
     <value>Mężczyzna</value>
   </data>
@@ -306,6 +321,18 @@
   <data name="OneClickScanUpload" xml:space="preserve">
     <value>Jedno kliknięcie - skanowanie i przesyłanie</value>
   </data>
+  <data name="OneClickUploadOff" xml:space="preserve">
+    <value>Wyłączone</value>
+  </data>
+  <data name="OneClickUploadGarmin" xml:space="preserve">
+    <value>Garmin</value>
+  </data>
+  <data name="OneClickUploadIntervals" xml:space="preserve">
+    <value>Intervals.icu</value>
+  </data>
+  <data name="OneClickUploadBoth" xml:space="preserve">
+    <value>Garmin + Intervals.icu</value>
+  </data>
   <data name="OpenHelp" xml:space="preserve">
     <value>Otwórz pomoc</value>
   </data>
@@ -345,9 +372,6 @@
   <data name="Settings" xml:space="preserve">
     <value>Ustawienia</value>
   </data>
-  <data name="SettingsHideAds" xml:space="preserve">
-    <value>Schowaj reklamy</value>
-  </data>
   <data name="Sex" xml:space="preserve">
     <value>Płeć</value>
   </data>
@@ -372,6 +396,9 @@
   <data name="UploadToGarminCloud" xml:space="preserve">
     <value>Prześlij do usługi Garmin Cloud</value>
   </data>
+  <data name="UploadToIntervalsIcu" xml:space="preserve">
+    <value>Prześlij do Intervals.icu</value>
+  </data>
   <data name="UseExternalAPI" xml:space="preserve">
     <value>Użyj zewnętrznego API</value>
   </data>
@@ -392,5 +419,35 @@
   </data>
   <data name="WeightLbs" xml:space="preserve">
     <value>Waga (Lbs)</value>
+  </data>
+  <data name="IntervalsApiKeyNotSet" xml:space="preserve">
+    <value>Najpierw ustaw klucz API Intervals.icu.</value>
+  </data>
+  <data name="IntervalsFillFromProfile" xml:space="preserve">
+    <value>Uzupełnij z Intervals.icu</value>
+  </data>
+  <data name="IntervalsProfileFilled" xml:space="preserve">
+    <value>Uzupełniono z Intervals.icu: {0}</value>
+  </data>
+  <data name="IntervalsProfileUnavailable" xml:space="preserve">
+    <value>Niedostępne w profilu Intervals.icu: {0}</value>
+  </data>
+  <data name="HealthConnectSettings" xml:space="preserve">
+    <value>Health Connect</value>
+  </data>
+  <data name="ExportToHealthConnect" xml:space="preserve">
+    <value>Eksportuj pomiary do Health Connect</value>
+  </data>
+  <data name="HealthConnectDescription" xml:space="preserve">
+    <value>Każdy pomiar jest dodatkowo zapisywany w Google Health Connect: waga, tłuszcz, masa kostna, woda w organizmie, beztłuszczowa masa ciała i BMR.</value>
+  </data>
+  <data name="HealthConnectUnavailable" xml:space="preserve">
+    <value>Health Connect nie jest dostępny na tym urządzeniu. Zainstaluj lub zaktualizuj Health Connect, aby korzystać z tej funkcji.</value>
+  </data>
+  <data name="HealthConnectPermissionDenied" xml:space="preserve">
+    <value>Nie przyznano uprawnień Health Connect, więc pomiary nie będą eksportowane. Możesz je przyznać w Health Connect.</value>
+  </data>
+  <data name="HealthConnectNotAvailableHint" xml:space="preserve">
+    <value>Health Connect nie jest dostępny na tym urządzeniu.</value>
   </data>
 </root>

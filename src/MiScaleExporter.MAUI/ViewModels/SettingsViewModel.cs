@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Windows.Input;
 using MiScaleExporter.MAUI.Resources.Localization;
@@ -13,24 +15,37 @@ namespace MiScaleExporter.MAUI.ViewModels
 {
     public class SettingsViewModel : BaseViewModel, ISettingsViewModel
     {
-        public SettingsViewModel()
+        private readonly IIntervalsService _intervalsService;
+        private readonly IHealthConnectService _healthConnectService;
+
+        public SettingsViewModel(IIntervalsService intervalsService, IHealthConnectService healthConnectService)
         {
+            _intervalsService = intervalsService;
+            _healthConnectService = healthConnectService;
             this.Title = AppSnippets.Settings;
             // Initialize birthDate with a reasonable default to avoid binding issues
             this._birthDate = DateTime.Today.AddYears(-25);
             // Initialize picker-backed values before the page creates its bindings.
             this._xiaomiScaleModel = Preferences.Get(PreferencesKeys.XiaomiScaleModel, string.Empty);
+            this._oneClickTarget = (OneClickUploadTarget)Preferences.Get(PreferencesKeys.OneClickScanAndUploadTarget, (byte)OneClickUploadTarget.None);
             ResetCommand = new Command(() =>
                 {
                     Preferences.Remove(PreferencesKeys.ApiServerAddressOverride);
                     this.ApiAddress = string.Empty;
                     Preferences.Remove(PreferencesKeys.OneClickScanAndUpload);
+                    Preferences.Remove(PreferencesKeys.OneClickScanAndUploadTarget);
+                    this._oneClickScanAndUpload = false;
+                    OnPropertyChanged(nameof(OneClickScanAndUpload));
+                    this._oneClickTarget = OneClickUploadTarget.None;
+                    OnPropertyChanged(nameof(SelectedOneClickUploadTarget));
                     Preferences.Remove(PreferencesKeys.UseExternalAPI);
                     Preferences.Remove(PreferencesKeys.ShowDebugInfo);
-                    Preferences.Remove(PreferencesKeys.HideAds);
                     Preferences.Remove(PreferencesKeys.MuscleMassAsPercentage);
                     Preferences.Remove(PreferencesKeys.DisplayWeightInLbs);
                     Preferences.Remove(PreferencesKeys.UseChinaServer);
+                    Preferences.Remove(PreferencesKeys.ExportToHealthConnect);
+                    this._exportToHealthConnect = false;
+                    OnPropertyChanged(nameof(ExportToHealthConnect));
                     Preferences.Remove(PreferencesKeys.UserAge);
                     Preferences.Remove(PreferencesKeys.UserBirthDate);
                     Preferences.Remove(PreferencesKeys.UseBirthDateMode);
@@ -40,6 +55,10 @@ namespace MiScaleExporter.MAUI.ViewModels
                     Preferences.Remove(PreferencesKeys.XiaomiPassToken);
                     Preferences.Remove(PreferencesKeys.XiaomiAccountRegion);
                     Preferences.Remove(PreferencesKeys.XiaomiScaleModel);
+                    SecureStorage.Remove(PreferencesKeys.IntervalsApiKey);
+                    this._intervalsApiKey = string.Empty;
+                    OnPropertyChanged(nameof(IntervalsApiKey));
+                    OnPropertyChanged(nameof(HasIntervalsApiKey));
                     this.UseBirthDateMode = false;
                     this.ManualAge = "25";
                     this._useFatCalibration = false;
@@ -54,6 +73,8 @@ namespace MiScaleExporter.MAUI.ViewModels
             );
             GetBLEKeyCommand = new Command(async () => await Launcher.OpenAsync("https://lswiderski.github.io/mi-scale-exporter/#steps-to-connect-xiaomi-body-composition-scale-s400"));
             GetXiaomiTokensCommand = new Command(async () => await Shell.Current.GoToAsync("//XiaomiLogin"));
+            OpenIntervalsSettingsCommand = new Command(async () => await Launcher.OpenAsync("https://intervals.icu/settings"));
+            FillFromIntervalsCommand = new Command(async () => await FillFromIntervalsAsync());
             ResetTokensCommand = new Command(_clearTokens);
             AddCalibrationPointCommand = new Command(AddCalibrationPoint);
             RemoveCalibrationPointCommand = new Command<FatCalibrationPoint>(RemoveCalibrationPoint);
@@ -63,6 +84,8 @@ namespace MiScaleExporter.MAUI.ViewModels
         public ICommand ResetCommand { get; }
         public ICommand GetBLEKeyCommand { get; }
         public ICommand GetXiaomiTokensCommand { get; }
+        public ICommand OpenIntervalsSettingsCommand { get; }
+        public ICommand FillFromIntervalsCommand { get; }
         public ICommand ResetTokensCommand { get; }
         public ICommand AddCalibrationPointCommand { get; }
         public ICommand RemoveCalibrationPointCommand { get; }
@@ -79,6 +102,26 @@ namespace MiScaleExporter.MAUI.ViewModels
             new PickerOption("xiaomi.scales.ms116", "S800 - xiaomi.scales.ms116")
         };
 
+        public List<PickerOption> OneClickUploadTargetOptions { get; } = new()
+        {
+            new PickerOption(((byte)OneClickUploadTarget.Garmin).ToString(), AppSnippets.OneClickUploadGarmin),
+            new PickerOption(((byte)OneClickUploadTarget.Intervals).ToString(), AppSnippets.OneClickUploadIntervals),
+            new PickerOption(((byte)OneClickUploadTarget.Both).ToString(), AppSnippets.OneClickUploadBoth),
+        };
+
+        public PickerOption SelectedOneClickUploadTarget
+        {
+            get => OneClickUploadTargetOptions.FirstOrDefault(o => o.Value == ((byte)_oneClickTarget).ToString())
+                   ?? OneClickUploadTargetOptions.First();
+            set
+            {
+                if (value != null && value.Value != ((byte)_oneClickTarget).ToString())
+                {
+                    OneClickTarget = (OneClickUploadTarget)byte.Parse(value.Value);
+                }
+            }
+        }
+
 
         public async Task LoadPreferencesAsync()
         {
@@ -87,12 +130,19 @@ namespace MiScaleExporter.MAUI.ViewModels
             {
                 this._apiAddress = Preferences.Get(PreferencesKeys.ApiServerAddressOverride, string.Empty);
                 this._oneClickScanAndUpload = Preferences.Get(PreferencesKeys.OneClickScanAndUpload, false);
+                this._oneClickTarget = (OneClickUploadTarget)Preferences.Get(PreferencesKeys.OneClickScanAndUploadTarget, (byte)OneClickUploadTarget.None);
+                if (_oneClickTarget == OneClickUploadTarget.None && _oneClickScanAndUpload)
+                {
+                    // migrate from the old boolean preference
+                    _oneClickTarget = OneClickUploadTarget.Garmin;
+                    Preferences.Set(PreferencesKeys.OneClickScanAndUploadTarget, (byte)OneClickUploadTarget.Garmin);
+                }
                 this._useExternalAPI = Preferences.Get(PreferencesKeys.UseExternalAPI, false);
                 this._showDebugInfo = Preferences.Get(PreferencesKeys.ShowDebugInfo, false);
-                this._hideAds = Preferences.Get(PreferencesKeys.HideAds, false);
                 this._muscleMassAsPercentage = Preferences.Get(PreferencesKeys.MuscleMassAsPercentage, false);
                 this._displayWeightInLbs = Preferences.Get(PreferencesKeys.DisplayWeightInLbs, false);
                 this._useChinaServer = Preferences.Get(PreferencesKeys.UseChinaServer, false);
+                this._exportToHealthConnect = Preferences.Get(PreferencesKeys.ExportToHealthConnect, false);
 
                 // Load age or birthday mode
                 this._useBirthDateMode = Preferences.Get(PreferencesKeys.UseBirthDateMode, false);
@@ -124,6 +174,9 @@ namespace MiScaleExporter.MAUI.ViewModels
                 this._xiaomiPassToken = Preferences.Get(PreferencesKeys.XiaomiPassToken, string.Empty);
                 this._xiaomiAccountRegion = Preferences.Get(PreferencesKeys.XiaomiAccountRegion, string.Empty);
                 this._xiaomiScaleModel = Preferences.Get(PreferencesKeys.XiaomiScaleModel, string.Empty);
+
+                this._intervalsApiKey = await SecureStorage.GetAsync(PreferencesKeys.IntervalsApiKey);
+                OnPropertyChanged(nameof(HasIntervalsApiKey));
 
                 this._useFatCalibration = Preferences.Get(PreferencesKeys.UseFatCalibration, false);
                 this.CalibrationPoints = new ObservableCollection<FatCalibrationPoint>(
@@ -176,8 +229,37 @@ namespace MiScaleExporter.MAUI.ViewModels
             get => _oneClickScanAndUpload;
             set
             {
+                if (_oneClickScanAndUpload == value)
+                {
+                    return;
+                }
+
                 Preferences.Set(PreferencesKeys.OneClickScanAndUpload, value);
                 SetProperty(ref _oneClickScanAndUpload, value);
+
+                if (value && _oneClickTarget == OneClickUploadTarget.None)
+                {
+                    OneClickTarget = OneClickUploadTarget.Garmin;
+                }
+            }
+        }
+
+        private OneClickUploadTarget _oneClickTarget;
+
+        public OneClickUploadTarget OneClickTarget
+        {
+            get => _oneClickTarget;
+            set
+            {
+                if (_oneClickTarget == value)
+                {
+                    return;
+                }
+
+                _oneClickTarget = value;
+                Preferences.Set(PreferencesKeys.OneClickScanAndUploadTarget, (byte)value);
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(SelectedOneClickUploadTarget));
             }
         }
 
@@ -229,6 +311,51 @@ namespace MiScaleExporter.MAUI.ViewModels
             }
         }
 
+        private bool _exportToHealthConnect;
+
+        public bool ExportToHealthConnect
+        {
+            get => _exportToHealthConnect;
+            set
+            {
+                if (_exportToHealthConnect == value)
+                {
+                    return;
+                }
+
+                if (value && !_healthConnectService.IsSupported)
+                {
+                    OnPropertyChanged();
+                    _ = Dialog.AlertAsync(AppSnippets.Response, AppSnippets.HealthConnectUnavailable, AppSnippets.OK);
+                    return;
+                }
+
+                _exportToHealthConnect = value;
+                Preferences.Set(PreferencesKeys.ExportToHealthConnect, value);
+                OnPropertyChanged();
+
+                if (value)
+                {
+                    _ = EnsureHealthConnectPermissionsAsync();
+                }
+            }
+        }
+
+        public bool HealthConnectSupported => _healthConnectService.IsSupported;
+
+        public bool HealthConnectUnsupported => !_healthConnectService.IsSupported;
+
+        private async Task EnsureHealthConnectPermissionsAsync()
+        {
+            var granted = await _healthConnectService.EnsurePermissionsAsync();
+            if (!granted)
+            {
+                // None of the requested permissions were granted - reflect that by turning the option off.
+                ExportToHealthConnect = false;
+                await Dialog.AlertAsync(AppSnippets.Response, AppSnippets.HealthConnectPermissionDenied, AppSnippets.OK);
+            }
+        }
+
         private bool _showDebugInfo;
 
         public bool ShowDebugInfo
@@ -238,18 +365,6 @@ namespace MiScaleExporter.MAUI.ViewModels
             {
                 Preferences.Set(PreferencesKeys.ShowDebugInfo, value);
                 SetProperty(ref _showDebugInfo, value);
-            }
-        }
-
-        private bool _hideAds;
-
-        public bool HideAds
-        {
-            get => _hideAds;
-            set
-            {
-                Preferences.Set(PreferencesKeys.HideAds, value);
-                SetProperty(ref _hideAds, value);
             }
         }
 
@@ -376,6 +491,137 @@ namespace MiScaleExporter.MAUI.ViewModels
             }
         }
 
+        // ---- Intervals.icu Settings -----------------------------------------------------
+
+        private string _intervalsApiKey;
+
+        public string IntervalsApiKey
+        {
+            get => _intervalsApiKey;
+            set
+            {
+                if (_intervalsApiKey != value)
+                {
+                    SetProperty(ref _intervalsApiKey, value);
+                    OnPropertyChanged(nameof(HasIntervalsApiKey));
+                    if (string.IsNullOrEmpty(value))
+                    {
+                        SecureStorage.Remove(PreferencesKeys.IntervalsApiKey);
+                    }
+                    else
+                    {
+                        SecureStorage.SetAsync(PreferencesKeys.IntervalsApiKey, value);
+                    }
+                }
+            }
+        }
+
+        public bool HasIntervalsApiKey => !string.IsNullOrWhiteSpace(_intervalsApiKey);
+
+        private bool _isFillingProfile;
+
+        public bool IsFillingProfile
+        {
+            get => _isFillingProfile;
+            set => SetProperty(ref _isFillingProfile, value);
+        }
+
+        private async Task FillFromIntervalsAsync()
+        {
+            if (IsFillingProfile)
+            {
+                return;
+            }
+
+            if (!HasIntervalsApiKey)
+            {
+                await Dialog.AlertAsync(AppSnippets.Response, AppSnippets.IntervalsApiKeyNotSet, AppSnippets.OK);
+                return;
+            }
+
+            IsFillingProfile = true;
+            try
+            {
+                var response = await Task.Run(() => _intervalsService.GetAthleteAsync());
+                if (!(response?.IsSuccess ?? false) || response.Athlete is null)
+                {
+                    var error = string.IsNullOrWhiteSpace(response?.Message) ? "Unknown error" : response.Message;
+                    await Dialog.AlertAsync(AppSnippets.Response, error, AppSnippets.OK);
+                    return;
+                }
+
+                var athlete = response.Athlete;
+                var filled = new List<string>();
+                var unavailable = new List<string>();
+
+                if (athlete.Height is > 0)
+                {
+                    var heightCm = athlete.Height.Value > 3
+                        ? athlete.Height.Value
+                        : athlete.Height.Value * 100;
+                    var rounded = (int)Math.Round(heightCm);
+                    if (rounded is > 0 and < 250)
+                    {
+                        Height = rounded.ToString(CultureInfo.InvariantCulture);
+                        filled.Add(AppSnippets.Height);
+                    }
+                    else
+                    {
+                        unavailable.Add(AppSnippets.Height);
+                    }
+                }
+                else
+                {
+                    unavailable.Add(AppSnippets.Height);
+                }
+
+                if (string.Equals(athlete.Sex, "M", StringComparison.OrdinalIgnoreCase))
+                {
+                    Sex = Sex.Male;
+                    filled.Add(AppSnippets.Sex);
+                }
+                else if (string.Equals(athlete.Sex, "F", StringComparison.OrdinalIgnoreCase))
+                {
+                    Sex = Sex.Female;
+                    filled.Add(AppSnippets.Sex);
+                }
+                else
+                {
+                    unavailable.Add(AppSnippets.Sex);
+                }
+
+                if (!string.IsNullOrWhiteSpace(athlete.DateOfBirth)
+                    && DateTime.TryParse(athlete.DateOfBirth, CultureInfo.InvariantCulture, DateTimeStyles.None, out var dob))
+                {
+                    BirthDate = dob;
+                    UseBirthDateMode = true;
+                    filled.Add(AppSnippets.Age);
+                }
+                else
+                {
+                    unavailable.Add(AppSnippets.Age);
+                }
+
+                var message = filled.Count > 0
+                    ? string.Format(AppSnippets.IntervalsProfileFilled, string.Join(", ", filled))
+                    : AppSnippets.IntervalsProfileUnavailable;
+                if (filled.Count > 0 && unavailable.Count > 0)
+                {
+                    message += Environment.NewLine + string.Format(AppSnippets.IntervalsProfileUnavailable, string.Join(", ", unavailable));
+                }
+
+                await Dialog.AlertAsync(AppSnippets.Response, message, AppSnippets.OK);
+            }
+            catch (Exception ex)
+            {
+                await Dialog.AlertAsync(AppSnippets.Response, ex.Message, AppSnippets.OK);
+            }
+            finally
+            {
+                IsFillingProfile = false;
+            }
+        }
+
         private int _age;
 
         public int Age
@@ -491,6 +737,8 @@ namespace MiScaleExporter.MAUI.ViewModels
                 if (_sex == value) return;
                 SetProperty(ref _sex, value);
                 Preferences.Set(PreferencesKeys.UserSex, (byte)value);
+                OnPropertyChanged(nameof(IsMaleSelected));
+                OnPropertyChanged(nameof(IsFemaleSelected));
             }
         }
 
