@@ -25,6 +25,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             this._birthDate = DateTime.Today.AddYears(-25);
             // Initialize picker-backed values before the page creates its bindings.
             this._xiaomiScaleModel = Preferences.Get(PreferencesKeys.XiaomiScaleModel, string.Empty);
+            this._oneClickTarget = (OneClickUploadTarget)Preferences.Get(PreferencesKeys.OneClickScanAndUploadTarget, (byte)OneClickUploadTarget.None);
             ResetCommand = new Command(() =>
                 {
                     Preferences.Remove(PreferencesKeys.ApiServerAddressOverride);
