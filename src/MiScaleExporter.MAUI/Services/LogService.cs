@@ -21,28 +21,58 @@ public class LogService : ILogService
 
     public void LogError(string message)
     {
-        Application.Current.MainPage.DisplayAlert("Error", message,
-                  "OK");
+        ShowAlert("Error", message);
     }
 
     public void LogFatal(string message)
     {
 
-        Application.Current.MainPage.DisplayAlert("Fatal", message,
-                "OK");
+        ShowAlert("Fatal", message);
     }
 
     public void LogInfo(string message)
     {
-        Application.Current.MainPage.DisplayAlert("Info", message,
-                "OK");
+        ShowAlert("Info", message);
     }
 
     public void LogWarning(string message)
     {
 
-        Application.Current.MainPage.DisplayAlert("Warning", message,
-                "OK");
+        ShowAlert("Warning", message);
+    }
+
+    // Log methods are called from background threads (BLE callbacks, Task.Run),
+    // so any UI interaction must be marshalled onto the main thread.
+    private static void ShowAlert(string title, string message)
+    {
+        try
+        {
+            if (MainThread.IsMainThread)
+            {
+                ShowAlertOnMainThread(title, message);
+            }
+            else
+            {
+                MainThread.BeginInvokeOnMainThread(() => ShowAlertOnMainThread(title, message));
+            }
+        }
+        catch
+        {
+            // Logging must never throw; swallow any UI/marshalling failure.
+        }
+    }
+
+    private static void ShowAlertOnMainThread(string title, string message)
+    {
+        try
+        {
+            var page = Application.Current?.MainPage;
+            page?.DisplayAlert(title, message, "OK");
+        }
+        catch
+        {
+            // Logging must never throw; swallow any UI failure.
+        }
     }
 
     public static LoggingConfiguration CreateLogger()

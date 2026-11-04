@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    x:Class="MiScaleExporter.MAUI.Views.IntervalsFormPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:behaviors="clr-namespace:MiScaleExporter.MAUI.Behaviors;assembly=MiScaleExporter.MAUI"
+    xmlns:admob="clr-namespace:Plugin.AdMob;assembly=Plugin.AdMob"
+    xmlns:localization="clr-namespace:MiScaleExporter.MAUI.Resources.Localization"
+    Title="{Binding Title}">
+
+    <AbsoluteLayout HorizontalOptions="FillAndExpand">
+        <ScrollView
+            HorizontalOptions="FillAndExpand"
+            VerticalScrollBarVisibility="Always"
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All">
+            <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
+                <admob:BannerAd
+                    x:Name="adMobBanner"
+                    AdUnitId="ca-app-pub-1938975042085430/4160336701"
+                    AdSize="Banner" />
+                <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
+                    <Grid
+                        Padding="10,10,10,10"
+                        HorizontalOptions="FillAndExpand">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50*" />
+                            <ColumnDefinition Width="50*" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackLayout Grid.Row="0" Grid.Column="0">
+                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.WeightKg}" IsVisible="{Binding ShowWeightInKg}" />
+                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.WeightLbs}" IsVisible="{Binding ShowWeightInLbs}" />
+                            <Entry
+                                FontSize="Medium"
+                                Keyboard="Numeric"
+                                Text="{Binding Weight, Mode=TwoWay, StringFormat='{0:0.##}'}">
+                                <Entry.Behaviors>
+                                    <behaviors:NumericDoubleValidationBehavior />
+                                </Entry.Behaviors>
+                            </Entry>
+                        </StackLayout>
+
+                        <StackLayout Grid.Row="0" Grid.Column="1">
+                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.BodyFatPercent}" />
+                            <Entry
+                                FontSize="Medium"
+                                Keyboard="Numeric"
+                                Text="{Binding Fat, Mode=TwoWay}">
+                                <Entry.Behaviors>
+                                    <behaviors:NumericDoubleValidationBehavior />
+                                </Entry.Behaviors>
+                            </Entry>
+                        </StackLayout>
+
+                        <StackLayout Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.TimeOfMeasurement}" />
+                            <DatePicker
+                                Date="{Binding Date}"
+                                FontSize="Medium"
+                                Format="d" />
+                        </StackLayout>
+
+                        <StackLayout
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="2"
+                            Padding="10"
+                            Orientation="Vertical">
+                            <Button
+                                Margin="0,10,0,0"
+                                BackgroundColor="{StaticResource Primary}"
+                                Command="{Binding UploadCommand}"
+                                Text="{x:Static localization:AppSnippets.UploadToIntervalsIcu}"
+                                TextColor="White" />
+                        </StackLayout>
+                    </Grid>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+        <StackLayout
+            Padding="12"
+            AbsoluteLayout.LayoutBounds="0.5,0.4,-1,-1"
+            AbsoluteLayout.LayoutFlags="PositionProportional"
+            IsVisible="{Binding IsBusyForm}">
+            <Border BackgroundColor="White">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                </Border.StrokeShape>
+                <StackLayout>
+                    <ActivityIndicator
+                        BackgroundColor="White"
+                        IsRunning="{Binding IsBusyForm}"
+                        Color="#80000000" />
+                    <Label
+                        HorizontalOptions="Center"
+                        Text="{x:Static localization:AppSnippets.Uploading}"
+                        TextColor="Black"
+                        BackgroundColor="White" />
+                </StackLayout>
+            </Border>
+        </StackLayout>
+    </AbsoluteLayout>
+
+</ContentPage>

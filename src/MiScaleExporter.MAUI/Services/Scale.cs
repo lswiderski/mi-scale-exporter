@@ -62,44 +62,51 @@ namespace MiScaleExporter.Services
 
         private void DeviceAdvertided(object s, DeviceEventArgs a)
         {
-            var obj = a.Device.NativeDevice;
-            PropertyInfo propInfo = obj.GetType().GetProperty("Address");
-            string address = (string)propInfo.GetValue(obj, null);
-
-            if (address.ToLowerInvariant() == _scaleBlutetoothAddress?.ToLowerInvariant())
+            try
             {
-
-                try
+                var obj = a.Device.NativeDevice;
+                PropertyInfo propInfo = obj?.GetType().GetProperty("Address");
+                if (propInfo is null)
                 {
-                    var device = a.Device;
-                    var bodyCompositionCandidate = GetScanData(device);
-                    if (bodyCompositionCandidate is not null && bodyCompositionCandidate.Weight > _minWeight)
-                    {
-                        this.BodyComposition = bodyCompositionCandidate;
-                    }
-
-                    this.ProcessReceivedData();
-                    this.SetPreviews(bodyCompositionCandidate);
+                    return;
                 }
-                catch (Exception ex)
-                {
-                    _logService.LogError(ex.Message);
 
-                    if (_scannedData != null)
-                    {
-                        _logService.LogInfo(string.Join("; ", _scannedData));
-                    }
+                string address = propInfo.GetValue(obj, null) as string;
+                if (string.IsNullOrEmpty(address) ||
+                    !string.Equals(address, _scaleBlutetoothAddress, StringComparison.OrdinalIgnoreCase))
+                {
+                    return;
                 }
-                finally
-                {
 
-                    if (this.BodyComposition != null && (this.BodyComposition.HasImpedance || _impedanceWaitFinished))
-                    {
-                        StopAsync().Wait();
-                        _lastSuccessfulMeasure = this.BodyComposition.Date;
-                        this.BodyComposition.IsValid = true;
-                        _completionSource.SetResult(this.BodyComposition);
-                    }
+                var device = a.Device;
+                var bodyCompositionCandidate = GetScanData(device);
+                if (bodyCompositionCandidate is not null && bodyCompositionCandidate.Weight > _minWeight)
+                {
+                    this.BodyComposition = bodyCompositionCandidate;
+                }
+
+                this.ProcessReceivedData();
+                this.SetPreviews(bodyCompositionCandidate);
+            }
+            catch (Exception ex)
+            {
+                _logService.LogError(ex.Message);
+
+                if (_scannedData != null)
+                {
+                    _logService.LogInfo(string.Join("; ", _scannedData));
+                }
+            }
+            finally
+            {
+                if (this.BodyComposition != null
+                    && (this.BodyComposition.HasImpedance || _impedanceWaitFinished)
+                    && !_completionSource.Task.IsCompleted)
+                {
+                    StopAsync().Wait();
+                    _lastSuccessfulMeasure = this.BodyComposition.Date;
+                    this.BodyComposition.IsValid = true;
+                    _completionSource.SetResult(this.BodyComposition);
                 }
             }
         }
@@ -187,6 +194,11 @@ namespace MiScaleExporter.Services
                     .FirstOrDefault();
                 _scannedData = data;
 
+                if (data is null || data.Length == 0)
+                {
+                    return null;
+                }
+
                 var bc = this._dataInterpreter.ComputeData(data, _user, _scaleBlutetoothAddress);
                 if (bc is not null)
                 {
@@ -253,7 +265,11 @@ namespace MiScaleExporter.Services
         private void TimeOuted(object s, EventArgs e)
         {
             StopAsync().Wait();
-            _completionSource.SetResult(this.BodyComposition);
+
+            if (_completionSource is not null && !_completionSource.Task.IsCompleted)
+            {
+                _completionSource.SetResult(this.BodyComposition);
+            }
         }
 
         private async Task StopAsync()
