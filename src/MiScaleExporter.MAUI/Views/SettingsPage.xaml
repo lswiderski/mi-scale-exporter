@@ -43,6 +43,13 @@
                                 HeightRequest="2"
                                 HorizontalOptions="Fill"
                                 Color="Gray" />
+                            <Button
+                                IsVisible="{Binding HasIntervalsApiKey}"
+                                IsEnabled="{Binding IsFillingProfile, Converter={StaticResource InvertedBoolConverter}}"
+                                Command="{Binding FillFromIntervalsCommand}"
+                                BackgroundColor="{StaticResource Primary}"
+                                Text="{x:Static localization:AppSnippets.IntervalsFillFromProfile}"
+                                TextColor="White" />
                             <Label FontSize="Small" Text="{x:Static localization:AppSnippets.Age}" />
                             <HorizontalStackLayout Spacing="20">
                                 <StackLayout Orientation="Horizontal" Spacing="10" HorizontalOptions="FillAndExpand">
@@ -286,6 +293,42 @@ Color="Gray" />
                             <Label
                                 FontAttributes="Bold"
                                 FontSize="Small"
+                                Text="{x:Static localization:AppSnippets.IntervalsSettings}" />
+                            <BoxView
+                                HeightRequest="2"
+                                HorizontalOptions="Fill"
+                                Color="Gray" />
+                            <Label FontSize="Small" Text="{x:Static localization:AppSnippets.IntervalsApiKey}" />
+                            <Entry
+                                FontSize="Medium"
+                                IsPassword="True"
+                                Text="{Binding IntervalsApiKey, Mode=TwoWay}" />
+                            <Label
+                                FontSize="Micro"
+                                Text="{x:Static localization:AppSnippets.IntervalsApiKeyDescription}"
+                                TextColor="Gray" />
+                            <Label
+                                FontSize="Micro"
+                                Text="intervals.icu/settings"
+                                TextDecorations="Underline"
+                                TextColor="#007CC3">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding OpenIntervalsSettingsCommand}" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </StackLayout>
+                    </Border>
+                    <Border>
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20" />
+                        </Border.StrokeShape>
+                        <StackLayout
+                            Padding="15,24,15,24"
+                            Orientation="Vertical"
+                            Spacing="10">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="Small"
                                 Text="{x:Static localization:AppSnippets.AppSettings}" />
                             <BoxView
                                 HeightRequest="2"
@@ -320,17 +363,26 @@ Color="Gray" />
                                     FontSize="Small"
                                     Text="{x:Static localization:AppSnippets.UseExternalAPI}"
                                     VerticalOptions="Center" />
-                                <CheckBox
+                                <VerticalStackLayout
                                     Grid.Row="1"
                                     Grid.Column="0"
-                                    IsChecked="{Binding OneClickScanAndUpload, Mode=TwoWay}"
-                                    VerticalOptions="Center" />
-                                <Label
-                                    Grid.Row="1"
-                                    Grid.Column="1"
-                                    FontSize="Small"
-                                    Text="{x:Static localization:AppSnippets.OneClickScanUpload}"
-                                    VerticalOptions="Center" />
+                                    Grid.ColumnSpan="2"
+                                    Spacing="4">
+                                    <HorizontalStackLayout Spacing="8">
+                                        <CheckBox
+                                            IsChecked="{Binding OneClickScanAndUpload, Mode=TwoWay}"
+                                            VerticalOptions="Center" />
+                                        <Label
+                                            FontSize="Small"
+                                            Text="{x:Static localization:AppSnippets.OneClickScanUpload}"
+                                            VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                    <Picker
+                                        IsVisible="{Binding OneClickScanAndUpload}"
+                                        ItemsSource="{Binding OneClickUploadTargetOptions}"
+                                        ItemDisplayBinding="{Binding Text}"
+                                        SelectedItem="{Binding SelectedOneClickUploadTarget}" />
+                                </VerticalStackLayout>
                                 <CheckBox
                                     Grid.Row="2"
                                     Grid.Column="0"
@@ -375,17 +427,6 @@ Color="Gray" />
                                     FontSize="Small"
                                     Text="Use China Server"
                                     VerticalOptions="Center" />
-                                <CheckBox
-                                    Grid.Row="6"
-                                    Grid.Column="0"
-                                    IsChecked="{Binding HideAds, Mode=TwoWay}"
-                                    VerticalOptions="Center" />
-                                <Label
-                                    Grid.Row="6"
-                                    Grid.Column="1"
-                                    FontSize="Small"
-                                    Text="{x:Static localization:AppSnippets.SettingsHideAds}"
-                                    VerticalOptions="Center" />
 
                             </Grid>
                             <Button
@@ -404,6 +445,44 @@ Color="Gray" />
                         </StackLayout>
                     </Border>
                    
+                    <Border>
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20" />
+                        </Border.StrokeShape>
+                        <StackLayout
+                            Padding="15,24,15,24"
+                            Orientation="Vertical"
+                            Spacing="10">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="Small"
+                                Text="{x:Static localization:AppSnippets.HealthConnectSettings}" />
+                            <BoxView
+                                HeightRequest="2"
+                                HorizontalOptions="Fill"
+                                Color="Gray" />
+                            <HorizontalStackLayout Spacing="8">
+                                <CheckBox
+                                    IsChecked="{Binding ExportToHealthConnect, Mode=TwoWay}"
+                                    IsEnabled="{Binding HealthConnectSupported}"
+                                    VerticalOptions="Center" />
+                                <Label
+                                    FontSize="Small"
+                                    Text="{x:Static localization:AppSnippets.ExportToHealthConnect}"
+                                    VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                            <Label
+                                FontSize="Micro"
+                                TextColor="Gray"
+                                Text="{x:Static localization:AppSnippets.HealthConnectDescription}" />
+                            <Label
+                                FontSize="Micro"
+                                IsVisible="{Binding HealthConnectUnsupported}"
+                                TextColor="Red"
+                                Text="{x:Static localization:AppSnippets.HealthConnectNotAvailableHint}" />
+                        </StackLayout>
+                    </Border>
+
                     <Border>
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="20" />

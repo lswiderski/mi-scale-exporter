@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="49" android:versionName="2.6.10" package="com.lukaszswiderski.MiScaleExporter" android:installLocation="auto">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="51" android:versionName="2.7.0" package="com.lukaszswiderski.MiScaleExporter" android:installLocation="auto">
 	<uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
 	<uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
 	<uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
@@ -12,10 +12,22 @@
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	<uses-permission android:name="com.google.android.gms.permission.AD_ID" />
+	<uses-permission android:name="android.permission.health.WRITE_WEIGHT" />
+	<uses-permission android:name="android.permission.health.WRITE_BODY_FAT" />
+	<uses-permission android:name="android.permission.health.WRITE_BONE_MASS" />
+	<uses-permission android:name="android.permission.health.WRITE_BODY_WATER_MASS" />
+	<uses-permission android:name="android.permission.health.WRITE_LEAN_BODY_MASS" />
+	<uses-permission android:name="android.permission.health.WRITE_BASAL_METABOLIC_RATE" />
 	<uses-feature android:name="android.hardware.bluetooth_le" android:required="false" />
+	<queries>
+		<package android:name="com.google.android.apps.healthdata" />
+	</queries>
 	<application android:label="MiScale Exporter" android:usesCleartextTraffic="true" android:theme="@style/MainTheme" android:icon="@mipmap/launcher_foreground" android:allowBackup="false" android:requestLegacyExternalStorage="true">
-		<activity android:name="com.google.android.gms.ads.AdActivity" android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" android:theme="@android:style/Theme.Translucent" />
-		<meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-1938975042085430~7383010816" />
+		<activity-alias android:name="com.lukaszswiderski.MiScaleExporter.ViewPermissionUsageActivity" android:targetActivity="com.lukaszswiderski.MiScaleExporter.PermissionsRationaleActivity" android:exported="true" android:permission="android.permission.START_VIEW_PERMISSION_USAGE">
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW_PERMISSION_USAGE" />
+				<category android:name="android.intent.category.HEALTH_PERMISSIONS" />
+			</intent-filter>
+		</activity-alias>
 	</application>
 </manifest>

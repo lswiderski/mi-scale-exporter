@@ -127,7 +127,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                 {
                     LoginStatus = $"Error: {ex.Message}";
                     IsPolling = false;
-                    await Application.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
+                    await Dialog.AlertAsync("Error", ex.Message, "OK");
                 }
             }
             finally
@@ -191,7 +191,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                             LoginStatus = "Login completed successfully!";
                             IsPolling = false;
 
-                            await Application.Current.MainPage.DisplayAlert(
+                            await Dialog.AlertAsync(
                                 "Success",
                                 "You have been successfully logged in.",
                                 "OK");
@@ -222,7 +222,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                 if (IsCurrentGeneration(generation))
                 {
                     LoginStatus = $"Polling error: {ex.Message}";
-                    await Application.Current.MainPage.DisplayAlert("Polling Error", ex.Message, "OK");
+                    await Dialog.AlertAsync("Polling Error", ex.Message, "OK");
                 }
             }
             finally
@@ -238,7 +238,7 @@ namespace MiScaleExporter.MAUI.ViewModels
         {
             if (string.IsNullOrWhiteSpace(LoginUrl))
             {
-                await Application.Current.MainPage.DisplayAlert("Error", "Login URL is not available.", "OK");
+                await Dialog.AlertAsync("Error", "Login URL is not available.", "OK");
                 return;
             }
 
@@ -249,7 +249,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", $"Failed to open URL: {ex.Message}", "OK");
+                await Dialog.AlertAsync("Error", $"Failed to open URL: {ex.Message}", "OK");
             }
         }
 

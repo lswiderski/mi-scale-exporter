@@ -11,6 +11,7 @@ namespace MiScaleExporter.MAUI.Views
     public partial class FormPage : ContentPage
     {
         private IFormViewModel vm;
+        private bool _autoUploadPending;
         public FormPage()
         {
             InitializeComponent();
@@ -23,9 +24,13 @@ namespace MiScaleExporter.MAUI.Views
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            this.adMobBanner.IsVisible = !Preferences.Get(PreferencesKeys.HideAds, false);
             await vm.LoadPreferencesAsync();
             vm.LoadBodyComposition();
+            if (_autoUploadPending)
+            {
+                _autoUploadPending = false;
+                vm.AutoUpload();
+            }
         }
 
         public bool AutoUpload
@@ -34,7 +39,7 @@ namespace MiScaleExporter.MAUI.Views
             {
                 if (value)
                 {
-                    vm.AutoUpload();
+                    _autoUploadPending = true;
                 }
             }
         }

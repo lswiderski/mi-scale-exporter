@@ -12,6 +12,7 @@ namespace MiScaleExporter.MAUI.ViewModels
     {
         private readonly IScale _scale;
         private readonly ILogService _logService;
+        private readonly IHealthConnectService _healthConnectService;
 
         private string _address;
         private int _age;
@@ -21,10 +22,11 @@ namespace MiScaleExporter.MAUI.ViewModels
 
         private string _bindkey;
 
-        public ScaleViewModel(IScale scale, ILogService logService)
+        public ScaleViewModel(IScale scale, ILogService logService, IHealthConnectService healthConnectService)
         {
             _scale = scale;
             _logService = logService;
+            _healthConnectService = healthConnectService;
 
             Title = AppSnippets.MiScaleData;
             CancelCommand = new Command(OnCancel);
@@ -46,7 +48,6 @@ namespace MiScaleExporter.MAUI.ViewModels
                 }
                 else
                 {
-                   // await App.Current.MainPage.Navigation.PopAsync();
                     await Shell.Current.GoToAsync($"//Settings");
                 }
             }
@@ -76,14 +77,14 @@ namespace MiScaleExporter.MAUI.ViewModels
                 {
                     if (await GetBluetoothPermissionStatusAsync() != PermissionStatus.Granted)
                     {
-                        await Application.Current.MainPage.DisplayAlert(AppSnippets.Problem, AppSnippets.PermissionBluetoothRequired,
+                        await Dialog.AlertAsync(AppSnippets.Problem, AppSnippets.PermissionBluetoothRequired,
                            AppSnippets.OK);
                         return false;
                     }
 
                     if (await GetLocationWhenInUsePermissionStatusAsync() != PermissionStatus.Granted)
                     {
-                        await Application.Current.MainPage.DisplayAlert(AppSnippets.Problem, AppSnippets.PermissionLocationRequired,
+                        await Dialog.AlertAsync(AppSnippets.Problem, AppSnippets.PermissionLocationRequired,
                              AppSnippets.OK);
                         return false;
                     }
@@ -94,7 +95,7 @@ namespace MiScaleExporter.MAUI.ViewModels
                     {
                         if(await GetLocationAlwaysPermissionStatusAsync() != PermissionStatus.Granted)
                         {
-                            await Application.Current.MainPage.DisplayAlert(AppSnippets.Problem, AppSnippets.PermissionLocationRequired,
+                            await Dialog.AlertAsync(AppSnippets.Problem, AppSnippets.PermissionLocationRequired,
                             AppSnippets.OK);
                             return false;
                         }
@@ -106,7 +107,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             // Check if Bluetooth is enabled
             if (CrossBluetoothLE.Current.State != BluetoothState.On)
             {
-                await Application.Current.MainPage.DisplayAlert(
+                await Dialog.AlertAsync(
                     AppSnippets.Problem,
                     AppSnippets.BluetoothDisabled,
                     AppSnippets.OK);
@@ -134,7 +135,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             if (this._scale.BodyComposition is null || !this._scale.BodyComposition.IsValid)
             {
                 var msg = AppSnippets.DataCouldNotBeObtained;
-                await Application.Current.MainPage.DisplayAlert(AppSnippets.Problem, msg,
+                await Dialog.AlertAsync(AppSnippets.Problem, msg,
                     AppSnippets.OK);
                 _logService.LogError(msg);
                 ScanningLabel = AppSnippets.NotFound;
@@ -142,7 +143,60 @@ namespace MiScaleExporter.MAUI.ViewModels
             else
             {
                 App.BodyComposition = this._scale.BodyComposition;
-                await Shell.Current.GoToAsync($"//FormPage?autoUpload={Preferences.Get(PreferencesKeys.OneClickScanAndUpload, false)}");
+                _ = ExportToHealthConnectAsync();
+                var oneClickEnabled = Preferences.Get(PreferencesKeys.OneClickScanAndUpload, false);
+                if (!oneClickEnabled)
+                {
+                    await Shell.Current.GoToAsync("//FormPage?autoUpload=false");
+                    return;
+                }
+
+                var target = (OneClickUploadTarget)Preferences.Get(PreferencesKeys.OneClickScanAndUploadTarget, (byte)OneClickUploadTarget.Garmin);
+                switch (target)
+                {
+                    case OneClickUploadTarget.Intervals:
+                        await Shell.Current.GoToAsync("//IntervalsFormPage?autoUpload=true");
+                        break;
+                    case OneClickUploadTarget.Both:
+                        await Shell.Current.GoToAsync("//IntervalsFormPage?autoUpload=true&continueTo=garmin");
+                        break;
+                    case OneClickUploadTarget.Garmin:
+                    default:
+                        await Shell.Current.GoToAsync("//FormPage?autoUpload=true");
+                        break;
+                }
+            }
+        }
+
+        private async Task ExportToHealthConnectAsync()
+        {
+            try
+            {
+                if (!Preferences.Get(PreferencesKeys.ExportToHealthConnect, false))
+                {
+                    return;
+                }
+
+                var bodyComposition = App.BodyComposition;
+                if (bodyComposition is null || !bodyComposition.IsValid)
+                {
+                    return;
+                }
+
+                if (!_healthConnectService.IsSupported)
+                {
+                    return;
+                }
+
+                var result = await _healthConnectService.WriteAsync(bodyComposition);
+                if (!result.IsSuccess && !result.IsUnavailable)
+                {
+                    _logService.LogError($"Health Connect export failed: {result.Message}");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logService.LogError($"Health Connect export failed: {ex.Message}");
             }
         }
 

@@ -16,9 +16,9 @@ public static class PreferencesKeys
     public static string ApiServerAddressOverride = "ApiServerAddressOverride";
     public static string ScaleType = "ScaleType";
     public static string OneClickScanAndUpload = "OneClickScanAndUpload";
+    public static string OneClickScanAndUploadTarget = "OneClickScanAndUploadTarget";
     public static string UseExternalAPI = "UseExternalAPI";
     public static string ShowDebugInfo = "ShowDebugInfo";
-    public static string HideAds = "HideAds";
     public static string MuscleMassAsPercentage = "MuscleMassAsPercentage";
     public static string S400Bindkey = "S400Bindkey";
     public static string DisplayWeightInLbs = "DisplayWeightInLbs";
@@ -29,4 +29,6 @@ public static class PreferencesKeys
     public static string XiaomiPassToken = "XiaomiPassToken";
     public static string XiaomiAccountRegion = "XiaomiAccountRegion";
     public static string XiaomiScaleModel = "XiaomiScaleModel";
+    public static string IntervalsApiKey = "IntervalsApiKey";
+    public static string ExportToHealthConnect = "ExportToHealthConnect";
 }

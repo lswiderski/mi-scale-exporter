@@ -21,7 +21,6 @@ namespace MiScaleExporter.MAUI.Views
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            this.adMobBanner.IsVisible = !Preferences.Get(PreferencesKeys.HideAds, false);
             await vm.CheckPreferencesAsync();
         }
 

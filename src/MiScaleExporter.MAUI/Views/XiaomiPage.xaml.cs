@@ -22,7 +22,6 @@ namespace MiScaleExporter.MAUI.Views
         {
             base.OnAppearing();
             this.vm.RefreshPreferences();
-            this.adMobBanner.IsVisible = !Preferences.Get(PreferencesKeys.HideAds, false);
         }
     }
 }

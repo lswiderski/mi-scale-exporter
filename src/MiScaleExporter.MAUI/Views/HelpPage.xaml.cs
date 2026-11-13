@@ -30,7 +30,7 @@ public partial class HelpPage : ContentPage
         }
         catch (Exception ex)
         {
-            await Application.Current.MainPage.DisplayAlert("Error", $"Failed to open URL: {ex.Message}", "OK");
+            await Dialog.AlertAsync("Error", $"Failed to open URL: {ex.Message}", "OK");
         }
     }
 }

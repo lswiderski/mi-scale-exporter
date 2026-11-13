@@ -64,7 +64,7 @@ namespace MiScaleExporter.MAUI.ViewModels
         {
             if (!HasPreferencesSet)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", "Xiaomi preferences are not set. Please configure them in Settings.", "OK");
+                await Dialog.AlertAsync("Error", "Xiaomi preferences are not set. Please configure them in Settings.", "OK");
                 return;
             }
 
@@ -76,7 +76,7 @@ namespace MiScaleExporter.MAUI.ViewModels
 
                 if (weights == null || weights.Count == 0)
                 {
-                    await Application.Current.MainPage.DisplayAlert("Error", "No weights returned from Xiaomi cloud.", "OK");
+                    await Dialog.AlertAsync("Error", "No weights returned from Xiaomi cloud.", "OK");
                     return;
                 }
 
@@ -92,7 +92,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
+                await Dialog.AlertAsync("Error", ex.Message, "OK");
             }
             finally
             {
@@ -105,7 +105,7 @@ namespace MiScaleExporter.MAUI.ViewModels
             if (item == null) return;
             // show detailed JSON in alert
             var json = JsonConvert.SerializeObject(item.WeightDto, Formatting.Indented);
-            await Application.Current.MainPage.DisplayAlert("Details", json, "OK");
+            await Dialog.AlertAsync("Details", json, "OK");
         }
 
         private async Task SelectMeasurement(XiaomiMeasurementItem item)
