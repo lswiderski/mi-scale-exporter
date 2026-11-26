@@ -21,28 +21,26 @@ public class LogService : ILogService
 
     public void LogError(string message)
     {
-        Application.Current.MainPage.DisplayAlert("Error", message,
-                  "OK");
+        MainThread.BeginInvokeOnMainThread(() =>
+            Application.Current?.MainPage?.DisplayAlert("Error", message, "OK"));
     }
 
     public void LogFatal(string message)
     {
-
-        Application.Current.MainPage.DisplayAlert("Fatal", message,
-                "OK");
+        MainThread.BeginInvokeOnMainThread(() =>
+            Application.Current?.MainPage?.DisplayAlert("Fatal", message, "OK"));
     }
 
     public void LogInfo(string message)
     {
-        Application.Current.MainPage.DisplayAlert("Info", message,
-                "OK");
+        MainThread.BeginInvokeOnMainThread(() =>
+            Application.Current?.MainPage?.DisplayAlert("Info", message, "OK"));
     }
 
     public void LogWarning(string message)
     {
-
-        Application.Current.MainPage.DisplayAlert("Warning", message,
-                "OK");
+        MainThread.BeginInvokeOnMainThread(() =>
+            Application.Current?.MainPage?.DisplayAlert("Warning", message, "OK"));
     }
 
     public static LoggingConfiguration CreateLogger()

@@ -74,7 +74,8 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-android36.0|AnyCPU'">
-	  <AndroidLinkTool>r8</AndroidLinkTool>
+	  <!-- Disabled R8 due to reflection/deserialization failures (Arg_TargetInvocationException, #89) -->
+	  <UseSystemResourceKeys>false</UseSystemResourceKeys>
 	</PropertyGroup>
 
 	<ItemGroup>
