@@ -35,7 +35,7 @@ public class GarminService : IGarminService
             _logger = factory.CreateLogger<GarminService>();
         }
 
-        System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+        System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
 
         if (DeviceInfo.Platform == DevicePlatform.Android)
         {
@@ -137,8 +137,12 @@ public class GarminService : IGarminService
         {
             var logs = LogService.GetLogs();
             var errorlogs = LogService.GetErrorLogs();
-            _logService.LogError(ex?.Message);
-            result.Message = ex.Message;
+            var baseEx = ex.GetBaseException();
+            var errorMessage = !string.IsNullOrWhiteSpace(baseEx?.Message)
+                ? $"{baseEx.GetType().Name}: {baseEx.Message}"
+                : ex.Message;
+            _logService.LogError(errorMessage);
+            result.Message = errorMessage;
             result.AccessToken = string.Empty;
             result.TokenSecret = string.Empty;
             return result;

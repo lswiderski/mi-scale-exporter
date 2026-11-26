@@ -134,7 +134,11 @@ namespace MiScaleExporter.MAUI.ViewModels
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert(AppSnippets.Response, ex.Message, AppSnippets.OK);
+                var baseEx = ex.GetBaseException();
+                var errorMessage = !string.IsNullOrWhiteSpace(baseEx?.Message)
+                    ? $"{baseEx.GetType().Name}: {baseEx.Message}"
+                    : ex.Message;
+                await Application.Current.MainPage.DisplayAlert(AppSnippets.Response, errorMessage, AppSnippets.OK);
             }
             finally
             {
@@ -148,7 +152,7 @@ namespace MiScaleExporter.MAUI.ViewModels
 
             var response = await this._garminService.GenerateFitFileAsync(this.PrepareRequest(Date.Date.Add(Time)) );
 
-            if (!response.IsSuccess && response.file != null)
+            if (!response.IsSuccess || response.file == null)
             {
                 await Application.Current.MainPage.DisplayAlert(AppSnippets.Response, response?.Message, AppSnippets.OK);
             }
